@@ -2,8 +2,8 @@
 Bienvenu dans notre dépot Github de notre projet de licence 3 informatique.
 
 ## Sommaire
-* **[BURGERCHESS](/#user-content-burgerchess)**
-* **[Informations annexes](/#user-content-informations-annexes)**
+* **[BURGERCHESS](https://github.com/virgil-rouquettecampredon/PROJET-TERL3/blob/main/README.md/#user-content-burgerchess)**
+* **[Informations annexes](https://github.com/virgil-rouquettecampredon/PROJET-TERL3/blob/main/README.md/#user-content-informations-annexes)**
 
 -----------------
 ## 1 BURGERCHESS
