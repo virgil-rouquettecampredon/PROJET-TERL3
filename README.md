@@ -2,12 +2,12 @@
 Bienvenu dans notre dépot Github de notre projet de licence 3 informatique.
 
 ## Sommaire
-* **[BURGERCHESS](#user-content-burgerchess)**
-* **[Informations annexes](#user-content-informations-annexes)**
+* **[BURGERCHESS](/#user-content-burgerchess)**
+* **[Informations annexes](/#user-content-informations-annexes)**
 
 -----------------
 ## 1 BURGERCHESS
------------------
+
 
 ### Missions
 **L'objectif** de ce TER est de concevoir et réaliser une application de jeu d'échecs permettant de spécifier des variantes de jeu.
@@ -39,6 +39,8 @@ Par exemple, augmenter ou réduire le nombre de cases sur l'échiquier, modifier
  * Erwan Reinders
  * Ange Clément
  * Hugo Bec
+
+-----------------
 
 ### Encadrant
 Sylvain Daudé
