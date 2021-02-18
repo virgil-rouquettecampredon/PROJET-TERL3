@@ -44,3 +44,5 @@ Par exemple, augmenter ou réduire le nombre de cases sur l'échiquier, modifier
 
 ### Encadrant
 Sylvain Daudé
+
+**[PDF sujet](https://github.com/virgil-rouquettecampredon/PROJET-TERL3/blob/main/%2319_Daude_extended-chess-daude%20(2).pdf)**
