@@ -7,6 +7,8 @@ public class Position{
         this.y = y;
     }
 
+    /*DEBUT GETTER SETTER*/
+
     public int getX() {
         return x;
     }
@@ -22,4 +24,6 @@ public class Position{
     public void setY(int y) {
         this.y = y;
     }
+
+    /*FIN GETTER SETTER*/
 }

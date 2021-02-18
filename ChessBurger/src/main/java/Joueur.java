@@ -5,17 +5,36 @@ public class Joueur {
     private String name;
     private int equipe;
     private ArrayList<Piece> graveyard;
+    private ArrayList<Piece> pawnList;
     private int timer;
+
 
     public Joueur(String name, int equipe) {
         this.name = name;
         this.equipe = equipe;
         this.graveyard = new ArrayList<Piece>();
+        this.pawnList = new ArrayList<Piece>();
         this.timer = -1;
     }
 
+    public void movePawn(Piece pawn, Position position){
+        // A completer
+
+    }
+
+    public void revive(Piece pawn, Case emplacement){
+        // A completer
+
+    }
+
+    /*DEBUT GETTER SETTER*/
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPawnList(ArrayList<Piece> pawnList) {
+        this.pawnList = pawnList;
     }
 
     public void setEquipe(int equipe) {
@@ -42,7 +61,13 @@ public class Joueur {
         return graveyard;
     }
 
+    public ArrayList<Piece> getPawnList() {
+        return pawnList;
+    }
+
     public int getTimer() {
         return timer;
     }
+
+    /*FIN GETTER SETTER*/
 }

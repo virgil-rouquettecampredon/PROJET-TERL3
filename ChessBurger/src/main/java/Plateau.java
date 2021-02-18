@@ -12,6 +12,13 @@ public class Plateau {
         echiquier = new ArrayList<ArrayList<Case>>();
     }
 
+    public void afficherPlateau(){
+        // A completer
+
+    }
+
+    /*DEBUT GETTER SETTER*/
+
     public int getHeightY() {
         return heightY;
     }
@@ -31,4 +38,6 @@ public class Plateau {
     public void setWitdhX(int witdhX) {
         this.witdhX = witdhX;
     }
+
+    /*FIN GETTER SETTER*/
 }

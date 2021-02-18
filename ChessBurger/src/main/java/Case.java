@@ -10,6 +10,13 @@ public class Case{
         this.pieceOnCase = null;
     }
 
+    public void afficherCase(){
+        // A completer
+
+    }
+
+    /*DEBUT GETTER SETTER*/
+
     public String getSprite() {
         return sprite;
     }
@@ -29,4 +36,5 @@ public class Case{
     public void setPieceOnCase(Piece pieceOnCase) {
         this.pieceOnCase = pieceOnCase;
     }
+    /*FIN GETTER SETTER*/
 }
