@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.GameController">
    <children>
       <ImageView pickOnBounds="true" preserveRatio="true">
@@ -15,7 +14,7 @@
             <Image url="@chess.png" />
          </image>
       </ImageView>
-      <Button layoutX="179.0" layoutY="147.0" mnemonicParsing="false" text="Big Button" textAlignment="CENTER">
+      <Button fx:id="bgButton" layoutX="179.0" layoutY="147.0" mnemonicParsing="false" onAction="#bigButton" text="Big Button" textAlignment="CENTER">
          <font>
             <Font name="Comic Sans MS" size="39.0" />
          </font>
