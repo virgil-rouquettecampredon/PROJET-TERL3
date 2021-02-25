@@ -17,7 +17,7 @@ public class ImportController {
 
     @FXML
     private void validateButton() throws IOException {
-        //TODO: valider texte de l'input et l'enregistrer dans un fichier (appdata?)
+        //TODO: valider texte de l'input et l'importer depuis un fichier (appdata?)
         System.out.println(input.getText());
         App.setRoot("home");
     }
