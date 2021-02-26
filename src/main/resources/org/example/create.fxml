@@ -15,7 +15,7 @@
    <children>
       <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@chess.png" />
+            <Image url="@images/chess.png" />
          </image>
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -32,7 +32,7 @@
                   <Insets left="200.0" right="200.0" />
                </VBox.margin>
             </BorderPane>
-            <Button mnemonicParsing="false" onAction="#continueButton" prefHeight="100.0" prefWidth="300.0" text="CONTINUER">
+            <Button mnemonicParsing="false" onAction="#continueButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="CONTINUER">
                <font>
                   <Font name="Candara" size="36.0" />
                </font>

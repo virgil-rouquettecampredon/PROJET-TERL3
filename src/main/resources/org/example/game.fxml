@@ -11,7 +11,7 @@
    <children>
       <ImageView pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@chess.png" />
+            <Image url="@images/chess.png" />
          </image>
       </ImageView>
       <Button fx:id="bgButton" layoutX="179.0" layoutY="147.0" mnemonicParsing="false" onAction="#bigButton" text="Big Button" textAlignment="CENTER">

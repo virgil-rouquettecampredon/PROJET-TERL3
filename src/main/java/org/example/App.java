@@ -11,10 +11,12 @@ import java.io.IOException;
 
 public class App extends Application {
 
+    public static SoundManager soundManager;
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
+        soundManager = new SoundManager();
         stage.setTitle("ChessBurger");
         scene = new Scene(loadFXML("home"), 1024, 640);
         stage.setScene(scene);

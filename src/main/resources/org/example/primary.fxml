@@ -13,7 +13,7 @@
       <Button fx:id="primaryButton" onAction="#switchToSecondary" text="Switch to Secondary View" />
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@chess.png" />
+            <Image url="@images/chess.png" />
          </image>
       </ImageView>
    </children>

@@ -11,22 +11,22 @@
    <children>
       <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@chess.png" />
+            <Image url="@images/chess.png" />
          </image>
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="285.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
                <image>
-                  <Image url="@logo.png" />
+                  <Image url="@images/logo.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" onAction="#playButton" prefHeight="100.0" prefWidth="300.0" text="JOUER">
+            <Button mnemonicParsing="false" onAction="#playButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="JOUER">
                <font>
                   <Font name="Candara" size="36.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#varianteButton" prefHeight="100.0" prefWidth="300.0" text="VARIANTES">
+            <Button mnemonicParsing="false" onAction="#varianteButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="VARIANTES">
                <font>
                   <Font name="Candara" size="36.0" />
                </font>

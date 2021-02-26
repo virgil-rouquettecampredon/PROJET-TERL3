@@ -15,7 +15,7 @@
    <children>
       <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@chess.png" />
+            <Image url="@images/chess.png" />
          </image>
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -29,13 +29,13 @@
                   <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Dossier" BorderPane.alignment="CENTER" />
                </left>
                <right>
-                  <Button mnemonicParsing="false" onAction="#chooseButton" prefHeight="40.0" text="📂" BorderPane.alignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#chooseButton" onMouseEntered="#buttonHover" prefHeight="40.0" text="📂" BorderPane.alignment="CENTER" />
                </right>
                <VBox.margin>
                   <Insets left="200.0" right="200.0" />
                </VBox.margin>
             </BorderPane>
-            <Button mnemonicParsing="false" onAction="#validateButton" prefHeight="100.0" prefWidth="300.0" text="TERMINER">
+            <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="TERMINER">
                <font>
                   <Font name="Candara" size="36.0" />
                </font>
