@@ -9,4 +9,8 @@ public class Controller {
     private void buttonHover() throws IOException {
         App.soundManager.playSound("button-hover");
     }
+
+    public void initialise() {
+
+    }
 }

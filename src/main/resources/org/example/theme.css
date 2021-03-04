@@ -143,6 +143,24 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 
+.specialButton {
+    -fx-background-color: #723813;
+}
+
+.specialButton:hover {
+    -fx-background-color: #F4C99C;
+    -fx-text-fill: #1d1d1d;
+}
+
+.specialButton:pressed {
+  -fx-background-color: #E1C6A8;
+  -fx-text-fill: #1d1d1d;
+}
+
+.buttonLight {
+    -fx-padding: 0;
+}
+
 .label-input {
     -fx-font-size: 30pt;
     -fx-font-family: "Segoe UI Light";
