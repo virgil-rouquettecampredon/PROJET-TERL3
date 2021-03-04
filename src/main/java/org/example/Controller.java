@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Controller {
     @FXML
     private void buttonHover() throws IOException {
-        App.soundManager.playSound("button-hover");
+        //App.soundManager.playSound("button-hover");
     }
 
     public void initialise() {

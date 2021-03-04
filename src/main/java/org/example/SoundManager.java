@@ -36,7 +36,8 @@ public class SoundManager {
     }
 
     public void playSound(String sound) {
-        sounds.get(sound).stop();
+        stopAllSound();
+        //sounds.get(sound).stop();
         sounds.get(sound).play();
     }
 }

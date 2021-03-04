@@ -42,9 +42,9 @@ public class PlayerController extends Controller {
         tablePlayer.setItems(data);
     }
 
-    private class PlayerTableRow {
-        private SimpleStringProperty name;
-        private SimpleIntegerProperty team;
+    private static class PlayerTableRow {
+        private final SimpleStringProperty name;
+        private final SimpleIntegerProperty team;
 
         private PlayerTableRow(String name, int team) {
             this.name = new SimpleStringProperty(name);

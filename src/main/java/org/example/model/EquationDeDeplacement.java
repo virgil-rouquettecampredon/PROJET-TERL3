@@ -1,3 +1,5 @@
+package org.example.model;
+
 public class EquationDeDeplacement {
 
     private String equation;

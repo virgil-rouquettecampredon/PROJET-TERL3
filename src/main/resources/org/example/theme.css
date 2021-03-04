@@ -143,18 +143,34 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 
-.specialButton {
+.backButton {
     -fx-background-color: #723813;
 }
 
-.specialButton:hover {
+.backButton:hover {
     -fx-background-color: #F4C99C;
     -fx-text-fill: #1d1d1d;
 }
 
-.specialButton:pressed {
+.backButton:pressed {
   -fx-background-color: #E1C6A8;
   -fx-text-fill: #1d1d1d;
+}
+
+.specialButton {
+    -fx-border-color: #1D1D1D;
+    -fx-background-color: #8DC7EC;
+    -fx-text-fill: black;
+}
+
+.specialButton:hover {
+    -fx-background-color: #0B3663;
+    -fx-text-fill: white;
+}
+
+.specialButton:pressed {
+    -fx-background-color: #1E3957;
+    -fx-text-fill: white;
 }
 
 .buttonLight {

@@ -1,3 +1,5 @@
+package org.example.model;
+
 public class Case{
     private String sprite;
     private Position position;
