@@ -9,5 +9,8 @@
         <module name="ChessBurger" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ChessBurger" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
