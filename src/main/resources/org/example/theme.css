@@ -129,8 +129,8 @@
 }
 
 .button:disabled, .button:default:disabled {
-    -fx-opacity: 0.4;
-    -fx-background-color: #1d1d1d;
+    -fx-opacity: 1;
+    -fx-background-color: #555555;
     -fx-text-fill: white;
 }
 
