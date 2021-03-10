@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="640.0" prefWidth="1024.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.InitPosController">
+   <children>
+      <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/chess.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Position initiales" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0">
+                     <children>
+                        <BorderPane prefHeight="100.0">
+                           <center>
+                              <TextField fx:id="joueurInput" onKeyTyped="#updateCanvas" prefHeight="37.0" prefWidth="0.0" promptText="Le joueur de la piece" text="1" BorderPane.alignment="CENTER" />
+                           </center>
+                           <left>
+                              <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Joueur:" BorderPane.alignment="CENTER" />
+                           </left>
+                        </BorderPane>
+                        <ScrollPane hbarPolicy="NEVER" minHeight="350.0" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="353.0" prefWidth="200.0" style="-fx-background-color: pink;">
+                                 <children>
+                                    <GridPane prefHeight="150.0" prefWidth="180.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@images/pawn.png" />
+                                             </image>
+                                          </ImageView>
+                                          <RadioButton mnemonicParsing="false" GridPane.columnIndex="1">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="radioButtonToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                             <image>
+                                                <Image url="@images/king.png" />
+                                             </image>
+                                          </ImageView>
+                                          <RadioButton mnemonicParsing="false" toggleGroup="$radioButtonToggleGroup" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <Canvas fx:id="canvas" height="300.0" width="300.0" />
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="VALIDER">
+               <font>
+                  <Font name="Candara" size="36.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
