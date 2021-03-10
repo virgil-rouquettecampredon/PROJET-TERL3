@@ -8,6 +8,7 @@ public class Piece{
     private int nbMovement;
     private int nbLife;
     private ArrayList<EquationDeDeplacement> deplacements;
+    private boolean[] comportementPiece;
 
     public Piece(String name, String sprite) {
         this.name = name;
@@ -15,6 +16,9 @@ public class Piece{
         this.nbMovement = 0;
         this.nbLife = -1;
         this.deplacements = new ArrayList<EquationDeDeplacement>();
+        for (int i = 0; i < 4; i++){
+            comportementPiece[i] = false;
+        }
     }
 
     public Position[] deplacementTheoriques(){
@@ -45,6 +49,22 @@ public class Piece{
         this.deplacements = deplacements;
     }
 
+    public void setEstConditionDeVictoire(boolean comportement){
+        comportementPiece[0] = comportement;
+    }
+
+    public void setEstSauteuse(boolean comportement){
+        comportementPiece[1] = comportement;
+    }
+
+    public void setEstPromouvable(boolean comportement){
+        comportementPiece[2] = comportement;
+    }
+
+    public void setEstTraitre(boolean comportement){
+        comportementPiece[3] = comportement;
+    }
+
     public String getName() {
         return name;
     }
@@ -63,6 +83,22 @@ public class Piece{
 
     public ArrayList<EquationDeDeplacement> getDeplacements() {
         return deplacements;
+    }
+
+    public boolean estConditionDeVictoire(){
+        return comportementPiece[0];
+    }
+
+    public boolean estSauteuse(){
+        return comportementPiece[1];
+    }
+
+    public boolean estPromouvable(){
+        return comportementPiece[2];
+    }
+
+    public boolean estTraitre(){
+        return comportementPiece[3];
     }
 
     /*FIN GETTER SETTER*/
