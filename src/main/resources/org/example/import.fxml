@@ -35,7 +35,7 @@
                   <Insets left="200.0" right="200.0" />
                </VBox.margin>
             </BorderPane>
-            <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="TERMINER">
+            <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="specialButton" text="TERMINER">
                <font>
                   <Font name="Candara" size="36.0" />
                </font>

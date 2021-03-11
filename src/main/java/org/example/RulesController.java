@@ -48,7 +48,7 @@ public class RulesController extends Controller {
         bd.setOnAction(event -> {
             deletRule(); //(r)
         });
-        Label l = new Label("Si hugo alors juif");
+        Label l = new Label("Si Pawn meurs alors perdu");
 
         RulesController.RuleRow rr = new RulesController.RuleRow(be, bd, l);// p);
         rules.add(rr);
