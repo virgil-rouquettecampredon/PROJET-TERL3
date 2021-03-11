@@ -26,7 +26,7 @@ public class SoundManager {
         addSound("button-hover", ".wav");
         addSound("check", ".wav");
         addSound("end", ".mp3");
-        addSound("loose", ".wav");
+        addSound("lose", ".wav");
         addSound("start", ".mp3");
         addSound("win", ".wav");
     }
