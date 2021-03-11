@@ -18,7 +18,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         soundManager = new SoundManager();
         stage.setTitle("ChessBurger");
-        scene = new Scene(loadFXML("varianteMenu2"), 1024, 640);
+        scene = new Scene(loadFXML("home"), 1024, 640);
         stage.setScene(scene);
         stage.show();
     }
