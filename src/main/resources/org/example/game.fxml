@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="640.0" prefWidth="1024.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.GameController">
+   <children>
+      <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/chess.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="varLabel" blendMode="DIFFERENCE" styleClass="label-header" text="Jeu" />
+            <SplitPane dividerPositions="0.29797979797979796" prefHeight="350.0" prefWidth="200.0" style="-fx-background-color: 0000;">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
+                     <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <top>
+                              <Label blendMode="DIFFERENCE" styleClass="label-input" text="Coups" BorderPane.alignment="CENTER" />
+                           </top>
+                           <center>
+                              <ScrollPane fx:id="scroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="271.0" vbarPolicy="ALWAYS" vvalue="1.0" BorderPane.alignment="CENTER">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="270.0" styleClass="background">
+                                       <children>
+                                          <VBox fx:id="coupsBox" alignment="TOP_CENTER" layoutY="125.0" prefWidth="270.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                                             <children>
+                                                <Label text="Label" />
+                                                <Label text="Label" />
+                                                <Label text="Label" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="120.0" />
+                                       </padding>
+                                    </AnchorPane>
+                                </content>
+                                 <BorderPane.margin>
+                                    <Insets />
+                                 </BorderPane.margin>
+                              </ScrollPane>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Canvas fx:id="canvas" height="300.0" layoutX="32.0" onMouseClicked="#play" width="300.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="25.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </VBox.margin>
+            </SplitPane>
+            <Label fx:id="playerLabel" blendMode="DIFFERENCE" styleClass="label-header" text="Joueur" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
