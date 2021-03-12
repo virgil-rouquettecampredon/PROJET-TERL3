@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 public class OrdreDesJoueursTest {
     @Test
-    public final void testConstructeur() {
+    public final void testVerifierOrdre_Passes3J() {
         try {
             OrdreDesJoueurs.verifierOrdre("123", 3);
         } catch (OrdreDesJoueursException oe) {

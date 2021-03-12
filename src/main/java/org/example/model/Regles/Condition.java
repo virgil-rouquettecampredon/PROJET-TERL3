@@ -5,7 +5,9 @@ import org.example.model.Regles.Sujet;
 
 import java.util.ArrayList;
 
-public class Condition {
+public abstract class Condition{
+
+    /*
     private ArrayList<Sujet> sujets;
 
 
@@ -15,6 +17,9 @@ public class Condition {
 
     public boolean verification(OrdonnanceurDeJeu odonnaceur, Sujet sujet){
         return false;
-    }
+    }*/
+
+    public abstract boolean verification();
+    public abstract void consequence();
 
 }

@@ -1,6 +1,8 @@
 package org.example.model;
 
-public class Case{
+import org.example.model.Regles.CibleDeRegle;
+
+public class Case implements CibleDeRegle {
     private String sprite;
     private Position position;
     private Piece pieceOnCase;

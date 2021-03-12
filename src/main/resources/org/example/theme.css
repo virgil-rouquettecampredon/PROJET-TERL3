@@ -1,4 +1,7 @@
 /*https://code.makery.ch/fr/library/javafx-tutorial/part4/*/
+:root {
+    --main-color-Virgil : "#F9CB9C";
+}
 
 .background {
     -fx-background-color: #1d1d1d;

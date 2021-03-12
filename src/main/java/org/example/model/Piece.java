@@ -6,7 +6,7 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.util.ArrayList;
 
-public class Piece{
+public class Piece implements SujetDeRegle, CibleDeRegle {
     private String name;
     private String sprite;
     private int nbMovement;

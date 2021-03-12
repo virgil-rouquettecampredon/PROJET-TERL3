@@ -1,8 +1,11 @@
 package org.example.model;
 
+import org.example.model.Regles.CibleDeRegle;
+import org.example.model.Regles.SujetDeRegle;
+
 import java.util.ArrayList;
 
-public class Joueur {
+public class Joueur implements CibleDeRegle, SujetDeRegle {
 
     private String name;
     private int equipe;

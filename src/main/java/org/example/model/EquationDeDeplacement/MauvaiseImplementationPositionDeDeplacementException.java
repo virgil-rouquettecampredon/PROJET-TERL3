@@ -8,4 +8,9 @@ public class MauvaiseImplementationPositionDeDeplacementException extends Mauvai
     public MauvaiseImplementationPositionDeDeplacementException(String s) {
         super(s);
     }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
 }

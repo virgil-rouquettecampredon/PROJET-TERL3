@@ -8,4 +8,9 @@ public class MauvaiseImplementationVecteurDeDeplacementException extends Mauvais
     public MauvaiseImplementationVecteurDeDeplacementException(String s) {
         super(s);
     }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
 }
