@@ -1,5 +1,9 @@
 package org.example.model;
 
+import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
+import org.example.model.Regles.CibleDeRegle;
+import org.example.model.Regles.SujetDeRegle;
+
 import java.util.ArrayList;
 
 public class Piece{

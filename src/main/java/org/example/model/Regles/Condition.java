@@ -1,4 +1,7 @@
-package org.example.model;
+package org.example.model.Regles;
+
+import org.example.model.OrdonnanceurDeJeu;
+import org.example.model.Regles.Sujet;
 
 import java.util.ArrayList;
 

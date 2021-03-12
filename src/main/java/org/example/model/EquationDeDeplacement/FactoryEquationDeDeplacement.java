@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.EquationDeDeplacement;
 
 public interface FactoryEquationDeDeplacement {
     //Séparateur autorisé

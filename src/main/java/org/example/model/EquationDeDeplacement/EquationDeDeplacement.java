@@ -1,4 +1,6 @@
-package org.example.model;
+package org.example.model.EquationDeDeplacement;
+
+import org.example.model.Position;
 
 public abstract class EquationDeDeplacement {
     private boolean evaluable;

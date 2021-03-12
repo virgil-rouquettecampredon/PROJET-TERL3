@@ -10,7 +10,6 @@ public class OrdreDesJoueurs {
         this.ordreStr = ordreStr;
         this.nbJoueur = nbJoueur;
         this.curseur = 0;
-        verifierOrdre();
     }
 
     public boolean verifierOrdre() throws OrdreDesJoueursException{
@@ -21,8 +20,8 @@ public class OrdreDesJoueurs {
         try {
             for (char c : this.ordreStr.toCharArray()) {
                 valueChar = Integer.parseInt(String.valueOf(c));
-                if (valueChar <= this.nbJoueur) {
-                    tabPresent[valueChar] = true;
+                if (valueChar <= nbJoueur) {
+                    tabPresent[valueChar-1] = true;
                 } else {
                     throw new OrdreDesJoueursException();
                 }
