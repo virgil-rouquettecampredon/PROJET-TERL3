@@ -23,16 +23,16 @@
             <Label fx:id="varLabel" blendMode="DIFFERENCE" styleClass="label-header" text="Jeu" />
             <SplitPane dividerPositions="0.29797979797979796" prefHeight="350.0" prefWidth="200.0" style="-fx-background-color: 0000;">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
+                <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
                      <children>
                         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <top>
                               <Label blendMode="DIFFERENCE" styleClass="label-input" text="Coups" BorderPane.alignment="CENTER" />
                            </top>
                            <center>
-                              <ScrollPane fx:id="scroll" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="271.0" vbarPolicy="ALWAYS" vvalue="1.0" BorderPane.alignment="CENTER">
+                              <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="414.0" vbarPolicy="ALWAYS" vvalue="1.0" BorderPane.alignment="CENTER">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="270.0" styleClass="background">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="background">
                                        <children>
                                           <VBox fx:id="coupsBox" alignment="TOP_CENTER" layoutY="125.0" prefWidth="270.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
                                              <children>
@@ -55,7 +55,7 @@
                         </BorderPane>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                <AnchorPane minHeight="0.0" minWidth="360.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
                         <Canvas fx:id="canvas" height="300.0" layoutX="32.0" onMouseClicked="#play" width="300.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="25.0" />
                      </children>
