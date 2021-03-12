@@ -30,6 +30,7 @@ public class App extends Application {
             System.exit(0);
         });
         stage.show();
+        //commentaire
     }
 
     public static void setRoot(String fxml) throws IOException {
