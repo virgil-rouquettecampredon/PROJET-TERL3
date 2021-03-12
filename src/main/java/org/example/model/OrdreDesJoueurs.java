@@ -19,7 +19,8 @@ public class OrdreDesJoueurs {
         for (boolean b: tabPresent){ b=false; }
 
         try {
-            for (char c : this.ordreStr.toCharArray()) {
+            for (char c : ordreStr.toCharArray()) {
+                //NumberFormatException
                 valueChar = Integer.parseInt(String.valueOf(c));
                 if (valueChar <= nbJoueur) {
                     tabPresent[valueChar-1] = true;
@@ -33,6 +34,5 @@ public class OrdreDesJoueurs {
         } catch (Exception e) {
             throw new OrdreDesJoueursException();
         }
-        return true;
     }
 }

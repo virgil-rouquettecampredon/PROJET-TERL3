@@ -6,6 +6,7 @@ import java.util.List;
 public class Sujet<T extends SujetDeRegle> {
 
     public ArrayList<T> recupererTout(List<T> list) {
+        //A IMPLEMENTER
         return null;
     }
 }
