@@ -19,6 +19,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        //commentaire a supprimer pour push
         soundManager = new SoundManager();
         stage.setTitle("ChessBurger");
         scene = new Scene(loadFXML("home"), 1024, 640);
