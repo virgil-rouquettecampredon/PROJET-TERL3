@@ -1,9 +1,9 @@
-package org.example.model;
+package org.example.model.Regles;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sujet<T extends  SujetDeRegle> {
+public class Sujet<T extends SujetDeRegle> {
 
     public ArrayList<T> recupererTout(List<T> list) {
         return null;

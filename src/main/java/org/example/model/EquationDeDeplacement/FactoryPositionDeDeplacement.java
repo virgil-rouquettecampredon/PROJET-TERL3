@@ -1,6 +1,6 @@
-package org.example.model;
+package org.example.model.EquationDeDeplacement;
 
-public class FactoryPositionDeDeplacement implements FactoryEquationDeDeplacement{
+public class FactoryPositionDeDeplacement implements FactoryEquationDeDeplacement {
     private String equation;
 
     /**Constructeur d'une factory VecteurDeDeplacement.

@@ -1,3 +1,3 @@
-package org.example.model;
+package org.example.model.Regles;
 
 public abstract class SujetDeRegle {}

@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.model.EquationDeDeplacement;
 
 public abstract class MauvaiseImplementationEquationDeDeplacementException extends Exception{
     private String message;
