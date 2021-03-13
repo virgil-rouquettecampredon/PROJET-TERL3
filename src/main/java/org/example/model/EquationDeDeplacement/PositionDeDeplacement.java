@@ -8,7 +8,7 @@ public class PositionDeDeplacement extends EquationDeDeplacement {
     }
 
     public PositionDeDeplacement(int x, int y) {
-        super(x, y);
+        super(true,x, y);
     }
 
     public Position evaluate(Position depart){

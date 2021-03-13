@@ -7,6 +7,6 @@ public class VecteurDeDeplacement extends EquationDeDeplacement {
     }
 
     public VecteurDeDeplacement(int x, int y) {
-        super(x, y);
+        super(true,x, y);
     }
 }

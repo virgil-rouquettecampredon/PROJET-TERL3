@@ -18,16 +18,6 @@ public abstract class EquationDeDeplacement {
         this.evaluable = evaluable;
     }
 
-    /**Constructeur d'une équation de déplacement.
-     * @param x : int renseignant la valeur à ajouter à l'axe X d'une position quelconque afin d'enobtenir une nouvelle, conforme à l'équation de déplacement.
-     * @param y : int renseignant la valeur à ajouter à l'axe Y d'une position quelconque afin d'enobtenir une nouvelle, conforme à l'équation de déplacement.
-     * **/
-    public EquationDeDeplacement(int x, int y){
-        this.x =x;
-        this.y =y;
-        this.evaluable = false;
-    }
-
     /**Fonction permettant d'évaluer une équation de déplacement à partir d'une position de départ.
      * @param depart : Position à prendre en compte afin de retourner une nouvelle position théoriquement atteignable d'après l'équation de déplacement.
      * **/
@@ -43,6 +33,15 @@ public abstract class EquationDeDeplacement {
     /*DEBUT GETTER SETTER*/
     public void setEvaluable(boolean evaluable) {
         this.evaluable = evaluable;
+    }
+
+    //test Only
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
     /*FIN GETTER SETTER*/
 }

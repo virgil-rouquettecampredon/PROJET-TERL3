@@ -22,12 +22,12 @@ public class FactoryVecteurDeDeplacement implements FactoryEquationDeDeplacement
                 try {
                     valX = Integer.parseInt(equationRes[0]);
                 }catch (NumberFormatException e){
-                    throw new MauvaiseImplementationVecteurDeDeplacementException("Valeur non numérique pour x");
+                    throw new MauvaiseImplementationVecteurDeDeplacementException("Valeur non numérique pour x : " + equationRes[0]);
                 }
                 try {
-                    valY = Integer.parseInt(equationRes[0]);
+                    valY = Integer.parseInt(equationRes[1]);
                 }catch (NumberFormatException e){
-                    throw new MauvaiseImplementationVecteurDeDeplacementException("Valeur non numérique pour y");
+                    throw new MauvaiseImplementationVecteurDeDeplacementException("Valeur non numérique pour y : " + equationRes[1]);
                 }
                 return new VecteurDeDeplacement(valX,valY);
             }
