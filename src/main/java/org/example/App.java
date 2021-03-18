@@ -15,7 +15,7 @@ import java.io.IOException;
 public class App extends Application {
 
     public static SoundManager soundManager;
-    private static Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
