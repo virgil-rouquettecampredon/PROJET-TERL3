@@ -2,6 +2,12 @@
 * {
     -bg-color : #1d1d1d;
     /*#F9CB9C*/
+    -backButton-color : #723813;
+    -specialButton-color : #8DC7EC;
+
+    -text-on-bg : #ffffff;
+    -font-semibold : "Segoe UI Semibold";
+    -font-light : "Segoe UI Light";
 }
 
 .background {
@@ -18,28 +24,28 @@
 
 .label {
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-font-family: -font-semibold;
+    -fx-text-fill: -text-on-bg;
 }
 
 .label-bright {
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-font-family: -font-semibold;
+    -fx-text-fill: -text-on-bg;
     -fx-opacity: 1;
 }
 
 .label-header {
     -fx-font-size: 40pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-font-family: -font-semibold;
+    -fx-text-fill: -text-on-bg;
     -fx-opacity: 1;
 }
 
 .table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
+    -fx-base: -bg-color;
+    -fx-control-inner-background: -bg-color;
+    -fx-background-color: -bg-color;
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 5;
@@ -63,8 +69,8 @@
 
 .table-view .column-header .label {
     -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-font-family: -font-light;
+    -fx-text-fill: -text-on-bg;
     -fx-alignment: center-left;
     -fx-opacity: 1;
 }
@@ -74,8 +80,8 @@
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
-    -fx-background-color: transparent, derive(#1d1d1d,20%);
+    -fx-border-color: transparent -bg-color transparent -bg-color;
+    -fx-background-color: transparent, derive(-bg-color,20%);
 }
 
 .split-pane {
@@ -83,17 +89,17 @@
 }
 
 .menu-bar {
-    -fx-background-color: derive(#1d1d1d,20%);
+    -fx-background-color: derive(-bg-color,20%);
 }
 
 .context-menu {
-    -fx-background-color: derive(#1d1d1d,50%);
+    -fx-background-color: derive(-bg-color,50%);
 }
 
 .menu-bar .label {
     -fx-font-size: 14pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-font-family: -font-light;
+    -fx-text-fill: -text-on-bg;
     -fx-opacity: 0.9;
 }
 
@@ -103,7 +109,7 @@
 
 .text-field {
     -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: -font-semibold;
 }
 
 /*
@@ -119,16 +125,16 @@
     -fx-background-color: -bg-color;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: -text-on-bg;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:hover {
-    -fx-background-color: #3a3a3a;
+    -fx-background-color: derive(-bg-color, 20%);
 }
 
 .button:pressed, .button:default:hover:pressed {
-  -fx-background-color: #4a4a4a;
+  -fx-background-color: derive(-bg-color, 50%);
   -fx-text-fill: -bg-color;
 }
 
@@ -142,13 +148,13 @@
 
 .button:disabled, .button:default:disabled {
     -fx-opacity: .9;
-    -fx-background-color: #555555;
-    -fx-text-fill: white;
+    -fx-background-color: derive(-bg-color, 70%);;
+    -fx-text-fill: -text-on-bg;
 }
 
 .button:default {
     -fx-background-color: -fx-focus-color;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -text-on-bg;
 }
 
 .button:default:hover {
@@ -156,32 +162,32 @@
 }
 
 .backButton {
-    -fx-background-color: #723813;
+    -fx-background-color: -backButton-color;
 }
 
 .backButton:hover {
-    -fx-background-color: #F4C99C;
-    -fx-text-fill: #1d1d1d;
+    -fx-background-color: derive(-backButton-color, 30%);
+    -fx-text-fill: -bg-color;
 }
 
 .backButton:pressed {
-  -fx-background-color: #E1C6A8;
-  -fx-text-fill: #1d1d1d;
+  -fx-background-color: derive(-backButton-color, 50%);
+  -fx-text-fill: -bg-color;
 }
 
 .specialButton {
     -fx-border-color: -bg-color;
-    -fx-background-color: #8DC7EC;
+    -fx-background-color: -specialButton-color;
     -fx-text-fill: black;
 }
 
 .specialButton:hover {
-    -fx-background-color: #0B3663;
+    -fx-background-color: derive(-specialButton-color, -30%);
     -fx-text-fill: white;
 }
 
 .specialButton:pressed {
-    -fx-background-color: #1E3957;
+    -fx-background-color: derive(-specialButton-color, -50%);
     -fx-text-fill: white;
 }
 
@@ -191,5 +197,5 @@
 
 .label-input {
     -fx-font-size: 30pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: -font-light;
 }
