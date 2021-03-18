@@ -10,12 +10,12 @@ import java.util.List;
 
 public class GenerateurDeRegle {
 
-    private String[] reglesSousFormeDeChaine;
+    private List<String>[] reglesSousFormeDeChaine;
 
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
 
-    public GenerateurDeRegle(String[] reglesSousFormeDeChaine) {
+    public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine) {
         this.reglesSousFormeDeChaine = reglesSousFormeDeChaine;
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
@@ -190,5 +190,13 @@ public class GenerateurDeRegle {
 
     //[ ["cavalier"] [(n)->if(n.type == cavalier) return n] ]
 
+    /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
+    * en une instance de REGLE manipulable plus simplement par le système.*/
+    public void analyser(ArrayList<Piece> listepiece) throws MauvaiseDefinitionRegleException{
+        //Pour chaque règles du jeu définies
+        for (int i = 0; i<this.reglesSousFormeDeChaine.length; i++){
+            //analyse syntaxique
+            //analyse sémantique
+        }
     }
 }
