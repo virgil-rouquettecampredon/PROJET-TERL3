@@ -10,18 +10,23 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.example.model.VarianteManager;
 
 import java.io.IOException;
 
 public class App extends Application {
 
-    public SoundManager soundManager;
     public Scene scene;
+
+    public SoundManager soundManager;
+    public VarianteManager varianteManager;
 
     @Override
     public void start(Stage stage) throws IOException {
         //commentaire a supprimer pour push
         soundManager = new SoundManager();
+        varianteManager = new VarianteManager();
+
         stage.setTitle("ChessBurger");
         stage.setResizable(false);
         scene = new Scene(loadFXML("home"), 1024, 640);
