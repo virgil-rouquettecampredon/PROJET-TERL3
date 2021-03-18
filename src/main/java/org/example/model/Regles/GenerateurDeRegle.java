@@ -15,6 +15,23 @@ public class GenerateurDeRegle {
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
 
+    //Liste des axiomes reconnaissables par notre système
+    //Utile lors de l'analyse syntaxique
+
+    private ArrayList<String> axiomes = new ArrayList<>();
+    private static final String[] axiomestab = {
+            "mange", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions*/
+            "=", "<", ">",                                                                                  /*comparaisons*/
+            "tous-piece", "tous-joueur", "tous-typecase",                                                   /*tokens nimporte*/
+            "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"                      /*consequences*/
+            };
+
+    private enum etat {
+        PIECE, JOUEUR, SURPLATEAU, DANSDEFAUSSE,
+        MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
+        COMPARAISON, ET, OU
+    };
+
     public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine) {
         this.reglesSousFormeDeChaine = reglesSousFormeDeChaine;
         this.regleAvantCoup = new ArrayList<>();
@@ -199,4 +216,6 @@ public class GenerateurDeRegle {
             //analyse sémantique
         }
     }
+
+
 }
