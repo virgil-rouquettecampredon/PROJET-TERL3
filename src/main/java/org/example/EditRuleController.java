@@ -32,7 +32,7 @@ public class EditRuleController extends Controller {
         System.out.println("sujet2Box="+sujet2Box.getValue());
         System.out.println("etatBox="+etatBox.getValue());
         System.out.println("consequenceBox="+consequenceBox.getValue());
-        App.setRoot("rules");
+        getApp().setRoot("rules");
     }
 
     @FXML

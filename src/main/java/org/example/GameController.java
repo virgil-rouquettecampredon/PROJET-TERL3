@@ -77,7 +77,7 @@ public class GameController extends Controller {
             playerLabel.setText("Player1");
         if (mouseEvent.getX() > 250 && mouseEvent.getY() > 250) {
             App.soundManager.playSound("win");
-            App.setRoot("gameOver");
+            getApp().setRoot("gameOver");
         }
     }
 }

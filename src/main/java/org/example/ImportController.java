@@ -31,6 +31,6 @@ public class ImportController extends Controller {
         App.soundManager.playSound("button-confirm");
         //TODO: valider texte de l'input, le traduire dans la classe variante, le rajouter à la liste de variante
         System.out.println(input.getText());
-        App.setRoot("home");
+        getApp().setRoot("home");
     }
 }

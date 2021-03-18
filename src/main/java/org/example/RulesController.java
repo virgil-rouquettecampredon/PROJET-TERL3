@@ -28,7 +28,7 @@ public class RulesController extends Controller {
     private void confirmButton() throws IOException {
         App.soundManager.playSound("button-click");
         //TODO: valider texte de l'input
-        App.setRoot("varianteMenu2");
+        getApp().setRoot("varianteMenu2");
     }
 
     @FXML
@@ -69,7 +69,7 @@ public class RulesController extends Controller {
         //r parameter
         //TODO passer r à la scene
         App.soundManager.playSound("button-click");
-        App.setRoot("editRule");
+        getApp().setRoot("editRule");
     }
 
     public void deletRule() {

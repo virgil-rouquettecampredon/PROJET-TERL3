@@ -14,6 +14,6 @@ public class CreateController extends Controller {
         App.soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println(input.getText());
-        App.setRoot("VarianteMenu1");
+        getApp().setRoot("VarianteMenu1");
     }
 }

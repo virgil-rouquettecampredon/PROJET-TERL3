@@ -30,7 +30,7 @@ public class PieceController extends Controller {
     private void confirmButton() throws IOException {
         //TODO SAUVEGARDER JE PENSE LOL
         App.soundManager.playSound("button-click");
-        App.setRoot("varianteMenu2");
+        getApp().setRoot("varianteMenu2");
     }
 
     @FXML
@@ -72,7 +72,7 @@ public class PieceController extends Controller {
     public void editPiece(Piece p) throws IOException {
         //TODO passer p à la scene
         App.soundManager.playSound("button-click");
-        App.setRoot("pieceMove");
+        getApp().setRoot("pieceMove");
     }
 
     public void deletPiece(Piece p) {

@@ -22,7 +22,7 @@ public class PlayController extends Controller {
         App.soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println(varianteBox.getValue());
-        App.setRoot("game");
+        getApp().setRoot("game");
     }
 
     @FXML

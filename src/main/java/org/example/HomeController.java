@@ -10,12 +10,12 @@ public class HomeController extends Controller {
     @FXML
     private void playButton() throws IOException {
         App.soundManager.playSound("button-click");
-        App.setRoot("play");
+        getApp().setRoot("play");
     }
 
     @FXML
     private void varianteButton() throws IOException {
         App.soundManager.playSound("button-click");
-        App.setRoot("variante");
+        getApp().setRoot("variante");
     }
 }

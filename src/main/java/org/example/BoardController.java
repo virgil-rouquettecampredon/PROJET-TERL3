@@ -64,6 +64,6 @@ public class BoardController extends Controller {
         App.soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println(xInput.getText() + " x " + yInput.getText());
-        App.setRoot("VarianteMenu1");
+        getApp().setRoot("VarianteMenu1");
     }
 }

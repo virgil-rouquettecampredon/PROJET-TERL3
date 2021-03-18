@@ -61,7 +61,7 @@ public class PieceMoveController extends Controller {
     private void validateButton() throws IOException {
         App.soundManager.playSound("button-click");
         //TODO: modifier la piece
-        App.setRoot("piece");
+        getApp().setRoot("piece");
     }
 
     public void openImageButton() {

@@ -95,7 +95,7 @@ public class InitPosController extends Controller {
         App.soundManager.playSound("button-click");
         //TODO: enregistrer les positions
         System.out.println(tab.getRowFactory());
-        App.setRoot("varianteMenu2");
+        getApp().setRoot("varianteMenu2");
     }
 
     public void updatePawnPlayer() {

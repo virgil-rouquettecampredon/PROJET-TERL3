@@ -21,6 +21,6 @@ public class SaveController extends Controller {
     @FXML
     private void continueButton() throws IOException {
         App.soundManager.playSound("button-confirm");
-        App.setRoot("home");
+        getApp().setRoot("home");
     }
 }

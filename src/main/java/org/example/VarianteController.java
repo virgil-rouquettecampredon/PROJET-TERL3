@@ -9,12 +9,12 @@ public class VarianteController extends Controller {
     @FXML
     private void importButton() throws IOException {
         App.soundManager.playSound("button-click");
-        App.setRoot("import");
+        getApp().setRoot("import");
     }
 
     @FXML
     private void createButton() throws IOException {
         App.soundManager.playSound("button-click");
-        App.setRoot("create");
+        getApp().setRoot("create");
     }
 }

@@ -30,7 +30,7 @@ public class PlayerController extends Controller {
         //TODO: enregistrer les trucs
         System.out.println(nbPlayerInput.getText());
         data.forEach(System.out::println);
-        App.setRoot("VarianteMenu1");
+        getApp().setRoot("VarianteMenu1");
     }
 
     @FXML
