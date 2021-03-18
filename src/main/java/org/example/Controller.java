@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
@@ -22,5 +23,12 @@ public class Controller {
 
     public void initialise() {
 
+    }
+
+    public void showAlert(Alert.AlertType type, String text) {
+        Alert alert = new Alert(type);
+        alert.setContentText(text);
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        alert.showAndWait();
     }
 }

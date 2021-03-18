@@ -3,6 +3,7 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
@@ -62,8 +63,18 @@ public class BoardController extends Controller {
     @FXML
     private void continueButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        //TODO: valider texte de l'input
+        int x = 8;
+        int y = 8;
+        try {
+            x = Integer.parseInt(xInput.getText());
+            y = Integer.parseInt(yInput.getText());
+        }
+        catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, xInput.getText()+" ou "+yInput.getText()+" n'est pas un entier.");
+            return;
+        }
         System.out.println(xInput.getText() + " x " + yInput.getText());
+        //TODO METTRE LE X ET Y DANS LE TABLEAU DE VARIANTE
         getApp().setRoot("VarianteMenu1");
     }
 }

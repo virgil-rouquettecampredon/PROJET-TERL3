@@ -1,10 +1,19 @@
 /*https://code.makery.ch/fr/library/javafx-tutorial/part4/*/
-:root {
-    --main-color-Virgil : "#F9CB9C";
+* {
+    -bg-color : #1d1d1d;
+    /*#F9CB9C*/
 }
 
 .background {
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: -bg-color;
+}
+
+.dialog-pane {
+    -fx-background-color: -bg-color;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: -bg-color;
 }
 
 .label {
@@ -107,7 +116,7 @@
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: -bg-color;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
@@ -120,7 +129,7 @@
 
 .button:pressed, .button:default:hover:pressed {
   -fx-background-color: #4a4a4a;
-  -fx-text-fill: #1d1d1d;
+  -fx-text-fill: -bg-color;
 }
 
 .button:focused {
@@ -161,7 +170,7 @@
 }
 
 .specialButton {
-    -fx-border-color: #1D1D1D;
+    -fx-border-color: -bg-color;
     -fx-background-color: #8DC7EC;
     -fx-text-fill: black;
 }
