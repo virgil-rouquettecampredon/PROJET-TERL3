@@ -59,23 +59,23 @@ public class PieceMoveController extends Controller {
 
     @FXML
     private void validateButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: modifier la piece
         getApp().setRoot("piece");
     }
 
     public void openImageButton() {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: fenetre pour ouvrir une image
     }
 
     public void selectBoxTool() {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: selectionner l'outil de case
     }
 
     public void selectArowTool() {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: selectionner l'outil de fleche
     }
 }

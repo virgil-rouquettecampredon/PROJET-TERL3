@@ -92,7 +92,7 @@ public class InitPosController extends Controller {
 
     @FXML
     private void validateButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: enregistrer les positions
         System.out.println(tab.getRowFactory());
         getApp().setRoot("varianteMenu2");

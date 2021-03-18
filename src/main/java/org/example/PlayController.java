@@ -19,7 +19,7 @@ public class PlayController extends Controller {
 
     @FXML
     private void beginButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println(varianteBox.getValue());
         getApp().setRoot("game");
@@ -32,7 +32,7 @@ public class PlayController extends Controller {
     }
 
     public void boxModified() {
-        App.soundManager.playSound("button-hover");
+        getApp().soundManager.playSound("button-hover");
         button.setDisable(false);
     }
 }

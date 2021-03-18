@@ -29,13 +29,13 @@ public class PieceController extends Controller {
     @FXML
     private void confirmButton() throws IOException {
         //TODO SAUVEGARDER JE PENSE LOL
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         getApp().setRoot("varianteMenu2");
     }
 
     @FXML
     private void addButton() {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO AJOUTER UNE PIECE
         Piece p = new Piece("Pawn", "file:src/main/resources/org/example/images/pawn.png");
         ImageView iv = new ImageView(new Image(p.getSprite()));
@@ -71,7 +71,7 @@ public class PieceController extends Controller {
 
     public void editPiece(Piece p) throws IOException {
         //TODO passer p à la scene
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         getApp().setRoot("pieceMove");
     }
 

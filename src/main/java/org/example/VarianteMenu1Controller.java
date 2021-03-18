@@ -8,19 +8,19 @@ public class VarianteMenu1Controller extends Controller {
 
     @FXML
     private void boardButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         getApp().setRoot("board");
     }
 
     @FXML
     private void playerButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         getApp().setRoot("player");
     }
 
     @FXML
     private void continueButton() throws IOException {
-        App.soundManager.playSound("button-confirm");
+        getApp().soundManager.playSound("button-confirm");
         getApp().setRoot("varianteMenu2");
     }
 }

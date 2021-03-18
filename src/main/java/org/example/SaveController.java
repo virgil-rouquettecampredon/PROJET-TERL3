@@ -12,7 +12,7 @@ public class SaveController extends Controller {
 
     @FXML
     private void saveButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         button.getStyleClass().remove("backButton");
         button.getStyleClass().add("specialButton");
         //TODO ouvrir explorer pour enregistrer
@@ -20,7 +20,7 @@ public class SaveController extends Controller {
 
     @FXML
     private void continueButton() throws IOException {
-        App.soundManager.playSound("button-confirm");
+        getApp().soundManager.playSound("button-confirm");
         getApp().setRoot("home");
     }
 }

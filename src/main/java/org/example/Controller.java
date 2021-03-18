@@ -17,7 +17,7 @@ public class Controller {
 
     @FXML
     private void buttonHover() throws IOException {
-        //App.soundManager.playSound("button-hover");
+        //getApp().soundManager.playSound("button-hover");
     }
 
     public void initialise() {

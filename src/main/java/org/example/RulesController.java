@@ -26,14 +26,14 @@ public class RulesController extends Controller {
 
     @FXML
     private void confirmButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         getApp().setRoot("varianteMenu2");
     }
 
     @FXML
     private void addButton() {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO AJOUTER UNE PIECE
         //Rule r = new Rule();
         Button be = new Button("Edit");
@@ -68,12 +68,12 @@ public class RulesController extends Controller {
     public void editRule() throws IOException {
         //r parameter
         //TODO passer r à la scene
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         getApp().setRoot("editRule");
     }
 
     public void deletRule() {
-        App.soundManager.playSound("lose");
+        getApp().soundManager.playSound("lose");
         //rules.remove(r);
     }
 

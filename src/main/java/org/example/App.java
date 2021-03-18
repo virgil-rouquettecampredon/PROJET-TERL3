@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class App extends Application {
 
-    public static SoundManager soundManager;
-    public static Scene scene;
+    public SoundManager soundManager;
+    public Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -27,7 +27,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("home"), 1024, 640);
         stage.setScene(scene);
         stage.setOnCloseRequest(t -> {
-            App.soundManager.playSound("lose");
+            soundManager.playSound("lose");
             Platform.exit();
             System.exit(0);
         });

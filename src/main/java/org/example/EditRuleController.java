@@ -24,7 +24,7 @@ public class EditRuleController extends Controller {
 
     @FXML
     private void validateButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println("sujet1Box="+sujet1Box.getValue());
         System.out.println("actionBox="+actionBox.getValue());

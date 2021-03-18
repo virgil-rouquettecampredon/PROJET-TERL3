@@ -66,7 +66,7 @@ public class GameController extends Controller {
     }
 
     public void play(MouseEvent mouseEvent) throws IOException {
-        App.soundManager.playSound("button-hover");
+        getApp().soundManager.playSound("button-hover");
         System.out.println(mouseEvent);
         coupsBox.getChildren().add(new Label(playerLabel.getText() + " : label de coup"));
         scroll.setVvalue(2);
@@ -76,7 +76,7 @@ public class GameController extends Controller {
         else
             playerLabel.setText("Player1");
         if (mouseEvent.getX() > 250 && mouseEvent.getY() > 250) {
-            App.soundManager.playSound("win");
+            getApp().soundManager.playSound("win");
             getApp().setRoot("gameOver");
         }
     }

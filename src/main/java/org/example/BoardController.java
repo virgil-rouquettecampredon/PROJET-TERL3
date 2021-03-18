@@ -61,7 +61,7 @@ public class BoardController extends Controller {
 
     @FXML
     private void continueButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: valider texte de l'input
         System.out.println(xInput.getText() + " x " + yInput.getText());
         getApp().setRoot("VarianteMenu1");

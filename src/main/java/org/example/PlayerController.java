@@ -26,7 +26,7 @@ public class PlayerController extends Controller {
 
     @FXML
     private void confirmButton() throws IOException {
-        App.soundManager.playSound("button-click");
+        getApp().soundManager.playSound("button-click");
         //TODO: enregistrer les trucs
         System.out.println(nbPlayerInput.getText());
         data.forEach(System.out::println);
