@@ -222,6 +222,16 @@ public class GenerateurDeRegle {
                             if(etAx == etat.AUCUN){
                                 throw new MauvaiseSyntaxeRegleException("Mauvaise definition d'axiome");
                             }else{
+                                if(etAx == etat.PIECE){
+                                    regle.set(i,"PALL#JALL#ALL");
+                                    etAx = etat.PIECETOKEN;
+                                }
+                                if(etAx == etat.JOUEUR){
+                                    regle.set(i,"JALL");
+                                }
+                                if(etAx == etat.CASE){
+                                    regle.set(i,"CALL");
+                                }
                                 curEtat = etAx;
                             }
                         }else{
