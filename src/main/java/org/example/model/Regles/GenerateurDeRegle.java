@@ -12,7 +12,7 @@ enum etat {
     AUCUN,NOMBRE,
     PIECE, JOUEUR,CASE,PIECETOKEN,
     MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
-    COMPARAISON, ET, OU, CONSEQUENCE
+    COMPARAISON, ET, OU, CONSEQUENCE, ENTIER
 
     /*private String valeur;
 
@@ -288,7 +288,7 @@ public class GenerateurDeRegle {
      * private enum etat {
      *         PIECE, JOUEUR, SURPLATEAU, DANSDEFAUSSE,
      *         MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
-     *         COMPARAISON, ET, OU
+     *         COMPARAISON, ET, OU, ENTIER
      *
      *
      **/

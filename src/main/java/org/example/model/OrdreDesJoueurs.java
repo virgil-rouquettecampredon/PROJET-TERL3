@@ -10,6 +10,7 @@ public class OrdreDesJoueurs {
         this.ordreStr = ordreStr;
         this.nbJoueur = nbJoueur;
         this.curseur = 0;
+        //this.verifierOrdre();
     }
 
     public static void verifierOrdre(String ordreStr, int nbJoueur) throws OrdreDesJoueursException{
