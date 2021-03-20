@@ -1,8 +1,8 @@
-package org.example.model;
-
-import static org.junit.Assert.*;
-
+/*package org.example.model;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class OrdreDesJoueursTest {
 
@@ -16,4 +16,8 @@ public class OrdreDesJoueursTest {
 
     }
 
-}
+}*/
+
+
+//QUEST CE QUE CA FOUT LA ?????????
+//ON A UN DOSSIER TEST NON ?
