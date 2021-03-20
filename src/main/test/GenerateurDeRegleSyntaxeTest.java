@@ -244,6 +244,43 @@ public class GenerateurDeRegleSyntaxeTest {
     public final void testScenario2_testBon() {
         ArrayList<String> regle = new ArrayList<>();
         regle.add("1"); //filtré
+        regle.add("tous-piece");
+        regle.add("mange");
+        regle.add("P0#J2#D");
+        regle.add("OU");
+        regle.add("tous-joueur");
+        regle.add("ET");
+        regle.add("tous-typecase");
+        regle.add("estechec");
+        regle.add("promouvoir");
+
+        ArrayList<Etat> regleEtat = new ArrayList<>();
+        regleEtat.add(Etat.PIECETOKEN);
+        regleEtat.add(Etat.MANGE);
+        regleEtat.add(Etat.PIECETOKEN);
+        regleEtat.add(Etat.OU);
+        regleEtat.add(Etat.JOUEUR);
+        regleEtat.add(Etat.ET);
+        regleEtat.add(Etat.CASE);
+        regleEtat.add(Etat.ESTMENACE);
+        regleEtat.add(Etat.CONSEQUENCE);
+
+        try{
+            ArrayList<Etat> etats = GenerateurDeRegle.estSyntaxiquementCorrecte(regle,10,10,10);
+            for (int i = 0; i < etats.size(); i++) {
+                assertEquals(etats.get(i),regleEtat.get(i));
+            }
+            assertEquals("PALL#JALL#ALL",regle.get(1));
+            assertEquals("JALL",regle.get(5));
+            assertEquals("CALL",regle.get(7));
+        }catch (MauvaiseDefinitionRegleException m){
+            fail("Exception Levée : " + m.getMessage());
+        }
+    }
+    @Test
+    public final void testScenario3_testBon() {
+        ArrayList<String> regle = new ArrayList<>();
+        regle.add("1"); //filtré
         regle.add("P0#J0#P");
         regle.add("sedeplace");
         regle.add("C2");
