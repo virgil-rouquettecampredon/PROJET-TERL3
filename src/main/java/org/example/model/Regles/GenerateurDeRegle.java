@@ -74,8 +74,8 @@ public class GenerateurDeRegle {
     public static Jeton getAxiome(String axiome){
         Jeton et = Jeton.AUCUN;
         switch (axiome){
-            case "mange","sedeplace","estplace"-> et = Jeton.ACTION;
-            case "estpromu","estsur","estechec"-> et = Jeton.ETAT;
+            case "mange","sedeplace","estplace","estechec","estsur"-> et = Jeton.ACTION;
+            case "estpromu"-> et = Jeton.ETAT;
             case "nb_deplacement","timer"-> et = Jeton.COMPTEUR;
             case "=" , "<" , ">" -> et = Jeton.COMPARAISON;
             case "ET"-> et = Jeton.ET;
@@ -285,13 +285,7 @@ public class GenerateurDeRegle {
      *  Prend en entrée une liste de Token et retourne une règle si cette liste
      *  de token est sémantiquement correcte.
      *
-     * note:
-     * private enum etat {
-     *          AUCUN,NOMBRE,
-     *          PIECE, JOUEUR,CASE,PIECETOKEN,
-     *          MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
-     *          COMPARAISON, ET, OU, CONSEQUENCE,NON
-     *
+     * note :
      *          AUCUN,NOMBRE,
      *          PIECE, JOUEUR, CASE,
      *          ACTION, CIBLE, ETAT,
@@ -299,7 +293,7 @@ public class GenerateurDeRegle {
      *
      *
      **/
-    public void estSemantiquementCorrecte(ArrayList<Jeton> lt) {
+    public void estSemantiquementCorrecte(ArrayList<Jeton> lt, ArrayList<String> reglestr) throws MauvaiseSemantiqueRegleException {
         int c = 0;    //curseur
         Regle regle = new Regle();
         //int nbContexte=2;
@@ -317,14 +311,117 @@ public class GenerateurDeRegle {
         map_etats.get(Etat.JOUEUR).get(1).add(Etat.NOMBRE);
         map_etats.get(Etat.ACTION).get(1).add(Etat.NOMBRE);*/
 
-       /* while (lt.get(c)) { regle.setBool(!regle.getBool()); c++; }
+        while (lt.get(c) == Jeton.NON) { regle.setBool(!regle.getBool()); c++; }
 
-        if (lt.get(c) == Jeton.PIECE) {
+        do {
+            if (lt.get(c) == Jeton.PIECE) {
+                //interpreter Piece
+                c++;
+                if (lt.get(c) == Jeton.ACTION) {
+                    //"mange","sedeplace","estplace","estechec","estsur"
+                    if (reglestr.get(c).equals("mange")) {
+                        c++;
+                        if (lt.get(c) == Jeton.CASE) {
+                            //interpreter Case
+                        } else if (lt.get(c) == Jeton.PIECE) {
+                            //interpreter Piece
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("manger: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case ou une piece est attendu");
+                        }
+                    } else if (reglestr.get(c).equals("sedeplace")) {
+                        if (lt.get(c) == Jeton.CASE) {
+                            //interpreter Case
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("sedeplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
+                        }
+                    } else if (reglestr.get(c).equals("estplace")) {
+                        if (lt.get(c) == Jeton.CASE) {
+                            //interpreter Case
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("estplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
+                        }
+                    } else if (reglestr.get(c).equals("estechec")) {
+                        if (lt.get(c) == Jeton.PIECE) {
+                            //interpreter Piece
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("estechec: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une piece est attendu");
+                        }
+                    } else if (reglestr.get(c).equals("estsur")) {
+                        if (lt.get(c) == Jeton.CASE) {
+                            //interpreter Case
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("estsur: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
+                        }
+                    } else {
+                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une action est attendu.");
+                    }
 
-        } else if (lt.get(c) == Jeton.JOUEUR) {
+                } else if (lt.get(c) == Jeton.ETAT) {
+                    //"estpromu"
+                    if (reglestr.get(c).equals("estpromu")) {
 
+                    } else {
+                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un etat est attendu.");
+                    }
+
+                } else if (lt.get(c) == Jeton.COMPTEUR) {
+                    if (reglestr.get(c).equals("nb_deplacement")) {
+                        c++;
+                        if (lt.get(c) == Jeton.COMPARAISON) {
+                            c++;
+                            if (lt.get(c) == Jeton.NOMBRE) {
+
+                            } else {
+                                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
+                            }
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une comparaison est attendu.");
+                        }
+                    } else {
+                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un compteur est attendu.");
+                    }
+                } else {
+                    throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une action, un etat ou un compteur est attendu");
+                }
+            }
+
+            else if (lt.get(c) == Jeton.JOUEUR) {
+                //interpreter Joueur
+                c++;
+                if (lt.get(c) == Jeton.COMPTEUR) {
+                    if (reglestr.get(c).equals("timer")) {
+                        c++;
+                        if (lt.get(c) == Jeton.COMPARAISON) {
+                            c++;
+                            if (lt.get(c) == Jeton.NOMBRE) {
+
+                            } else {
+                                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
+                            }
+                        } else {
+                            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une comparaison est attendu.");
+                        }
+                    } else {
+                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un timer est attendu.");
+                    }
+                } else {
+                    throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un compteur est attendu.");
+                }
+            }
+
+            else {
+                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un joueur ou une piece est attendu.");
+            }
+
+            c++;
+        } while(lt.get(c) == Jeton.ET || lt.get(c) == Jeton.OU);
+
+        if (lt.get(c) == Jeton.CONSEQUENCE) {
+            //interpreter consequence
         }
-        */
+        else {
+            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un OU, un ET ou une conséquence est attendu.");
+        }
 
     }
 
@@ -342,7 +439,6 @@ public class GenerateurDeRegle {
 
     /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
     * en une instance de REGLE manipulable plus simplement par le système.*/
-    }
 
     public void analyser(ArrayList<Piece> listepiece) throws MauvaiseDefinitionRegleException{
         //Pour chaque règles du jeu définies
