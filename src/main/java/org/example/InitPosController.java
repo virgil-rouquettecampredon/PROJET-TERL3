@@ -31,29 +31,26 @@ public class InitPosController extends Controller {
     public Canvas canvas;
 
     private GraphicsContext context;
+    private double rectSize;
 
     private ObservableList<PieceRow> pieces;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialise() {
         imgCol.setCellValueFactory(cellData -> cellData.getValue().imgProperty());
 
         pieces = FXCollections.observableArrayList();
 
-        //TODO REMPLIR PROPREMENT AVEC LES DONNES ENREGISTREES
-        Piece p = new Piece("Pawn", "file:src/main/resources/org/example/images/pawn.png");
-        ImageView iv = new ImageView(new Image(p.getSprite()));
-        iv.setPreserveRatio(true);
-        iv.setFitWidth(256/(float)4); // TODO metre une vraie taille
+        for (Piece p:
+                getApp().varianteManager.getCurrent().getPieces()) {
 
-        pieces.add(new PieceRow(iv, p));
+            ImageView iv = new ImageView(new Image(p.getSprite()));
+            iv.setPreserveRatio(true);
+            iv.setFitWidth(imgCol.getWidth());
+            iv.setFitHeight(100);
 
-        Piece p2 = new Piece("King", "file:src/main/resources/org/example/images/king.png");
-        ImageView iv2 = new ImageView(new Image(p2.getSprite()));
-        iv2.setPreserveRatio(true);
-        iv2.setFitWidth(256/(float)4); // TODO metre une vraie taille
-
-        pieces.add(new PieceRow(iv2, p2));
+            pieces.add(new PieceRow(iv, p));
+        }
 
         tab.setItems(pieces);
 
@@ -62,10 +59,8 @@ public class InitPosController extends Controller {
     }
 
     public void updateCanvas() {
-        //TODO METTRE le vrai plateau
-        int nbSquareX = 8;
-        int nbSquareY = 8;
-
+        int nbSquareX = getApp().varianteManager.getCurrent().getPlateau().getWitdhX();
+        int nbSquareY = getApp().varianteManager.getCurrent().getPlateau().getHeightY();
 
         if (nbSquareX > nbSquareY) {
             canvas.setHeight(300*((float)nbSquareY/nbSquareX));
@@ -83,13 +78,23 @@ public class InitPosController extends Controller {
                 canvas.getWidth(),
                 canvas.getHeight());
 
-        double rectSize = canvas.getWidth()/nbSquareX;
+        rectSize = canvas.getWidth()/nbSquareX;
         context.setFill(Color.PINK);
         for (int i = 0; i < nbSquareY; i++) {
             for (int j = 0; j < nbSquareX; j+=2) {
                 context.fillRect((j+(i%2))*rectSize, i*rectSize, rectSize, rectSize);
             }
         }
+
+        //TODO mettre les pieces
+        for (ArrayList<Case> ligne: getApp().varianteManager.getCurrent().getPlateau().getEchiquier()) {
+            for (Case c: ligne) {
+                if (c.getPieceOnCase() != null) {
+                    putPiece(c.getPosition().getX()*rectSize, c.getPosition().getY()*rectSize, c.getPieceOnCase());
+                }
+            }
+        }
+
     }
 
     @FXML
@@ -104,22 +109,28 @@ public class InitPosController extends Controller {
         
     }
 
-    public void putPiece(MouseEvent mouseEvent) {
+    private void putPiece(double x, double y, Piece p) {
+        Image img = new Image(p.getSprite());
+        double w;
+        double h;
+        if (img.getHeight() > img.getWidth()) {
+            h = rectSize;
+            w = img.getWidth()/img.getHeight() * rectSize;
+        }
+        else {
+            w = rectSize;
+            h = img.getHeight()/img.getWidth() * rectSize;
+        }
+        context.drawImage(img, (int)(x/rectSize)*rectSize-w, (int)(y/rectSize)*rectSize-h, w, h);
+    }
+
+    public void onClick(MouseEvent mouseEvent) {
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
         if (pr != null) {
-            Image img = new Image(pr.getPiece().getSprite());
-            double s = 300/8;//TODO A CHANGER BIEN SUR
-            double w;
-            double h;
-            if (img.getHeight() > img.getWidth()) {
-                h = s;
-                w = img.getWidth()/img.getHeight() * s;
-            }
-            else {
-                w = s;
-                h = img.getHeight()/img.getWidth() * s;
-            }
-            context.drawImage(img, mouseEvent.getX()-w/2, mouseEvent.getY()-h/2, w, h);
+            putPiece(mouseEvent.getX(), mouseEvent.getY(), pr.getPiece());
+            int x =(int)(mouseEvent.getX()/rectSize);
+            int y =(int)(mouseEvent.getY()/rectSize);
+            getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).setPieceOnCase(pr.getPiece());
         }
     }
 

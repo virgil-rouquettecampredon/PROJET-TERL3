@@ -46,9 +46,13 @@ public class App extends Application {
 
     private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+
         Pane layout = fxmlLoader.load();
+
         Controller controller = fxmlLoader.getController();
         controller.setApp(this);
+        controller.initialise();
+
         return layout;
     }
 

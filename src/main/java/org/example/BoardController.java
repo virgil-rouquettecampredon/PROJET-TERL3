@@ -35,7 +35,7 @@ public class BoardController extends Controller {
         } catch (NumberFormatException ignored) {
 
         }
-        if (nbSquareX == 0 || nbSquareY == 0) return;
+        if (nbSquareX <= 0 || nbSquareY <= 0) return;
 
         if (nbSquareX > nbSquareY) {
             canvas.setHeight(300*((float)nbSquareY/nbSquareX));
@@ -70,13 +70,20 @@ public class BoardController extends Controller {
         try {
             x = Integer.parseInt(xInput.getText());
             y = Integer.parseInt(yInput.getText());
+            if (x <= 0 || y <= 0) {
+                throw new NumberFormatException();
+            }
         }
         catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, xInput.getText()+" ou "+yInput.getText()+" n'est pas un entier.");
+            showAlert(Alert.AlertType.ERROR, xInput.getText()+" ou "+yInput.getText()+" n'est pas un entier > 0.");
             return;
         }
+
         System.out.println(xInput.getText() + " x " + yInput.getText());
-        //TODO METTRE LE X ET Y DANS LE TABLEAU DE VARIANTE
+
+        getApp().varianteManager.getCurrent().getPlateau().setWitdhX(x);
+        getApp().varianteManager.getCurrent().getPlateau().setHeightY(y);
+
         getApp().setRoot("VarianteMenu1");
     }
 }

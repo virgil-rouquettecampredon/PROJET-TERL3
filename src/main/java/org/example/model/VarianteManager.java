@@ -6,7 +6,7 @@ import java.util.List;
 
 //Classe de transition entre l'interface et les variantes en mémoire
 public class VarianteManager {
-    private Variante current;
+    private VarianteBuilder current;
     private List<Variante> variantes;
 
     public VarianteManager() {
@@ -14,11 +14,16 @@ public class VarianteManager {
         current = new VarianteBuilder();
     }
 
-    public void setCurrent(Variante current) {
+    public void setCurrent(VarianteBuilder current) {
         this.current = current;
     }
 
+    public VarianteBuilder getCurrent() {
+        return current;
+    }
+
     public void saveCurrent(String path) {
+        Variante vrToSave = current.createVariante();
         try {
             FileOutputStream fos = new FileOutputStream(path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);

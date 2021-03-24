@@ -17,7 +17,7 @@ public class Plateau {
     public Plateau(int heightY, int witdhX) {
         this.heightY = heightY;
         this.witdhX = witdhX;
-        echiquier = new ArrayList<ArrayList<Case>>();
+        updateSize();
     }
 
     public void afficherPlateau(){
@@ -41,10 +41,22 @@ public class Plateau {
 
     public void setHeightY(int heightY) {
         this.heightY = heightY;
+        updateSize();
     }
 
     public void setWitdhX(int witdhX) {
         this.witdhX = witdhX;
+        updateSize();
+    }
+
+    private void updateSize() {
+        echiquier = new ArrayList<>();
+        for (int i = 0; i < heightY; i++) {
+            echiquier.add(new ArrayList<>());
+            for (int j = 0; j < witdhX; j++) {
+                echiquier.get(i).add(new Case(j, i));
+            }
+        }
     }
 
     /*FIN GETTER SETTER*/

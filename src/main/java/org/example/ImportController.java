@@ -29,7 +29,10 @@ public class ImportController extends Controller {
     @FXML
     private void validateButton() throws IOException {
         getApp().soundManager.playSound("button-confirm");
-        //TODO: valider texte de l'input, le traduire dans la classe variante, le rajouter à la liste de variante
+
+        //TODO: valider texte de l'input
+        getApp().varianteManager.importFile(input.getText());
+
         System.out.println(input.getText());
         getApp().setRoot("home");
     }

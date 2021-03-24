@@ -42,6 +42,6 @@ public class SauvegardeVarianteTest {
         VarianteBuilder vrToCompare = new VarianteBuilder();
         vrToCompare.setName("TestVariante");
 
-        Assertions.assertEquals(vr, vrToCompare);
+        Assertions.assertEquals(vr, vrToCompare.createVariante());
     }
 }

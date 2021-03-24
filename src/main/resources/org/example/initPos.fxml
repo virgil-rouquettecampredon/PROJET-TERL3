@@ -46,7 +46,7 @@
                         </TableView>
                      </children>
                   </VBox>
-                  <Canvas fx:id="canvas" height="300.0" onMouseClicked="#putPiece" width="300.0" />
+                  <Canvas fx:id="canvas" height="300.0" onMouseClicked="#onClick" width="300.0" />
                </children>
             </HBox>
             <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="VALIDER">

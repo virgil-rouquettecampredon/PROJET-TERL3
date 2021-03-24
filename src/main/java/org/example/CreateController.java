@@ -12,7 +12,9 @@ public class CreateController extends Controller {
     @FXML
     private void continueButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        //TODO: valider texte de l'input
+
+        getApp().varianteManager.getCurrent().setName(input.getText());
+
         System.out.println(input.getText());
         getApp().setRoot("VarianteMenu1");
     }

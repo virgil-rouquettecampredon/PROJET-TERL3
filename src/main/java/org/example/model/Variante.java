@@ -8,6 +8,42 @@ import java.util.Objects;
 
 public class Variante implements Serializable {
     private String name;
+    private Plateau plateau;
+    private ArrayList<Joueur> joueurs;
+    private ArrayList<Regle> regles;
+    private ArrayList<Piece> pieces;
+
+    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles, ArrayList<Piece> pieces) {
+        this.name = name;
+        this.plateau = plateau;
+        this.joueurs = joueurs;
+        this.regles = regles;
+        this.pieces = pieces;
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
+    public void setPlateau(Plateau plateau) {
+        this.plateau = plateau;
+    }
+
+    public ArrayList<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
+    public void setJoueurs(ArrayList<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
+
+    public ArrayList<Regle> getRegles() {
+        return regles;
+    }
+
+    public void setRegles(ArrayList<Regle> regles) {
+        this.regles = regles;
+    }
 
     public String getName() {
         return name;

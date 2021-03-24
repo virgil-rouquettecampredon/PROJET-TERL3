@@ -27,11 +27,11 @@ public class GameController extends Controller {
 
     private GraphicsContext context;
 
-    @FXML
-    public void initialize() {
-        //TODO prendre les vraie valeurs
+    @Override
+    public void initialise() {
+        //TODO potentiellement à changer
         varLabel.setText("Classique");
-        playerLabel.setText("Player1");
+        playerLabel.setText("Joueur1");
         context = canvas.getGraphicsContext2D();
         updateCanvas();
     }
