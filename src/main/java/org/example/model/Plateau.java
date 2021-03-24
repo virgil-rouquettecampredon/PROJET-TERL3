@@ -8,6 +8,12 @@ public class Plateau {
     private ArrayList<ArrayList<Case>> echiquier;
 
 
+    public Plateau() {
+        this.heightY = 10;
+        this.witdhX = 10;
+        updateSize();
+    }
+
     public Plateau(int heightY, int witdhX) {
         this.heightY = heightY;
         this.witdhX = witdhX;

@@ -18,8 +18,10 @@ public class BoardController extends Controller {
     public Canvas canvas;
     private GraphicsContext context;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialise() {
+        xInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getWitdhX());
+        yInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getHeightY());
         context = canvas.getGraphicsContext2D();
         updateCanvas();
     }

@@ -3,14 +3,11 @@ package org.example.model;
 import org.example.model.Regles.CibleDeRegle;
 
 public class Case implements CibleDeRegle {
-    private String sprite;
     private Position position;
     private Piece pieceOnCase;
 
-    public Case(String sprite, int x, int y) {
-        this.sprite = sprite;
-        this.position.setY(y);
-        this.position.setX(x);
+    public Case(int x, int y) {
+        position = new Position(x, y);
         this.pieceOnCase = null;
     }
 
@@ -21,9 +18,6 @@ public class Case implements CibleDeRegle {
 
     /*DEBUT GETTER SETTER*/
 
-    public String getSprite() {
-        return sprite;
-    }
 
     public Position getPosition() {
         return position;
@@ -31,10 +25,6 @@ public class Case implements CibleDeRegle {
 
     public Piece getPieceOnCase() {
         return pieceOnCase;
-    }
-
-    public void setSprite(String sprite) {
-        this.sprite = sprite;
     }
 
     public void setPieceOnCase(Piece pieceOnCase) {

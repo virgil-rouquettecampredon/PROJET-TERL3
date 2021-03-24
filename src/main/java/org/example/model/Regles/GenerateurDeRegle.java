@@ -1,12 +1,8 @@
 package org.example.model.Regles;
 
-import org.example.model.Case;
 import org.example.model.Piece;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GenerateurDeRegle {
 
@@ -77,8 +73,8 @@ public class GenerateurDeRegle {
     }
 
     //Fonction renseignant un axiome correspondant à axiome
-    public static Etat getAxiome(String axiome){
-        Etat et = Etat.AUCUN;
+    public static Jeton getAxiome(String axiome){
+        Jeton et = Jeton.AUCUN;
         switch (axiome){
             case "mange"-> et = Etat.MANGE;
             case "sedeplace"-> et = Etat.SEDEPLACE;
@@ -101,13 +97,16 @@ public class GenerateurDeRegle {
 
     //Fonction renseignant si une case est correctement définie (String cases)
     //CALL C1
-    public static Etat estSyntaxiquementCorrecte_Case(String cases, int nbCase)throws MauvaiseDefinitionRegleException{
+    public static Jeton estSyntaxiquementCorrecte_Case(String cases, int nbCase)throws MauvaiseDefinitionRegleException{
         if(cases.length() > 1){
             if(cases.charAt(0) == 'C'){
                 if(cases.length() == 4 && cases.charAt(1) == 'A') {
                     if (cases.charAt(2) == 'L') {
                         if (cases.charAt(3) == 'L') {
-                            return Etat.CASE;
+                            if(cases.length() == 4){
+                                return Jeton.CASE;
+                            }
+                            throw new MauvaiseSyntaxeRegleException("Syntaxe de case (CALL + mauvais carac) incorrecte");
                         }
                         throw new MauvaiseSyntaxeRegleException("Syntaxe de case (CAL + mauvais carac) incorrecte");
                     }
@@ -117,7 +116,7 @@ public class GenerateurDeRegle {
                         int nb = Integer.parseInt(cases.substring(1));
                         if(nb<nbCase){
                             if(nb>=0){
-                                return Etat.CASE;
+                                return Jeton.CASE;
                             }
                             throw new MauvaiseSyntaxeRegleException("Syntaxe de case (numero trop petit) incorrecte");
                         }
@@ -134,13 +133,16 @@ public class GenerateurDeRegle {
 
     //Fonction renseignant si une case est correctement définie (String piece)
     //PALL P1
-    public static Etat estSyntaxiquementCorrecte_Piece(String piece, int nbPiece)throws MauvaiseDefinitionRegleException{
+    public static Jeton estSyntaxiquementCorrecte_Piece(String piece, int nbPiece)throws MauvaiseDefinitionRegleException{
         if(piece.length() > 1){
             if(piece.charAt(0) == 'P'){
                 if(piece.length() == 4 && piece.charAt(1) == 'A') {
                     if (piece.charAt(2) == 'L') {
                         if (piece.charAt(3) == 'L') {
-                            return Etat.PIECE;
+                            if(piece.length() == 4){
+                                return Jeton.PIECE;
+                            }
+                            throw new MauvaiseSyntaxeRegleException("Syntaxe de piece (PALL + mauvais carac) incorrecte");
                         }
                         throw new MauvaiseSyntaxeRegleException("Syntaxe de piece (PAL + mauvais carac) incorrecte");
                     }
@@ -150,7 +152,7 @@ public class GenerateurDeRegle {
                         int nb = Integer.parseInt(piece.substring(1));
                         if(nb<nbPiece){
                             if(nb>=0){
-                                return Etat.PIECE;
+                                return Jeton.PIECE;
                             }
                             throw new MauvaiseSyntaxeRegleException("Syntaxe de piece (numero trop petit) incorrecte");
                         }
@@ -167,13 +169,16 @@ public class GenerateurDeRegle {
 
     //Fonction renseignant si un joueur est correctement défini (String joueur)
     //JALL J1
-    public static Etat estSyntaxiquementCorrecte_Joueur(String joueur, int nbJoueur)throws MauvaiseDefinitionRegleException{
+    public static Jeton estSyntaxiquementCorrecte_Joueur(String joueur, int nbJoueur)throws MauvaiseDefinitionRegleException{
         if(joueur.length() > 1){
             if(joueur.charAt(0) == 'J'){
                 if(joueur.length() == 4 && joueur.charAt(1) == 'A') {
                     if (joueur.charAt(2) == 'L') {
                         if (joueur.charAt(3) == 'L') {
-                            return Etat.JOUEUR;
+                            if(joueur.length() == 4){
+                                return Jeton.JOUEUR;
+                            }
+                            throw new MauvaiseSyntaxeRegleException("Syntaxe du joueur (JALL + mauvais carac) incorrecte");
                         }
                         throw new MauvaiseSyntaxeRegleException("Syntaxe du joueur (JAL + mauvais carac) incorrecte");
                     }
@@ -183,7 +188,7 @@ public class GenerateurDeRegle {
                         int nb = Integer.parseInt(joueur.substring(1));
                         if(nb<nbJoueur){
                             if(nb>=0){
-                                return Etat.JOUEUR;
+                                return Jeton.JOUEUR;
                             }
                             throw new MauvaiseSyntaxeRegleException("Syntaxe du joueur (numero trop petit) incorrecte");
                         }else{
@@ -268,28 +273,19 @@ public class GenerateurDeRegle {
     }
 
     //Fonction renseignant si une piece+token est correctement définie
-    public static Etat estSyntaxiquementCorrecte_PieceToken(String piece, int nbJoueur,int nbPiece) throws MauvaiseDefinitionRegleException{
+    public static Jeton estSyntaxiquementCorrecte_PieceToken(String piece, int nbJoueur, int nbPiece) throws MauvaiseDefinitionRegleException{
         String[] sousPiece = piece.split("#");
-
-            if (sousPiece.length == 3) {
-                try {
-                    estSyntaxiquementCorrecte_Piece(sousPiece[0], nbPiece);
-                    estSyntaxiquementCorrecte_Joueur(sousPiece[1], nbJoueur);
-
-                    if ((sousPiece[2].charAt(0) == 'P' || sousPiece[2].charAt(0) == 'D') && sousPiece[2].length() == 1) {
-                        return Etat.PIECETOKEN;
-                    }
-                    if ((sousPiece[2].charAt(0) == 'A' && sousPiece[2].charAt(1) == 'L' && sousPiece[2].charAt(2) == 'L') && sousPiece[2].length() == 3) {
-                        return Etat.PIECETOKEN;
-                    }
-                    throw new MauvaiseSyntaxeRegleException("Syntaxe de la provenance de la piece invalide");
-                }catch (MauvaiseSyntaxeRegleException e){
-                    throw new MauvaiseSyntaxeRegleException("Syntaxe de piece incorrecte [" + e.getMessage() + "]");
-                }
-            } else {
-                throw new MauvaiseSyntaxeRegleException("Mauvais nombre de parametre de définition d'une piece");
+        if (sousPiece.length == 2) {
+            try {
+                estSyntaxiquementCorrecte_Piece(sousPiece[0], nbPiece);
+                estSyntaxiquementCorrecte_Joueur(sousPiece[1], nbJoueur);
+                return Jeton.PIECETOKEN;
+            }catch (MauvaiseSyntaxeRegleException e){
+                throw new MauvaiseSyntaxeRegleException("Syntaxe de pieceToken incorrecte [" + e.getMessage() + "]");
             }
-
+        } else {
+            throw new MauvaiseSyntaxeRegleException("Mauvais nombre de parametre de définition d'une pieceToken");
+        }
     }
 
 
@@ -327,6 +323,8 @@ public class GenerateurDeRegle {
 
     /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
     * en une instance de REGLE manipulable plus simplement par le système.*/
+    }
+
     public void analyser(ArrayList<Piece> listepiece) throws MauvaiseDefinitionRegleException{
         //Pour chaque règles du jeu définies
         for (int i = 0; i<this.reglesSousFormeDeChaine.length; i++){

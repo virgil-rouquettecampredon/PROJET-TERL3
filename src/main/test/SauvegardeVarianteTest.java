@@ -1,4 +1,5 @@
 import org.example.model.Variante;
+import org.example.model.VarianteBuilder;
 import org.example.model.VarianteManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +20,7 @@ public class SauvegardeVarianteTest {
 
     @Test
     public void testEnregistrerVariante() {
-        Variante vr = new Variante();
+        VarianteBuilder vr = new VarianteBuilder();
         vr.setName("TestVariante");
 
         vm.setCurrent(vr);
@@ -30,7 +31,7 @@ public class SauvegardeVarianteTest {
 
     @Test
     public void testImporterVariante() {
-        Variante vrSave = new Variante();
+        VarianteBuilder vrSave = new VarianteBuilder();
         vrSave.setName("TestVariante");
 
         vm.setCurrent(vrSave);
@@ -38,7 +39,7 @@ public class SauvegardeVarianteTest {
 
         Variante vr = vm.importFile(filePath);
 
-        Variante vrToCompare = new Variante();
+        VarianteBuilder vrToCompare = new VarianteBuilder();
         vrToCompare.setName("TestVariante");
 
         Assertions.assertEquals(vr, vrToCompare);

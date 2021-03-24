@@ -13,9 +13,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.example.model.Case;
 import org.example.model.Piece;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class InitPosController extends Controller {
     @FXML

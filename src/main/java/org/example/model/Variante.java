@@ -1,6 +1,9 @@
 package org.example.model;
 
+import org.example.model.Regles.Regle;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Variante implements Serializable {

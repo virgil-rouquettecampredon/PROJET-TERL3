@@ -11,7 +11,7 @@ public class VarianteManager {
 
     public VarianteManager() {
         variantes = new ArrayList<>();
-        current = new Variante();
+        current = new VarianteBuilder();
     }
 
     public void setCurrent(Variante current) {
