@@ -42,7 +42,6 @@ public class GenerateurDeRegle {
         this.reglesSousFormeDeChaine = reglesSousFormeDeChaine;
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
-        //axiomes.addAll(Arrays.asList(axiomestab));
     }
 
 
@@ -51,7 +50,6 @@ public class GenerateurDeRegle {
      * ================================ ANALYSE SYNTAXIQUE ===============================
      * ===================================================================================
      **/
-
     //Fonction renseignant si un axiome autre qu'un joueur, une case ou une piece fait partie des axiomes connues
     public static boolean estAxiome(String axiome){
         for (String s: axiomestab) {
@@ -76,23 +74,81 @@ public class GenerateurDeRegle {
     public static Jeton getAxiome(String axiome){
         Jeton et = Jeton.AUCUN;
         switch (axiome){
-            case "mange"-> et = Etat.MANGE;
-            case "sedeplace"-> et = Etat.SEDEPLACE;
-            case "estpromu"-> et = Etat.PROMU;
-            case "estsur"-> et = Etat.SURCASE;
-            case "estechec"-> et = Etat.ESTMENACE;
-            case "nb_deplacement"-> et = Etat.NBDEPLACEMENT;
-            case "estplace"-> et = Etat.ESTPLACEE;
-            case "timer"-> et = Etat.TIMER;
-            case "=" , "<" , ">" -> et = Etat.COMPARAISON;
-            case "ET"-> et = Etat.ET;
-            case "OU"-> et = Etat.OU;
-            case "tous-piece" -> et = Etat.PIECE;
-            case "tous-joueur" -> et = Etat.JOUEUR;
-            case "tous-typecase" -> et = Etat.CASE;
-            case "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer" -> et = Etat.CONSEQUENCE;
+            case "mange","sedeplace","estplace"-> et = Jeton.ACTION;
+            case "estpromu","estsur","estechec"-> et = Jeton.ETAT;
+            case "nb_deplacement","timer"-> et = Jeton.COMPTEUR;
+            case "=" , "<" , ">" -> et = Jeton.COMPARAISON;
+            case "ET"-> et = Jeton.ET;
+            case "OU"-> et = Jeton.OU;
+            case "tous-piece" -> et = Jeton.PIECE;
+            case "tous-joueur" -> et = Jeton.JOUEUR;
+            case "tous-typecase" -> et = Jeton.CASE;
+            case "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer" -> et = Jeton.CONSEQUENCE;
         }
         return et;
+    }
+
+    /**Transforme une regle sous forme de chaine de caractères en une liste de jetons, analysables par la partie sémantique.
+     * @param regle : ArrayList<String> renseignant la liste des regles à transformer sous forme de jetons.
+     * @param nbTypePiece : int renseignant le nombre de type de pieces du jeu.
+     * @param nbTypeDeCase : int renseignant le nombre de type de cases du jeu.
+     * @param nbJoueur :  int renseignant le nombre de joueurs du jeu.
+     * */
+    public static ArrayList<Jeton> estSyntaxiquementCorrecte(ArrayList<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
+        ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
+
+        for (int i = 1; i<regle.size();i++){
+            Jeton curJeton;
+            String curRegle = regle.get(i);
+
+            try {
+                int cpt = 0;
+                while(curRegle.charAt(cpt) == 'N'){
+                    regleSousFormeJeton.add(Jeton.NON);
+                    cpt++;
+                    curRegle = curRegle.substring(cpt);
+                }
+                switch (curRegle.charAt(0)) {
+                    /*CAS PIECE*/
+                    case 'P' -> curJeton = estSyntaxiquementCorrecte_PieceToken(curRegle, nbJoueur,nbTypePiece);
+                    /*CAS JOUEUR*/
+                    case 'J' -> curJeton = estSyntaxiquementCorrecte_Joueur(curRegle,nbJoueur);
+                    /*CAS CASE*/
+                    case 'C' -> curJeton = estSyntaxiquementCorrecte_Case(curRegle,nbTypeDeCase);
+                    default -> {
+                        if (estAxiome(curRegle) || estConnecteur(curRegle)) {
+                            Jeton etAx = getAxiome(curRegle);
+                            if(etAx == Jeton.AUCUN){
+                                throw new MauvaiseSyntaxeRegleException("Mauvaise definition d'axiome");
+                            }else{
+                                if(etAx == Jeton.PIECE){
+                                    regle.set(i,"PALL");
+                                    etAx = Jeton.PIECE;
+                                }
+                                if(etAx == Jeton.JOUEUR){
+                                    regle.set(i,"JALL");
+                                }
+                                if(etAx == Jeton.CASE){
+                                    regle.set(i,"CALL");
+                                }
+                                curJeton = etAx;
+                            }
+                        }else{
+                            try {
+                                Integer.parseInt(curRegle);
+                                curJeton = Jeton.NOMBRE;
+                            } catch (NumberFormatException nfe) {
+                                throw new MauvaiseSyntaxeRegleException("Axiome inconnu");
+                            }
+                        }
+                    }
+                }
+            }catch (MauvaiseSyntaxeRegleException e){
+                throw new MauvaiseSyntaxeRegleException(e.getMessage() + " au bloc de regle numero : [" + i + "]");
+            }
+            regleSousFormeJeton.add(curJeton);
+        }
+        return regleSousFormeJeton;
     }
 
     //Fonction renseignant si une case est correctement définie (String cases)
@@ -100,7 +156,7 @@ public class GenerateurDeRegle {
     public static Jeton estSyntaxiquementCorrecte_Case(String cases, int nbCase)throws MauvaiseDefinitionRegleException{
         if(cases.length() > 1){
             if(cases.charAt(0) == 'C'){
-                if(cases.length() == 4 && cases.charAt(1) == 'A') {
+                if(cases.length() >= 4 && cases.charAt(1) == 'A') {
                     if (cases.charAt(2) == 'L') {
                         if (cases.charAt(3) == 'L') {
                             if(cases.length() == 4){
@@ -127,6 +183,7 @@ public class GenerateurDeRegle {
                     }
                 }
             }
+            throw new MauvaiseSyntaxeRegleException("Syntaxe de case incorrecte (doit commencer par C)");
         }
         throw new MauvaiseSyntaxeRegleException("Syntaxe de case incorrecte");
     }
@@ -136,7 +193,7 @@ public class GenerateurDeRegle {
     public static Jeton estSyntaxiquementCorrecte_Piece(String piece, int nbPiece)throws MauvaiseDefinitionRegleException{
         if(piece.length() > 1){
             if(piece.charAt(0) == 'P'){
-                if(piece.length() == 4 && piece.charAt(1) == 'A') {
+                if(piece.length() >= 4 && piece.charAt(1) == 'A') {
                     if (piece.charAt(2) == 'L') {
                         if (piece.charAt(3) == 'L') {
                             if(piece.length() == 4){
@@ -162,17 +219,17 @@ public class GenerateurDeRegle {
                     }
                 }
             }
+            throw new MauvaiseSyntaxeRegleException("Syntaxe de piece incorrecte (doit commencer par P)");
         }
         throw new MauvaiseSyntaxeRegleException("Syntaxe de piece incorrecte");
     }
-
 
     //Fonction renseignant si un joueur est correctement défini (String joueur)
     //JALL J1
     public static Jeton estSyntaxiquementCorrecte_Joueur(String joueur, int nbJoueur)throws MauvaiseDefinitionRegleException{
         if(joueur.length() > 1){
             if(joueur.charAt(0) == 'J'){
-                if(joueur.length() == 4 && joueur.charAt(1) == 'A') {
+                if(joueur.length() >= 4 && joueur.charAt(1) == 'A') {
                     if (joueur.charAt(2) == 'L') {
                         if (joueur.charAt(3) == 'L') {
                             if(joueur.length() == 4){
@@ -200,76 +257,9 @@ public class GenerateurDeRegle {
                     }
                 }
             }
+            throw new MauvaiseSyntaxeRegleException("Syntaxe du joueur incorrecte (doit commencer par J)");
         }
         throw new MauvaiseSyntaxeRegleException("Syntaxe du joueur incorrecte");
-    }
-
-    /**
-     *  si est une Piece (P), un type de case (C), un joueur (J); suivis d'un index entier
-     *  sinon si est dans les mots d'axiomes
-     *  sinon si c'est un nombre entier
-     *
-     *  A CHANGER => PASSER DUN BOOL A TOKEN/EXCEPTION POUR SYNTAXE
-     *
-     * Transforme une regle sous forme de chaine de caractères en une liste de jetons, analysables par la partie sémantique.
-     * @param regle : ArrayList<String> renseignant la liste des regles à transformer sous forme de jetons.
-     * @param nbTypePiece : int renseignant le nombre de type de pieces du jeu.
-     * @param nbTypeDeCase : int renseignant le nombre de type de cases du jeu.
-     * @param nbJoueur :  int renseignant le nombre de joueurs du jeu.
-    * */
-    public static ArrayList<Etat> estSyntaxiquementCorrecte(ArrayList<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
-        ArrayList<Etat> regleSousFormeEtat = new ArrayList<>();
-
-        for (int i = 1; i<regle.size();i++){
-            Etat curEtat;
-            String curRegle = regle.get(i);
-
-            try {
-                if(curRegle.charAt(0) == 'N'){
-                    regleSousFormeEtat.add(Etat.NON);
-                    curRegle = curRegle.substring(1);
-                }
-                switch (curRegle.charAt(0)) {
-                    /*CAS PIECE*/
-                    case 'P' -> curEtat = estSyntaxiquementCorrecte_PieceToken(curRegle, nbJoueur,nbTypePiece);
-                    /*CAS JOUEUR*/
-                    case 'J' -> curEtat = estSyntaxiquementCorrecte_Joueur(curRegle,nbJoueur);
-                    /*CAS CASE*/
-                    case 'C' -> curEtat = estSyntaxiquementCorrecte_Case(curRegle,nbTypeDeCase);
-                    default -> {
-                        if (estAxiome(curRegle) || estConnecteur(curRegle)) {
-                            Etat etAx = getAxiome(curRegle);
-                            if(etAx == Etat.AUCUN){
-                                throw new MauvaiseSyntaxeRegleException("Mauvaise definition d'axiome");
-                            }else{
-                                if(etAx == Etat.PIECE){
-                                    regle.set(i,"PALL#JALL#ALL");
-                                    etAx = Etat.PIECETOKEN;
-                                }
-                                if(etAx == Etat.JOUEUR){
-                                    regle.set(i,"JALL");
-                                }
-                                if(etAx == Etat.CASE){
-                                    regle.set(i,"CALL");
-                                }
-                                curEtat = etAx;
-                            }
-                        }else{
-                            try {
-                                Integer.parseInt(curRegle);
-                                curEtat = Etat.NOMBRE;
-                            } catch (NumberFormatException nfe) {
-                                throw new MauvaiseSyntaxeRegleException("Axiome inconnu");
-                            }
-                        }
-                    }
-                }
-            }catch (MauvaiseSyntaxeRegleException e){
-                throw new MauvaiseSyntaxeRegleException(e.getMessage() + " au bloc de regle numero : [" + i + "]");
-            }
-            regleSousFormeEtat.add(curEtat);
-        }
-        return regleSousFormeEtat;
     }
 
     //Fonction renseignant si une piece+token est correctement définie

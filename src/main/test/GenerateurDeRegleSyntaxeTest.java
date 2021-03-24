@@ -199,9 +199,9 @@ public class GenerateurDeRegleSyntaxeTest {
                 "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer",                    /*consequences*/
         };
 
-        Etat[] tabEtatAxiome = {Etat.MANGE,Etat.SEDEPLACE,Etat.PROMU,Etat.SURCASE,Etat.ESTMENACE,Etat.NBDEPLACEMENT,Etat.ESTPLACEE,Etat.TIMER,
-                Etat.COMPARAISON,Etat.COMPARAISON,Etat.COMPARAISON,Etat.PIECE,Etat.JOUEUR,Etat.CASE,
-                Etat.CONSEQUENCE,Etat.CONSEQUENCE,Etat.CONSEQUENCE,Etat.CONSEQUENCE,Etat.CONSEQUENCE,Etat.CONSEQUENCE,Etat.CONSEQUENCE,
+        Jeton[] tabJetonAxiome = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ETAT, Jeton.ETAT, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
+                Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.PIECE, Jeton.JOUEUR, Jeton.CASE,
+                Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE,
         };
         for (int i = 0; i < tabAxiome.length; i++) {
             assertTrue(GenerateurDeRegle.estAxiome(tabAxiome[i]));
