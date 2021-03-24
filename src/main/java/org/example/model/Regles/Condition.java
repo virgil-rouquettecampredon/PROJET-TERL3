@@ -5,7 +5,7 @@ import org.example.model.Regles.Sujet;
 
 import java.util.ArrayList;
 
-public abstract class Condition{
+public abstract class Condition implements BlocDeRegle {
 
     /*
     private ArrayList<Sujet> sujets;

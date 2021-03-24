@@ -287,15 +287,44 @@ public class GenerateurDeRegle {
      *
      * note:
      * private enum etat {
-     *         PIECE, JOUEUR, SURPLATEAU, DANSDEFAUSSE,
-     *         MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
-     *         COMPARAISON, ET, OU, ENTIER
+     *          AUCUN,NOMBRE,
+     *          PIECE, JOUEUR,CASE,PIECETOKEN,
+     *          MANGE, SURCASE, ESTMENACE, PROMU, NBDEPLACEMENT, SEDEPLACE, ESTPLACEE, TIMER,
+     *          COMPARAISON, ET, OU, CONSEQUENCE,NON
+     *
+     *          AUCUN,NOMBRE,
+     *          PIECE, JOUEUR, CASE,
+     *          ACTION, CIBLE, ETAT,
+     *          COMPARAISON, ET, OU, CONSEQUENCE,NON
      *
      *
      **/
-    public void analyse_sémantique(ArrayList<Integer> lt){
+    public void estSemantiquementCorrecte(ArrayList<Jeton> lt) {
+        int c = 0;    //curseur
+        Regle regle = new Regle();
+        //int nbContexte=2;
+        //enum Contexte{A, B};
 
-        //if(lt.get(0) == etat.PIECE)
+        /*Map<Etat, Map<Integer, ArrayList<Etat>>> map_etats = new HashMap<>();
+        for(Etat e: Etat.values()){
+            map_etats.put(e, new HashMap<>());
+            for (int i=1; i<=nbContexte; i++){
+                map_etats.get(e).put(i, new ArrayList<>());
+            }
+        }
+
+        map_etats.get(Etat.PIECE).get(1).add(Etat.JOUEUR); //.add(Etat.JOUEURALL);
+        map_etats.get(Etat.JOUEUR).get(1).add(Etat.NOMBRE);
+        map_etats.get(Etat.ACTION).get(1).add(Etat.NOMBRE);*/
+
+       /* while (lt.get(c)) { regle.setBool(!regle.getBool()); c++; }
+
+        if (lt.get(c) == Jeton.PIECE) {
+
+        } else if (lt.get(c) == Jeton.JOUEUR) {
+
+        }
+        */
 
     }
 
