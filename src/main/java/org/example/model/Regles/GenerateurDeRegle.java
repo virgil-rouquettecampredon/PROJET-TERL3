@@ -3,6 +3,7 @@ package org.example.model.Regles;
 import org.example.model.Piece;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class GenerateurDeRegle {
 
@@ -29,6 +30,121 @@ public class GenerateurDeRegle {
     };
 
     private static final String[] connecteur = {"ET","OU"};
+
+
+
+    /**Classe utile pour l'analyse sémantique
+     * Permet une modélisation simple d'un automate reconnaissant des Jeton**/
+    class TransitionSortante_Semantique{
+        private Jeton etiquetteArete;
+        private int etatArrive;
+
+        public TransitionSortante_Semantique(Jeton etiquette,int arrive){
+            this.etiquetteArete = etiquette;
+            this.etatArrive = arrive;
+        }
+    }
+
+    class Etat_Semantique{
+        private int num;
+        private List<TransitionSortante_Semantique> transitions;
+
+        public Etat_Semantique(int num){
+            this.num = num;
+            this.transitions = new ArrayList<>();
+        }
+
+        private void ajouterTransitionSortante(TransitionSortante_Semantique t){
+            this.transitions.add(t);
+        }
+    }
+
+    class EtatTerminal_Semantique extends Etat_Semantique{
+        Function<List<String>,Void> cmp;
+        public EtatTerminal_Semantique(int num, Function<List<String>,Void> comportement) {
+            super(num);
+            cmp = comportement;
+        }
+        public EtatTerminal_Semantique(int num) {
+            super(num);
+            cmp = null;
+        }
+        private void executeComp(List<String> args){
+            if(cmp!= null){
+                cmp.apply(args);
+            }
+        }
+    }
+
+    class EtatsTransitons_Semantique{
+        private int nbEtat;
+        private int nbEtatTerminaux;
+        private List<Etat_Semantique> etatsTr;
+
+        public EtatsTransitons_Semantique(int nbEtat, int nbEtatTerminaux){
+            this.nbEtat = nbEtat;
+            this.nbEtatTerminaux = nbEtatTerminaux;
+            int i = 0;
+            while (i<nbEtat){
+                etatsTr.add(new Etat_Semantique(i));
+                i++;
+            }
+            for (int j = i; j < nbEtatTerminaux; j++) {
+                etatsTr.add(new EtatTerminal_Semantique(j));
+            }
+        }
+
+        private void ajouterUneTransition(int dep, Jeton val, int arrive){
+            for (Etat_Semantique e: etatsTr) {
+                if(e.num == dep){
+                    Iterator<TransitionSortante_Semantique> t = e.transitions.iterator();
+                    while (t.hasNext()) {
+                        if(t.next().etiquetteArete == val){
+                            //Permet d'empécher les automates indeterministes
+                            t.remove();
+                        }
+                    }
+                    e.ajouterTransitionSortante(new TransitionSortante_Semantique(val,arrive));
+                }
+            }
+        }
+
+        /*
+        private boolean estReconnu(int sommet,Jeton val){
+            for (Etat_Semantique e: etatsTr) {
+                if(e.num ==sommet){
+                    for(TransitionSortante_Semantique t:e.transitions){
+                        if(t.etiquetteArete == val){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }*/
+
+        private int etatSuivant(int sommet, Jeton val){
+            for (Etat_Semantique e: etatsTr) {
+                if(e.num ==sommet){
+                    for(TransitionSortante_Semantique t:e.transitions){
+                        if(t.etiquetteArete == val){
+                            return t.etatArrive;
+                        }
+                    }
+                    return -1;
+                }
+            }
+            return -1;
+        }
+    }
+
+    /*
+    public static EtatsTransitons_Semantique initialiserTransition_Semantique(){
+        EtatsTransitons_Semantique etats = new GenerateurDeRegle.EtatsTransitons_Semantique(0,0);
+        return  etats;
+    }*/
+
 
 
 
@@ -290,8 +406,6 @@ public class GenerateurDeRegle {
      *          PIECE, JOUEUR, CASE,
      *          ACTION, CIBLE, ETAT,
      *          COMPARAISON, ET, OU, CONSEQUENCE,NON
-     *
-     *
      **/
     public void estSemantiquementCorrecte(ArrayList<Jeton> lt, ArrayList<String> reglestr) throws MauvaiseSemantiqueRegleException {
         int c = 0;    //curseur
@@ -323,32 +437,42 @@ public class GenerateurDeRegle {
                         c++;
                         if (lt.get(c) == Jeton.CASE) {
                             //interpreter Case
+                            //CAS PIECE+MANGE+CASE
+
                         } else if (lt.get(c) == Jeton.PIECE) {
                             //interpreter Piece
+                            //CAS PIECE+MANGE+PIECE
                         } else {
                             throw new MauvaiseSemantiqueRegleException("manger: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case ou une piece est attendu");
                         }
                     } else if (reglestr.get(c).equals("sedeplace")) {
                         if (lt.get(c) == Jeton.CASE) {
                             //interpreter Case
+                            //CAS PIECE+SEDEPLACER+CASE
                         } else {
                             throw new MauvaiseSemantiqueRegleException("sedeplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
                         }
                     } else if (reglestr.get(c).equals("estplace")) {
                         if (lt.get(c) == Jeton.CASE) {
                             //interpreter Case
+                            //CAS PIECE+ESTPLACE+CASE
+
                         } else {
                             throw new MauvaiseSemantiqueRegleException("estplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
                         }
                     } else if (reglestr.get(c).equals("estechec")) {
                         if (lt.get(c) == Jeton.PIECE) {
                             //interpreter Piece
+                            //CAS PIECE+ESTECHEC+PIECE
+
                         } else {
                             throw new MauvaiseSemantiqueRegleException("estechec: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une piece est attendu");
                         }
                     } else if (reglestr.get(c).equals("estsur")) {
                         if (lt.get(c) == Jeton.CASE) {
                             //interpreter Case
+                            //CAS PIECE+ESTSUR+CASE
+
                         } else {
                             throw new MauvaiseSemantiqueRegleException("estsur: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
                         }
@@ -359,7 +483,7 @@ public class GenerateurDeRegle {
                 } else if (lt.get(c) == Jeton.ETAT) {
                     //"estpromu"
                     if (reglestr.get(c).equals("estpromu")) {
-
+                        //CAS PIECE+ESTPROMU
                     } else {
                         throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un etat est attendu.");
                     }
@@ -370,7 +494,7 @@ public class GenerateurDeRegle {
                         if (lt.get(c) == Jeton.COMPARAISON) {
                             c++;
                             if (lt.get(c) == Jeton.NOMBRE) {
-
+                                //CAS PIECE+NBDEPLACEMENT+COMPARAISON(=<>)+NOMBRE
                             } else {
                                 throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
                             }
@@ -384,7 +508,6 @@ public class GenerateurDeRegle {
                     throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une action, un etat ou un compteur est attendu");
                 }
             }
-
             else if (lt.get(c) == Jeton.JOUEUR) {
                 //interpreter Joueur
                 c++;
@@ -394,7 +517,7 @@ public class GenerateurDeRegle {
                         if (lt.get(c) == Jeton.COMPARAISON) {
                             c++;
                             if (lt.get(c) == Jeton.NOMBRE) {
-
+                                //CAS JOUEUR+TIMER+COMPARAISON(=<>)+NOMBRE
                             } else {
                                 throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
                             }

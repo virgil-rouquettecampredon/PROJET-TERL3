@@ -199,7 +199,7 @@ public class GenerateurDeRegleSyntaxeTest {
                 "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer",                    /*consequences*/
         };
 
-        Jeton[] tabJetonAxiome = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ETAT, Jeton.ETAT, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
+        Jeton[] tabJetonAxiome = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ETAT, Jeton.ACTION, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
                 Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.PIECE, Jeton.JOUEUR, Jeton.CASE,
                 Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE, Jeton.CONSEQUENCE,
         };
