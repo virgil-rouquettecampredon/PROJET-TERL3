@@ -34,7 +34,7 @@
                   </BorderPane>
                   <BorderPane prefHeight="100.0">
                      <center>
-                        <TextField fx:id="yInput" onKeyTyped="#updateCanvas" prefHeight="10.0" promptText="Ex: 8" text="8" BorderPane.alignment="CENTER" />
+                        <TextField fx:id="yInput" onKeyTyped="#inputAction" prefHeight="10.0" promptText="Ex: 8" text="8" BorderPane.alignment="CENTER" />
                      </center>
                      <left>
                         <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="X" BorderPane.alignment="CENTER" />
@@ -42,7 +42,7 @@
                   </BorderPane>
                </children>
             </HBox>
-            <Canvas fx:id="canvas" height="300.0" width="300.0" />
+            <Canvas fx:id="canvas" onMouseClicked="#onClick" height="300.0" width="300.0" />
             <Button mnemonicParsing="false" onAction="#continueButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="CONTINUER">
                <font>
                   <Font name="Candara" size="36.0" />

@@ -5,7 +5,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.example.model.Position;
 
 import java.io.IOException;
 
@@ -17,6 +19,7 @@ public class BoardController extends Controller {
     @FXML
     public Canvas canvas;
     private GraphicsContext context;
+    private double rectSize;
 
     @Override
     public void initialise() {
@@ -26,16 +29,32 @@ public class BoardController extends Controller {
         updateCanvas();
     }
 
-    public void updateCanvas() {
-        int nbSquareX = 0;
-        int nbSquareY = 0;
+    public void inputAction() {
+        int nbSquareX = getApp().varianteManager.getCurrent().getPlateau().getWitdhX();
+        int nbSquareY = getApp().varianteManager.getCurrent().getPlateau().getHeightY();
+
         try {
             nbSquareX = Integer.parseInt(xInput.getText());
             nbSquareY = Integer.parseInt(yInput.getText());
-        } catch (NumberFormatException ignored) {
-
         }
-        if (nbSquareX <= 0 || nbSquareY <= 0) return;
+        catch (NumberFormatException ignore) {
+        }
+
+        getApp().varianteManager.getCurrent().getPlateau().setWitdhX(nbSquareX);
+        getApp().varianteManager.getCurrent().getPlateau().setHeightY(nbSquareY);
+        updateCanvas();
+    }
+
+    public void updateCanvas() {
+        int nbSquareX = getApp().varianteManager.getCurrent().getPlateau().getWitdhX();
+        int nbSquareY = getApp().varianteManager.getCurrent().getPlateau().getHeightY();
+
+        try {
+            nbSquareX = Integer.parseInt(xInput.getText());
+            nbSquareY = Integer.parseInt(yInput.getText());
+        }
+        catch (NumberFormatException ignore) {
+        }
 
         if (nbSquareX > nbSquareY) {
             canvas.setHeight(300*((float)nbSquareY/nbSquareX));
@@ -46,20 +65,38 @@ public class BoardController extends Controller {
             canvas.setWidth(300*((float)nbSquareX/nbSquareY));
         }
 
-        context.setFill(Color.PURPLE);
-        context.fillRect(
-                0,
-                0,
-                canvas.getWidth(),
-                canvas.getHeight());
-
-        double rectSize = canvas.getWidth()/nbSquareX;
-        context.setFill(Color.PINK);
+        rectSize = canvas.getWidth()/nbSquareX;
         for (int i = 0; i < nbSquareY; i++) {
-            for (int j = 0; j < nbSquareX; j+=2) {
-                context.fillRect((j+(i%2))*rectSize, i*rectSize, rectSize, rectSize);
+            for (int j = 0; j < nbSquareX; j++) {
+                if (getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(i).get(j).isClickable()) {
+                    if ((j+i)%2==0) {
+                        context.setFill(Color.PURPLE);
+                    }
+                    else {
+                        context.setFill(Color.PINK);
+                    }
+                }
+                else {
+                    if ((j+i)%2==0) {
+                        context.setFill(Color.GRAY);
+                    }
+                    else {
+                        context.setFill(Color.DARKGRAY);
+                    }
+                }
+                context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
             }
         }
+    }
+
+    @FXML
+    public void onClick(MouseEvent mouseEvent) {
+        int x = (int) (mouseEvent.getX() / rectSize);
+        int y = (int) (mouseEvent.getY() / rectSize);
+
+        getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).switchClickable();
+
+        updateCanvas();
     }
 
     @FXML
@@ -80,9 +117,6 @@ public class BoardController extends Controller {
         }
 
         System.out.println(xInput.getText() + " x " + yInput.getText());
-
-        getApp().varianteManager.getCurrent().getPlateau().setWitdhX(x);
-        getApp().varianteManager.getCurrent().getPlateau().setHeightY(y);
 
         getApp().setRoot("VarianteMenu1");
     }

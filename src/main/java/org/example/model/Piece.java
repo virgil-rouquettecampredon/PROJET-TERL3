@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
+import org.example.model.EquationDeDeplacement.FactoryEquationDeDeplacement;
 import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.SujetDeRegle;
 
@@ -11,19 +12,37 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
     private String sprite;
     private int nbMovement;
     private int nbLife;
+    private Joueur joueur;
     private ArrayList<EquationDeDeplacement> deplacements;
     private ArrayList<Boolean> comportementPiece;
 
-    public Piece(String name, String sprite) {
+    public Piece(String name, String sprite, Joueur joueur) {
         this.name = name;
         this.sprite = sprite;
         this.nbMovement = 0;
         this.nbLife = -1;
+        this.joueur = joueur;
         this.deplacements = new ArrayList<EquationDeDeplacement>();
         this.comportementPiece = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             comportementPiece.add(i, false);
         }
+    }
+
+    public Piece(String name, String sprite) {
+        this(name, sprite, null);
+    }
+
+    public Piece(Piece piece) {
+        name = piece.name;
+        sprite = piece.sprite;
+        nbMovement = piece.nbMovement;
+        nbLife = piece.nbLife;
+        joueur = piece.joueur;
+        deplacements = new ArrayList<>();
+        deplacements.addAll(piece.deplacements);
+        comportementPiece = new ArrayList<>();
+        comportementPiece.addAll(piece.comportementPiece);
     }
 
     public Position[] deplacementTheoriques(){
@@ -48,6 +67,10 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
 
     public void setNbLife(int nbLife) {
         this.nbLife = nbLife;
+    }
+
+    public void setJoueur(Joueur joueur) {
+        this.joueur = joueur;
     }
 
     public void setDeplacements(ArrayList<EquationDeDeplacement> deplacements) {
@@ -84,6 +107,10 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
 
     public int getNbLife() {
         return nbLife;
+    }
+
+    public Joueur getJoueur() {
+        return joueur;
     }
 
     public ArrayList<EquationDeDeplacement> getDeplacements() {

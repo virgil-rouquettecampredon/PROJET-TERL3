@@ -15,6 +15,8 @@ import javafx.util.converter.IntegerStringConverter;
 import org.example.model.Joueur;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerController extends Controller {
     @FXML
@@ -31,19 +33,73 @@ public class PlayerController extends Controller {
     @FXML
     private void confirmButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        //TODO: enregistrer les trucs
-        System.out.println(nbPlayerInput.getText());
-        data.forEach(System.out::println);
+
+        List<Joueur> list = getApp().varianteManager.getCurrent().getJoueurs();
+        list.clear();
+        for (PlayerTableRow prow:
+             data) {
+            getApp().varianteManager.getCurrent().getJoueurs().add(new Joueur(prow.getName(), prow.getTeam()));
+        }
+
+        /*System.out.println(nbPlayerInput.getText());
+        data.forEach(System.out::println);*/
         getApp().setRoot("VarianteMenu1");
     }
 
-    @FXML
-    public void initialize() {
-        //TODO REMPLIR PROPREMENT AVEC LES DONNES ENREGISTREES
+    @Override
+    public void initialise() {
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         teamColumn.setCellValueFactory(cellData -> cellData.getValue().teamProperty().asObject());
-        data = FXCollections.observableArrayList(new PlayerTableRow("Player1", 0), new PlayerTableRow("Player2", 1));
+        teamColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+
+        data = FXCollections.observableArrayList();
+        for (Joueur p:
+             getApp().varianteManager.getCurrent().getJoueurs()) {
+            data.add(new PlayerTableRow(p));
+        }
+
+        nbPlayerInput.setText(""+data.size());
+
         tablePlayer.setItems(data);
+    }
+
+    @FXML
+    public void inputAction() {
+        int v = data.size();
+        try {
+            v = Integer.parseInt(nbPlayerInput.getText());
+        } catch(NumberFormatException ignore) {
+        }
+        if (data.size() < v) {
+            for (int i = data.size(); i < v; i++) {
+                data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size()+1)%2));
+            }
+        }
+        else if (data.size() > v && v >= 0){
+            for (int i = data.size(); i > v; i--) {
+                data.remove(data.get(data.size()-1));
+            }
+        }
+    }
+
+    private void updateInput() {
+        nbPlayerInput.setText(""+data.size());
+    }
+
+    @FXML
+    public void incrementNbPlayer() {
+        data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size()+1)%2));
+        updateInput();
+    }
+
+    @FXML
+    public void decrementNbPlayer() {
+        if(!data.isEmpty()){
+            data.remove(data.get(data.size()-1));
+            updateInput();
+        }
     }
 
     private static class PlayerTableRow {
@@ -53,6 +109,11 @@ public class PlayerController extends Controller {
         private PlayerTableRow(String name, int team) {
             this.name = new SimpleStringProperty(name);
             this.team = new SimpleIntegerProperty(team);
+        }
+
+        private PlayerTableRow(Joueur p) {
+            name = new SimpleStringProperty(p.getName());
+            team = new SimpleIntegerProperty(p.getEquipe());
         }
 
         public SimpleStringProperty nameProperty() {

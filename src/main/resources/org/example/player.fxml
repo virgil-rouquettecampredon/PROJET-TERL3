@@ -26,7 +26,7 @@
             <Label blendMode="DIFFERENCE" styleClass="label-header" text="Joueurs" />
             <BorderPane prefHeight="100.0">
                <center>
-                  <TextField fx:id="nbPlayerInput" prefHeight="10.0" promptText="Ex: 2" text="2" BorderPane.alignment="CENTER">
+                  <TextField fx:id="nbPlayerInput" onKeyTyped="#inputAction" prefHeight="10.0" promptText="Ex: 2" text="2" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </BorderPane.margin></TextField>
@@ -40,12 +40,12 @@
                <right>
                   <VBox prefHeight="200.0" prefWidth="50.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#confirmButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="buttonLight" text="+">
+                        <Button mnemonicParsing="false" onAction="#incrementNbPlayer" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="buttonLight" text="+">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#confirmButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="buttonLight" text="-">
+                        <Button mnemonicParsing="false" onAction="#decrementNbPlayer" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="buttonLight" text="-">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>

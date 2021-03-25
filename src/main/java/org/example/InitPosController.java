@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
@@ -30,6 +31,8 @@ public class InitPosController extends Controller {
     public TableView<PieceRow> tab;
     @FXML
     public TableColumn<PieceRow, ImageView> imgCol;
+    @FXML
+    public ComboBox<JoueurBox> joueurBox;
 
     @FXML
     public Canvas canvas;
@@ -58,6 +61,10 @@ public class InitPosController extends Controller {
 
         tab.setItems(pieces);
 
+        for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
+            joueurBox.getItems().add(new JoueurBox(p.getName(), p));
+        }
+
         context = canvas.getGraphicsContext2D();
         updateCanvas();
     }
@@ -85,16 +92,31 @@ public class InitPosController extends Controller {
         rectSize = canvas.getWidth()/nbSquareX;
         context.setFill(Color.PINK);
         for (int i = 0; i < nbSquareY; i++) {
-            for (int j = 0; j < nbSquareX; j+=2) {
-                context.fillRect((j+(i%2))*rectSize, i*rectSize, rectSize, rectSize);
+            for (int j = 0; j < nbSquareX; j++) {
+                if (getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(i).get(j).isClickable()) {
+                    if ((j+i)%2==0) {
+                        context.setFill(Color.PURPLE);
+                    }
+                    else {
+                        context.setFill(Color.PINK);
+                    }
+                }
+                else {
+                    if ((j+i)%2==0) {
+                        context.setFill(Color.GRAY);
+                    }
+                    else {
+                        context.setFill(Color.DARKGRAY);
+                    }
+                }
+                context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
             }
         }
 
-        //TODO mettre les pieces
         for (ArrayList<Case> ligne: getApp().varianteManager.getCurrent().getPlateau().getEchiquier()) {
             for (Case c: ligne) {
                 if (c.getPieceOnCase() != null) {
-                    putPiece(c.getPosition().getX()*rectSize, c.getPosition().getY()*rectSize, c.getPieceOnCase());
+                    putPiece(rectSize*(c.getPosition().getX()+0.5), rectSize*(c.getPosition().getY()+0.5), c.getPieceOnCase());
                 }
             }
         }
@@ -125,16 +147,39 @@ public class InitPosController extends Controller {
             w = rectSize;
             h = img.getHeight()/img.getWidth() * rectSize;
         }
-        context.drawImage(img, (int)(x/rectSize)*rectSize-w, (int)(y/rectSize)*rectSize-h, w, h);
+        context.drawImage(img, x-w/2, y-h/2, w, h);
     }
 
+    @FXML
     public void onClick(MouseEvent mouseEvent) {
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
         if (pr != null) {
-            putPiece(mouseEvent.getX(), mouseEvent.getY(), pr.getPiece());
-            int x =(int)(mouseEvent.getX()/rectSize);
-            int y =(int)(mouseEvent.getY()/rectSize);
-            getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).setPieceOnCase(pr.getPiece());
+            int x = (int) (mouseEvent.getX() / rectSize);
+            int y = (int) (mouseEvent.getY() / rectSize);
+
+            switch (mouseEvent.getButton()) {
+                case PRIMARY -> {
+                    if (getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).isClickable()) {
+
+                        Piece p = new Piece(pr.getPiece());
+                        Joueur j = joueurBox.getValue().getJoueur();
+                        p.setJoueur(j);
+                        j.getPawnList().add(p);
+
+                        getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).setPieceOnCase(p);
+                    }
+                }
+                case SECONDARY -> {
+                    Case c = getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x);
+
+                    if (c.getPieceOnCase() != null) {
+                        c.getPieceOnCase().getJoueur().getPawnList().remove(c.getPieceOnCase());
+                    }
+
+                    c.setPieceOnCase(null);
+                }
+            }
+            updateCanvas();
         }
     }
 
@@ -161,6 +206,37 @@ public class InitPosController extends Controller {
 
         public Piece getPiece() {
             return piece;
+        }
+    }
+
+    private static class JoueurBox {
+        private final SimpleStringProperty name;
+        private final Joueur joueur;
+
+        public JoueurBox(String name, Joueur joueur) {
+            this.name = new SimpleStringProperty(name);
+            this.joueur = joueur;
+        }
+
+        @Override
+        public String toString() {
+            return getName();
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public Joueur getJoueur() {
+            return joueur;
         }
     }
 }
