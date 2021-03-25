@@ -37,7 +37,7 @@ public class PieceController extends Controller {
     private void addButton() {
         getApp().soundManager.playSound("button-click");
         //TODO AJOUTER UNE PIECE
-        Piece p = new Piece("Pawn", "file:src/main/resources/org/example/images/pawn.png");
+        Piece p = new Piece("Pawn", "file:src/main/resources/org/example/images/pawn.png", null);
         ImageView iv = new ImageView(new Image(p.getSprite()));
         iv.setPreserveRatio(true);
         iv.setFitWidth(256/(float)4); // TODO changer 4 par le nombre d'images de la piece

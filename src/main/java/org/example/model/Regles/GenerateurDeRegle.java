@@ -74,8 +74,8 @@ public class GenerateurDeRegle {
     public static Jeton getAxiome(String axiome){
         Jeton et = Jeton.AUCUN;
         switch (axiome){
-            case "mange","sedeplace","estplace","estechec","estsur"-> et = Jeton.ACTION;
-            case "estpromu"-> et = Jeton.ETAT;
+            case "mange","sedeplace","estplace","estsur"-> et = Jeton.ACTION;
+            case "estpromu","estechec"-> et = Jeton.ETAT;
             case "nb_deplacement","timer"-> et = Jeton.COMPTEUR;
             case "=" , "<" , ">" -> et = Jeton.COMPARAISON;
             case "ET"-> et = Jeton.ET;

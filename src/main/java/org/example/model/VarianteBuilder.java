@@ -15,12 +15,12 @@ public class VarianteBuilder {
         name = "Default variante";
         plateau = new Plateau();
         joueurs = new ArrayList<>();
-        joueurs.add(new Joueur("Joueur1", 1));
-        joueurs.add(new Joueur("Joueur2",2));
+        joueurs.add(new Joueur("Joueur1", 0));
+        joueurs.add(new Joueur("Joueur2",1));
         regles = new ArrayList<>();
         pieces = new ArrayList<>();
-        pieces.add(new Piece("Paw", "file:src/main/resources/org/example/images/pawn.png"));
-        pieces.add(new Piece("King", "file:src/main/resources/org/example/images/king.png"));
+        pieces.add(new Piece("Paw", "file:src/main/resources/org/example/images/pawn.png", null));
+        pieces.add(new Piece("King", "file:src/main/resources/org/example/images/king.png", null));
     }
 
     public VarianteBuilder setName(String name) {

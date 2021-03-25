@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,11 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
 import org.example.model.Case;
+import org.example.model.Joueur;
 import org.example.model.Piece;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InitPosController extends Controller {
     @FXML

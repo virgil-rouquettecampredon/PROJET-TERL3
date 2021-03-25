@@ -9,6 +9,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import org.example.model.Joueur;
 
 import java.io.IOException;
 
