@@ -48,31 +48,16 @@ public class GenerateurDeRegle {
     class Etat_Semantique{
         private int num;
         private List<TransitionSortante_Semantique> transitions;
+        boolean estTerminal;
 
-        public Etat_Semantique(int num){
+        public Etat_Semantique(int num, boolean estTerminal){
             this.num = num;
             this.transitions = new ArrayList<>();
+            this.estTerminal = estTerminal;
         }
 
         private void ajouterTransitionSortante(TransitionSortante_Semantique t){
             this.transitions.add(t);
-        }
-    }
-
-    class EtatTerminal_Semantique extends Etat_Semantique{
-        Function<List<String>,Void> cmp;
-        public EtatTerminal_Semantique(int num, Function<List<String>,Void> comportement) {
-            super(num);
-            cmp = comportement;
-        }
-        public EtatTerminal_Semantique(int num) {
-            super(num);
-            cmp = null;
-        }
-        private void executeComp(List<String> args){
-            if(cmp!= null){
-                cmp.apply(args);
-            }
         }
     }
 
@@ -86,11 +71,11 @@ public class GenerateurDeRegle {
             this.nbEtatTerminaux = nbEtatTerminaux;
             int i = 0;
             while (i<nbEtat){
-                etatsTr.add(new Etat_Semantique(i));
+                etatsTr.add(new Etat_Semantique(i,false));
                 i++;
             }
             for (int j = i; j < nbEtatTerminaux; j++) {
-                etatsTr.add(new EtatTerminal_Semantique(j));
+                etatsTr.add(new Etat_Semantique(j, true));
             }
         }
 
@@ -139,13 +124,15 @@ public class GenerateurDeRegle {
         }
     }
 
-    /*
-    public static EtatsTransitons_Semantique initialiserTransition_Semantique(){
-        EtatsTransitons_Semantique etats = new GenerateurDeRegle.EtatsTransitons_Semantique(0,0);
+
+    public EtatsTransitons_Semantique initialiserTransition_Semantique(){
+        EtatsTransitons_Semantique etats = new GenerateurDeRegle.EtatsTransitons_Semantique(8,5);
+        etats.ajouterUneTransition(0,Jeton.PIECETOKEN,1);
+        etats.ajouterUneTransition(0,Jeton.PIECE,1);
+        etats.ajouterUneTransition(0,Jeton.PIECE,1);
+        etats.ajouterUneTransition(0,Jeton.JOUEUR,2);
         return  etats;
-    }*/
-
-
+    }
 
 
     /**Constructeur d'un GenerateurDeRegle
@@ -159,8 +146,6 @@ public class GenerateurDeRegle {
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
     }
-
-
 
     /**===================================================================================
      * ================================ ANALYSE SYNTAXIQUE ===============================
