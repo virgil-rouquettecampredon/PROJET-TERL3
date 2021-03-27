@@ -2,8 +2,8 @@ package org.example.model.Regles;
 
 import org.example.model.Piece;
 
+import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.Function;
 
 public class GenerateurDeRegle {
 
@@ -33,53 +33,67 @@ public class GenerateurDeRegle {
 
 
 
-    /**Classe utile pour l'analyse sémantique
+    /**Classes utiles pour l'analyse sémantique
      * Permet une modélisation simple d'un automate reconnaissant des Jeton**/
+
+    //Modélisation d'une transition sortante d'un état de l'automate
     class TransitionSortante_Semantique{
         private Jeton etiquetteArete;
         private int etatArrive;
-
         public TransitionSortante_Semantique(Jeton etiquette,int arrive){
             this.etiquetteArete = etiquette;
             this.etatArrive = arrive;
         }
     }
 
+    //Modélisation d'un état de l'automate
     class Etat_Semantique{
         private int num;
         private List<TransitionSortante_Semantique> transitions;
-        boolean estTerminal;
+        private boolean estTerminal;
+        private int codeDeRetour;
 
-        public Etat_Semantique(int num, boolean estTerminal){
+        public Etat_Semantique(int num){
             this.num = num;
             this.transitions = new ArrayList<>();
-            this.estTerminal = estTerminal;
+            this.estTerminal = false;
+            this.codeDeRetour = 0;
         }
 
-        private void ajouterTransitionSortante(TransitionSortante_Semantique t){
+        public void ajouterTransitionSortante(TransitionSortante_Semantique t){
             this.transitions.add(t);
+        }
+
+        public boolean estTerminal(){
+            return estTerminal;
         }
     }
 
-    class EtatsTransitons_Semantique{
+    //Modélisation de l'automate
+    class Automate_Semantique {
         private int nbEtat;
         private int nbEtatTerminaux;
         private List<Etat_Semantique> etatsTr;
 
-        public EtatsTransitons_Semantique(int nbEtat, int nbEtatTerminaux){
+        public Automate_Semantique(int nbEtat){
             this.nbEtat = nbEtat;
-            this.nbEtatTerminaux = nbEtatTerminaux;
+            nbEtatTerminaux = 0;
             int i = 0;
             while (i<nbEtat){
-                etatsTr.add(new Etat_Semantique(i,false));
+                etatsTr.add(new Etat_Semantique(i));
                 i++;
-            }
-            for (int j = i; j < nbEtatTerminaux; j++) {
-                etatsTr.add(new Etat_Semantique(j, true));
             }
         }
 
-        private void ajouterUneTransition(int dep, Jeton val, int arrive){
+        public void ajouterUnEtatTerminal(int etat, int codeDeRetour){
+            if(etat<nbEtat && etat>=0){
+                etatsTr.get(etat).estTerminal = true;
+                etatsTr.get(etat).codeDeRetour = codeDeRetour;
+                this.nbEtatTerminaux++;
+            }
+        }
+
+        public void ajouterUneTransition(int dep, Jeton val, int arrive){
             for (Etat_Semantique e: etatsTr) {
                 if(e.num == dep){
                     Iterator<TransitionSortante_Semantique> t = e.transitions.iterator();
@@ -108,8 +122,7 @@ public class GenerateurDeRegle {
             }
             return false;
         }*/
-
-        private int etatSuivant(int sommet, Jeton val){
+        public int etatSuivant(int sommet, Jeton val){
             for (Etat_Semantique e: etatsTr) {
                 if(e.num ==sommet){
                     for(TransitionSortante_Semantique t:e.transitions){
@@ -122,16 +135,174 @@ public class GenerateurDeRegle {
             }
             return -1;
         }
+
+        public Etat_Semantique recupererEtat(int etat){
+            return etatsTr.get(etat);
+        }
     }
 
+    public Automate_Semantique initialiserAutomate_Semantique(List<Integer> etatTerminaux){
+        Automate_Semantique autoSem = new Automate_Semantique(23);
+        //GESTIONS ETATS TERMINAUX
+        int ind = 0;
+        for (Integer i:etatTerminaux) {
+            autoSem.ajouterUnEtatTerminal(i,300+ind);
+            ind++;
+        }
 
-    public EtatsTransitons_Semantique initialiserTransition_Semantique(){
-        EtatsTransitons_Semantique etats = new GenerateurDeRegle.EtatsTransitons_Semantique(8,5);
-        etats.ajouterUneTransition(0,Jeton.PIECETOKEN,1);
-        etats.ajouterUneTransition(0,Jeton.PIECE,1);
-        etats.ajouterUneTransition(0,Jeton.PIECE,1);
-        etats.ajouterUneTransition(0,Jeton.JOUEUR,2);
-        return  etats;
+        //GESTION DES ALIAS
+        autoSem.ajouterUneTransition(1,Jeton.ALIAS,1);
+        autoSem.ajouterUneTransition(2,Jeton.ALIAS,2);
+        autoSem.ajouterUneTransition(3,Jeton.ALIAS,3);
+        autoSem.ajouterUneTransition(9,Jeton.ALIAS,9);
+        autoSem.ajouterUneTransition(10,Jeton.ALIAS,10);
+        autoSem.ajouterUneTransition(11,Jeton.ALIAS,11);
+
+        //GESTION NEGATION
+        autoSem.ajouterUneTransition(4,Jeton.NON,4);
+        autoSem.ajouterUneTransition(7,Jeton.NON,7);
+
+        //GESTION DES NEGATIONS
+
+
+        //=========== CONDITIONS ===========
+        //ETAT INITIAL
+        autoSem.ajouterUneTransition(0,Jeton.JOUEUR,1);
+        autoSem.ajouterUneTransition(0,Jeton.PIECE,2);
+        autoSem.ajouterUneTransition(0,Jeton.PIECETOKEN,3);
+
+        //ETAT 1
+        autoSem.ajouterUneTransition(1,Jeton.COMPTEUR,4);
+
+        //ETAT 2
+        autoSem.ajouterUneTransition(2,Jeton.ACTION,5);
+        autoSem.ajouterUneTransition(2,Jeton.ETAT,6);
+        autoSem.ajouterUneTransition(2,Jeton.COMPTEUR,7);
+        autoSem.ajouterUneTransition(2,Jeton.JOUEUR,3);
+
+        //ETAT 3
+        autoSem.ajouterUneTransition(3,Jeton.ACTION,5);
+        autoSem.ajouterUneTransition(3,Jeton.ETAT,6);
+        autoSem.ajouterUneTransition(3,Jeton.COMPTEUR,7);
+
+        //ETAT 4
+        autoSem.ajouterUneTransition(4,Jeton.COMPARAISON,8);
+
+        //ETAT 5
+        autoSem.ajouterUneTransition(5,Jeton.PIECE,9);
+        autoSem.ajouterUneTransition(5,Jeton.PIECETOKEN,10);
+        autoSem.ajouterUneTransition(5,Jeton.CASE,11);
+
+        //ETAT 6
+        autoSem.ajouterUneTransition(6,Jeton.ET,0);
+        autoSem.ajouterUneTransition(6,Jeton.OU,0);
+        autoSem.ajouterUneTransition(6,Jeton.ALORS,15);
+
+        //ETAT 7
+        autoSem.ajouterUneTransition(7,Jeton.COMPARAISON,12);
+
+        //ETAT 8
+        autoSem.ajouterUneTransition(8,Jeton.NOMBRE,13);
+
+        //ETAT 9
+        autoSem.ajouterUneTransition(9,Jeton.JOUEUR,10);
+        autoSem.ajouterUneTransition(9,Jeton.ET,0);
+        autoSem.ajouterUneTransition(9,Jeton.OU,0);
+        autoSem.ajouterUneTransition(9,Jeton.ALORS,15);
+
+        //ETAT 10
+        autoSem.ajouterUneTransition(10,Jeton.ET,0);
+        autoSem.ajouterUneTransition(10,Jeton.OU,0);
+        autoSem.ajouterUneTransition(10,Jeton.ALORS,15);
+
+        //ETAT 11
+        autoSem.ajouterUneTransition(11,Jeton.ET,0);
+        autoSem.ajouterUneTransition(11,Jeton.OU,0);
+        autoSem.ajouterUneTransition(11,Jeton.ALORS,15);
+
+        //ETAT 12
+        autoSem.ajouterUneTransition(12,Jeton.COMPTEUR,14);
+
+        //ETAT 13
+        autoSem.ajouterUneTransition(13,Jeton.ET,0);
+        autoSem.ajouterUneTransition(13,Jeton.OU,0);
+        autoSem.ajouterUneTransition(13,Jeton.ALORS,15);
+
+        //ETAT 14
+        autoSem.ajouterUneTransition(14,Jeton.ET,0);
+        autoSem.ajouterUneTransition(14,Jeton.OU,0);
+        autoSem.ajouterUneTransition(14,Jeton.ALORS,15);
+
+        //=========== CONDITIONS ===========
+        //ETAT 15
+        autoSem.ajouterUneTransition(15,Jeton.JOUEUR,16);
+        autoSem.ajouterUneTransition(15,Jeton.PIECE,17);
+        autoSem.ajouterUneTransition(15,Jeton.PIECETOKEN,18);
+
+        //ETAT 16
+        autoSem.ajouterUneTransition(16,Jeton.CONSEQUENCEACTION,20);
+        autoSem.ajouterUneTransition(16,Jeton.CONSEQUENCETERMINALE,19);
+
+        //ETAT 17
+        autoSem.ajouterUneTransition(17,Jeton.JOUEUR,18);
+        autoSem.ajouterUneTransition(17,Jeton.CONSEQUENCEACTION,20);
+
+        //ETAT 18
+        autoSem.ajouterUneTransition(18,Jeton.CONSEQUENCEACTION,20);
+
+        //ETAT 20
+        autoSem.ajouterUneTransition(20,Jeton.PIECE,21);
+        autoSem.ajouterUneTransition(20,Jeton.PIECETOKEN,22);
+        autoSem.ajouterUneTransition(20,Jeton.CASE,23);
+
+        //ETAT 21
+        autoSem.ajouterUneTransition(21,Jeton.ET,20);
+        autoSem.ajouterUneTransition(21,Jeton.JOUEUR,22);
+
+        //ETAT 22
+        autoSem.ajouterUneTransition(22,Jeton.ET,20);
+
+        //ETAT 23
+        autoSem.ajouterUneTransition(23,Jeton.ET,20);
+        autoSem.ajouterUneTransition(23,Jeton.PIECETOKEN,22);
+        autoSem.ajouterUneTransition(23,Jeton.PIECE,21);
+
+        return  autoSem;
+    }
+
+    //Java : les var-args
+
+    public void analyseSemantique(List<Jeton> regleSyntaxe, List<String> regle){
+        //Etat initial par défaut : 0
+        int curEtat = 0;
+        //regles de etat-transitions de l'automate de notre système
+        Automate_Semantique automateSem = initialiserAutomate_Semantique(new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23)));
+        //Pile de gestion des blocs de règle parcourus
+        List<String> blocsParcourus = new ArrayList<>();
+
+
+        for (Jeton jetons: regleSyntaxe) {
+            //Récupération de l'indice du prochain état d'après la transition donnée
+            curEtat = automateSem.etatSuivant(curEtat,jetons);
+
+            //Récupération de l'état correspondant à l'indice curEtat
+            Etat_Semantique etat = automateSem.recupererEtat(curEtat);
+            if(etat.estTerminal){
+                //Si terminal, traitement du code de retour
+                switch (etat.codeDeRetour){
+                    case 300 -> /*traitement*/ System.out.println("");
+                    case 301 -> /*traitement*/ System.out.println("");
+                    case 302 -> /*traitement*/ System.out.println("");
+                    case 303 -> /*traitement*/ System.out.println("");
+                    case 304 -> /*traitement*/ System.out.println("");
+                    case 305 -> /*traitement*/ System.out.println("");
+                    case 306 -> /*traitement*/ System.out.println("");
+                    case 307 -> /*traitement*/ System.out.println("");
+                    case 308 -> /*traitement*/ System.out.println("");
+                    case 309 -> /*traitement*/ System.out.println("");
+                }
+            }
+        }
     }
 
 
