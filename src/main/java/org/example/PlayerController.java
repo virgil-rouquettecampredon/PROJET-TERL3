@@ -5,10 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -90,7 +87,7 @@ public class PlayerController extends Controller {
 
     @FXML
     public void incrementNbPlayer() {
-        data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size()+1)%2));
+        data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size())%2));
         updateInput();
     }
 

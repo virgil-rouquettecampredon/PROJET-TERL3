@@ -104,28 +104,28 @@ public class PieceController extends Controller {
             this.img.set(img);
         }
 
-        public Button getEdit() {
-            return edit.get();
+        public String getNom() {
+            return nom.get();
         }
 
-        public SimpleObjectProperty<Button> editProperty() {
-            return edit;
+        public SimpleStringProperty nomProperty() {
+            return nom;
         }
 
-        public void setEdit(Button edit) {
-            this.edit.set(edit);
+        public void setNom(String nom) {
+            this.nom.set(nom);
         }
 
-        public Button getDel() {
-            return del.get();
+        public String getJoueur() {
+            return joueur.get();
         }
 
-        public SimpleObjectProperty<Button> delProperty() {
-            return del;
+        public SimpleStringProperty joueurProperty() {
+            return joueur;
         }
 
-        public void setDel(Button del) {
-            this.del.set(del);
+        public void setJoueur(String joueur) {
+            this.joueur.set(joueur);
         }
 
         public Piece getPiece() {

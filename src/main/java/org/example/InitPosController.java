@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import org.example.model.Case;
 import org.example.model.Joueur;
+import org.example.model.JoueurBox;
 import org.example.model.Piece;
 
 import java.io.IOException;
