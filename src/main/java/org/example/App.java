@@ -29,7 +29,7 @@ public class App extends Application {
 
         stage.setTitle("ChessBurger");
         stage.setResizable(false);
-        scene = new Scene(loadFXML("home"), 1024, 640);
+        scene = new Scene(loadFXML("home", null), 1024, 640);
         stage.setScene(scene);
         stage.setOnCloseRequest(t -> {
             soundManager.playSound("lose");
@@ -41,16 +41,21 @@ public class App extends Application {
     }
 
     public void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        setRoot(fxml, null);
     }
 
-    private Parent loadFXML(String fxml) throws IOException {
+    public void setRoot(String fxml, Object var) throws IOException {
+        scene.setRoot(loadFXML(fxml, var));
+    }
+
+    private Parent loadFXML(String fxml, Object var) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
 
         Pane layout = fxmlLoader.load();
 
         Controller controller = fxmlLoader.getController();
         controller.setApp(this);
+        controller.setUserVar(var);
         controller.initialise();
 
         return layout;

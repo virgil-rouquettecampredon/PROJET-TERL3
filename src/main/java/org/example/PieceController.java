@@ -1,12 +1,11 @@
 package org.example;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.example.model.Piece;
@@ -20,75 +19,102 @@ public class PieceController extends Controller {
     @FXML
     private TableColumn<PieceRow, ImageView> imgCol;
     @FXML
-    private TableColumn<PieceRow, Button> editCol;
+    private TableColumn<PieceRow, String> nomCol;
     @FXML
-    private TableColumn<PieceRow, Button> delCol;
+    private TableColumn<PieceRow, String> joueurCol;
 
     private ObservableList<PieceRow> pieces;
 
     @FXML
     private void confirmButton() throws IOException {
-        //TODO SAUVEGARDER JE PENSE LOL
         getApp().soundManager.playSound("button-click");
         getApp().setRoot("varianteMenu2");
     }
 
     @FXML
-    private void addButton() {
-        getApp().soundManager.playSound("button-click");
-        //TODO AJOUTER UNE PIECE
-        Piece p = new Piece("Pawn", "file:src/main/resources/org/example/images/pawn.png", null);
-        ImageView iv = new ImageView(new Image(p.getSprite()));
-        iv.setPreserveRatio(true);
-        iv.setFitWidth(256/(float)4); // TODO changer 4 par le nombre d'images de la piece
-        Button be = new Button("Edit");
-        be.setOnAction(event -> {
-            try {
-                editPiece(p);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        Button bd = new Button("Delete");
-        bd.setOnAction(event -> {
-            deletPiece(p);
-        });
-
-        PieceRow pr = new PieceRow(iv, be, bd, p);
-        pieces.add(pr);
-    }
-
-    @FXML
-    public void initialize() {
-        //TODO REMPLIR PROPREMENT AVEC LES DONNES ENREGISTREES
-        imgCol.setCellValueFactory(cellData -> cellData.getValue().imgProperty());
-        editCol.setCellValueFactory(cellData -> cellData.getValue().editProperty());
-        delCol.setCellValueFactory(cellData -> cellData.getValue().delProperty());
-
-        pieces = FXCollections.observableArrayList();
-        tab.setItems(pieces);
-    }
-
-    public void editPiece(Piece p) throws IOException {
-        //TODO passer p à la scene
+    private void addButton() throws IOException{
         getApp().soundManager.playSound("button-click");
         getApp().setRoot("pieceMove");
     }
 
-    public void deletPiece(Piece p) {
+    @Override
+    public void initialise(){
+        imgCol.setCellValueFactory(cellData -> cellData.getValue().imgProperty());
+        nomCol.setCellValueFactory(cellData -> cellData.getValue().nomProperty());
+        joueurCol.setCellValueFactory(cellData -> cellData.getValue().joueurProperty());
+
+        pieces = FXCollections.observableArrayList();
+
+        for (Piece p:
+                getApp().varianteManager.getCurrent().getPieces()) {
+
+            ImageView iv = new ImageView(new Image(p.getSprite()));
+            iv.setPreserveRatio(true);
+            iv.setFitWidth(imgCol.getWidth());
+            iv.setFitHeight(100);
+
+            pieces.add(new PieceRow(iv, p.getName(), p.getJoueur().getName(), p));
+        }
+
+        tab.setItems(pieces);
+
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editItem = new MenuItem("Edit");
+        editItem.setOnAction((event) -> {
+            editSelectedPiece();
+        });
+
+        MenuItem deleteItem = new MenuItem("Delete");
+        deleteItem.setOnAction((event) -> {
+            deleteSelectedPiece();
+        });
+
+        MenuItem duplicateItem = new MenuItem("Duplicate");
+        duplicateItem.setOnAction((event) -> {
+            duplicateSelectedPiece();
+        });
+
+        contextMenu.getItems().addAll(editItem, deleteItem, duplicateItem);
+
+        tab.setContextMenu(contextMenu);
+    }
+
+    private void duplicateSelectedPiece() {
+
+    }
+
+    private void deleteSelectedPiece() {
+        PieceRow p = tab.getSelectionModel().getSelectedItem();
         pieces.remove(p);
+        getApp().varianteManager.getCurrent().getPieces().remove(p.getPiece());
+    }
+
+    private void editSelectedPiece(){
+        PieceRow p = tab.getSelectionModel().getSelectedItem();
+        if (p == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucune piece selectionne");
+            return;
+        }
+
+        getApp().soundManager.playSound("button-click");
+        try {
+            getApp().setRoot("pieceMove", p.getPiece());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static class PieceRow {
         private final SimpleObjectProperty<ImageView> img;
-        private final SimpleObjectProperty<Button> edit;
-        private final SimpleObjectProperty<Button> del;
+        private final SimpleStringProperty nom;
+        private final SimpleStringProperty joueur;
         private final Piece piece;
 
-        public PieceRow(ImageView img, Button edit, Button del, Piece piece) {
+        public PieceRow(ImageView img, String nom, String joueur, Piece piece) {
             this.img = new SimpleObjectProperty<>(img);
-            this.edit = new SimpleObjectProperty<>(edit);
-            this.del = new SimpleObjectProperty<>(del);
+            this.nom = new SimpleStringProperty(nom);
+            this.joueur = new SimpleStringProperty(joueur);
             this.piece = piece;
         }
 

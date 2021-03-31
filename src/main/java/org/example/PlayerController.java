@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.model.Joueur;
@@ -31,6 +32,11 @@ public class PlayerController extends Controller {
     private void confirmButton() throws IOException {
         getApp().soundManager.playSound("button-click");
 
+        if (data.size() < 1) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : pas assez de joueur (1 au minimum)");
+            return;
+        }
+
         List<Joueur> list = getApp().varianteManager.getCurrent().getJoueurs();
         list.clear();
         for (PlayerTableRow prow:
@@ -40,6 +46,7 @@ public class PlayerController extends Controller {
 
         /*System.out.println(nbPlayerInput.getText());
         data.forEach(System.out::println);*/
+
         getApp().setRoot("VarianteMenu1");
     }
 
@@ -57,9 +64,32 @@ public class PlayerController extends Controller {
             data.add(new PlayerTableRow(p));
         }
 
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem menuItem1 = new MenuItem("delete");
+
+        menuItem1.setOnAction((event) -> {
+            deleteSelectedPlayer();
+        });
+
+        contextMenu.getItems().addAll(menuItem1);
+
+        tablePlayer.setContextMenu(contextMenu);
+
         nbPlayerInput.setText(""+data.size());
 
         tablePlayer.setItems(data);
+    }
+
+    public void deleteSelectedPlayer() {
+        PlayerTableRow p = tablePlayer.getSelectionModel().getSelectedItem();
+        if (p != null) {
+            data.remove(p);
+            updateInput();
+        }
+        else {
+            decrementNbPlayer();
+        }
     }
 
     @FXML
@@ -97,6 +127,10 @@ public class PlayerController extends Controller {
             data.remove(data.get(data.size()-1));
             updateInput();
         }
+    }
+
+    public void infoButton() {
+        showAlert(Alert.AlertType.INFORMATION, "Vous pouvez augmenter ou réduire le nombre de joueur pour cette variante soit en cliquant sur le bouton + et -, soit en entrant directement la valeur dans l'encart.\n\nVous pouvez aussi modifier le nom et l'équipe d'un joueur en cliquant gauche soit sur le nom, soit sur l'équipe du joueur en question.\n\nEnsuite si vous voulez supprimer un joueur en particulier, il suffit de faire un clique droit sur ce joueur pouis appuyer sur le bouton delete qui sera apparu.\n\nPour finir la variante doit avoir au minimum 1 joueur.");//todo texte
     }
 
     private static class PlayerTableRow {

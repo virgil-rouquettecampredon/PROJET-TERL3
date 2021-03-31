@@ -78,11 +78,26 @@
                   <Insets />
                </VBox.margin>
             </ScrollPane>
-            <Button mnemonicParsing="false" onAction="#confirmButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="CONTINUER">
-               <font>
-                  <Font name="Candara" size="36.0" />
-               </font>
-            </Button>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+             <children>
+                 <Button mnemonicParsing="false" onAction="#confirmButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="CONTINUER">
+                     <font>
+                         <Font name="Candara" size="36.0" />
+                     </font>
+                 </Button>
+                 <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#infoButton" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                         <Image url="@images/msg.png" />
+                     </image>
+                 </ImageView>
+             </children>
+             <VBox.margin>
+                 <Insets />
+             </VBox.margin>
+             <padding>
+                 <Insets left="362.0" />
+             </padding>
+            </HBox>
          </children>
       </VBox>
    </children>

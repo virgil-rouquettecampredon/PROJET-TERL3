@@ -66,6 +66,8 @@ public class InitPosController extends Controller {
             joueurBox.getItems().add(new JoueurBox(p.getName(), p));
         }
 
+        joueurBox.getSelectionModel().select(joueurBox.getItems().get(0));
+
         context = canvas.getGraphicsContext2D();
         updateCanvas();
     }
@@ -127,7 +129,6 @@ public class InitPosController extends Controller {
     @FXML
     private void validateButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        //TODO: enregistrer les positions
         System.out.println(tab.getRowFactory());
         getApp().setRoot("varianteMenu2");
     }
@@ -184,6 +185,10 @@ public class InitPosController extends Controller {
         }
     }
 
+    public void infoButton() {
+        showAlert(Alert.AlertType.INFORMATION, "texte");//todo texte positions initiales
+    }
+
     private static class PieceRow {
         private final SimpleObjectProperty<ImageView> img;
         private final Piece piece;
@@ -207,37 +212,6 @@ public class InitPosController extends Controller {
 
         public Piece getPiece() {
             return piece;
-        }
-    }
-
-    private static class JoueurBox {
-        private final SimpleStringProperty name;
-        private final Joueur joueur;
-
-        public JoueurBox(String name, Joueur joueur) {
-            this.name = new SimpleStringProperty(name);
-            this.joueur = joueur;
-        }
-
-        @Override
-        public String toString() {
-            return getName();
-        }
-
-        public String getName() {
-            return name.get();
-        }
-
-        public SimpleStringProperty nameProperty() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name.set(name);
-        }
-
-        public Joueur getJoueur() {
-            return joueur;
         }
     }
 }

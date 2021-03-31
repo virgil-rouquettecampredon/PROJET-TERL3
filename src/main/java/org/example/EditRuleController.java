@@ -3,8 +3,10 @@ package org.example;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -44,5 +46,9 @@ public class EditRuleController extends Controller {
         sujet2Box.getItems().addAll("Pawn", "AllPiece");
         etatBox.getItems().addAll("Mooved", "can Roque");
         consequenceBox.getItems().addAll("Meurs", "Promotion");
+    }
+
+    public void infoButton() {
+        showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte edition regle
     }
 }

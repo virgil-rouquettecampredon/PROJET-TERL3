@@ -8,6 +8,8 @@ import java.io.IOException;
 public class Controller {
     private App app;
 
+    protected Object userVar;
+
     public App getApp() {
         return app;
     }
@@ -23,6 +25,10 @@ public class Controller {
 
     public void initialise() {
 
+    }
+
+    public void setUserVar(Object userVar) {
+        this.userVar = userVar;
     }
 
     public void showAlert(Alert.AlertType type, String text) {
