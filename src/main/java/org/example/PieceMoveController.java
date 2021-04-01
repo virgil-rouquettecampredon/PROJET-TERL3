@@ -2,6 +2,7 @@ package org.example;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -13,9 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import org.example.model.Joueur;
-import org.example.model.JoueurBox;
-import org.example.model.Piece;
+import org.example.model.*;
+import org.example.model.EquationDeDeplacement.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,12 +35,19 @@ public class PieceMoveController extends Controller {
     @FXML
     public Button arrowButton;
 
-    private GraphicsContext context;
+    private CanvasManager canvasManager;
     private String file;
+    private ArrayList<PositionDeDeplacement> posDeplacements;
+    private ArrayList<VecteurDeDeplacement> vecDeplacements;
+
+    private int posX, posY;
+
+    private Tool tool;
 
 
     @Override
     public void initialise() {
+        tool = Tool.BOX;
         for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
             joueurBox.getItems().add(new JoueurBox(p.getName(), p));
         }
@@ -51,44 +58,26 @@ public class PieceMoveController extends Controller {
             image.setImage(new Image(p.getSprite()));
             joueurBox.getSelectionModel().select(joueurBox.getItems().stream().filter(jb -> jb.getJoueur() == p.getJoueur()).findFirst().get());
             file = p.getSprite().split("file:")[1];
+            posDeplacements = p.getPosDeplacements();
+            vecDeplacements = p.getVecDeplacements();
         }
         else {
             joueurBox.getSelectionModel().selectFirst();
             nomInput.setText("Pawn");
+            posDeplacements = new ArrayList<>();
+            vecDeplacements = new ArrayList<>();
         }
+        Plateau p = getApp().varianteManager.getCurrent().getPlateau();
+        posX = p.getWitdhX()/2;
+        posY = p.getHeightY()/2;
 
-        context = canvas.getGraphicsContext2D();
+        canvasManager = new CanvasManager(canvas, p);
         updateCanvas();
     }
 
     public void updateCanvas() {
-        //TODO mettre la véritable taille du plateau
-        int nbSquareX = 8;
-        int nbSquareY = 8;
-
-        if (nbSquareX > nbSquareY) {
-            canvas.setHeight(300*((float)nbSquareY/nbSquareX));
-            canvas.setWidth(300);
-        }
-        else {
-            canvas.setHeight(300);
-            canvas.setWidth(300*((float)nbSquareX/nbSquareY));
-        }
-
-        context.setFill(Color.PURPLE);
-        context.fillRect(
-                0,
-                0,
-                canvas.getWidth(),
-                canvas.getHeight());
-
-        double rectSize = canvas.getWidth()/nbSquareX;
-        context.setFill(Color.PINK);
-        for (int i = 0; i < nbSquareY; i++) {
-            for (int j = 0; j < nbSquareX; j+=2) {
-                context.fillRect((j+(i%2))*rectSize, i*rectSize, rectSize, rectSize);
-            }
-        }
+        canvasManager.drawCanvas();
+        canvasManager.drawDeplacement(image.getImage(), posX, posY, posDeplacements, vecDeplacements);
     }
 
     @FXML
@@ -150,15 +139,57 @@ public class PieceMoveController extends Controller {
 
     public void selectBoxTool() {
         getApp().soundManager.playSound("button-click");
-        //TODO: selectionner l'outil de case
+        tool = Tool.BOX;
+        arrowButton.setDisable(false);
+        boxButton.setDisable(true);
     }
 
     public void selectArowTool() {
         getApp().soundManager.playSound("button-click");
-        //TODO: selectionner l'outil de fleche
+        tool = Tool.ARROW;
+        arrowButton.setDisable(true);
+        boxButton.setDisable(false);
     }
 
     public void infoButton() {
         showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte definition piece
+    }
+
+    public void onClick(MouseEvent mouseEvent) {
+        Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+
+        switch (mouseEvent.getButton()) {
+            case PRIMARY -> {
+                switch (tool) {
+                    case BOX -> {
+                        //add case to piece deplacement
+                        posDeplacements.add(new PositionDeDeplacement(c.getPosition().getX()-posX, c.getPosition().getY()-posY));
+                    }
+                    case ARROW -> {
+                        //add arrow to piece deplacement
+                        vecDeplacements.add(new VecteurDeDeplacement(c.getPosition().getX()-posX, c.getPosition().getY()-posY));
+                    }
+                }
+            }
+            case SECONDARY -> {
+                switch (tool) {
+                    case BOX -> {
+                        //remove case to piece deplacement
+                    }
+                    case ARROW -> {
+                        //remove arrow to piece deplacement
+                    }
+                }
+            }
+            case MIDDLE -> {
+                posX = c.getPosition().getX();
+                posY = c.getPosition().getY();
+            }
+        }
+        updateCanvas();
+    }
+
+    private static enum Tool {
+        BOX, ARROW
     }
 }

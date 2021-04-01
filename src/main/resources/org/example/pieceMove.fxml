@@ -89,7 +89,7 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </VBox>
-                  <Canvas fx:id="canvas" height="300.0" width="300.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                  <Canvas fx:id="canvas" onMouseClicked="#onClick" height="300.0" width="300.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                </children>
                <VBox.margin>
                   <Insets left="50.0" right="50.0" />

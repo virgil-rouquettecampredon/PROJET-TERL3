@@ -2,6 +2,8 @@ package org.example.model;
 
 import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
 import org.example.model.EquationDeDeplacement.FactoryEquationDeDeplacement;
+import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
+import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.SujetDeRegle;
 
@@ -13,7 +15,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
     private int nbMovement;
     private int nbLife;
     private Joueur joueur;
-    private ArrayList<EquationDeDeplacement> deplacements;
+    private ArrayList<PositionDeDeplacement> posDeplacements;
+    private ArrayList<VecteurDeDeplacement> vecDeplacements;
     private ArrayList<Boolean> comportementPiece;
 
     public Piece(String name, String sprite, Joueur joueur) {
@@ -22,7 +25,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
         this.nbMovement = 0;
         this.nbLife = -1;
         this.joueur = joueur;
-        this.deplacements = new ArrayList<EquationDeDeplacement>();
+        this.posDeplacements = new ArrayList<>();
+        this.vecDeplacements = new ArrayList<>();
         this.comportementPiece = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             comportementPiece.add(i, false);
@@ -39,8 +43,12 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
         nbMovement = piece.nbMovement;
         nbLife = piece.nbLife;
         joueur = piece.joueur;
-        deplacements = new ArrayList<>();
-        deplacements.addAll(piece.deplacements);
+
+        posDeplacements = new ArrayList<>();
+        posDeplacements.addAll(piece.posDeplacements);
+        vecDeplacements = new ArrayList<>();
+        vecDeplacements.addAll(piece.vecDeplacements);
+
         comportementPiece = new ArrayList<>();
         comportementPiece.addAll(piece.comportementPiece);
     }
@@ -71,10 +79,6 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
 
     public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
-    }
-
-    public void setDeplacements(ArrayList<EquationDeDeplacement> deplacements) {
-        this.deplacements = deplacements;
     }
 
     public void setEstConditionDeVictoire(boolean comportement){
@@ -113,8 +117,12 @@ public class Piece implements SujetDeRegle, CibleDeRegle {
         return joueur;
     }
 
-    public ArrayList<EquationDeDeplacement> getDeplacements() {
-        return deplacements;
+    public ArrayList<PositionDeDeplacement> getPosDeplacements() {
+        return posDeplacements;
+    }
+
+    public ArrayList<VecteurDeDeplacement> getVecDeplacements() {
+        return vecDeplacements;
     }
 
     public boolean estConditionDeVictoire(){

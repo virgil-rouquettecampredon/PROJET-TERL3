@@ -8,6 +8,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.example.model.CanvasManager;
+import org.example.model.Case;
 import org.example.model.Position;
 
 import java.io.IOException;
@@ -19,14 +21,15 @@ public class BoardController extends Controller {
     public TextField yInput;
     @FXML
     public Canvas canvas;
-    private GraphicsContext context;
-    private double rectSize;
+
+    private CanvasManager canvasManager;
 
     @Override
     public void initialise() {
         xInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getWitdhX());
         yInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getHeightY());
-        context = canvas.getGraphicsContext2D();
+
+        canvasManager = new CanvasManager(canvas, getApp().varianteManager.getCurrent().getPlateau());
         updateCanvas();
     }
 
@@ -47,55 +50,13 @@ public class BoardController extends Controller {
     }
 
     public void updateCanvas() {
-        int nbSquareX = getApp().varianteManager.getCurrent().getPlateau().getWitdhX();
-        int nbSquareY = getApp().varianteManager.getCurrent().getPlateau().getHeightY();
-
-        try {
-            nbSquareX = Integer.parseInt(xInput.getText());
-            nbSquareY = Integer.parseInt(yInput.getText());
-        }
-        catch (NumberFormatException ignore) {
-        }
-
-        if (nbSquareX > nbSquareY) {
-            canvas.setHeight(300*((float)nbSquareY/nbSquareX));
-            canvas.setWidth(300);
-        }
-        else {
-            canvas.setHeight(300);
-            canvas.setWidth(300*((float)nbSquareX/nbSquareY));
-        }
-
-        rectSize = canvas.getWidth()/nbSquareX;
-        for (int i = 0; i < nbSquareY; i++) {
-            for (int j = 0; j < nbSquareX; j++) {
-                if (getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(i).get(j).isClickable()) {
-                    if ((j+i)%2==0) {
-                        context.setFill(Color.PURPLE);
-                    }
-                    else {
-                        context.setFill(Color.PINK);
-                    }
-                }
-                else {
-                    if ((j+i)%2==0) {
-                        context.setFill(Color.GRAY);
-                    }
-                    else {
-                        context.setFill(Color.DARKGRAY);
-                    }
-                }
-                context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
-            }
-        }
+        canvasManager.drawCanvas();
     }
 
     @FXML
     public void onClick(MouseEvent mouseEvent) {
-        int x = (int) (mouseEvent.getX() / rectSize);
-        int y = (int) (mouseEvent.getY() / rectSize);
-
-        getApp().varianteManager.getCurrent().getPlateau().getEchiquier().get(y).get(x).switchClickable();
+        Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+        c.switchClickable();
 
         updateCanvas();
     }
