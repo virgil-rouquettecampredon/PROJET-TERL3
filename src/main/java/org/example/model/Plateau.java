@@ -25,6 +25,14 @@ public class Plateau {
 
     }
 
+    public void clear() {
+        for (int i = 0; i < heightY; i++) {
+            for (int j = 0; j < witdhX; j++) {
+                echiquier.get(i).get(j).setPieceOnCase(null);
+            }
+        }
+    }
+
     /*DEBUT GETTER SETTER*/
 
     public int getHeightY() {

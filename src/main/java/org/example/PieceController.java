@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import org.example.model.Piece;
 
 import java.io.IOException;
@@ -46,14 +47,9 @@ public class PieceController extends Controller {
         pieces = FXCollections.observableArrayList();
 
         for (Piece p:
-                getApp().varianteManager.getCurrent().getPieces()) {
+                getApp().varianteManager.getCurrent().getAllPawn()) {
 
-            ImageView iv = new ImageView(new Image(p.getSprite()));
-            iv.setPreserveRatio(true);
-            iv.setFitWidth(imgCol.getWidth());
-            iv.setFitHeight(100);
-
-            pieces.add(new PieceRow(iv, p.getName(), p.getJoueur().getName(), p));
+            pieces.add(new PieceRow(imgCol.getWidth(), p));
         }
 
         tab.setItems(pieces);
@@ -81,7 +77,11 @@ public class PieceController extends Controller {
     }
 
     private void duplicateSelectedPiece() {
-
+        PieceRow pr = tab.getSelectionModel().getSelectedItem();
+        Piece p = new Piece(pr.getPiece());
+        p.getJoueur().getTypePawnList().add(p);
+        PieceRow pr2 = new PieceRow(imgCol.getWidth(), p);
+        pieces.add(pr2);
     }
 
     private void deleteSelectedPiece() {
@@ -105,17 +105,25 @@ public class PieceController extends Controller {
         }
     }
 
+    public void infoButton() {
+        showAlert(Alert.AlertType.INFORMATION, "texte");//todo texte modifier piece
+    }
+
     private static class PieceRow {
         private final SimpleObjectProperty<ImageView> img;
         private final SimpleStringProperty nom;
         private final SimpleStringProperty joueur;
         private final Piece piece;
 
-        public PieceRow(ImageView img, String nom, String joueur, Piece piece) {
-            this.img = new SimpleObjectProperty<>(img);
-            this.nom = new SimpleStringProperty(nom);
-            this.joueur = new SimpleStringProperty(joueur);
-            this.piece = piece;
+        public PieceRow(double width, Piece p) {
+            ImageView iv = new ImageView(new Image(p.getSprite()));
+            iv.setPreserveRatio(true);
+            iv.setFitWidth(width);
+            iv.setFitHeight(100);
+            this.img = new SimpleObjectProperty<>(iv);
+            this.nom = new SimpleStringProperty(p.getName());
+            this.joueur = new SimpleStringProperty(p.getJoueur().getName());
+            this.piece = p;
         }
 
         public ImageView getImg() {

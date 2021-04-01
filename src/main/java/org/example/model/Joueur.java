@@ -11,6 +11,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle {
     private int equipe;
     private ArrayList<Piece> graveyard;
     private ArrayList<Piece> pawnList;
+    private ArrayList<Piece> typePawnList;
     private int timer;
 
 
@@ -19,6 +20,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle {
         this.equipe = equipe;
         this.graveyard = new ArrayList<Piece>();
         this.pawnList = new ArrayList<Piece>();
+        this.typePawnList = new ArrayList<Piece>();
         this.timer = -1;
     }
 
@@ -68,6 +70,10 @@ public class Joueur implements CibleDeRegle, SujetDeRegle {
 
     public ArrayList<Piece> getPawnList() {
         return pawnList;
+    }
+
+    public ArrayList<Piece> getTypePawnList() {
+        return typePawnList;
     }
 
     public int getTimer() {

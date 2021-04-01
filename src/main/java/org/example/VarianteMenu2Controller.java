@@ -1,8 +1,11 @@
 package org.example;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class VarianteMenu2Controller extends Controller {
 
@@ -25,9 +28,17 @@ public class VarianteMenu2Controller extends Controller {
     }
 
     @FXML
-    private void backButton() throws IOException {
+    private void backButton() {
         getApp().soundManager.playSound("button-cancel");
-        getApp().setRoot("varianteMenu1");
+        Optional<ButtonType> result =
+                showAlert(Alert.AlertType.CONFIRMATION, "Attention !\nSi vous revenez en arrière, les pièces posées, les pièces créé et les règles créées seront supprimés. \nÊtes vous sûr de revenir en arrière ?");
+        result.ifPresent(response -> {if (response == ButtonType.OK) {
+            try {
+                getApp().setRoot("varianteMenu1");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }});
     }
 
     @FXML

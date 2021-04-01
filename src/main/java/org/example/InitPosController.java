@@ -33,6 +33,8 @@ public class InitPosController extends Controller {
     @FXML
     public TableColumn<PieceRow, ImageView> imgCol;
     @FXML
+    public TableColumn<PieceRow, String> nameCol;
+    @FXML
     public ComboBox<JoueurBox> joueurBox;
 
     @FXML
@@ -46,27 +48,17 @@ public class InitPosController extends Controller {
     @Override
     public void initialise() {
         imgCol.setCellValueFactory(cellData -> cellData.getValue().imgProperty());
+        nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
         pieces = FXCollections.observableArrayList();
-
-        for (Piece p:
-                getApp().varianteManager.getCurrent().getPieces()) {
-
-            ImageView iv = new ImageView(new Image(p.getSprite()));
-            iv.setPreserveRatio(true);
-            iv.setFitWidth(imgCol.getWidth());
-            iv.setFitHeight(100);
-
-            pieces.add(new PieceRow(iv, p));
-        }
-
         tab.setItems(pieces);
 
         for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
             joueurBox.getItems().add(new JoueurBox(p.getName(), p));
         }
 
-        joueurBox.getSelectionModel().select(joueurBox.getItems().get(0));
+        joueurBox.getSelectionModel().selectFirst();
+        updatePawnPlayer();
 
         context = canvas.getGraphicsContext2D();
         updateCanvas();
@@ -133,8 +125,27 @@ public class InitPosController extends Controller {
         getApp().setRoot("varianteMenu2");
     }
 
+    @FXML
     public void updatePawnPlayer() {
-        
+        getApp().soundManager.playSound("button-hover");
+
+        if (joueurBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        Joueur j = joueurBox.getSelectionModel().getSelectedItem().getJoueur();
+
+        pieces.clear();
+        System.out.println(j.getTypePawnList());
+        for (Piece p:
+                j.getTypePawnList()) {
+
+            ImageView iv = new ImageView(new Image(p.getSprite()));
+            iv.setPreserveRatio(true);
+            iv.setFitWidth(imgCol.getWidth());
+            iv.setFitHeight(100);
+
+            pieces.add(new PieceRow(iv, p));
+        }
     }
 
     private void putPiece(double x, double y, Piece p) {
@@ -191,10 +202,12 @@ public class InitPosController extends Controller {
 
     private static class PieceRow {
         private final SimpleObjectProperty<ImageView> img;
+        private final SimpleStringProperty name;
         private final Piece piece;
 
         public PieceRow(ImageView img, Piece piece) {
             this.img = new SimpleObjectProperty<>(img);
+            this.name = new SimpleStringProperty(piece.getName());
             this.piece = piece;
         }
 
@@ -208,6 +221,18 @@ public class InitPosController extends Controller {
 
         public void setImg(ImageView img) {
             this.img.set(img);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
         }
 
         public Piece getPiece() {

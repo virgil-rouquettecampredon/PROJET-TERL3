@@ -38,6 +38,7 @@ public class PieceMoveController extends Controller {
     private GraphicsContext context;
     private String file;
 
+
     @Override
     public void initialise() {
         for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
@@ -118,11 +119,14 @@ public class PieceMoveController extends Controller {
             Piece p = (Piece) userVar;
             p.setName(nomInput.getText());
             p.setSprite("file:" + file);
+
+            p.getJoueur().getTypePawnList().remove(p);
             p.setJoueur(joueurBox.getSelectionModel().getSelectedItem().getJoueur());
+            p.getJoueur().getTypePawnList().add(p);
         }
         else {
             Piece p = new Piece(nomInput.getText(), "file:" + file, joueurBox.getSelectionModel().getSelectedItem().getJoueur());
-            getApp().varianteManager.getCurrent().getPieces().add(p);
+            p.getJoueur().getTypePawnList().add(p);
         }
 
         getApp().setRoot("piece");

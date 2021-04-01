@@ -34,12 +34,13 @@
                               <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Joueur:" BorderPane.alignment="CENTER" />
                            </left>
                            <center>
-                              <ComboBox fx:id="joueurBox" prefWidth="150.0" promptText="Joueur" BorderPane.alignment="CENTER" />
+                              <ComboBox fx:id="joueurBox" onAction="#updatePawnPlayer" prefWidth="150.0" promptText="Joueur" BorderPane.alignment="CENTER" />
                            </center>
                         </BorderPane>
                         <TableView fx:id="tab" prefHeight="350.0" prefWidth="200.0">
                            <columns>
-                              <TableColumn fx:id="imgCol" editable="false" prefWidth="212.0" />
+                              <TableColumn fx:id="imgCol" editable="false" prefWidth="106.0" />
+                              <TableColumn fx:id="nameCol" editable="false" prefWidth="106.0" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

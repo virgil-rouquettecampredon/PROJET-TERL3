@@ -11,14 +11,12 @@ public class Variante implements Serializable {
     private Plateau plateau;
     private ArrayList<Joueur> joueurs;
     private ArrayList<Regle> regles;
-    private ArrayList<Piece> pieces;
 
-    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles, ArrayList<Piece> pieces) {
+    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles) {
         this.name = name;
         this.plateau = plateau;
         this.joueurs = joueurs;
         this.regles = regles;
-        this.pieces = pieces;
     }
 
     public Plateau getPlateau() {

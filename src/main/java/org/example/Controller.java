@@ -2,8 +2,10 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class Controller {
     private App app;
@@ -31,10 +33,10 @@ public class Controller {
         this.userVar = userVar;
     }
 
-    public void showAlert(Alert.AlertType type, String text) {
+    public Optional<ButtonType> showAlert(Alert.AlertType type, String text) {
         Alert alert = new Alert(type);
         alert.setContentText(text);
         alert.getDialogPane().getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
-        alert.showAndWait();
+        return alert.showAndWait();
     }
 }

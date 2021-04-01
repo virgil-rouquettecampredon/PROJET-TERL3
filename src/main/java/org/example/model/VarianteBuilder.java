@@ -9,7 +9,6 @@ public class VarianteBuilder {
     private Plateau plateau;
     private ArrayList<Joueur> joueurs;
     private ArrayList<Regle> regles;
-    private ArrayList<Piece> pieces;
 
     public VarianteBuilder() {
         name = "Default variante";
@@ -20,9 +19,6 @@ public class VarianteBuilder {
         joueurs.add(j1);
         joueurs.add(j2);
         regles = new ArrayList<>();
-        pieces = new ArrayList<>();
-        pieces.add(new Piece("Paw", "file:src/main/resources/org/example/images/pawn.png", j1));
-        pieces.add(new Piece("King", "file:src/main/resources/org/example/images/king.png", j2));
     }
 
     public VarianteBuilder setName(String name) {
@@ -45,11 +41,6 @@ public class VarianteBuilder {
         return this;
     }
 
-    public VarianteBuilder setPieces(ArrayList<Piece> pieces) {
-        this.pieces = pieces;
-        return this;
-    }
-
     public String getName() {
         return name;
     }
@@ -66,11 +57,16 @@ public class VarianteBuilder {
         return regles;
     }
 
-    public ArrayList<Piece> getPieces() {
-        return pieces;
+    public ArrayList<Piece> getAllPawn() {
+        ArrayList<Piece> lp = new ArrayList<>();
+        for (Joueur j:
+             joueurs) {
+            lp.addAll(j.getTypePawnList());
+        }
+        return lp;
     }
 
     public Variante createVariante() {
-        return new Variante(name, plateau, joueurs, regles, pieces);
+        return new Variante(name, plateau, joueurs, regles);
     }
 }

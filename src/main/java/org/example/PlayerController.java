@@ -39,9 +39,10 @@ public class PlayerController extends Controller {
 
         List<Joueur> list = getApp().varianteManager.getCurrent().getJoueurs();
         list.clear();
+        getApp().varianteManager.getCurrent().getPlateau().clear();
         for (PlayerTableRow prow:
              data) {
-            getApp().varianteManager.getCurrent().getJoueurs().add(new Joueur(prow.getName(), prow.getTeam()));
+            list.add(new Joueur(prow.getName(), prow.getTeam()));
         }
 
         /*System.out.println(nbPlayerInput.getText());
