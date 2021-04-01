@@ -17,13 +17,11 @@ public class GenerateurDeRegle {
     private List<Regle> regleApresCoup;
 
 
-    //private ArrayList<String> axiomes = new ArrayList<>();
-
     //Tableau des axiomes reconnaissables par notre système
     //Utile lors de l'analyse syntaxique dans un premier temps,
     //puis semantique ensuite
     private static final String[] axiomestab = {
-            "mange", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions*/
+            "prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions*/
             "=", "<", ">",                                                                                  /*comparaisons*/
             "tous-piece", "tous-joueur", "tous-typecase",                                                   /*tokens nimporte*/
             "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"                      /*consequences*/
@@ -77,8 +75,8 @@ public class GenerateurDeRegle {
     public static Jeton getAxiome(String axiome){
         Jeton et = Jeton.AUCUN;
         switch (axiome){
-            case "mange","sedeplace","estplace","estsur"-> et = Jeton.ACTION;
-            case "estpromu","estechec"-> et = Jeton.ETAT;
+            case "prend","sedeplace","estplace","estsur","estechec"-> et = Jeton.ACTION;
+            case "estpromu"-> et = Jeton.ETAT;
             case "nb_deplacement","timer"-> et = Jeton.COMPTEUR;
             case "=" , "<" , ">" -> et = Jeton.COMPARAISON;
             case "ET"-> et = Jeton.ET;
@@ -280,8 +278,6 @@ public class GenerateurDeRegle {
             throw new MauvaiseSyntaxeRegleException("Mauvais nombre de parametre de définition d'une pieceToken");
         }
     }
-
-
 
 
     /**
