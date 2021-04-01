@@ -1,6 +1,7 @@
 package org.example.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Plateau {
     private int heightY;
@@ -9,8 +10,8 @@ public class Plateau {
 
 
     public Plateau() {
-        this.heightY = 10;
-        this.witdhX = 10;
+        this.heightY = 8;
+        this.witdhX = 8;
         updateSize();
     }
 

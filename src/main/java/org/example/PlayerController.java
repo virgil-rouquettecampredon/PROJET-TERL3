@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.model.Joueur;
+import org.example.model.Piece;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -4,18 +4,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
 import org.example.model.Case;
 import org.example.model.Joueur;
 import org.example.model.JoueurBox;
@@ -23,7 +19,7 @@ import org.example.model.Piece;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class InitPosController extends Controller {
     @FXML

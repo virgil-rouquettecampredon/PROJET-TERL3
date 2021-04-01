@@ -85,9 +85,10 @@ public class PieceController extends Controller {
     }
 
     private void deleteSelectedPiece() {
-        PieceRow p = tab.getSelectionModel().getSelectedItem();
-        pieces.remove(p);
-        getApp().varianteManager.getCurrent().getPieces().remove(p.getPiece());
+        PieceRow pr = tab.getSelectionModel().getSelectedItem();
+        pieces.remove(pr);
+        Piece p = pr.getPiece();
+        p.getJoueur().getTypePawnList().remove(p);
     }
 
     private void editSelectedPiece(){
