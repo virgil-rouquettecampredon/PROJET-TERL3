@@ -132,7 +132,7 @@ public class PlayerController extends Controller {
     }
 
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "Vous pouvez augmenter ou réduire le nombre de joueur pour cette variante soit en cliquant sur le bouton + et -, soit en entrant directement la valeur dans l'encart.\n\nVous pouvez aussi modifier le nom et l'équipe d'un joueur en cliquant gauche soit sur le nom, soit sur l'équipe du joueur en question.\n\nEnsuite si vous voulez supprimer un joueur en particulier, il suffit de faire un clique droit sur ce joueur pouis appuyer sur le bouton delete qui sera apparu.\n\nPour finir la variante doit avoir au minimum 1 joueur.");//todo texte
+        showAlert(Alert.AlertType.INFORMATION, "Vous pouvez augmenter ou réduire le nombre de joueur pour cette variante soit en cliquant sur le bouton + et -, soit en entrant directement la valeur dans l'encart.\n\nVous pouvez aussi modifier le nom et l'équipe d'un joueur en cliquant gauche soit sur le nom, soit sur l'équipe du joueur en question.\n\nEnsuite si vous voulez supprimer un joueur en particulier, il suffit de faire un clique droit sur ce joueur pouis appuyer sur le bouton delete qui sera apparu.\n\nPour finir la variante doit avoir au minimum 1 joueur.");
     }
 
     private static class PlayerTableRow {

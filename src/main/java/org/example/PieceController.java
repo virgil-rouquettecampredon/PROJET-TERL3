@@ -107,7 +107,7 @@ public class PieceController extends Controller {
     }
 
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "texte");//todo texte modifier piece
+        showAlert(Alert.AlertType.INFORMATION, "Sur cette partie, vous pouvez rajouter des pièces en cliquant sur le bouton ajouter en bas à droite.\n\nSi vous voulez supprimé une pièce créée, il suffit de faire un clique droit sur la pièce voulu et de cliquer sur delete, vous pouvez faire de meme pour éditer une pièce ou bien la dupliquer.\n\n Lorsque vous avez fini, il suffit de cliquer sur le bouton valider.");
     }
 
     private static class PieceRow {

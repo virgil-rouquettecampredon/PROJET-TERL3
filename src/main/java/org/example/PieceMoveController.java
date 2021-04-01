@@ -44,7 +44,6 @@ public class PieceMoveController extends Controller {
 
     private Tool tool;
 
-
     @Override
     public void initialise() {
         tool = Tool.BOX;
@@ -152,7 +151,7 @@ public class PieceMoveController extends Controller {
     }
 
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte definition piece
+        showAlert(Alert.AlertType.INFORMATION, "Ici, vous pouvez modifier le nom de la pièce créée ou modifier, ainsi que le joueur auquel elle appartient et de même pour l'image de la pièce (Ce sera une image sur votre ordinateur).\n\n ");//todo finir texte pour déplacement de la pièce
     }
 
     public void onClick(MouseEvent mouseEvent) {
