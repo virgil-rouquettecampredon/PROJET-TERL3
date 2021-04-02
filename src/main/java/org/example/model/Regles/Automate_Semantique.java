@@ -513,12 +513,118 @@ public class Automate_Semantique extends Automate{
                                 }
 
                                 case 321 -> {
+                                    //SUJET-CONSEQUENCE-PIECE ou SUJET-CONSEQUENCE-CASE-PIECE
                                     switch (parcours) {
-                                        /*case "15162021" ->
-                                        *
-                                        * */
+                                        //en passant par 20 (pièce)
+                                        // Joueur-Consequence-Piece
+                                        case "15162021" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Joueur-Consequence-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "15172021" -> {    // Piece-Consequence-Piece
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(1==1);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Consequence-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "1517182021" -> {  // Piece-Joueur-Consequence-Piece
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(2==2);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Consequence-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "15182021" -> {    // Piecetoken-Consequence-Piece
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(3==3);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Consequence-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+
+                                        //en passant par 23 (case + pièce)
+                                        case "1516202321" -> {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {if(1==1);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "1517202321" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "151718202321" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Joueur-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "1518202321" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piecetoken-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        default -> { throw new MauvaiseSemantiqueRegleException("Bloc SUJET-CONSEQUENCE-PIECE ou SUJET-CONSEQUENCE-CASE-PIECE inconnu [" + indRegleSyntaxe + "]"); }
                                     }
                                 }
+
+                                case 322 -> {
+                                    //SUJET-CONSEQUENCE-PIECETOKEN ou SUJET-CONSEQUENCE-PIECE-JOUEUR ou SUJET-CONSEQUENCE-CASE-PIECETOKEN
+                                    switch (parcours) {
+                                        //en passant par 20 (piecetoken)
+                                        case "15162022" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Joueur-Consequence-Piecetoken inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "15172022" -> {
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(1==1);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Consequence-Piecetoken inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "1517182022" -> {
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(2==2);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Consequence-Piecetoken inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "15182022" -> {
+                                            if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {if(3==3);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Consequence-Piecetoken inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+
+                                        //en passant par 21 (piece + joueur)
+                                            //en passant par 20 (piece + joueur)
+                                        case "1516202122" -> {throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Consequence-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");}
+                                        case "1517202122" -> {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {if(4==4);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Consequence-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "151718202122" -> {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {if(5==5);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Consequence-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "1518202122" -> {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {if(6==6);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Consequence-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                            //en passant par 23 (case + pièce + joueur)
+                                        case "151620232122" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Joueur-Consequence-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "151720232122" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Consequence-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "15171820232122" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Joueur-Consequence-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+                                        case "151820232122" -> { throw new MauvaiseSemantiqueRegleException("typeBloc Piecetoken-Consequence-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]"); }
+
+                                        //en passant par 23 (case + piecetoken)
+                                        case "1516202322" -> {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {if(7==7);}
+                                            else { throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]"); }
+                                        }
+                                        case "1517202322" -> {throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]");}
+                                        case "151718202322" -> {throw new MauvaiseSemantiqueRegleException("typeBloc Piece-Joueur-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]");}
+                                        case "1518202322" -> {throw new MauvaiseSemantiqueRegleException("typeBloc Piecetoken-Consequence-Case-Piece inconnu [" + indRegleSyntaxe + "]");}
+
+                                        default -> {throw new MauvaiseSemantiqueRegleException("Bloc SUJET-CONSEQUENCE-PIECETOKEN ou SUJET-CONSEQUENCE-PIECE-JOUEUR ou SUJET-CONSEQUENCE-CASE-PIECETOKEN inconnu [" + indRegleSyntaxe + "]");}
+                                    }
+                                }
+
+                                case 323 -> {
+                                    //SUJET-CONSEQUENCE-CASE
+                                    switch (parcours) {
+                                        case "15162023" -> {throw new MauvaiseSemantiqueRegleException("typeBloc Joueur-Consequence-Case inconnu [" + indRegleSyntaxe + "]");}
+                                        case "15172023" -> {/*prendre + promouvoir*/
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prendre" -> {}
+                                                case "promouvoir" -> {}
+                                                default -> {throw new MauvaiseSemantiqueRegleException("Bloc Piece-Consequence-Case inconnu [" + indRegleSyntaxe + "]");}
+                                            }
+                                        }
+                                        case "1517182023" -> {/*prendre + promouvoir*/
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prendre" -> {}
+                                                case "promouvoir" -> {}
+                                                default -> {throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Consequence-Case inconnu [" + indRegleSyntaxe + "]");}
+                                            }
+                                        }
+                                        case "15182023" -> {/*prendre + promouvoir*/
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prendre" -> {}
+                                                case "promouvoir" -> {}
+                                                default -> {throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Consequence-Case inconnu [" + indRegleSyntaxe + "]");}
+                                            }
+                                        }
+                                        default -> { throw new MauvaiseSemantiqueRegleException("Bloc SUJET-CONSEQUENCE-CASE inconnu [" + indRegleSyntaxe + "]"); }
+                                    }
+                                }
+
+                                default -> { throw new MauvaiseSemantiqueRegleException("Bloc inconnu [" + indRegleSyntaxe + "]"); }
                                 //case 306 ->  System.out.println("");
                                 //case 307 ->  System.out.println("");
                                 //case 308 ->  System.out.println("");
