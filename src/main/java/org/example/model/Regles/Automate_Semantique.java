@@ -215,14 +215,6 @@ public class Automate_Semantique extends Automate{
                 else { throw new MauvaiseSemantiqueRegleException("Double alors [" + indRegleSyntaxe + "]"); }
             }
 
-            if(j == Jeton.ET || j == Jeton.OU){
-                if (traitementCondition){
-                    //créer nouveau block condition
-                } else {
-                    //créer nouveau block conséquence
-                }
-            }
-
             //Récupération de l'indice du prochain état d'après la transition donnée
             curEtat = this.etatSuivant(curEtat,j);
 
