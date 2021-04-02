@@ -184,6 +184,10 @@ public class Automate_Semantique extends Automate{
         return j == Jeton.ET;
     }
 
+    private String getMessageErreur(int id, List<Jeton> regleSyntaxe, List<String> regleString){
+        return id+"";
+    }
+
 
     /*"prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",
       "=", "<", ">",
@@ -237,7 +241,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
 
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "0236" -> {
@@ -245,7 +249,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
 
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Etat inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "036" -> {
@@ -253,15 +257,15 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
 
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Etat inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat OU Piece-Joueur-Etat OU PieceToken-Etat inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat OU Piece-Joueur-Etat OU PieceToken-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Etat [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Etat [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
 
                                 }
@@ -276,7 +280,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" ->{if(1==1);}
                                                     case "estechec" -> {if(1==1);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -286,7 +290,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(2==2);}
                                                     case "estechec" -> {if(2==2);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -296,16 +300,16 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(3==3);}
                                                     case "estechec" -> {if(3==3);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece OU Piece-Joueur-Action-Piece OU PieceToken-Action-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece OU Piece-Joueur-Action-Piece OU PieceToken-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -319,7 +323,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(1==1);}
                                                     case "estechec" -> {if(1==1);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -329,7 +333,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(2==2);}
                                                     case "estechec" -> {if(2==2);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -339,7 +343,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(3==3);}
                                                     case "estechec" -> {if(3==3);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -349,7 +353,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(4==4);}
                                                     case "estechec" -> {if(4==4);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -359,7 +363,7 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(5==5);}
                                                     case "estechec" -> {if(5==5);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -369,16 +373,16 @@ public class Automate_Semantique extends Automate{
                                                     case "prend" -> {if(6==6);}
                                                     case "estechec" -> {if(6==6);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-Joueur OU Piece-Action-PieceToken OU Piece-Joueur-Action-Piece-Joueur OU Piece-Joueur-Action-PieceToken OU PieceToken-Action-Piece-Joueur OU PieceToken-Action-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-Joueur OU Piece-Action-PieceToken OU Piece-Joueur-Action-Piece-Joueur OU Piece-Joueur-Action-PieceToken OU PieceToken-Action-Piece-Joueur OU PieceToken-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece(J|T) [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece(J|T) [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -394,7 +398,7 @@ public class Automate_Semantique extends Automate{
                                                     case "sedeplace" -> {if(5==5);}
                                                     case "estplace" -> {if(5==5);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -406,7 +410,7 @@ public class Automate_Semantique extends Automate{
                                                     case "sedeplace" -> {if(5==5);}
                                                     case "estplace" -> {if(5==5);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -418,16 +422,16 @@ public class Automate_Semantique extends Automate{
                                                     case "sedeplace" -> {if(5==5);}
                                                     case "estplace" -> {if(5==5);}
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case OU Piece-Joueur-Action-Case OU PieceToken-Action-Case inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case OU Piece-Joueur-Action-Case OU PieceToken-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Case [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Case [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -439,13 +443,13 @@ public class Automate_Semantique extends Automate{
                                             if (regleString.get(indRegleSyntaxe - 2).equals("timer")) {
                                                 //nickel michel
                                             } else {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Timer inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Timer inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         } else {
-                                            throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Compteur-Comparaison-Nombre inconnu [" + indRegleSyntaxe + "]");
+                                            throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Joueur-Compteur-Comparaison-Nombre [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Joueur-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -459,7 +463,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
 
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Compteur-Comparaison-Nombre inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "02371214" -> {
@@ -468,7 +472,7 @@ public class Automate_Semantique extends Automate{
                                                     //insane jeannette
                                                     if (2 == 2) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Compteur-Comparaison-Nombre inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "0371214" -> {
@@ -477,15 +481,15 @@ public class Automate_Semantique extends Automate{
                                                     //insane jeannette
                                                     if (3 == 3) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Compteur-Comparaison-Nombre inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Compteur-Comparaison-Nombre OU Piece-Joueur-Compteur-Comparaison-Nombre OU PieceToken-Compteur-Comparaison-Nombre inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Compteur-Comparaison-Nombre OU Piece-Joueur-Compteur-Comparaison-Nombre OU PieceToken-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     } else {
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -500,15 +504,15 @@ public class Automate_Semantique extends Automate{
                                                 case "defaite" -> {}
                                                 case "pat" -> {}
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceTerminale inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceTerminale inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }else{
                                             //Pas atteignable en théorie (on ne peut atteindre 19 que part Joueur)
-                                            throw new MauvaiseSemantiqueRegleException("Chemin emprunte inconnu pour ConsequenceTerminale [" + indRegleSyntaxe + "]");
+                                            throw new MauvaiseSemantiqueRegleException("Chemin emprunte inconnu pour ConsequenceTerminale [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -520,14 +524,14 @@ public class Automate_Semantique extends Automate{
                                             // SUJET-CONSEQUENCE-PIECE
                                             case "15162021" -> {
                                                 // Joueur+Consequence+Piece
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "15172021" -> {
                                                 // Piece+Consequence+Piece
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (1 == 1) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "1517182021" -> {
@@ -535,7 +539,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (2 == 2) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "15182021" -> {
@@ -543,7 +547,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (3 == 3) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
 
@@ -554,27 +558,27 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {
                                                     if (1 == 1) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "1517202321" -> {
                                                 // Piece+Consequence+Piece
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "151718202321" -> {
                                                 // Piece+Joueur+Consequence+Piece
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "1518202321" -> {
                                                 // PieceToken+Consequence+Piece
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Case-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-Piece ou Sujet-ConsequenceAction-Case-Piece inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-Piece ou Sujet-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -585,14 +589,14 @@ public class Automate_Semantique extends Automate{
                                             //en passant par 20 (piecetoken)
                                             case "15162022" -> {
                                                 // Joueur+ConsequenceAction+PieceToken
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "15172022" -> {
                                                 // Piece+ConsequenceAction+PieceToken
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (1 == 1) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "1517182022" -> {
@@ -600,7 +604,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (2 == 2) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "15182022" -> {
@@ -608,7 +612,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
                                                     if (3 == 3) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
 
@@ -616,14 +620,14 @@ public class Automate_Semantique extends Automate{
                                             //en passant par 20 (20-21)(piece)
                                             case "1516202122" -> {
                                                 // Joueur+ConsequenceAction+Piece+Joueur
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "1517202122" -> {
                                                 // Piece+ConsequenceAction+Piece+Joueur
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
                                                     if (4 == 4) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "151718202122" -> {
@@ -631,7 +635,7 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
                                                     if (5 == 5) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "1518202122" -> {
@@ -639,26 +643,26 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
                                                     if (6 == 6) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
 
                                             //en passant par 20-23 (20-23-21)(case + pièce + joueur)
                                             case "151620232122" -> {
                                                 // Joueur+ConsequenceAction+Case+Piece+Joueur
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "151720232122" -> {
                                                 // Piece+ConsequenceAction+Case+Piece+Joueur
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "15171820232122" -> {
                                                 // Piece+Joueur+ConsequenceAction+Case+Piece+Joueur
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "151820232122" -> {
                                                 // JoueurToken+ConsequenceAction+Case+Piece+Joueur
-                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
 
                                             //en passant par 23 (20-23)(case + piecetoken)
@@ -667,28 +671,28 @@ public class Automate_Semantique extends Automate{
                                                 if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {
                                                     if (7 == 7) ;
                                                 } else {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                             case "1517202322" -> {
                                                 // Piece+ConsequenceAction+Case+PieceToken
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "151718202322" -> {
                                                 // Piece+Joueur+ConsequenceAction+Case+PieceToken
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "1518202322" -> {
                                                 // PieceToken+ConsequenceAction+Case+PieceToken
-                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case-PieceToken inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
 
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-PieceToken OU Sujet-ConsequenceAction-Piece-Joueur OU Sujet-ConsequenceAction-Case-PieceToken OU Sujet-ConsequenceAction-Case-Piece-Joueur inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-PieceToken OU Sujet-ConsequenceAction-Piece-Joueur OU Sujet-ConsequenceAction-Case-PieceToken OU Sujet-ConsequenceAction-Case-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }else{
-                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece(T,J) [" + indRegleSyntaxe + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece(T,J) [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }
 
@@ -698,7 +702,7 @@ public class Automate_Semantique extends Automate{
                                         switch (parcours) {
                                             case "15162023" -> {
                                                 // Joueur+ConsequenceAction+Case
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                             case "15172023" -> {/*prendre + promouvoir*/
                                                 // Piece+ConsequenceAction+Case
@@ -708,7 +712,7 @@ public class Automate_Semantique extends Automate{
                                                     case "promouvoir" -> {
                                                     }
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -720,7 +724,7 @@ public class Automate_Semantique extends Automate{
                                                     case "promouvoir" -> {
                                                     }
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
@@ -732,18 +736,18 @@ public class Automate_Semantique extends Automate{
                                                     case "promouvoir" -> {
                                                     }
                                                     default -> {
-                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case inconnu [" + indRegleSyntaxe + "]");
+                                                        throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                     }
                                                 }
                                             }
                                             default -> {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-Case inconnu [" + indRegleSyntaxe + "]");
+                                                throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                     }
                                 }
 
-                                default -> { throw new MauvaiseSemantiqueRegleException("Bloc inconnu [" + indRegleSyntaxe + "]"); }
+                                default -> { throw new MauvaiseSemantiqueRegleException("Bloc inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]"); }
                             }
                         }
 
