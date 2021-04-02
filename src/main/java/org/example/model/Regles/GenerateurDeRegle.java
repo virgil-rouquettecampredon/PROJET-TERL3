@@ -26,10 +26,11 @@ public class GenerateurDeRegle {
             "mange", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions*/
             "=", "<", ">",                                                                                  /*comparaisons*/
             "tous-piece", "tous-joueur", "tous-typecase",                                                   /*tokens nimporte*/
-            "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"                      /*consequences*/
+            "victoire", "defaite", "pat", "prendre", "placer", "promouvoir", "deplacer",                      /*consequences*/
+            "as"
     };
 
-    private static final String[] connecteur = {"ET","OU"};
+    private static final String[] connecteur = {"ET","OU","alors"};
 
 
 
@@ -355,7 +356,10 @@ public class GenerateurDeRegle {
             case "tous-piece" -> et = Jeton.PIECE;
             case "tous-joueur" -> et = Jeton.JOUEUR;
             case "tous-typecase" -> et = Jeton.CASE;
-            case "victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer" -> et = Jeton.CONSEQUENCE;
+            case "victoire", "defaite", "pat" -> et = Jeton.CONSEQUENCETERMINALE;
+            case "prendre", "placer", "promouvoir", "deplacer" -> et = Jeton.CONSEQUENCEACTION;
+            case "alors" -> et = Jeton.ALORS;
+            case "as" -> et = Jeton.ALIAS;
         }
         return et;
     }
@@ -374,11 +378,9 @@ public class GenerateurDeRegle {
             String curRegle = regle.get(i);
 
             try {
-                int cpt = 0;
-                while(curRegle.charAt(cpt) == 'N'){
+                while(curRegle.charAt(0) == 'N'){
                     regleSousFormeJeton.add(Jeton.NON);
-                    cpt++;
-                    curRegle = curRegle.substring(cpt);
+                    curRegle = curRegle.substring(1);
                 }
                 switch (curRegle.charAt(0)) {
                     /*CAS PIECE*/
@@ -396,6 +398,9 @@ public class GenerateurDeRegle {
                                 if(etAx == Jeton.PIECE){
                                     regle.set(i,"PALL");
                                     etAx = Jeton.PIECE;
+                                }
+                                if(etAx == Jeton.ALIAS){
+                                    regle.remove(i);
                                 }
                                 if(etAx == Jeton.JOUEUR){
                                     regle.set(i,"JALL");
@@ -581,6 +586,7 @@ public class GenerateurDeRegle {
         map_etats.get(Etat.JOUEUR).get(1).add(Etat.NOMBRE);
         map_etats.get(Etat.ACTION).get(1).add(Etat.NOMBRE);*/
 
+        /*
         while (lt.get(c) == Jeton.NON) { regle.setBool(!regle.getBool()); c++; }
 
         do {
@@ -701,6 +707,7 @@ public class GenerateurDeRegle {
         else {
             throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un OU, un ET ou une conséquence est attendu.");
         }
+        */
 
     }
 
