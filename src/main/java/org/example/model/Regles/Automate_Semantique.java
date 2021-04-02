@@ -9,14 +9,12 @@ import java.util.List;
 
 public class Automate_Semantique extends Automate{
 
-    public Automate_Semantique(int nbEtat){
-        super(nbEtat);
-        this.initialiserAutomate();
+    public Automate_Semantique(){
+        super(24,0);
     }
 
-    public Automate_Semantique(int nbEtat,List<String> nomEtat){
-        super(nbEtat, nomEtat);
-        this.initialiserAutomate();
+    public Automate_Semantique(List<String> nomEtat){
+        super(24,0, nomEtat);
     }
 
     public void initialiserAutomate(){
@@ -188,13 +186,11 @@ public class Automate_Semantique extends Automate{
         return id+"";
     }
 
-
     /*"prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",
       "=", "<", ">",
       "tous-piece", "tous-joueur", "tous-typecase","victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"*/
     public List<BlocDeRegle> analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException{
-        //Etat initial par défaut : 0
-        int curEtat = 0;
+        int curEtat = this.getEtatDeDepart();
         //Liste à retourner après le traitement
         List<BlocDeRegle> blocs = new ArrayList<>();
         //Chaine de caractere fourni par le passage dans les états
@@ -208,11 +204,10 @@ public class Automate_Semantique extends Automate{
         for (Jeton j: regleSyntaxe) {
 
             if(j == Jeton.ALORS){
-                //parcours = "";
                 if(traitementCondition){
                     traitementCondition = false;
                 }
-                else { throw new MauvaiseSemantiqueRegleException("Double alors [" + indRegleSyntaxe + "]"); }
+                else { throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]"); }
             }
 
             //Récupération de l'indice du prochain état d'après la transition donnée

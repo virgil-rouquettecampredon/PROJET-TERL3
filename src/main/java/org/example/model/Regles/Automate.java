@@ -62,7 +62,10 @@ public abstract class Automate{
     private int nbEtatTerminaux;
     private List<Etat> etatsTr;
 
-    public Automate(int nbEtat){
+    //Automate déterministe ici
+    private int etatDeDepart;
+
+    public Automate(int nbEtat, int etatDeDepart){
         etatsTr = new ArrayList<>();
         this.nbEtat = nbEtat;
         nbEtatTerminaux = 0;
@@ -71,9 +74,10 @@ public abstract class Automate{
             etatsTr.add(new Etat(i));
             i++;
         }
+        this.etatDeDepart = etatDeDepart;
     }
 
-    public Automate(int nbEtat, List<String> valEtat){
+    public Automate(int nbEtat,int etatDeDepart, List<String> valEtat){
         etatsTr = new ArrayList<>();
         this.nbEtat = nbEtat;
         nbEtatTerminaux = 0;
@@ -82,6 +86,7 @@ public abstract class Automate{
             etatsTr.add(new Etat(i, valEtat.get(i)));
             i++;
         }
+        this.etatDeDepart = etatDeDepart;
     }
 
     public void ajouterUnEtatTerminal(int etat, int codeDeRetour){
@@ -138,6 +143,20 @@ public abstract class Automate{
         }
     }
 
+    public int getEtatDeDepart() {
+        return etatDeDepart;
+    }
+
+    public void setEtatDeDepart(int etatDeDepart) {
+        this.etatDeDepart = etatDeDepart;
+    }
+
     /** Méthode abstraite permettant l'initialisation de l'automate (à définir dans les sous-classes)**/
     public abstract void initialiserAutomate();
+
+    /** Méthode abstraite permettant l'analyse de l'automate
+     * @return une liste de BlocDeRegle représenatant la règle bien former sémantiquement sous d'objets manipulables par le système.
+     * @param regleString : Regle sous forme de liste de mots
+     * @param regleSyntaxe : Regle sous forme de Jeton, issue de l'analyse syntaxique.**/
+    public abstract List<BlocDeRegle> analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException;
 }
