@@ -20,10 +20,8 @@ public class Automate_Semantique extends Automate{
     public void initialiserAutomate(){
         //GESTIONS ETATS TERMINAUX
         List<Integer> etatTer = new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23));
-        int ind = 0;
         for (Integer i:etatTer) {
-            this.ajouterUnEtatTerminal(i,300+ind);
-            ind++;
+            this.ajouterUnEtatTerminal(i,300+i);
         }
 
         //GESTION DES ALIAS
@@ -202,7 +200,6 @@ public class Automate_Semantique extends Automate{
 
 
         for (Jeton j: regleSyntaxe) {
-
             if(j == Jeton.ALORS){
                 if(traitementCondition){
                     traitementCondition = false;
@@ -215,8 +212,6 @@ public class Automate_Semantique extends Automate{
 
             //Récupération de l'état correspondant à l'indice curEtat
             Etat etat = this.recupererEtat(curEtat);
-
-            indRegleSyntaxe++;
 
             if (etat != null){
                 parcours+=etat.getValeur();
@@ -246,7 +241,7 @@ public class Automate_Semantique extends Automate{
                             case 306 -> {
                                 //traitement sommet terminal 6 : SUJET-ETAT
                                 //Seul l'état estpromu est possible
-                                if(indRegleSyntaxe >= 2){
+                                if(indRegleSyntaxe >= 1){
                                     switch (parcours) {
                                         case "026" -> {
                                             //Cas Piece+Etat
@@ -284,7 +279,7 @@ public class Automate_Semantique extends Automate{
 
                             case 309 -> {
                                 //SUJET-ACTION-PIECE
-                                if (indRegleSyntaxe >= 3) {
+                                if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
                                         //Cas Piece+Action+Piece
                                         case "0259" -> {
@@ -327,7 +322,7 @@ public class Automate_Semantique extends Automate{
 
                             case 310 -> {
                                 //SUJET-ACTION-PIECETOKEN   OU  SUJET-ACTION-PIECE-JOUEUR
-                                if (indRegleSyntaxe >= 3) {
+                                if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
                                         case "025910" -> {
                                             //Cas Piece+action+piece+joueur
@@ -400,7 +395,7 @@ public class Automate_Semantique extends Automate{
 
                             case 311 -> {
                                 //SUJET-ACTION-CASE
-                                if (indRegleSyntaxe >= 3) {
+                                if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
                                         case "02511" -> {
                                             //Cas Piece+Action+Case
@@ -449,7 +444,7 @@ public class Automate_Semantique extends Automate{
 
                             case 313 -> {
                                 //JOUEUR-COMPTEUR-COMPARAISON-NOMBRE
-                                if (indRegleSyntaxe >= 4) {
+                                if (indRegleSyntaxe >= 3) {
                                     //Cas Joueur+Compteur+Comparaison+Nombre
                                     if (parcours.equals("014813")) {
                                         if (regleString.get(indRegleSyntaxe - 2).equals("timer")) {
@@ -468,7 +463,7 @@ public class Automate_Semantique extends Automate{
                             case 314 -> {
                                 //SUJET-COMPTEUR-COMPARAISON-NOMBRE
 
-                                if (indRegleSyntaxe >= 4) {
+                                if (indRegleSyntaxe >= 3) {
                                     switch (parcours) {
                                         case "0271214" -> {
                                             //Cas Piece+Compteur+Comparaison+Nombre
@@ -508,7 +503,7 @@ public class Automate_Semantique extends Automate{
                             /*---------------------------------CONSEQUENCES---------------------------------*/
                             case 319 -> {
                                 //Consequence Joueur+ConsequenceTerminale
-                                if(indRegleSyntaxe >= 4) {
+                                if(indRegleSyntaxe >= 1) {
                                     if (parcours.equals("151619")) {
                                         //"victoire", "defaite", "pat"
                                         switch (regleString.get(indRegleSyntaxe - 1)) {
@@ -530,7 +525,7 @@ public class Automate_Semantique extends Automate{
 
                             case 321 -> {
                                 //SUJET-CONSEQUENCE-PIECE ou SUJET-CONSEQUENCE-CASE-PIECE
-                                if(indRegleSyntaxe>=4) {
+                                if(indRegleSyntaxe>=2) {
                                     switch (parcours) {
                                         //en passant par 20-21 (pièce)
                                         // SUJET-CONSEQUENCE-PIECE
@@ -596,7 +591,7 @@ public class Automate_Semantique extends Automate{
 
                             case 322 -> {
                                 //SUJET-CONSEQUENCEACTION-PIECETOKEN ou SUJET-CONSEQUENCEACTION-PIECE-JOUEUR ou SUJET-CONSEQUENCEACTION-CASE-PIECETOKEN ou SUJET-CONSEQUENCEACTION-CASE-PIECE-JOUEUR
-                                if(indRegleSyntaxe>=4) {
+                                if(indRegleSyntaxe>=2) {
                                     switch (parcours) {
                                         //en passant par 20 (piecetoken)
                                         case "15162022" -> {
@@ -710,7 +705,7 @@ public class Automate_Semantique extends Automate{
 
                             case 323 -> {
                                 //SUJET-CONSEQUENCE-CASE
-                                if(indRegleSyntaxe>=4) {
+                                if(indRegleSyntaxe>=2) {
                                     switch (parcours) {
                                         case "15162023" -> {
                                             // Joueur+ConsequenceAction+Case
@@ -778,6 +773,7 @@ public class Automate_Semantique extends Automate{
                 //Erreur Etat Inconnu
                 throw new MauvaiseSemantiqueRegleException("Transition inconnu (etat == null) : " + j.getValeur() + " à l'état: "+ indRegleSyntaxe);
             }
+            indRegleSyntaxe++;
         }
 
 
