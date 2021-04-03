@@ -32,10 +32,8 @@ public class GenerateurDeRegle {
 
     private static final String[] connecteur = {"ET","OU","alors"};
 
-
-
     /**Classes utiles pour l'analyse sémantique
-     * Permet une modélisation simple d'un automate reconnaissant des Jeton**/
+     * Permet une modélisation simple d'un automate reconnaissant des Jeton
 
     //Modélisation d'une transition sortante d'un état de l'automate
     class TransitionSortante_Semantique{
@@ -109,7 +107,7 @@ public class GenerateurDeRegle {
             }
         }
 
-        /*
+
         private boolean estReconnu(int sommet,Jeton val){
             for (Etat_Semantique e: etatsTr) {
                 if(e.num ==sommet){
@@ -122,7 +120,7 @@ public class GenerateurDeRegle {
                 }
             }
             return false;
-        }*/
+        }
         public int etatSuivant(int sommet, Jeton val){
             for (Etat_Semantique e: etatsTr) {
                 if(e.num ==sommet){
@@ -291,20 +289,20 @@ public class GenerateurDeRegle {
             if(etat.estTerminal){
                 //Si terminal, traitement du code de retour
                 switch (etat.codeDeRetour){
-                    case 300 -> /*traitement*/ System.out.println("");
-                    case 301 -> /*traitement*/ System.out.println("");
-                    case 302 -> /*traitement*/ System.out.println("");
-                    case 303 -> /*traitement*/ System.out.println("");
-                    case 304 -> /*traitement*/ System.out.println("");
-                    case 305 -> /*traitement*/ System.out.println("");
-                    case 306 -> /*traitement*/ System.out.println("");
-                    case 307 -> /*traitement*/ System.out.println("");
-                    case 308 -> /*traitement*/ System.out.println("");
-                    case 309 -> /*traitement*/ System.out.println("");
+                    case 300 ->  System.out.println("");
+                    case 301 ->  System.out.println("");
+                    case 302 ->  System.out.println("");
+                    case 303 ->  System.out.println("");
+                    case 304 ->  System.out.println("");
+                    case 305 ->  System.out.println("");
+                    case 306 ->  System.out.println("");
+                    case 307 -> System.out.println("");
+                    case 308 -> System.out.println("");
+                    case 309 -> System.out.println("");
                 }
             }
         }
-    }
+    }**/
 
 
     /**Constructeur d'un GenerateurDeRegle

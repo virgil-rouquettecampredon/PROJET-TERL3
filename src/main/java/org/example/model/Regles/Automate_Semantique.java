@@ -104,7 +104,7 @@ public class Automate_Semantique extends Automate{
 
         //ETAT 12
         //this.setValeurEtat(12,"12");
-        this.ajouterUneTransition(12,Jeton.COMPTEUR,14);
+        this.ajouterUneTransition(12,Jeton.NOMBRE,14);
 
         //ETAT 13
         //this.setValeurEtat(13,"13");
@@ -206,6 +206,8 @@ public class Automate_Semantique extends Automate{
                 }
                 else { throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]"); }
             }
+
+            int predEtat = curEtat;
 
             //Récupération de l'indice du prochain état d'après la transition donnée
             curEtat = this.etatSuivant(curEtat,j);
@@ -771,7 +773,7 @@ public class Automate_Semantique extends Automate{
 
             } else {
                 //Erreur Etat Inconnu
-                throw new MauvaiseSemantiqueRegleException("Transition inconnu (etat == null) : " + j.getValeur() + " à l'état: "+ indRegleSyntaxe);
+                throw new MauvaiseSemantiqueRegleException("Transition inconnu (etat == null) : " + j.getValeur() + " à l'état: "+ predEtat + "(" + indRegleSyntaxe + ")");
             }
             indRegleSyntaxe++;
         }
