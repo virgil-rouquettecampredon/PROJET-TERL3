@@ -24,7 +24,7 @@ public class Automate_SemantiqueMauvaisTest {
 
     //test etat terminal 306
     @Test
-    public final void testCase306_026_Exception(){
+    public final void testCase306_ExceptionTropPeuArguments(){
         List<String> reS = Arrays.asList("test");
         List<Jeton> reJ = Arrays.asList(Jeton.ETAT);
 
@@ -34,7 +34,21 @@ public class Automate_SemantiqueMauvaisTest {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
         }catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Pas assez d'argument pour Piece(T)-Etat [1]",e.getMessage());
+            assertEquals("Pas assez d'argument pour Piece(T)-Etat [0]",e.getMessage());
+        }
+
+    }
+
+    @Test
+    public final void testCase306_026_PasDetecte(){
+        List<String> reS = Arrays.asList("P1","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE, Jeton.ETAT);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        }catch (MauvaiseSemantiqueRegleException e){
+            assertEquals("Bloc Piece-Etat inconnu [1]",e.getMessage());
         }
 
     }
