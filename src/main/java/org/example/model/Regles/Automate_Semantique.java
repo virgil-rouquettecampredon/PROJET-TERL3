@@ -508,7 +508,7 @@ public class Automate_Semantique extends Automate{
                                 if(indRegleSyntaxe >= 1) {
                                     if (parcours.equals("151619")) {
                                         //"victoire", "defaite", "pat"
-                                        switch (regleString.get(indRegleSyntaxe - 1)) {
+                                        switch (regleString.get(indRegleSyntaxe)) {
                                             case "victoire" -> {}
                                             case "defaite" -> {}
                                             case "pat" -> {}
@@ -518,10 +518,10 @@ public class Automate_Semantique extends Automate{
                                         }
                                     }else{
                                         //Pas atteignable en théorie (on ne peut atteindre 19 que part Joueur)
-                                        throw new MauvaiseSemantiqueRegleException("Chemin emprunte inconnu pour ConsequenceTerminale [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceTerminale inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                     }
                                 }else{
-                                    throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                    throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceTerminale [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
                             }
 
