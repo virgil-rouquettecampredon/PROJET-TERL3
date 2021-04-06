@@ -629,7 +629,7 @@ public class Automate_Semantique extends Automate{
                                         //en passant par 20 (20-21)(piece)
                                         case "1516202122" -> {
                                             // Joueur+ConsequenceAction+Piece+Joueur
-                                            throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         case "1517202122" -> {
                                             // Piece+ConsequenceAction+Piece+Joueur
@@ -753,6 +753,8 @@ public class Automate_Semantique extends Automate{
                                             throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                     }
+                                } else {
+                                    throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceAction-Case(T,J) [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
                             }
 
