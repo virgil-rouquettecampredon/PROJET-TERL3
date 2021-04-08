@@ -19,22 +19,35 @@ public class Regle implements Serializable {
     }
 
     public void ajouterUneConsequence(Consequence cons){
-        conséquences.add(cons);
+        consequences.add(cons);
     }
 
-    public void evaluer(){
-        for (Condition co: conditions) {
-            if(!co.verification()){
-                return;
+
+    public void genererArbreCondition(List<Condition> conditions,List<Jeton> jetons) throws MauvaiseDefinitionRegleException{
+        try{
+            arbre_conditions = new Arbre_Condition(jetons,conditions);
+            arbre_conditions.evaluer();
+        }catch (ArbreException e){
+            throw new MauvaiseDefinitionRegleException("Regle : Impossible de générer l'arbre de Condition : " + e.getMessage());
+        }
+    }
+
+
+    public void analyser() throws MauvaiseDefinitionRegleException{
+        try{
+            if(arbre_conditions.evaluer()){
+                for (Consequence cons:consequences) {
+                    cons.comportement();
+                }
             }
+        }catch (ArbreException e){
+            throw new MauvaiseDefinitionRegleException("Problème dans l'évaluation de la règle : " + e.getMessage());
         }
-        for (Consequence cons: conséquences) {
-            cons.comportement();
-        }
+
     }
 
     public void evaluer2(){
-        boolean resultCond = true;
+        /*boolean resultCond = true;
         //initialisation inutile de résult, permet juste pour compiler, la vrai première valeur de result sera déterminé ensuite
         int ind = 0;
         for (Condition co: conditions) {

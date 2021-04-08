@@ -158,5 +158,5 @@ public abstract class Automate{
      * @return une liste de BlocDeRegle représenatant la règle bien former sémantiquement sous d'objets manipulables par le système.
      * @param regleString : Regle sous forme de liste de mots
      * @param regleSyntaxe : Regle sous forme de Jeton, issue de l'analyse syntaxique.**/
-    public abstract Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException;
+    public abstract Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException;
 }

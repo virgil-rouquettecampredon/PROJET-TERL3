@@ -10,11 +10,11 @@ import java.util.List;
 public class Automate_Semantique extends Automate{
 
     public Automate_Semantique(){
-        super(24,0);
+        super(26,0);
     }
 
     public Automate_Semantique(List<String> nomEtat){
-        super(24,0, nomEtat);
+        super(26,0, nomEtat);
     }
 
     public void initialiserAutomate(){
@@ -35,6 +35,27 @@ public class Automate_Semantique extends Automate{
         //GESTION DES NEGATIONS
         this.ajouterUneTransition(4,Jeton.NON,4);
         this.ajouterUneTransition(7,Jeton.NON,7);
+
+        //GESTION DU PARENTHESAGE
+        this.setValeurEtat(24,"");
+        this.ajouterUneTransition(0,Jeton.PARENTHESEOUVRANTE,24);
+        this.ajouterUneTransition(24,Jeton.PARENTHESEOUVRANTE,24);
+
+        this.ajouterUneTransition(24,Jeton.JOUEUR,1);
+        this.ajouterUneTransition(24,Jeton.PIECE,2);
+        this.ajouterUneTransition(24,Jeton.PIECETOKEN,3);
+
+        this.setValeurEtat(25,"");
+        this.ajouterUneTransition(13,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(9,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(10,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(11,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(14,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(25,Jeton.PARENTHESEFERMANTE,25);
+
+        this.ajouterUneTransition(25,Jeton.ET,0);
+        this.ajouterUneTransition(25,Jeton.OU,0);
+        this.ajouterUneTransition(25,Jeton.ALORS,15);
 
         //=========== CONDITIONS ===========
         //ETAT INITIAL
@@ -188,9 +209,8 @@ public class Automate_Semantique extends Automate{
     /*"prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",
       "=", "<", ">",
       "tous-piece", "tous-joueur", "tous-typecase","victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"*/
-
     @SuppressWarnings("Duplicates")
-    public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException{
+    public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException{
         int curEtat = this.getEtatDeDepart();
         //Regle à retourner après le traitement
         Regle regle = new Regle();
@@ -198,6 +218,7 @@ public class Automate_Semantique extends Automate{
         String parcours = "0";
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
+
 
         int nbConditions = 0;
         int nbConsequence = 0;
@@ -241,8 +262,6 @@ public class Automate_Semantique extends Automate{
                             !peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                         )  {
 
-                        BlocDeRegle b = null;
-
                         //Alors notre etat est bien terminal de block, on l'analyse
                         switch (etat.getCodeDeRetour()) {
                             /*---------------------------------CONDITIONS---------------------------------*/
@@ -264,6 +283,7 @@ public class Automate_Semantique extends Automate{
                                             //Cas Piece+Joueur+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
                                                 nbConditions++;
+                                                jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
@@ -272,6 +292,7 @@ public class Automate_Semantique extends Automate{
                                             //Cas PieceToken+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
                                                 nbConditions++;
+                                                jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
@@ -295,9 +316,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" ->{
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -309,9 +332,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -323,9 +348,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -350,9 +377,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -364,9 +393,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -378,9 +409,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -392,9 +425,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -406,9 +441,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -420,9 +457,11 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -447,15 +486,19 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -467,15 +510,19 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -487,15 +534,19 @@ public class Automate_Semantique extends Automate{
                                             switch (regleString.get(indRegleSyntaxe-1)) {
                                                 case "estsur" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
                                                     nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -518,6 +569,7 @@ public class Automate_Semantique extends Automate{
                                     if (parcours.equals("014813")) {
                                         if (regleString.get(indRegleSyntaxe - 2).equals("timer")) {
                                             nbConditions++;
+                                            jetonsarborescence.add(Jeton.CONDITION);
                                         } else {
                                             throw new MauvaiseSemantiqueRegleException("Bloc Joueur-Timer inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
@@ -568,6 +620,8 @@ public class Automate_Semantique extends Automate{
                             }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/
+                            //regle.ajouterUneConsequence(cons);
+
                             case 319 -> {
                                 //Consequence Joueur+ConsequenceTerminale
                                 if(indRegleSyntaxe >= 1) {
@@ -841,7 +895,7 @@ public class Automate_Semantique extends Automate{
                         //blocs.add(b);
                         parcours = "";  //on a gagné !
 
-                    } // sinon on ne faitb rien car on est terminal, on peut encore avancer et on est pas un connecteur adequat
+                    } // sinon on ne fait rien car on est terminal, on peut encore avancer et on est pas un connecteur adequat
                     //connecteur non adequat gérer au niveaux de transition automate  !!
 
                 } else {  //sinon état non terminal, continuer à l'état suivant
@@ -857,10 +911,8 @@ public class Automate_Semantique extends Automate{
             indRegleSyntaxe++;
         }
 
-
         // Si sort de la boucle sans encombre, alors on a pu tout définir d'après le liste des Jetons et des String
         // Il faut désormais vérifier si notre règle comporte au moins un bloc condition et au moins un bloc conséquence
-
         if(nbConditions == 0){
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une condition pour créer une règle");
         }

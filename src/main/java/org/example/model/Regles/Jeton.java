@@ -7,7 +7,8 @@ public enum Jeton implements Serializable {
     PIECE("piece"), JOUEUR("joueur"), CASE("case"), PIECETOKEN("piece token"),
     ACTION("action"), ETAT("etat"), COMPTEUR("compteur"),
     COMPARAISON("comparaison"), ET("et"), OU("ou"),NON("non"),
-    ALORS("alors"),CONSEQUENCETERMINALE("consequence terminale"),CONSEQUENCEACTION("consequence"),ALIAS("alias");
+    ALORS("alors"),CONSEQUENCETERMINALE("consequence terminale"),CONSEQUENCEACTION("consequence"),ALIAS("alias")
+    ,PARENTHESEOUVRANTE("("), PARENTHESEFERMANTE(")"), CONDITION("condition");
 
 
     private String valeur;
