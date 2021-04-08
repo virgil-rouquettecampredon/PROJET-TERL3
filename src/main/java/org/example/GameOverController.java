@@ -13,8 +13,7 @@ public class GameOverController extends Controller {
 
     @FXML
     private void restartButton() throws IOException {
-        //TODO passer à la scene la même variante
         getApp().soundManager.playSound("button-confirm");
-        getApp().setRoot("game");
+        getApp().setRoot("game", userVar);
     }
 }

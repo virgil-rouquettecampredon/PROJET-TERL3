@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
+import java.io.IOException;
 
 //Attention creation de fichier dans /AppData/Local/Temp
 public class SauvegardeVarianteTest {
@@ -19,7 +20,7 @@ public class SauvegardeVarianteTest {
     }
 
     @Test
-    public void testEnregistrerVariante() {
+    public void testEnregistrerVariante() throws IOException {
         VarianteBuilder vr = new VarianteBuilder();
         vr.setName("TestVariante");
 
@@ -30,7 +31,7 @@ public class SauvegardeVarianteTest {
     }
 
     @Test
-    public void testImporterVariante() {
+    public void testImporterVariante() throws IOException{
         VarianteBuilder vrSave = new VarianteBuilder();
         vrSave.setName("TestVariante");
 

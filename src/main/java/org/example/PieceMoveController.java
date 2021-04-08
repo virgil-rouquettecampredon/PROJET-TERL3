@@ -156,17 +156,23 @@ public class PieceMoveController extends Controller {
 
     public void onClick(MouseEvent mouseEvent) {
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+        int relativeX = c.getPosition().getX()-posX;
+        int relativeY = c.getPosition().getY()-posY;
 
-        switch (mouseEvent.getButton()) {
+        switch (mouseEvent.getButton())  {
             case PRIMARY -> {
                 switch (tool) {
                     case BOX -> {
                         //add case to piece deplacement
-                        posDeplacements.add(new PositionDeDeplacement(c.getPosition().getX()-posX, c.getPosition().getY()-posY));
+                        if (!posDeplacements.contains(new PositionDeDeplacement(relativeX, relativeY)) && (relativeX != 0 || relativeY != 0)) {
+                            posDeplacements.add(new PositionDeDeplacement(relativeX, relativeY));
+                        }
                     }
                     case ARROW -> {
                         //add arrow to piece deplacement
-                        vecDeplacements.add(new VecteurDeDeplacement(c.getPosition().getX()-posX, c.getPosition().getY()-posY));
+                        if (!vecDeplacements.contains(new VecteurDeDeplacement(relativeX, relativeY)) && (relativeX != 0 || relativeY != 0)) {
+                            vecDeplacements.add(new VecteurDeDeplacement(relativeX, relativeY));
+                        }
                     }
                 }
             }
@@ -174,9 +180,11 @@ public class PieceMoveController extends Controller {
                 switch (tool) {
                     case BOX -> {
                         //remove case to piece deplacement
+                        posDeplacements.remove(new PositionDeDeplacement(relativeX, relativeY));
                     }
                     case ARROW -> {
                         //remove arrow to piece deplacement
+                        vecDeplacements.remove(new VecteurDeDeplacement(relativeX, relativeY));
                     }
                 }
             }

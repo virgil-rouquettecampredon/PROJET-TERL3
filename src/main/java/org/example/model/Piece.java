@@ -7,9 +7,10 @@ import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.SujetDeRegle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Piece implements SujetDeRegle, CibleDeRegle {
+public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     private String name;
     private String sprite;
     private int nbMovement;

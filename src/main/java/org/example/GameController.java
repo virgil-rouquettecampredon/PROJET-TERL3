@@ -3,12 +3,16 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import org.example.model.CanvasManager;
+import org.example.model.Case;
+import org.example.model.Variante;
 
 import java.io.IOException;
 import java.util.Random;
@@ -25,47 +29,36 @@ public class GameController extends Controller {
     @FXML
     public ScrollPane scroll;
 
-    private GraphicsContext context;
+    private CanvasManager canvasManager;
+    private Variante gameVariante;
 
     @Override
-    public void initialise() {
-        //TODO potentiellement à changer
-        varLabel.setText("Classique");
-        playerLabel.setText("Joueur1");
-        context = canvas.getGraphicsContext2D();
-        updateCanvas();
+    public void initialise(){
+        if (userVar == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : Aucune variante n'as été selectionné");
+            try {
+                getApp().setRoot("home");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            gameVariante = (Variante) userVar;
+            varLabel.setText(gameVariante.getName());
+            playerLabel.setText(gameVariante.getJoueurs().get(0).getName());//todo a changer?
+
+            canvasManager = new CanvasManager(canvas, gameVariante.getPlateau());
+            updateCanvas();
+        }
     }
 
     public void updateCanvas() {
-        int nbSquareX = 8;
-        int nbSquareY = 8;
-
-        if (nbSquareX > nbSquareY) {
-            canvas.setHeight(300*((float)nbSquareY/nbSquareX));
-            canvas.setWidth(300);
-        }
-        else {
-            canvas.setHeight(300);
-            canvas.setWidth(300*((float)nbSquareX/nbSquareY));
-        }
-
-        context.setFill(Color.PURPLE);
-        context.fillRect(
-                0,
-                0,
-                canvas.getWidth(),
-                canvas.getHeight());
-
-        double rectSize = canvas.getWidth()/nbSquareX;
-        context.setFill(Color.PINK);
-        for (int i = 0; i < nbSquareY; i++) {
-            for (int j = 0; j < nbSquareX; j+=2) {
-                context.fillRect((j+(i%2))*rectSize, i*rectSize, rectSize, rectSize);
-            }
-        }
+        canvasManager.drawCanvas();
+        canvasManager.drawPawn();
     }
 
     public void play(MouseEvent mouseEvent) throws IOException {
+        //todo bien sur
         getApp().soundManager.playSound("button-hover");
         System.out.println(mouseEvent);
         coupsBox.getChildren().add(new Label(playerLabel.getText() + " : label de coup"));
@@ -75,9 +68,10 @@ public class GameController extends Controller {
             playerLabel.setText("Player2");
         else
             playerLabel.setText("Player1");
-        if (mouseEvent.getX() > 250 && mouseEvent.getY() > 250) {
+        Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+        if (c != null && c.getPosition().getX() == 0 && c.getPosition().getY() == 0) {
             getApp().soundManager.playSound("win");
-            getApp().setRoot("gameOver");
+            getApp().setRoot("gameOver", gameVariante);
         }
     }
 }

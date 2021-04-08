@@ -24,14 +24,14 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Position initiales" />
+            <Label  styleClass="label-header" text="Position initiales" />
             <HBox alignment="CENTER" prefWidth="200.0" spacing="50.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefWidth="300.0">
                      <children>
                         <BorderPane prefWidth="200.0">
                            <left>
-                              <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Joueur:" BorderPane.alignment="CENTER" />
+                              <Label alignment="CENTER"  styleClass="label-input" text="Joueur:" BorderPane.alignment="CENTER" />
                            </left>
                            <center>
                               <ComboBox fx:id="joueurBox" onAction="#updatePawnPlayer" prefWidth="150.0" promptText="Joueur" BorderPane.alignment="CENTER" />

@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.model.Regles.Regle;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class VarianteBuilder {

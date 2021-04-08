@@ -23,7 +23,7 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Modifier règle" />
+            <Label  styleClass="label-header" text="Modifier règle" />
             <GridPane prefHeight="408.0" prefWidth="924.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -44,10 +44,10 @@
                   <ComboBox fx:id="sujet1Box" prefWidth="150.0" promptText="Sujet" GridPane.halignment="CENTER" />
                   <ComboBox fx:id="actionBox" prefWidth="150.0" promptText="Action" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <ComboBox fx:id="cibleBox" prefWidth="150.0" promptText="Cible" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <Label blendMode="DIFFERENCE" styleClass="label-header" text="ou" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label  styleClass="label-header" text="ou" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <ComboBox fx:id="sujet2Box" prefWidth="150.0" promptText="Sujet" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                   <ComboBox fx:id="etatBox" prefWidth="150.0" promptText="Etat" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                  <Label blendMode="DIFFERENCE" styleClass="label-header" text="et" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                  <Label  styleClass="label-header" text="et" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                   <ComboBox fx:id="consequenceBox" prefWidth="150.0" promptText="Conséquence" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                </children>
             </GridPane>

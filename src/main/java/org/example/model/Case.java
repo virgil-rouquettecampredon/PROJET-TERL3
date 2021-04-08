@@ -2,7 +2,9 @@ package org.example.model;
 
 import org.example.model.Regles.CibleDeRegle;
 
-public class Case implements CibleDeRegle {
+import java.io.Serializable;
+
+public class Case implements CibleDeRegle, Serializable {
     private Position position;
     private Piece pieceOnCase;
     private boolean clickable;

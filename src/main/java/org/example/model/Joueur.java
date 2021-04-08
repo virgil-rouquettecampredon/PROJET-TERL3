@@ -3,9 +3,10 @@ package org.example.model;
 import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.SujetDeRegle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Joueur implements CibleDeRegle, SujetDeRegle {
+public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
     private String name;
     private int equipe;

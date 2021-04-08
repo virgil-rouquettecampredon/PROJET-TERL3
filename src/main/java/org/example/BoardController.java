@@ -57,6 +57,7 @@ public class BoardController extends Controller {
     public void onClick(MouseEvent mouseEvent) {
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
         c.switchClickable();
+        c.setPieceOnCase(null);
 
         updateCanvas();
     }

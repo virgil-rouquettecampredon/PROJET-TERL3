@@ -1,6 +1,8 @@
 package org.example.model.Regles;
 
-public enum Jeton{
+import java.io.Serializable;
+
+public enum Jeton implements Serializable {
     AUCUN("aucun"),NOMBRE("nombre"),
     PIECE("piece"), JOUEUR("joueur"), CASE("case"), PIECETOKEN("piece token"),
     ACTION("action"), ETAT("etat"), COMPTEUR("compteur"),

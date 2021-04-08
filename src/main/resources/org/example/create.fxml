@@ -20,13 +20,13 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Creer : 1/3" />
+            <Label  styleClass="label-header" text="Creer : 1/3" />
             <BorderPane prefHeight="100.0">
                <center>
                   <TextField fx:id="input" prefHeight="10.0" BorderPane.alignment="CENTER" />
                </center>
                <left>
-                  <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Nom" BorderPane.alignment="CENTER" />
+                  <Label alignment="CENTER"  styleClass="label-input" text="Nom" BorderPane.alignment="CENTER" />
                </left>
                <VBox.margin>
                   <Insets left="200.0" right="200.0" />

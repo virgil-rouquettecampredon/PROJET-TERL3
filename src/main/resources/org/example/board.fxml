@@ -22,15 +22,19 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Plateau" />
+            <Label text="Plateau">
+               <styleClass>
+                  <String fx:value="label-header" />
+                  <String fx:value="outline" />
+               </styleClass></Label>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <BorderPane prefHeight="100.0">
                      <center>
-                        <TextField onKeyTyped="#updateCanvas" prefHeight="10.0" promptText="Ex: 8" text="8" BorderPane.alignment="CENTER" fx:id="xInput" />
+                        <TextField onKeyTyped="#inputAction" prefHeight="10.0" promptText="Ex: 8" text="8" BorderPane.alignment="CENTER" fx:id="xInput" />
                      </center>
                      <left>
-                        <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Taille:" BorderPane.alignment="CENTER" />
+                        <Label alignment="CENTER" text="Taille:" BorderPane.alignment="CENTER" />
                      </left>
                   </BorderPane>
                   <BorderPane prefHeight="100.0">

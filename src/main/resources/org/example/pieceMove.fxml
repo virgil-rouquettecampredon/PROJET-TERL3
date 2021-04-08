@@ -26,7 +26,7 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Modifier pièce" />
+            <Label  styleClass="label-header" text="Modifier pièce" />
             <GridPane prefHeight="440.0" prefWidth="1024.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -44,7 +44,7 @@
                         <TextField fx:id="nomInput" prefHeight="10.0" BorderPane.alignment="CENTER" />
                      </center>
                      <left>
-                        <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Nom" BorderPane.alignment="CENTER" />
+                        <Label alignment="CENTER"  styleClass="label-input" text="Nom" BorderPane.alignment="CENTER" />
                      </left>
                   </BorderPane>
                   <BorderPane prefHeight="100.0" GridPane.columnIndex="1">
@@ -52,10 +52,10 @@
                         <ComboBox fx:id="joueurBox" prefWidth="150.0" promptText="Joueur" BorderPane.alignment="CENTER" />
                      </center>
                      <left>
-                        <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Joueurs" BorderPane.alignment="CENTER" />
+                        <Label alignment="CENTER"  styleClass="label-input" text="Joueurs" BorderPane.alignment="CENTER" />
                      </left>
                   </BorderPane>
-                  <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Déplacement" GridPane.columnIndex="2" />
+                  <Label alignment="CENTER"  styleClass="label-input" text="Déplacement" GridPane.columnIndex="2" />
                   <ImageView fx:id="image" fitHeight="250.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <image>
                         <Image url="@images/pawn.png" />
@@ -63,7 +63,7 @@
                   </ImageView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
-                        <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Apparence" />
+                        <Label alignment="CENTER"  styleClass="label-input" text="Apparence" />
                         <Button mnemonicParsing="false" onAction="#openImageButton" onMouseEntered="#buttonHover" text="📂">
                            <font>
                               <Font name="Candara" size="36.0" />
@@ -73,7 +73,7 @@
                   </HBox>
                   <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Outil" />
+                        <Label alignment="CENTER"  styleClass="label-input" text="Outil" />
                         <Button fx:id="boxButton" disable="true" mnemonicParsing="false" onAction="#selectBoxTool" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="100.0" text="CASE">
                            <font>
                               <Font name="Candara" size="36.0" />

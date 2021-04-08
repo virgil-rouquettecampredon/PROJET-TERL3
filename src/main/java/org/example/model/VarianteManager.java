@@ -22,20 +22,25 @@ public class VarianteManager {
         return current;
     }
 
-    public void saveCurrent(String path) {
-        Variante vrToSave = current.createVariante();
-        try {
-            FileOutputStream fos = new FileOutputStream(path);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(current);
-            oos.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<Variante> getVariantes() {
+        return variantes;
     }
 
-    public Variante importFile(String path) {
+    public Variante applyCurrent() {
+        Variante vr = current.createVariante();
+        variantes.add(vr);
+        return vr;
+    }
+
+    public void saveCurrent(String path) throws IOException{
+        Variante vrToSave = applyCurrent();
+        FileOutputStream fos = new FileOutputStream(path);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(vrToSave);
+        oos.close();
+    }
+
+    public Variante importFile(String path) throws IOException{
         try {
             FileInputStream fin = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fin);
@@ -46,8 +51,7 @@ public class VarianteManager {
             return vr;
         }
         catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new IOException();
         }
-        return null;
     }
 }

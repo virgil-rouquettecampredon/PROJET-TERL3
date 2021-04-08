@@ -78,6 +78,11 @@ public class PieceController extends Controller {
 
     private void duplicateSelectedPiece() {
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
+        if (pr == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucune piece selectionne");
+            return;
+        }
+
         Piece p = new Piece(pr.getPiece());
         p.getJoueur().getTypePawnList().add(p);
         PieceRow pr2 = new PieceRow(imgCol.getWidth(), p);
@@ -86,6 +91,11 @@ public class PieceController extends Controller {
 
     private void deleteSelectedPiece() {
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
+        if (pr == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucune piece selectionne");
+            return;
+        }
+
         pieces.remove(pr);
         Piece p = pr.getPiece();
         p.getJoueur().getTypePawnList().remove(p);

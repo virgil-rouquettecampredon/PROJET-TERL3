@@ -5,7 +5,7 @@
     -backButton-color : #723813;
     -specialButton-color : #8DC7EC;
 
-    -text-on-bg : #ffffff;
+    -text-on-bg : white;
     -font-semibold : "Segoe UI Semibold";
     -font-light : "Segoe UI Light";
 }
@@ -23,7 +23,7 @@
 }
 
 .label {
-    -fx-font-size: 11pt;
+    -fx-font-size: 15pt;
     -fx-font-family: -font-semibold;
     -fx-text-fill: -text-on-bg;
 }
@@ -32,6 +32,7 @@
     -fx-font-size: 11pt;
     -fx-font-family: -font-semibold;
     -fx-text-fill: -text-on-bg;
+    -fx-font-weight: bold;
     -fx-opacity: 1;
 }
 
@@ -40,6 +41,17 @@
     -fx-font-family: -font-semibold;
     -fx-text-fill: -text-on-bg;
     -fx-opacity: 1;
+}
+
+.label-header.label .text, .label-input .text{
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+}
+
+.label-input {
+    -fx-font-size: 30pt;
+    -fx-font-family: -font-light;
+    -fx-text-fill: -text-on-bg;
 }
 
 .table-view {
@@ -193,9 +205,4 @@
 
 .buttonLight {
     -fx-padding: 0;
-}
-
-.label-input {
-    -fx-font-size: 30pt;
-    -fx-font-family: -font-light;
 }

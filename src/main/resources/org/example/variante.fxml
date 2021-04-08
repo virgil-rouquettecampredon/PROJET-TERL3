@@ -17,7 +17,7 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Variante" />
+            <Label  styleClass="label-header" text="Variante" />
             <Button mnemonicParsing="false" onAction="#importButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="IMPORTER">
                <font>
                   <Font name="Candara" size="36.0" />

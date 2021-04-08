@@ -2,7 +2,7 @@ package org.example.model.EquationDeDeplacement;
 
 import org.example.model.Position;
 
-public abstract class EquationDeDeplacement {
+public abstract class EquationDeDeplacement implements Serializable {
     private boolean evaluable;
     private int x = 0;
     private int y = 0;
@@ -44,6 +44,19 @@ public abstract class EquationDeDeplacement {
         return y;
     }
     /*FIN GETTER SETTER*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EquationDeDeplacement that = (EquationDeDeplacement) o;
+        return evaluable == that.evaluable && x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(evaluable, x, y);
+    }
 }
 
 

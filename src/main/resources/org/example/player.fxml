@@ -24,7 +24,7 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Joueurs" />
+            <Label  styleClass="label-header" text="Joueurs" />
             <BorderPane prefHeight="100.0">
                <center>
                   <TextField fx:id="nbPlayerInput" onKeyTyped="#inputAction" prefHeight="10.0" promptText="Ex: 2" text="2" BorderPane.alignment="CENTER">
@@ -33,7 +33,7 @@
                      </BorderPane.margin></TextField>
                </center>
                <left>
-                  <Label alignment="CENTER" blendMode="DIFFERENCE" styleClass="label-input" text="Nombre&#13;de joueurs" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" BorderPane.alignment="CENTER" />
+                  <Label alignment="CENTER"  styleClass="label-input" text="Nombre&#13;de joueurs" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" BorderPane.alignment="CENTER" />
                </left>
                <VBox.margin>
                   <Insets left="200.0" right="200.0" />

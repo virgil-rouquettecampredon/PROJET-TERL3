@@ -19,7 +19,7 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label blendMode="DIFFERENCE" styleClass="label-header" text="Creer : 2/3" />
+            <Label  styleClass="label-header" text="Creer : 2/3" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                <children>
                   <Button mnemonicParsing="false" onAction="#pieceButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="MODIFIER PIECES">

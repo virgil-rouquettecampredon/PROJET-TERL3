@@ -1,9 +1,10 @@
 package org.example.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Plateau {
+public class Plateau implements Serializable {
     private int heightY;
     private int witdhX;
     private ArrayList<ArrayList<Case>> echiquier;

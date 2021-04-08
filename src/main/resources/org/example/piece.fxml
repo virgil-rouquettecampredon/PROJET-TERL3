@@ -23,7 +23,7 @@
         <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label blendMode="DIFFERENCE" styleClass="label-header" text="Piece"/>
+                <Label  styleClass="label-header" text="Piece"/>
                 <TableView fx:id="tab" prefHeight="350.0" prefWidth="785.0">
                     <columns>
                         <TableColumn fx:id="imgCol" prefWidth="195.0"/>
