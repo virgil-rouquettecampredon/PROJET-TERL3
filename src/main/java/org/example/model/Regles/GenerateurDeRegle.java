@@ -10,14 +10,13 @@ public class GenerateurDeRegle {
     //Tableau des règles données sous forme de chaine de caractère
     //à la construction du GenerateurDeRegle
     private List<String>[] reglesSousFormeDeChaine;
+    //Automate utilisé pour l'analyse semantique
+    private Automate automate_semantique;
 
-    //Listes de Regle qui seront remplies par l'analyseur sémantique
-    //Si syntaxe et sémantique sont correctes
+
+    //Listes de Regle
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
-
-
-    //private ArrayList<String> axiomes = new ArrayList<>();
 
     //Tableau des axiomes reconnaissables par notre système
     //Utile lors de l'analyse syntaxique dans un premier temps,
@@ -32,289 +31,19 @@ public class GenerateurDeRegle {
 
     private static final String[] connecteur = {"ET","OU","alors"};
 
-    /**Classes utiles pour l'analyse sémantique
-     * Permet une modélisation simple d'un automate reconnaissant des Jeton
-
-    //Modélisation d'une transition sortante d'un état de l'automate
-    class TransitionSortante_Semantique{
-        private Jeton etiquetteArete;
-        private int etatArrive;
-        public TransitionSortante_Semantique(Jeton etiquette,int arrive){
-            this.etiquetteArete = etiquette;
-            this.etatArrive = arrive;
-        }
-    }
-
-    //Modélisation d'un état de l'automate
-    class Etat_Semantique{
-        private int num;
-        private List<TransitionSortante_Semantique> transitions;
-        private boolean estTerminal;
-        private int codeDeRetour;
-
-        public Etat_Semantique(int num){
-            this.num = num;
-            this.transitions = new ArrayList<>();
-            this.estTerminal = false;
-            this.codeDeRetour = 0;
-        }
-
-        public void ajouterTransitionSortante(TransitionSortante_Semantique t){
-            this.transitions.add(t);
-        }
-
-        public boolean estTerminal(){
-            return estTerminal;
-        }
-    }
-
-    //Modélisation de l'automate
-    class Automate_Semantique {
-        private int nbEtat;
-        private int nbEtatTerminaux;
-        private List<Etat_Semantique> etatsTr;
-
-        public Automate_Semantique(int nbEtat){
-            this.nbEtat = nbEtat;
-            nbEtatTerminaux = 0;
-            int i = 0;
-            while (i<nbEtat){
-                etatsTr.add(new Etat_Semantique(i));
-                i++;
-            }
-        }
-
-        public void ajouterUnEtatTerminal(int etat, int codeDeRetour){
-            if(etat<nbEtat && etat>=0){
-                etatsTr.get(etat).estTerminal = true;
-                etatsTr.get(etat).codeDeRetour = codeDeRetour;
-                this.nbEtatTerminaux++;
-            }
-        }
-
-        public void ajouterUneTransition(int dep, Jeton val, int arrive){
-            for (Etat_Semantique e: etatsTr) {
-                if(e.num == dep){
-                    Iterator<TransitionSortante_Semantique> t = e.transitions.iterator();
-                    while (t.hasNext()) {
-                        if(t.next().etiquetteArete == val){
-                            //Permet d'empécher les automates indeterministes
-                            t.remove();
-                        }
-                    }
-                    e.ajouterTransitionSortante(new TransitionSortante_Semantique(val,arrive));
-                }
-            }
-        }
-
-
-        private boolean estReconnu(int sommet,Jeton val){
-            for (Etat_Semantique e: etatsTr) {
-                if(e.num ==sommet){
-                    for(TransitionSortante_Semantique t:e.transitions){
-                        if(t.etiquetteArete == val){
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-            return false;
-        }
-        public int etatSuivant(int sommet, Jeton val){
-            for (Etat_Semantique e: etatsTr) {
-                if(e.num ==sommet){
-                    for(TransitionSortante_Semantique t:e.transitions){
-                        if(t.etiquetteArete == val){
-                            return t.etatArrive;
-                        }
-                    }
-                    return -1;
-                }
-            }
-            return -1;
-        }
-
-        public Etat_Semantique recupererEtat(int etat){
-            return etatsTr.get(etat);
-        }
-    }
-
-    public Automate_Semantique initialiserAutomate_Semantique(List<Integer> etatTerminaux){
-        Automate_Semantique autoSem = new Automate_Semantique(23);
-        //GESTIONS ETATS TERMINAUX
-        int ind = 0;
-        for (Integer i:etatTerminaux) {
-            autoSem.ajouterUnEtatTerminal(i,300+ind);
-            ind++;
-        }
-
-        //GESTION DES ALIAS
-        autoSem.ajouterUneTransition(1,Jeton.ALIAS,1);
-        autoSem.ajouterUneTransition(2,Jeton.ALIAS,2);
-        autoSem.ajouterUneTransition(3,Jeton.ALIAS,3);
-        autoSem.ajouterUneTransition(9,Jeton.ALIAS,9);
-        autoSem.ajouterUneTransition(10,Jeton.ALIAS,10);
-        autoSem.ajouterUneTransition(11,Jeton.ALIAS,11);
-
-        //GESTION NEGATION
-        autoSem.ajouterUneTransition(4,Jeton.NON,4);
-        autoSem.ajouterUneTransition(7,Jeton.NON,7);
-
-        //GESTION DES NEGATIONS
-
-
-        //=========== CONDITIONS ===========
-        //ETAT INITIAL
-        autoSem.ajouterUneTransition(0,Jeton.JOUEUR,1);
-        autoSem.ajouterUneTransition(0,Jeton.PIECE,2);
-        autoSem.ajouterUneTransition(0,Jeton.PIECETOKEN,3);
-
-        //ETAT 1
-        autoSem.ajouterUneTransition(1,Jeton.COMPTEUR,4);
-
-        //ETAT 2
-        autoSem.ajouterUneTransition(2,Jeton.ACTION,5);
-        autoSem.ajouterUneTransition(2,Jeton.ETAT,6);
-        autoSem.ajouterUneTransition(2,Jeton.COMPTEUR,7);
-        autoSem.ajouterUneTransition(2,Jeton.JOUEUR,3);
-
-        //ETAT 3
-        autoSem.ajouterUneTransition(3,Jeton.ACTION,5);
-        autoSem.ajouterUneTransition(3,Jeton.ETAT,6);
-        autoSem.ajouterUneTransition(3,Jeton.COMPTEUR,7);
-
-        //ETAT 4
-        autoSem.ajouterUneTransition(4,Jeton.COMPARAISON,8);
-
-        //ETAT 5
-        autoSem.ajouterUneTransition(5,Jeton.PIECE,9);
-        autoSem.ajouterUneTransition(5,Jeton.PIECETOKEN,10);
-        autoSem.ajouterUneTransition(5,Jeton.CASE,11);
-
-        //ETAT 6
-        autoSem.ajouterUneTransition(6,Jeton.ET,0);
-        autoSem.ajouterUneTransition(6,Jeton.OU,0);
-        autoSem.ajouterUneTransition(6,Jeton.ALORS,15);
-
-        //ETAT 7
-        autoSem.ajouterUneTransition(7,Jeton.COMPARAISON,12);
-
-        //ETAT 8
-        autoSem.ajouterUneTransition(8,Jeton.NOMBRE,13);
-
-        //ETAT 9
-        autoSem.ajouterUneTransition(9,Jeton.JOUEUR,10);
-        autoSem.ajouterUneTransition(9,Jeton.ET,0);
-        autoSem.ajouterUneTransition(9,Jeton.OU,0);
-        autoSem.ajouterUneTransition(9,Jeton.ALORS,15);
-
-        //ETAT 10
-        autoSem.ajouterUneTransition(10,Jeton.ET,0);
-        autoSem.ajouterUneTransition(10,Jeton.OU,0);
-        autoSem.ajouterUneTransition(10,Jeton.ALORS,15);
-
-        //ETAT 11
-        autoSem.ajouterUneTransition(11,Jeton.ET,0);
-        autoSem.ajouterUneTransition(11,Jeton.OU,0);
-        autoSem.ajouterUneTransition(11,Jeton.ALORS,15);
-
-        //ETAT 12
-        autoSem.ajouterUneTransition(12,Jeton.COMPTEUR,14);
-
-        //ETAT 13
-        autoSem.ajouterUneTransition(13,Jeton.ET,0);
-        autoSem.ajouterUneTransition(13,Jeton.OU,0);
-        autoSem.ajouterUneTransition(13,Jeton.ALORS,15);
-
-        //ETAT 14
-        autoSem.ajouterUneTransition(14,Jeton.ET,0);
-        autoSem.ajouterUneTransition(14,Jeton.OU,0);
-        autoSem.ajouterUneTransition(14,Jeton.ALORS,15);
-
-        //=========== CONDITIONS ===========
-        //ETAT 15
-        autoSem.ajouterUneTransition(15,Jeton.JOUEUR,16);
-        autoSem.ajouterUneTransition(15,Jeton.PIECE,17);
-        autoSem.ajouterUneTransition(15,Jeton.PIECETOKEN,18);
-
-        //ETAT 16
-        autoSem.ajouterUneTransition(16,Jeton.CONSEQUENCEACTION,20);
-        autoSem.ajouterUneTransition(16,Jeton.CONSEQUENCETERMINALE,19);
-
-        //ETAT 17
-        autoSem.ajouterUneTransition(17,Jeton.JOUEUR,18);
-        autoSem.ajouterUneTransition(17,Jeton.CONSEQUENCEACTION,20);
-
-        //ETAT 18
-        autoSem.ajouterUneTransition(18,Jeton.CONSEQUENCEACTION,20);
-
-        //ETAT 20
-        autoSem.ajouterUneTransition(20,Jeton.PIECE,21);
-        autoSem.ajouterUneTransition(20,Jeton.PIECETOKEN,22);
-        autoSem.ajouterUneTransition(20,Jeton.CASE,23);
-
-        //ETAT 21
-        autoSem.ajouterUneTransition(21,Jeton.ET,20);
-        autoSem.ajouterUneTransition(21,Jeton.JOUEUR,22);
-
-        //ETAT 22
-        autoSem.ajouterUneTransition(22,Jeton.ET,20);
-
-        //ETAT 23
-        autoSem.ajouterUneTransition(23,Jeton.ET,20);
-        autoSem.ajouterUneTransition(23,Jeton.PIECETOKEN,22);
-        autoSem.ajouterUneTransition(23,Jeton.PIECE,21);
-
-        return  autoSem;
-    }
-
-    //Java : les var-args
-
-    public void analyseSemantique(List<Jeton> regleSyntaxe, List<String> regle){
-        //Etat initial par défaut : 0
-        int curEtat = 0;
-        //regles de etat-transitions de l'automate de notre système
-        Automate_Semantique automateSem = initialiserAutomate_Semantique(new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23)));
-        //Pile de gestion des blocs de règle parcourus
-        List<String> blocsParcourus = new ArrayList<>();
-
-
-        for (Jeton jetons: regleSyntaxe) {
-            //Récupération de l'indice du prochain état d'après la transition donnée
-            curEtat = automateSem.etatSuivant(curEtat,jetons);
-
-            //Récupération de l'état correspondant à l'indice curEtat
-            Etat_Semantique etat = automateSem.recupererEtat(curEtat);
-            if(etat.estTerminal){
-                //Si terminal, traitement du code de retour
-                switch (etat.codeDeRetour){
-                    case 300 ->  System.out.println("");
-                    case 301 ->  System.out.println("");
-                    case 302 ->  System.out.println("");
-                    case 303 ->  System.out.println("");
-                    case 304 ->  System.out.println("");
-                    case 305 ->  System.out.println("");
-                    case 306 ->  System.out.println("");
-                    case 307 -> System.out.println("");
-                    case 308 -> System.out.println("");
-                    case 309 -> System.out.println("");
-                }
-            }
-        }
-    }**/
-
-
     /**Constructeur d'un GenerateurDeRegle
      * @param reglesSousFormeDeChaine : Tableau de Liste de Chaines de caractères. Chaque liste représente une règle de jeu :
      *                                [0] : ["0","PALL","sedeplace","C2","manger","PALL"]
      *                                [1] : ["1","JALL","timer","=","3","ET","PALL","estechec","victoire"]
      *                                [2] : ["0","PALL#J2#P", "ET","PALL#J2#P","estsur","C5","defaite"]
      **/
-    public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine) {
+    public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine, Automate auto) {
         this.reglesSousFormeDeChaine = reglesSousFormeDeChaine;
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
+
+        this.automate_semantique = auto;
+        this.automate_semantique.initialiserAutomate();
     }
 
     /**===================================================================================
@@ -371,7 +100,7 @@ public class GenerateurDeRegle {
     public static ArrayList<Jeton> estSyntaxiquementCorrecte(ArrayList<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
 
-        for (int i = 1; i<regle.size();i++){
+        for (int i = 0; i<regle.size();i++){
             Jeton curJeton;
             String curRegle = regle.get(i);
 

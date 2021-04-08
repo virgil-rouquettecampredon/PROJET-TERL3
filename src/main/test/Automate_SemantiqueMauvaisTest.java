@@ -14,13 +14,13 @@ import static org.junit.Assert.*;
 public class Automate_SemantiqueMauvaisTest {
 
     private Automate_Semantique automate;
-    private List<BlocDeRegle> regle;
+    private Regle regle;
 
     @BeforeEach
     public void initialiser_Automate(){
         automate = new Automate_Semantique();
         automate.initialiserAutomate();
-        regle = new ArrayList<>();
+        regle = new Regle();
     }
 
     //------------------------------------------------------------------------------------------------

@@ -89,7 +89,7 @@ public abstract class Automate{
         this.etatDeDepart = etatDeDepart;
     }
 
-    public void ajouterUnEtatTerminal(int etat, int codeDeRetour){
+    protected void ajouterUnEtatTerminal(int etat, int codeDeRetour){
         Etat et =  recupererEtat(etat);
         if(et != null){
             et.estTerminal = true;
@@ -98,7 +98,7 @@ public abstract class Automate{
         }
     }
 
-    public void ajouterUneTransition(int dep, Jeton val, int arrive){
+    protected void ajouterUneTransition(int dep, Jeton val, int arrive){
         for (Etat e: etatsTr) {
             if(e.num == dep){
                 Iterator<TransitionSortante> t = e.transitions.iterator();
@@ -115,8 +115,8 @@ public abstract class Automate{
 
     public int etatSuivant(int sommet,Jeton val){
         for (Etat e: etatsTr) {
-            if(e.num ==sommet){
-                for(TransitionSortante t:e.transitions){
+            if(e.num == sommet){
+                for(TransitionSortante t : e.transitions){
                     if(t.etiquetteArete == val){
                         return t.etatArrive;
                     }
@@ -135,7 +135,7 @@ public abstract class Automate{
          }return null;
     }
 
-    public void setValeurEtat(int etat, String valeur){
+    protected void setValeurEtat(int etat, String valeur){
         for (Etat e : etatsTr) {
             if (e.num == etat) {
                 e.valeur = valeur;
@@ -158,5 +158,5 @@ public abstract class Automate{
      * @return une liste de BlocDeRegle représenatant la règle bien former sémantiquement sous d'objets manipulables par le système.
      * @param regleString : Regle sous forme de liste de mots
      * @param regleSyntaxe : Regle sous forme de Jeton, issue de l'analyse syntaxique.**/
-    public abstract List<BlocDeRegle> analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException;
+    public abstract Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException;
 }

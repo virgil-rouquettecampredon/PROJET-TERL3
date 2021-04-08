@@ -1,6 +1,6 @@
 package org.example.model.Regles;
 
-public abstract class MauvaiseDefinitionRegleException extends Exception{
+public class MauvaiseDefinitionRegleException extends Exception{
     private String message;
 
     public MauvaiseDefinitionRegleException() { super(); }

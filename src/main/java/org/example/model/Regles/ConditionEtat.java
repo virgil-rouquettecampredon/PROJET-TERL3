@@ -6,7 +6,4 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
         //A IMPLEMENTER
         return false;
     }
-    public void consequence(){
-        //A IMPLEMENTER
-    }
 }

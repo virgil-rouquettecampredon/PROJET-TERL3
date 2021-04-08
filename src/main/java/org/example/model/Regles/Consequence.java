@@ -1,8 +1,19 @@
 package org.example.model.Regles;
 
-public abstract class Consequence implements BlocDeRegle {
+import java.io.Serializable;
 
+public abstract class Consequence implements BlocDeRegle, Serializable {
+    private Jeton connecteur;
 
-    public abstract boolean verification();
     public abstract void comportement();
+
+    public Jeton getConnecteur(){
+        return this.connecteur;
+    }
+
+    public void setConnecteur(Jeton j){
+        if(j == Jeton.ET){
+            this.connecteur = j;
+        }
+    }
 }

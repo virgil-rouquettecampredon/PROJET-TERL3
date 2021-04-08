@@ -8,19 +8,17 @@ import java.util.ArrayList;
 
 public abstract class Condition implements BlocDeRegle, Serializable {
 
-    /*
-    private ArrayList<Sujet> sujets;
-
-
-    public Condition(ArrayList<Sujet> sujets) {
-        this.sujets = new ArrayList<>();
-    }
-
-    public boolean verification(OrdonnanceurDeJeu odonnaceur, Sujet sujet){
-        return false;
-    }*/
+    private Jeton connecteur;
 
     public abstract boolean verification();
-    public abstract void consequence();
 
+    public Jeton getConnecteur(){
+        return this.connecteur;
+    }
+
+    public void setConnecteur(Jeton j){
+        if(j == Jeton.OU || j == Jeton.ET){
+            this.connecteur = j;
+        }
+    }
 }
