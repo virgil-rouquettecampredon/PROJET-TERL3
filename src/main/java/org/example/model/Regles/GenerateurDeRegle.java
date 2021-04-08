@@ -1,5 +1,7 @@
 package org.example.model.Regles;
 
+import org.example.model.Case;
+import org.example.model.Joueur;
 import org.example.model.Piece;
 
 import java.lang.reflect.Array;
@@ -283,188 +285,35 @@ public class GenerateurDeRegle {
     }
 
 
-
-
-    /**
-     *  Prend en entrée une liste de Token et retourne une règle si cette liste
-     *  de token est sémantiquement correcte.
-     *
-     * note :
-     *          AUCUN,NOMBRE,
-     *          PIECE, JOUEUR, CASE,
-     *          ACTION, CIBLE, ETAT,
-     *          COMPARAISON, ET, OU, CONSEQUENCE,NON
-     **/
-    public void estSemantiquementCorrecte(ArrayList<Jeton> lt, ArrayList<String> reglestr) throws MauvaiseSemantiqueRegleException {
-        int c = 0;    //curseur
-        Regle regle = new Regle();
-        //int nbContexte=2;
-        //enum Contexte{A, B};
-
-        /*Map<Etat, Map<Integer, ArrayList<Etat>>> map_etats = new HashMap<>();
-        for(Etat e: Etat.values()){
-            map_etats.put(e, new HashMap<>());
-            for (int i=1; i<=nbContexte; i++){
-                map_etats.get(e).put(i, new ArrayList<>());
-            }
-        }
-
-        map_etats.get(Etat.PIECE).get(1).add(Etat.JOUEUR); //.add(Etat.JOUEURALL);
-        map_etats.get(Etat.JOUEUR).get(1).add(Etat.NOMBRE);
-        map_etats.get(Etat.ACTION).get(1).add(Etat.NOMBRE);*/
-
-        /*
-        while (lt.get(c) == Jeton.NON) { regle.setBool(!regle.getBool()); c++; }
-
-        do {
-            if (lt.get(c) == Jeton.PIECE) {
-                //interpreter Piece
-                c++;
-                if (lt.get(c) == Jeton.ACTION) {
-                    //"mange","sedeplace","estplace","estechec","estsur"
-                    if (reglestr.get(c).equals("mange")) {
-                        c++;
-                        if (lt.get(c) == Jeton.CASE) {
-                            //interpreter Case
-                            //CAS PIECE+MANGE+CASE
-
-                        } else if (lt.get(c) == Jeton.PIECE) {
-                            //interpreter Piece
-                            //CAS PIECE+MANGE+PIECE
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("manger: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case ou une piece est attendu");
-                        }
-                    } else if (reglestr.get(c).equals("sedeplace")) {
-                        if (lt.get(c) == Jeton.CASE) {
-                            //interpreter Case
-                            //CAS PIECE+SEDEPLACER+CASE
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("sedeplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
-                        }
-                    } else if (reglestr.get(c).equals("estplace")) {
-                        if (lt.get(c) == Jeton.CASE) {
-                            //interpreter Case
-                            //CAS PIECE+ESTPLACE+CASE
-
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("estplace: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
-                        }
-                    } else if (reglestr.get(c).equals("estechec")) {
-                        if (lt.get(c) == Jeton.PIECE) {
-                            //interpreter Piece
-                            //CAS PIECE+ESTECHEC+PIECE
-
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("estechec: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une piece est attendu");
-                        }
-                    } else if (reglestr.get(c).equals("estsur")) {
-                        if (lt.get(c) == Jeton.CASE) {
-                            //interpreter Case
-                            //CAS PIECE+ESTSUR+CASE
-
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("estsur: cible \"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une case est attendu");
-                        }
-                    } else {
-                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une action est attendu.");
-                    }
-
-                } else if (lt.get(c) == Jeton.ETAT) {
-                    //"estpromu"
-                    if (reglestr.get(c).equals("estpromu")) {
-                        //CAS PIECE+ESTPROMU
-                    } else {
-                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un etat est attendu.");
-                    }
-
-                } else if (lt.get(c) == Jeton.COMPTEUR) {
-                    if (reglestr.get(c).equals("nb_deplacement")) {
-                        c++;
-                        if (lt.get(c) == Jeton.COMPARAISON) {
-                            c++;
-                            if (lt.get(c) == Jeton.NOMBRE) {
-                                //CAS PIECE+NBDEPLACEMENT+COMPARAISON(=<>)+NOMBRE
-                            } else {
-                                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
-                            }
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une comparaison est attendu.");
-                        }
-                    } else {
-                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un compteur est attendu.");
-                    }
-                } else {
-                    throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une action, un etat ou un compteur est attendu");
-                }
-            }
-            else if (lt.get(c) == Jeton.JOUEUR) {
-                //interpreter Joueur
-                c++;
-                if (lt.get(c) == Jeton.COMPTEUR) {
-                    if (reglestr.get(c).equals("timer")) {
-                        c++;
-                        if (lt.get(c) == Jeton.COMPARAISON) {
-                            c++;
-                            if (lt.get(c) == Jeton.NOMBRE) {
-                                //CAS JOUEUR+TIMER+COMPARAISON(=<>)+NOMBRE
-                            } else {
-                                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un nombre est attendu.");
-                            }
-                        } else {
-                            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), une comparaison est attendu.");
-                        }
-                    } else {
-                        throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un timer est attendu.");
-                    }
-                } else {
-                    throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un compteur est attendu.");
-                }
-            }
-
-            else {
-                throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un joueur ou une piece est attendu.");
-            }
-
-            c++;
-        } while(lt.get(c) == Jeton.ET || lt.get(c) == Jeton.OU);
-
-        if (lt.get(c) == Jeton.CONSEQUENCE) {
-            //interpreter consequence
-        }
-        else {
-            throw new MauvaiseSemantiqueRegleException("\"" + reglestr.get(c) + "\" incorrect (mot num " + c + "), un OU, un ET ou une conséquence est attendu.");
-        }
-        */
-
-    }
-
-
-
-    // [Piece p1] ....
-    // [Joueur j1] ....
-    // Regle1: {{}}
-    // {P0#J1#P, SEDEPLACE, C1}P,ESTECHEC]
-    // [P0#J1#P,sedeplace,C1,OU,P0#J2#P,SEDEPLACE,P0#J1#
-    // [PALL#JALL#ALL,sedeplace,C1,OU,P0#J2#P,SEDEPLACE,P0#J1#
-    //[ ["piece_nimporte"] [(n)->return n] ]
-
-    //[ ["cavalier"] [(n)->if(n.type == cavalier) return n] ]
-
     /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
      * en une instance de REGLE manipulable plus simplement par le système.*/
     public void analyser (List<Piece> type_piece, List<Case> type_case, List<Joueur> joueurs) throws MauvaiseDefinitionRegleException {
         int ind = 0;
 
         //Pour chaque règles du jeu définies
-        for (int i = 0; i<this.reglesSousFormeDeChaine.length; i++){
-            //bloc try
-            //traitement premier caractère (permet de filtrer regles avant-coup et regle apres-coup)
-            //idée : faire un liste de liste de regle et donner un supplier<Integer> "listeAregarder" a l'ordonnanceur a la construction
-            //analyse syntaxique
-            //analyse sémantique
-            //construction de la règle
-            //ajout règle dans bonne liste
-            //bloc catch (action à définir : si une regle fausse, tout faux ?)
+        for(List<String> reglestring: this.reglesSousFormeDeChaine){
+            if(reglestring.size() >= 1){
+                String premier = reglestring.remove(0);
+                if(premier.equals("0") || premier.equals("1")) {
+                    try{
+                        List<Jeton> regleJeton = estSyntaxiquementCorrecte(reglestring, type_piece.size(), type_case.size(), joueurs.size());
+                        Regle r = this.automate_semantique.analyserUneRegle(regleJeton,reglestring);
+
+                        if(premier.equals("0")){
+                            this.regleAvantCoup.add(r);
+                        }else{
+                            this.regleApresCoup.add(r);
+                        }
+                    }catch(MauvaiseSemantiqueRegleException | MauvaiseSyntaxeRegleException e){
+                        throw new MauvaiseDefinitionRegleException("Problème à la règle num [" + ind + "] => " + e.getMessage());
+                    }
+                }else{
+                    throw new MauvaiseDefinitionRegleException("Problème à la règle num [" + ind + "] => indentificateur de règle invalide {0,1}");
+                }
+            }else{
+                throw new MauvaiseDefinitionRegleException("Problème à la règle num [" + ind + "] => règle vide");
+            }
+            ind++;
         }
     }
 }

@@ -188,7 +188,9 @@ public class Automate_Semantique extends Automate{
     /*"prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",
       "=", "<", ">",
       "tous-piece", "tous-joueur", "tous-typecase","victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"*/
-    public List<BlocDeRegle> analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException{
+
+    @SuppressWarnings("Duplicates")
+    public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseSemantiqueRegleException{
         int curEtat = this.getEtatDeDepart();
         //Regle à retourner après le traitement
         Regle regle = new Regle();

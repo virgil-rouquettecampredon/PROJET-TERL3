@@ -980,8 +980,23 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ, reS);
             fail("Aucune Exception détectée");
+        } catch (MauvaiseSemantiqueRegleException e) {
+            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]", e.getMessage());
+
+        }
+    }
+
+    @Test
+    public final void testCase323_PasDetecte(){
+        List<String> reS = Arrays.asList("J1","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION,Jeton.CASE);
+
+        automate.setEtatDeDepart(17);
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
         }catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]",e.getMessage());
+            assertEquals("Bloc Sujet-ConsequenceAction-Case inconnu [3]",e.getMessage());
         }
     }
 

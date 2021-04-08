@@ -2,6 +2,9 @@ package org.example.model.EquationDeDeplacement;
 
 import org.example.model.Position;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 public abstract class EquationDeDeplacement implements Serializable {
     private boolean evaluable;
     private int x = 0;
