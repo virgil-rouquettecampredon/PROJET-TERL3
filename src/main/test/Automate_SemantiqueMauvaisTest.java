@@ -20,7 +20,7 @@ public class Automate_SemantiqueMauvaisTest {
     public void initialiser_Automate(){
         automate = new Automate_Semantique();
         automate.initialiserAutomate();
-        regle = new Regle();
+        //regle = new Regle();
     }
 
     //------------------------------------------------------------------------------------------------

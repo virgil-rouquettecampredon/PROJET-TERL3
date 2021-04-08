@@ -3,6 +3,7 @@ package org.example.model.Regles;
 
 import org.example.model.Piece;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -225,15 +226,37 @@ public class Automate_Semantique extends Automate{
 
         boolean traitementCondition = true;
 
+        List<Jeton> jetonsarborescence = new ArrayList<>();
+        List<Condition> conditionsDeLaRegle = new ArrayList<>();
+
+        int indParenthese = 0;
 
         for (Jeton j: regleSyntaxe) {
-            if(j == Jeton.ALORS){
-                if(traitementCondition){
-                    traitementCondition = false;
+            switch (j) {
+                case PARENTHESEOUVRANTE: {
+                    jetonsarborescence.add(Jeton.PARENTHESEOUVRANTE);
+                    indParenthese++;
                 }
-                else { throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]"); }
+                case PARENTHESEFERMANTE: {
+                    jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                    indParenthese--;
+                    if(indParenthese<0){
+                        throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                    }
+                }
+                case ET: { jetonsarborescence.add(Jeton.ET); }
+                case OU: { jetonsarborescence.add(Jeton.OU); }
+                case ALORS: {
+                    if (traitementCondition) {
+                        traitementCondition = false;
+                        if(indParenthese != 0){
+                            throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, trop de parenthèses paranthese " + ((indParenthese < 0)? "fermante" : "ouvrante") + " : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                        }
+                    } else {
+                        throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                    }
+                }
             }
-
             int predEtat = curEtat;
 
             //Récupération de l'indice du prochain état d'après la transition donnée
@@ -273,8 +296,9 @@ public class Automate_Semantique extends Automate{
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                //conditionsDeLaRegle.add(new ConditionEtat<Joueur>());
                                                 nbConditions++;
-
+                                                jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
@@ -891,8 +915,6 @@ public class Automate_Semantique extends Automate{
 
                             default -> { throw new MauvaiseSemantiqueRegleException("Bloc inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]"); }
                         }
-
-                        //blocs.add(b);
                         parcours = "";  //on a gagné !
 
                     } // sinon on ne fait rien car on est terminal, on peut encore avancer et on est pas un connecteur adequat
