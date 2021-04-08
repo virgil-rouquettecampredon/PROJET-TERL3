@@ -28,7 +28,7 @@ public class FactoryPositionDeDeplacement implements FactoryEquationDeDeplacemen
                 }catch (NumberFormatException e){
                     throw new MauvaiseImplementationPositionDeDeplacementException("Valeur non numérique pour y : " + equationRes[1]);
                 }
-                return new PositionDeDeplacement(valX, valY);
+                return new PositionDeDeplacement(valX, valY, EquationDeDeplacement.TypeDeplacement.BOTH);
             }
         }
     }

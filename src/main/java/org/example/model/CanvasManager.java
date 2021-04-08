@@ -87,18 +87,30 @@ public class CanvasManager {
 
             double bPosEX = (e.getX()+posX) * rectSize;
             double bPosEY = (e.getY()+posY) * rectSize;
-            if ((e.getX() + e.getY())%2==0) {
-                context.setFill(Color.GREEN);
+            if ((e.getX()+posX + e.getY()+posY)%2==0) {
+                switch (e.getTypeDeplacement()) {
+                    case DEPLACER -> context.setFill(Color.DARKGREEN);
+                    case PRENDRE -> context.setFill(Color.DARKRED);
+                    case BOTH -> context.setFill(Color.MEDIUMBLUE);
+                }
             }
             else {
-                context.setFill(Color.LIGHTGREEN);
+                switch (e.getTypeDeplacement()) {
+                    case DEPLACER -> context.setFill(Color.LIGHTGREEN);
+                    case PRENDRE -> context.setFill(Color.PALEVIOLETRED);
+                    case BOTH -> context.setFill(Color.color(68/255.0, 167/255.0, 242/255.0));
+                }
             }
             context.fillRect(bPosEX, bPosEY, rectSize, rectSize);
         }
 
         for (VecteurDeDeplacement e:
                 vecDeplacements) {
-            context.setStroke(Color.RED);
+            switch (e.getTypeDeplacement()) {
+                case DEPLACER -> context.setStroke(Color.GREEN);
+                case PRENDRE -> context.setStroke(Color.RED);
+                case BOTH -> context.setStroke(Color.SKYBLUE);
+            }
             context.setLineWidth(5);
 
             double bEX = (e.getX()+posX);
@@ -129,9 +141,8 @@ public class CanvasManager {
             context.strokeLine(ceX, ceY, p2X * rectSize, p2Y * rectSize); //TODO Faire des vrai fleches 2/2
             */
             context.strokeOval(ceX-(rectSize/4), ceY-(rectSize/4), (rectSize/2), (rectSize/2));
-
-            context.setStroke(Color.BLACK);
         }
+        context.setStroke(Color.BLACK);
         putPiece(posX, posY, image);
     }
 

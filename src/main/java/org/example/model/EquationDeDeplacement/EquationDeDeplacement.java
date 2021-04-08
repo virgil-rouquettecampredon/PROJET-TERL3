@@ -9,16 +9,18 @@ public abstract class EquationDeDeplacement implements Serializable {
     private boolean evaluable;
     private int x = 0;
     private int y = 0;
+    private TypeDeplacement typeDeplacement;
 
     /**Constructeur d'une équation de déplacement.
      * @param evaluable : booleaan renseignant si l'équation de déplacement est évaluable ou non.
      * @param x : int renseignant la valeur à ajouter à l'axe X d'une position quelconque afin d'enobtenir une nouvelle, conforme à l'équation de déplacement.
      * @param y : int renseignant la valeur à ajouter à l'axe Y d'une position quelconque afin d'enobtenir une nouvelle, conforme à l'équation de déplacement.
      * **/
-    public EquationDeDeplacement(boolean evaluable, int x, int y){
+    public EquationDeDeplacement(boolean evaluable, int x, int y, TypeDeplacement typeDeplacement) {
         this.x =x;
         this.y =y;
         this.evaluable = evaluable;
+        this.typeDeplacement = typeDeplacement;
     }
 
     /**Fonction permettant d'évaluer une équation de déplacement à partir d'une position de départ.
@@ -36,6 +38,10 @@ public abstract class EquationDeDeplacement implements Serializable {
     /*DEBUT GETTER SETTER*/
     public void setEvaluable(boolean evaluable) {
         this.evaluable = evaluable;
+    }
+
+    public TypeDeplacement getTypeDeplacement() {
+        return typeDeplacement;
     }
 
     //test Only
@@ -59,6 +65,12 @@ public abstract class EquationDeDeplacement implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(evaluable, x, y);
+    }
+
+    public static enum TypeDeplacement {
+        DEPLACER,
+        PRENDRE,
+        BOTH
     }
 }
 

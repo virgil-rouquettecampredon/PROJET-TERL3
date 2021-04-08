@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +31,14 @@ public class PieceMoveController extends Controller {
     public Button boxButton;
     @FXML
     public Button arrowButton;
+    @FXML
+    public ToggleGroup caseGroup;
+    @FXML
+    public RadioButton deplacerRadio;
+    @FXML
+    public RadioButton prendreRadio;
+    @FXML
+    public RadioButton bothRadio;
 
     private CanvasManager canvasManager;
     private String file;
@@ -47,6 +52,9 @@ public class PieceMoveController extends Controller {
     @Override
     public void initialise() {
         tool = Tool.BOX;
+        deplacerRadio.setUserData(EquationDeDeplacement.TypeDeplacement.DEPLACER);
+        prendreRadio.setUserData(EquationDeDeplacement.TypeDeplacement.PRENDRE);
+        bothRadio.setUserData(EquationDeDeplacement.TypeDeplacement.BOTH);
         for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
             joueurBox.getItems().add(new JoueurBox(p.getName(), p));
         }
@@ -159,19 +167,25 @@ public class PieceMoveController extends Controller {
         int relativeX = c.getPosition().getX()-posX;
         int relativeY = c.getPosition().getY()-posY;
 
+        if (caseGroup.getSelectedToggle() == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucun comportement de case selectionné!");
+            return;
+        }
+        EquationDeDeplacement.TypeDeplacement typeDeplacement = (EquationDeDeplacement.TypeDeplacement) caseGroup.getSelectedToggle().getUserData();
+
         switch (mouseEvent.getButton())  {
             case PRIMARY -> {
                 switch (tool) {
                     case BOX -> {
                         //add case to piece deplacement
-                        if (!posDeplacements.contains(new PositionDeDeplacement(relativeX, relativeY)) && (relativeX != 0 || relativeY != 0)) {
-                            posDeplacements.add(new PositionDeDeplacement(relativeX, relativeY));
+                        if (!posDeplacements.contains(new PositionDeDeplacement(relativeX, relativeY, typeDeplacement)) && (relativeX != 0 || relativeY != 0)) {
+                            posDeplacements.add(new PositionDeDeplacement(relativeX, relativeY, typeDeplacement));
                         }
                     }
                     case ARROW -> {
                         //add arrow to piece deplacement
-                        if (!vecDeplacements.contains(new VecteurDeDeplacement(relativeX, relativeY)) && (relativeX != 0 || relativeY != 0)) {
-                            vecDeplacements.add(new VecteurDeDeplacement(relativeX, relativeY));
+                        if (!vecDeplacements.contains(new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement)) && (relativeX != 0 || relativeY != 0)) {
+                            vecDeplacements.add(new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement));
                         }
                     }
                 }
@@ -180,11 +194,11 @@ public class PieceMoveController extends Controller {
                 switch (tool) {
                     case BOX -> {
                         //remove case to piece deplacement
-                        posDeplacements.remove(new PositionDeDeplacement(relativeX, relativeY));
+                        posDeplacements.remove(new PositionDeDeplacement(relativeX, relativeY, typeDeplacement));
                     }
                     case ARROW -> {
                         //remove arrow to piece deplacement
-                        vecDeplacements.remove(new VecteurDeDeplacement(relativeX, relativeY));
+                        vecDeplacements.remove(new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement));
                     }
                 }
             }

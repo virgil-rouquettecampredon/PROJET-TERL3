@@ -29,7 +29,7 @@ public class FactoryVecteurDeDeplacement implements FactoryEquationDeDeplacement
                 }catch (NumberFormatException e){
                     throw new MauvaiseImplementationVecteurDeDeplacementException("Valeur non numérique pour y : " + equationRes[1]);
                 }
-                return new VecteurDeDeplacement(valX,valY);
+                return new VecteurDeDeplacement(valX,valY, EquationDeDeplacement.TypeDeplacement.BOTH);
             }
         }
     }

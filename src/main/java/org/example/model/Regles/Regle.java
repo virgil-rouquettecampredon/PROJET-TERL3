@@ -54,7 +54,7 @@ public class Regle implements Serializable {
             for (Consequence cons : conséquences) {
                 cons.comportement();
             }
-        }
+        }*/
     }
 
 }
