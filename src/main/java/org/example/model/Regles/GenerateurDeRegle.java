@@ -97,7 +97,7 @@ public class GenerateurDeRegle {
      * @param nbTypeDeCase : int renseignant le nombre de type de cases du jeu.
      * @param nbJoueur :  int renseignant le nombre de joueurs du jeu.
      * */
-    public static ArrayList<Jeton> estSyntaxiquementCorrecte(ArrayList<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
+    public static ArrayList<Jeton> estSyntaxiquementCorrecte(List<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
 
         for (int i = 0; i<regle.size();i++){
@@ -163,7 +163,7 @@ public class GenerateurDeRegle {
                 if(cases.length() >= 4 && cases.charAt(1) == 'A') {
                     if (cases.charAt(2) == 'L') {
                         if (cases.charAt(3) == 'L') {
-                            if(cases.length() == 4){
+                            if(cases.length() == 4) {
                                 return Jeton.CASE;
                             }
                             throw new MauvaiseSyntaxeRegleException("Syntaxe de case (CALL + mauvais carac) incorrecte");
@@ -267,14 +267,14 @@ public class GenerateurDeRegle {
     }
 
     //Fonction renseignant si une piece+token est correctement définie
-    public static Jeton estSyntaxiquementCorrecte_PieceToken(String piece, int nbJoueur, int nbPiece) throws MauvaiseDefinitionRegleException{
+    public static Jeton estSyntaxiquementCorrecte_PieceToken(String piece, int nbJoueur, int nbPiece) throws MauvaiseDefinitionRegleException {
         String[] sousPiece = piece.split("#");
         if (sousPiece.length == 2) {
             try {
                 estSyntaxiquementCorrecte_Piece(sousPiece[0], nbPiece);
                 estSyntaxiquementCorrecte_Joueur(sousPiece[1], nbJoueur);
                 return Jeton.PIECETOKEN;
-            }catch (MauvaiseSyntaxeRegleException e){
+            } catch (MauvaiseSyntaxeRegleException e) {
                 throw new MauvaiseSyntaxeRegleException("Syntaxe de pieceToken incorrecte [" + e.getMessage() + "]");
             }
         } else {
@@ -451,9 +451,10 @@ public class GenerateurDeRegle {
     //[ ["cavalier"] [(n)->if(n.type == cavalier) return n] ]
 
     /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
-    * en une instance de REGLE manipulable plus simplement par le système.*/
+     * en une instance de REGLE manipulable plus simplement par le système.*/
+    public void analyser (List<Piece> type_piece, List<Case> type_case, List<Joueur> joueurs) throws MauvaiseDefinitionRegleException {
+        int ind = 0;
 
-    public void analyser(ArrayList<Piece> listepiece) throws MauvaiseDefinitionRegleException{
         //Pour chaque règles du jeu définies
         for (int i = 0; i<this.reglesSousFormeDeChaine.length; i++){
             //bloc try
@@ -466,6 +467,4 @@ public class GenerateurDeRegle {
             //bloc catch (action à définir : si une regle fausse, tout faux ?)
         }
     }
-
-
 }
