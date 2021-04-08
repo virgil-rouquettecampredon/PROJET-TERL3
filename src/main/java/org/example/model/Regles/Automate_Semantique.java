@@ -943,6 +943,7 @@ public class Automate_Semantique extends Automate{
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une condition pour créer une règle");
         }
 
+        regle.genererArbreCondition(conditionsDeLaRegle,jetonsarborescence);
         return regle;
     }
 }
