@@ -57,7 +57,8 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
             indiceJeton++;
             curJeton = jetons.get(indiceJeton);
         } catch (IndexOutOfBoundsException e) {
-            throw new ArbreConditionException("Erreur : Impossible d'avancer : " + curJeton + " (" + indiceJeton + ")");
+            curJeton = null;
+            //throw new ArbreConditionException("Erreur : Impossible d'avancer : " + curJeton + " (" + indiceJeton + ")");
         }
     }
 
@@ -76,14 +77,14 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
 
     //Regle : construireOU -> construireET-construireOUDroite
     public Noeud_Condition construireOU() throws EvaluableException{
-        System.out.println("OU");
+        //System.out.println("OU");
         return construireOUDroite(construireET());
     }
 
     //Regle : construireOUDroite -> OU construireET-construireOUDroite
     public Noeud_Condition construireOUDroite(Noeud_Condition nGauche) throws EvaluableException{
-        System.out.println("OUD");
-        if(curJeton.equals(Jeton.OU)){
+        //System.out.println("OUD");
+        if(curJeton!=null && curJeton.equals(Jeton.OU)){
             avancer();
             Noeud_Condition n = new Noeud_Condition(curCondition,Jeton.OU);
             n.setFilsG(nGauche);
@@ -95,14 +96,14 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
 
     //Regle : construireET -> construireCondEtParenthese-construireETDroite
     public Noeud_Condition construireET() throws EvaluableException{
-        System.out.println("ET");
+        //System.out.println("ET");
         return construireETDroite(construireCondEtParenthese());
     }
 
     //Regle : construireETDroite -> ET construireCondEtParenthese-construireETDroite
     public Noeud_Condition construireETDroite(Noeud_Condition nGauche) throws EvaluableException{
-        System.out.println("ETD");
-        if(curJeton.equals(Jeton.ET)){
+        //System.out.println("ETD");
+        if(curJeton!=null && curJeton.equals(Jeton.ET)){
             avancer();
             Noeud_Condition result = new Noeud_Condition(curCondition, Jeton.ET);
             result.setFilsG(nGauche);
@@ -114,17 +115,17 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
 
     //Regle : construireCondEtParenthese -> INTERPRETATION
     public Noeud_Condition construireCondEtParenthese() throws EvaluableException{
-        System.out.println("COND PARENTH");
+        //System.out.println("COND PARENTH");
         Noeud_Condition valeur = null;
-        if(curJeton.equals(Jeton.PARENTHESEOUVRANTE)) { //Regle : construireCondEtParenthese -> ( construireOU )
-            System.out.println("PARENTH");
+        if(curJeton!=null && curJeton.equals(Jeton.PARENTHESEOUVRANTE)) { //Regle : construireCondEtParenthese -> ( construireOU )
+            //System.out.println("PARENTH");
             avancer();
-            System.out.println("ON RECOMMENCE");
+            //System.out.println("ON RECOMMENCE");
             valeur = construireOU();
             testAvancer(Jeton.PARENTHESEFERMANTE);
         }
-        else if (curJeton.equals(Jeton.CONDITION)) { //Regle : construireCondEtParenthese -> CONDITION
-            System.out.println("COND");
+        else if (curJeton!=null && curJeton.equals(Jeton.CONDITION)) { //Regle : construireCondEtParenthese -> CONDITION
+            //System.out.println("COND");
             try{
                 curCondition = conditions.get(indiceCondition);
                 indiceCondition++;
@@ -145,8 +146,11 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
     public Noeud_Condition construireArbre() throws ArbreConditionException{
         try{
             Noeud_Condition a = construireOU();
-            if(indiceCondition < this.conditions.size()-1){
+            if(indiceCondition != this.conditions.size()){
                 warning = "Vous n'avez pas utilisé l'ensemble des conditions définies à la construction de votre Arbre_Condition.";
+            }
+            if(curJeton != null){
+                erreurSyntaxe();
             }
             return a;
         }catch(EvaluableException e){
