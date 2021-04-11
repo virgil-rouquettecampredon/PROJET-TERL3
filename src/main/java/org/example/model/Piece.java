@@ -125,7 +125,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     }
 
     public boolean estConditionDeVictoire(){
-        return comportementPiece.get(0);
+        return comportementPiece[0];
     }
 
     public boolean estPromouvable(){

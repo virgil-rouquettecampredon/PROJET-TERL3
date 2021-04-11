@@ -900,12 +900,26 @@ public class Automate_SemantiqueMauvaisTest {
         }
     }
 
+    @Test
+    public final void testCase322_PasDetecte(){
+        List<String> reS = Arrays.asList("J1","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.CONSEQUENCEACTION,Jeton.CASE,Jeton.PIECETOKEN);
+
+        automate.setEtatDeDepart(17);
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        }catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Bloc Sujet-ConsequenceAction-PieceToken OU Sujet-ConsequenceAction-Piece-Joueur OU Sujet-ConsequenceAction-Case-PieceToken OU Sujet-ConsequenceAction-Case-Piece-Joueur inconnu [3]",e.getMessage());
+        }
+    }
+
     //------------------------------------------------------------------------------------------------
     //---------------------------------------------3 2 3----------------------------------------------
     //------------------------------------------------------------------------------------------------
 
     @Test
-    public final void testCase323_PasDetecte(){
+    public final void testCase323_PasAssezArguments(){
         List<String> reS = Arrays.asList("test");
         List<Jeton> reJ = Arrays.asList(Jeton.CASE);
         automate.setEtatDeDepart(20);
@@ -958,17 +972,89 @@ public class Automate_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase323_15182023_PasDetectePiecetoken_Case(){
-        List<String> reS = Arrays.asList("P2","estpromu","alors","P1#J1","test","C1");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.PIECETOKEN,Jeton.CONSEQUENCEACTION,Jeton.CASE);
+    public final void testCase323_15182023_PasDetectePiecetoken_Case() {
+        List<String> reS = Arrays.asList("P2", "estpromu", "alors", "P1#J1", "test", "C1");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE, Jeton.ETAT, Jeton.ALORS, Jeton.PIECETOKEN, Jeton.CONSEQUENCEACTION, Jeton.CASE);
 
+        try {
+            regle = automate.analyserUneRegle(reJ, reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e) {
+            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]", e.getMessage());
+
+        }
+    }
+
+    @Test
+    public final void testCase323_PasDetecte(){
+        List<String> reS = Arrays.asList("J1","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION,Jeton.CASE);
+
+        automate.setEtatDeDepart(17);
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
         }catch (MauvaiseDefinitionRegleException e){
-            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]",e.getMessage());
+            assertEquals("Bloc Sujet-ConsequenceAction-Case inconnu [3]",e.getMessage());
         }
     }
+
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------Tests Autres------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    @Test
+    public final void testCase_EstPasTerminal(){
+        List<String> reS = Arrays.asList("P1","estpromu","alors", "J1", "placer");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Bloc incomplet: ne fini pas par un jeton terminal [4]",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testCase_EstInconnu(){
+        List<String> reS = Arrays.asList("J1","estpromu");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.ETAT);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Transition inconnu (etat == null) : etat à l'état: 1(1)",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testCase_DoubleAlors(){
+        List<String> reS = Arrays.asList("P1","estpromu", "alors", "J1", "gagner", "alors", "J2", "gagner");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE,Jeton.ALORS, Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Double alors [5]",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testCase_DoubleConditionSansAlors(){
+        List<String> reS = Arrays.asList("P1","estpromu","et","P2#J1","estpromu");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ET,Jeton.PIECETOKEN,Jeton.ETAT);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Il faut définir au moins une condition pour créer une règle",e.getMessage());
+        }
+    }
+
 
 
 
