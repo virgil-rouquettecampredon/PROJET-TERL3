@@ -35,16 +35,20 @@ public class VarianteManager {
 
         Piece pawnP1 = new Piece("pawn", "file:src/main/resources/org/example/images/pawn.png", j1);
         pawnP1.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.DEPLACER));
+        pawnP1.setEstPromouvable(true);
         j1.getTypePawnList().add(pawnP1);
         Piece pawnP2 = new Piece("pawn", "file:src/main/resources/org/example/images/pawnBlack.png", j2);
         pawnP2.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.DEPLACER));
+        pawnP2.setEstPromouvable(true);
         j2.getTypePawnList().add(pawnP2);
 
         Piece kingP1 = new Piece("king", "file:src/main/resources/org/example/images/king.png", j1);
         kingP1.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
+        kingP1.setEstConditionDeVictoire(true);
         j1.getTypePawnList().add(kingP1);
         Piece kingP2 = new Piece("king", "file:src/main/resources/org/example/images/kingBlack.png", j2);
         kingP2.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
+        kingP2.setEstConditionDeVictoire(true);
         j2.getTypePawnList().add(kingP2);
 
         ArrayList<Piece> pieces = new ArrayList<>();

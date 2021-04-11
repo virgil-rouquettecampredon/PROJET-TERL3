@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import org.example.model.*;
@@ -39,6 +40,16 @@ public class PieceMoveController extends Controller {
     public RadioButton prendreRadio;
     @FXML
     public RadioButton bothRadio;
+    @FXML
+    public CheckBox promouvableBox;
+    @FXML
+    public CheckBox victoireBox;
+    @FXML
+    public CheckBox traitreBox;
+    @FXML
+    public BorderPane vieForm;
+    @FXML
+    public TextField vieInput;
 
     private CanvasManager canvasManager;
     private String file;
@@ -67,6 +78,12 @@ public class PieceMoveController extends Controller {
             file = p.getSprite().split("file:")[1];
             posDeplacements = p.getPosDeplacements();
             vecDeplacements = p.getVecDeplacements();
+
+            promouvableBox.setSelected(p.estPromouvable());
+            traitreBox.setSelected(p.estTraitre());
+            victoireBox.setSelected(p.estConditionDeVictoire());
+
+            vieInput.setText(""+p.getNbLife());
         }
         else {
             joueurBox.getSelectionModel().selectFirst();
@@ -74,6 +91,9 @@ public class PieceMoveController extends Controller {
             posDeplacements = new ArrayList<>();
             vecDeplacements = new ArrayList<>();
         }
+
+        vieForm.visibleProperty().bindBidirectional(victoireBox.selectedProperty());
+
         Plateau p = getApp().varianteManager.getCurrent().getPlateau();
         posX = p.getWitdhX()/2;
         posY = p.getHeightY()/2;
@@ -111,19 +131,42 @@ public class PieceMoveController extends Controller {
             return;
         }
 
+        int vie = -1;
+        if (victoireBox.isSelected()) {
+            try {
+                vie = Integer.parseInt(vieInput.getText());
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur : nombre de vie n'est pas un entier ("+vieInput.getText()+")");
+                return;
+            }
+            if (vie < -1) {
+                showAlert(Alert.AlertType.ERROR, "Erreur : nombre de vie inférieur à -1 ("+vieInput.getText()+")");
+                return;
+            }
+        }
+        
+        Piece p;
         if (userVar != null) {
-            Piece p = (Piece) userVar;
+            p = (Piece) userVar;
             p.setName(nomInput.getText());
             p.setSprite("file:" + file);
 
             p.getJoueur().getTypePawnList().remove(p);
             p.setJoueur(joueurBox.getSelectionModel().getSelectedItem().getJoueur());
-            p.getJoueur().getTypePawnList().add(p);
         }
         else {
-            Piece p = new Piece(nomInput.getText(), "file:" + file, joueurBox.getSelectionModel().getSelectedItem().getJoueur());
-            p.getJoueur().getTypePawnList().add(p);
+            p = new Piece(nomInput.getText(), "file:" + file, joueurBox.getSelectionModel().getSelectedItem().getJoueur());
         }
+        p.setEstPromouvable(promouvableBox.isSelected());
+        p.setEstConditionDeVictoire(victoireBox.isSelected());
+        p.setEstTraitre(traitreBox.isSelected());
+
+        if (victoireBox.isSelected()) {
+            p.setNbLife(vie);
+        }
+
+        p.getJoueur().getTypePawnList().add(p);
+
 
         getApp().setRoot("piece");
     }

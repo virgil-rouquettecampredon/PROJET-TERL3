@@ -18,7 +18,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     private Joueur joueur;
     private ArrayList<PositionDeDeplacement> posDeplacements;
     private ArrayList<VecteurDeDeplacement> vecDeplacements;
-    private ArrayList<Boolean> comportementPiece;
+    private Boolean[] comportementPiece;
 
     public Piece(String name, String sprite, Joueur joueur) {
         this.name = name;
@@ -28,9 +28,9 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         this.joueur = joueur;
         this.posDeplacements = new ArrayList<>();
         this.vecDeplacements = new ArrayList<>();
-        this.comportementPiece = new ArrayList<>();
-        for (int i = 0; i < 4; i++){
-            comportementPiece.add(i, false);
+        this.comportementPiece = new Boolean[3];
+        for (int i = 0; i < 3; i++){
+            comportementPiece[i] = false;
         }
     }
 
@@ -50,8 +50,10 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         vecDeplacements = new ArrayList<>();
         vecDeplacements.addAll(piece.vecDeplacements);
 
-        comportementPiece = new ArrayList<>();
-        comportementPiece.addAll(piece.comportementPiece);
+        comportementPiece = new Boolean[3];
+        for (int i = 0; i < 3; i++) {
+            comportementPiece[i] = piece.comportementPiece[i];
+        }
     }
 
     public Position[] deplacementTheoriques(){
@@ -83,19 +85,15 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     }
 
     public void setEstConditionDeVictoire(boolean comportement){
-        comportementPiece.set(0, comportement);
-    }
-
-    public void setEstSauteuse(boolean comportement){
-        comportementPiece.set(1, comportement);
+        comportementPiece[0] = comportement;
     }
 
     public void setEstPromouvable(boolean comportement){
-        comportementPiece.set(2, comportement);
+        comportementPiece[1] = comportement;
     }
 
     public void setEstTraitre(boolean comportement){
-        comportementPiece.set(3, comportement);
+        comportementPiece[2] = comportement;
     }
 
     public String getName() {
@@ -130,16 +128,12 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         return comportementPiece.get(0);
     }
 
-    public boolean estSauteuse(){
-        return comportementPiece.get(1);
-    }
-
     public boolean estPromouvable(){
-        return comportementPiece.get(2);
+        return comportementPiece[1];
     }
 
     public boolean estTraitre(){
-        return comportementPiece.get(3);
+        return comportementPiece[2];
     }
 
     /*FIN GETTER SETTER*/

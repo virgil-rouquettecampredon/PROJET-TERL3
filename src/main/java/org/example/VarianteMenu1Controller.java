@@ -37,9 +37,11 @@ public class VarianteMenu1Controller extends Controller {
             }
             Piece p1 = new Piece("Paw", "file:" + pawnFile.getAbsolutePath(), j.get(0));
             p1.getJoueur().getTypePawnList().add(p1);
+            p1.setEstPromouvable(true);
 
             Piece p2 = new Piece("King", "file:" + kingFile.getAbsolutePath(), j2);
             p2.getJoueur().getTypePawnList().add(p2);
+            p2.setEstConditionDeVictoire(true);
         }
 
         getApp().setRoot("varianteMenu2");
