@@ -20,7 +20,6 @@ public class Automate_SemantiqueMauvaisTest {
     public void initialiser_Automate(){
         automate = new Automate_Semantique();
         automate.initialiserAutomate();
-        //regle = new Regle();
     }
 
     //------------------------------------------------------------------------------------------------
@@ -37,7 +36,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Piece(T)-Etat [0]",e.getMessage());
         }
 
@@ -51,7 +50,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Etat inconnu [1]",e.getMessage());
         }
     }
@@ -64,7 +63,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Etat inconnu [2]",e.getMessage());
         }
     }
@@ -77,7 +76,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Etat inconnu [1]",e.getMessage());
         }
     }
@@ -92,7 +91,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Etat OU Piece-Joueur-Etat OU PieceToken-Etat inconnu [2]",e.getMessage());
         }
     }
@@ -111,7 +110,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Piece(T)-Action-Piece [0]",e.getMessage());
         }
 
@@ -125,7 +124,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Piece inconnu [2]",e.getMessage());
         }
     }
@@ -138,7 +137,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Action-Piece inconnu [2]",e.getMessage());
         }
     }
@@ -151,7 +150,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Action-Piece inconnu [3]",e.getMessage());
         }
     }
@@ -166,7 +165,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Piece OU Piece-Joueur-Action-Piece OU PieceToken-Action-Piece inconnu [3]",e.getMessage());
         }
     }
@@ -185,7 +184,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Piece(T)-Action-Piece(J|T) [1]",e.getMessage());
         }
 
@@ -199,7 +198,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Piece-Joueur inconnu [3]",e.getMessage());
         }
     }
@@ -212,7 +211,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-PieceToken inconnu [2]",e.getMessage());
         }
     }
@@ -225,7 +224,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Action-Piece-Joueur inconnu [3]",e.getMessage());
         }
     }
@@ -238,7 +237,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Action-PieceToken inconnu [2]",e.getMessage());
         }
     }
@@ -251,7 +250,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Action-Piece-Joueur inconnu [4]",e.getMessage());
         }
     }
@@ -264,7 +263,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Action-PieceToken inconnu [3]",e.getMessage());
         }
     }
@@ -279,7 +278,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Piece-Joueur OU Piece-Action-PieceToken OU Piece-Joueur-Action-Piece-Joueur OU Piece-Joueur-Action-PieceToken OU PieceToken-Action-Piece-Joueur OU PieceToken-Action-PieceToken inconnu [4]",e.getMessage());
         }
     }
@@ -299,7 +298,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Piece(T)-Action-Case [0]",e.getMessage());
         }
 
@@ -313,7 +312,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Case inconnu [2]",e.getMessage());
         }
     }
@@ -326,7 +325,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Action-Case inconnu [2]",e.getMessage());
         }
     }
@@ -339,7 +338,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Action-Case inconnu [3]",e.getMessage());
         }
     }
@@ -354,7 +353,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Action-Case OU Piece-Joueur-Action-Case OU PieceToken-Action-Case inconnu [3]",e.getMessage());
         }
     }
@@ -373,7 +372,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Joueur-Compteur-Comparaison-Nombre [1]",e.getMessage());
         }
 
@@ -387,7 +386,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-Timer inconnu [3]",e.getMessage());
         }
     }
@@ -402,7 +401,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-Compteur-Comparaison-Nombre inconnu [4]",e.getMessage());
         }
     }
@@ -421,7 +420,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [0]",e.getMessage());
         }
 
@@ -435,7 +434,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Compteur-Comparaison-Nombre inconnu [3]",e.getMessage());
         }
     }
@@ -448,7 +447,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-Compteur-Comparaison-Nombre inconnu [4]",e.getMessage());
         }
     }
@@ -461,7 +460,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-Compteur-Comparaison-Nombre inconnu [3]",e.getMessage());
         }
     }
@@ -476,7 +475,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Compteur-Comparaison-Nombre OU Piece-Joueur-Compteur-Comparaison-Nombre OU PieceToken-Compteur-Comparaison-Nombre inconnu [5]",e.getMessage());
         }
     }
@@ -495,7 +494,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Sujet-ConsequenceTerminale [0]",e.getMessage());
         }
 
@@ -509,7 +508,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceTerminale inconnu [4]",e.getMessage());
         }
 
@@ -524,7 +523,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Sujet-ConsequenceTerminale inconnu [1]",e.getMessage());
         }
     }
@@ -544,7 +543,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece [0]",e.getMessage());
         }
 
@@ -558,7 +557,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Piece inconnu [5]",e.getMessage());
         }
 
@@ -572,7 +571,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Piece inconnu [5]",e.getMessage());
         }
 
@@ -586,7 +585,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Piece inconnu [6]",e.getMessage());
         }
 
@@ -600,7 +599,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piecetoken-ConsequenceAction-Piece inconnu [5]",e.getMessage());
         }
 
@@ -614,7 +613,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Case-Piece inconnu [6]",e.getMessage());
         }
 
@@ -628,7 +627,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Case-Piece inconnu [6]",e.getMessage());
         }
 
@@ -642,7 +641,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Case-Piece inconnu [7]",e.getMessage());
         }
 
@@ -656,7 +655,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piecetoken-ConsequenceAction-Case-Piece inconnu [6]",e.getMessage());
         }
 
@@ -671,7 +670,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Sujet-ConsequenceAction-Piece ou Sujet-ConsequenceAction-Case-Piece inconnu [3]",e.getMessage());
         }
     }
@@ -688,7 +687,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Sujet-ConsequenceAction-(Case)-Piece(T,J) [0]",e.getMessage());
         }
     }
@@ -701,7 +700,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-PieceToken inconnu [5]",e.getMessage());
         }
     }
@@ -714,7 +713,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-PieceToken inconnu [5]",e.getMessage());
         }
     }
@@ -727,7 +726,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-PieceToken inconnu [6]",e.getMessage());
         }
     }
@@ -740,7 +739,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-ConsequenceAction-PieceToken inconnu [5]",e.getMessage());
         }
     }
@@ -753,7 +752,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Piece-Joueur inconnu [6]",e.getMessage());
         }
     }
@@ -766,7 +765,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [6]",e.getMessage());
         }
     }
@@ -779,7 +778,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Piece-Joueur inconnu [7]",e.getMessage());
         }
     }
@@ -792,7 +791,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piecetoken-ConsequenceAction-Piece-Joueur inconnu [6]",e.getMessage());
         }
     }
@@ -805,7 +804,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [7]",e.getMessage());
         }
     }
@@ -818,7 +817,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Case-Piece-Joueur inconnu [7]",e.getMessage());
         }
     }
@@ -831,7 +830,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Case-Piece-Joueur inconnu [8]",e.getMessage());
         }
     }
@@ -844,7 +843,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-ConsequenceAction-Case-Piece-Joueur inconnu [7]",e.getMessage());
         }
     }
@@ -857,7 +856,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [6]",e.getMessage());
         }
     }
@@ -870,7 +869,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Case-PieceToken inconnu [6]",e.getMessage());
         }
     }
@@ -883,7 +882,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Case-PieceToken inconnu [7]",e.getMessage());
         }
     }
@@ -896,22 +895,8 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc PieceToken-ConsequenceAction-Case-PieceToken inconnu [6]",e.getMessage());
-        }
-    }
-
-    @Test
-    public final void testCase322_PasDetecte(){
-        List<String> reS = Arrays.asList("J1","test");
-        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.CONSEQUENCEACTION,Jeton.CASE,Jeton.PIECETOKEN);
-
-        automate.setEtatDeDepart(17);
-        try {
-            regle = automate.analyserUneRegle(reJ,reS);
-            fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Bloc Sujet-ConsequenceAction-PieceToken OU Sujet-ConsequenceAction-Piece-Joueur OU Sujet-ConsequenceAction-Case-PieceToken OU Sujet-ConsequenceAction-Case-Piece-Joueur inconnu [3]",e.getMessage());
         }
     }
 
@@ -920,7 +905,7 @@ public class Automate_SemantiqueMauvaisTest {
     //------------------------------------------------------------------------------------------------
 
     @Test
-    public final void testCase323_PasAssezArguments(){
+    public final void testCase323_PasDetecte(){
         List<String> reS = Arrays.asList("test");
         List<Jeton> reJ = Arrays.asList(Jeton.CASE);
         automate.setEtatDeDepart(20);
@@ -928,7 +913,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Pas assez d'argument pour Sujet-ConsequenceAction-Case(T,J) [0]",e.getMessage());
         }
     }
@@ -941,7 +926,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Joueur-ConsequenceAction-Case inconnu [5]",e.getMessage());
         }
     }
@@ -954,7 +939,7 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-ConsequenceAction-Case inconnu [5]",e.getMessage());
         }
     }
@@ -967,95 +952,23 @@ public class Automate_SemantiqueMauvaisTest {
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
+        }catch (MauvaiseDefinitionRegleException e){
             assertEquals("Bloc Piece-Joueur-ConsequenceAction-Case inconnu [6]",e.getMessage());
         }
     }
 
     @Test
-    public final void testCase323_15182023_PasDetectePiecetoken_Case() {
-        List<String> reS = Arrays.asList("P2", "estpromu", "alors", "P1#J1", "test", "C1");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE, Jeton.ETAT, Jeton.ALORS, Jeton.PIECETOKEN, Jeton.CONSEQUENCEACTION, Jeton.CASE);
-
-        try {
-            regle = automate.analyserUneRegle(reJ, reS);
-            fail("Aucune Exception détectée");
-        } catch (MauvaiseSemantiqueRegleException e) {
-            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]", e.getMessage());
-
-        }
-    }
-
-    @Test
-    public final void testCase323_PasDetecte(){
-        List<String> reS = Arrays.asList("J1","test");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION,Jeton.CASE);
-
-        automate.setEtatDeDepart(17);
-        try {
-            regle = automate.analyserUneRegle(reJ,reS);
-            fail("Aucune Exception détectée");
-        }catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Bloc Sujet-ConsequenceAction-Case inconnu [3]",e.getMessage());
-        }
-    }
-
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------------------Tests Autres------------------------------------------
-    //----------------------------------------------------------------------------------------------
-    @Test
-    public final void testCase_EstPasTerminal(){
-        List<String> reS = Arrays.asList("P1","estpromu","alors", "J1", "placer");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION);
+    public final void testCase323_15182023_PasDetectePiecetoken_Case(){
+        List<String> reS = Arrays.asList("P2","estpromu","alors","P1#J1","test","C1");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.PIECETOKEN,Jeton.CONSEQUENCEACTION,Jeton.CASE);
 
         try {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
-        } catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Bloc incomplet: ne fini pas par un jeton terminal [4]",e.getMessage());
+        }catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Bloc PieceToken-ConsequenceAction-Case inconnu [5]",e.getMessage());
         }
     }
-
-    @Test
-    public final void testCase_EstInconnu(){
-        List<String> reS = Arrays.asList("J1","estpromu");
-        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.ETAT);
-
-        try {
-            regle = automate.analyserUneRegle(reJ,reS);
-            fail("Aucune Exception détectée");
-        } catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Transition inconnu (etat == null) : etat à l'état: 1(1)",e.getMessage());
-        }
-    }
-
-    @Test
-    public final void testCase_DoubleAlors(){
-        List<String> reS = Arrays.asList("P1","estpromu", "alors", "J1", "gagner", "alors", "J2", "gagner");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE,Jeton.ALORS, Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE);
-
-        try {
-            regle = automate.analyserUneRegle(reJ,reS);
-            fail("Aucune Exception détectée");
-        } catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Double alors [5]",e.getMessage());
-        }
-    }
-
-    @Test
-    public final void testCase_DoubleConditionSansAlors(){
-        List<String> reS = Arrays.asList("P1","estpromu","et","P2#J1","estpromu");
-        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ET,Jeton.PIECETOKEN,Jeton.ETAT);
-
-        try {
-            regle = automate.analyserUneRegle(reJ,reS);
-            fail("Aucune Exception détectée");
-        } catch (MauvaiseSemantiqueRegleException e){
-            assertEquals("Il faut définir au moins une condition pour créer une règle",e.getMessage());
-        }
-    }
-
 
 
 

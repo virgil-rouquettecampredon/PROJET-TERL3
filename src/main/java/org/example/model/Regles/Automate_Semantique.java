@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Automate_Semantique extends Automate{
+public class Automate_Semantique extends Automate<Jeton>{
 
     public Automate_Semantique(){
         super(26,0);

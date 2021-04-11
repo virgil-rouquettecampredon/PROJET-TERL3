@@ -1,8 +1,12 @@
 package org.example.model.Regles;
 
 public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvaluable{
+    /**Méthode permettant de modéliser un arbre d'évaluation de formule de logique.**/
+
+    //Noeud racine de l'arbre
     private Noeud<A> racine;
 
+    /**Méthode permettant d'évaluer une formule logique mise sous forme d'un arbre.**/
     @Override
     public boolean evaluer() throws ArbreException{
         try {
@@ -16,7 +20,7 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
         this.racine = racine;
     }
 
-
+    /**Getter et Setter**/
     public Noeud<A> getRacine() {
         return racine;
     }
@@ -25,10 +29,18 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
         this.racine = racine;
     }
 
+    /**Méthode abstraite à implémanter renseignant la manière dont l'arbre va être construit.
+     * C'est cette méthode qui va définir les règles de construction de l'arbre à partir d'une formule logique.
+     * Va construire l'arbre par embriquement de Noeuds, ou lever une Exception sinon.**/
     public abstract void construire() throws ArbreException;
 
+    // ===== Modélisation d'un Noeud de l'arbre
     public static abstract class Noeud<A> implements EstEvaluable{
+        //Elément du Noeud à évaluer
         private A elem;
+
+        //Pointeurs vers la suite de l'arbre
+        //(Deux maximums car connecteurs de logique binaire {ET,OU,=>,<=>} ou unaire {NON})
         private Noeud<A> filsG;
         private Noeud<A> filsD;
 
@@ -38,6 +50,7 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
             filsD = null;
         }
 
+        /**Getter et Setter**/
         public Noeud<A> getFilsD() { return filsD; }
         public Noeud<A> getFilsG() { return filsG; }
         public void setFilsG(Noeud<A> filsG) { this.filsG = filsG; }

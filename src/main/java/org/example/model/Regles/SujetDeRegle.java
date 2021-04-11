@@ -1,3 +1,3 @@
 package org.example.model.Regles;
 
-public interface SujetDeRegle {}
+public interface SujetDeRegle extends ObjetsDeRegle {}

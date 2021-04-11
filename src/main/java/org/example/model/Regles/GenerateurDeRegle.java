@@ -7,27 +7,108 @@ import org.example.model.Piece;
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class GenerateurDeRegle {
+public abstract class GenerateurDeRegle<A extends EstToken> {
 
-    //Tableau des règles données sous forme de chaine de caractère
-    //à la construction du GenerateurDeRegle
-    private List<String>[] reglesSousFormeDeChaine;
+    //Liste des règles données sous forme de chaine de caractère (liste de mots) à la construction du GenerateurDeRegle
+    private List<List<String>> reglesSousFormeDeChaine;
+
+    //Liste d'objets Tokken utile pour l'analyse syntaxique
+    protected List<A> objetsSyntaxiques;
     //Automate utilisé pour l'analyse semantique
-    private Automate automate_semantique;
-
+    protected Automate<A> automate;
 
     //Listes de Regle
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
 
+    public GenerateurDeRegle(List<A> objetsSemantiques,Automate<A> automate){
+        this.automate = automate;
+        this.objetsSyntaxiques = objetsSemantiques;
+
+        this.regleAvantCoup = new ArrayList<>();
+        this.regleApresCoup = new ArrayList<>();
+        reglesSousFormeDeChaine = new ArrayList<>();
+    }
+
+    public List<Regle> getRegleAvantCoup() {
+        return regleAvantCoup;
+    }
+
+    public List<Regle> getRegleApresCoup() {
+        return regleApresCoup;
+    }
+
+    /**Méthode permettant d'ajouter une règle avant coup.
+    * @param r: Regle à ajouter.**/
+   public void ajouterRegleAvantCoup(Regle r){
+       this.regleAvantCoup.add(r);
+   }
+
+    /**Méthode permettant d'ajouter une règle après coup.
+     * @param r: Regle à ajouter.**/
+    public void ajouterRegleApresCoup(Regle r){
+        this.regleApresCoup.add(r);
+    }
+
+    /**Méthode permettant de renseigner des règles (sous forme de suite de mot) à faire
+     * analyser par le GenerateurDeRegle
+     * @param regles : Attribut variable de règles sous forme de liste de mots.**/
+    public void addRegleSousFormeDeChaine(List<String>... regles){
+        this.reglesSousFormeDeChaine.addAll(Arrays.asList(regles));
+    }
+
+    /**Méthode permettant de récupérer le nombre de règles sous forme de liste de mots à anlyser.**/
+    public int getNBReglesAEvaluer(){
+        return this.reglesSousFormeDeChaine.size();
+    }
+
+    /**Méthode permettant de récupérer une règle à l'indice passé en paramètre
+     * @param indice : indice de l'élément de objetsSyntaxiques à retourner.
+     * @return La règle sous forme de liste de mots à l'indice indice si elle existe, null sinon **/
+    public List<String> getRegle(int indice){
+        try {
+            return reglesSousFormeDeChaine.get(indice);
+        }catch(IndexOutOfBoundsException  e){
+            return null;
+        }
+    }
+
+    /**Méthode permettant de récupérer un Token de objetsSyntaxiques, s'il existe
+     * @param token: Token de objetsSyntaxiques à récupérer.
+     * @return : Un Token de objetsSyntaxiques égal à token s'il existe, null sinon.**/
+    public A getToken(A token){
+        for (A t: objetsSyntaxiques) {
+            if(t.equals(token)){
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**Méthode permettant de récupérer un Token de objetsSyntaxiques s'il reconnait la String s
+     * @param s: String à tester pour savoir si un élément de objetsSyntaxiques (Liste de Token) la reconnait.
+     * @return : Le premier Token de objetsSyntaxiques qui reconnait la chaine s, null sinon.**/
+    public A estReconnu(String s){
+        for (A t: objetsSyntaxiques) {
+            if(t.estReconnu(s)){
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**Méthode permettant de générer les règles qui seront ajoutées dans les deux listes de règles
+     * @param objetsDeRegle : Liste de liste d'objets pouvant se retrouver dans une règle**/
+    public abstract void genererRegles(List<List<ObjetsDeRegle>> objetsDeRegle) throws MauvaiseDefinitionRegleException;
+/*
     //Tableau des axiomes reconnaissables par notre système
     //Utile lors de l'analyse syntaxique dans un premier temps,
     //puis semantique ensuite
     private static final String[] axiomestab = {
-            "mange", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions*/
-            "=", "<", ">",                                                                                  /*comparaisons*/
-            "tous-piece", "tous-joueur", "tous-typecase",                                                   /*tokens nimporte*/
-            "victoire", "defaite", "pat", "prendre", "placer", "promouvoir", "deplacer",                      /*consequences*/
+            "mange", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",  /*conditions
+            "=", "<", ">",                                                                                  /*comparaisons
+            "tous-piece", "tous-joueur", "tous-typecase",                                                   /*tokens nimporte
+            "victoire", "defaite", "pat", "prendre", "placer", "promouvoir", "deplacer",                      /*consequences
             "as"
     };
 
@@ -38,8 +119,8 @@ public class GenerateurDeRegle {
      *                                [0] : ["0","PALL","sedeplace","C2","manger","PALL"]
      *                                [1] : ["1","JALL","timer","=","3","ET","PALL","estechec","victoire"]
      *                                [2] : ["0","PALL#J2#P", "ET","PALL#J2#P","estsur","C5","defaite"]
-     **/
-    public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine, Automate auto) {
+     *
+    public GenerateurDeRegle(List<String>[] reglesSousFormeDeChaine, Automate<Jeton> auto) {
         this.reglesSousFormeDeChaine = reglesSousFormeDeChaine;
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
@@ -51,7 +132,7 @@ public class GenerateurDeRegle {
     /**===================================================================================
      * ================================ ANALYSE SYNTAXIQUE ===============================
      * ===================================================================================
-     **/
+     *
     //Fonction renseignant si un axiome autre qu'un joueur, une case ou une piece fait partie des axiomes connues
     public static boolean estAxiome(String axiome){
         for (String s: axiomestab) {
@@ -98,7 +179,7 @@ public class GenerateurDeRegle {
      * @param nbTypePiece : int renseignant le nombre de type de pieces du jeu.
      * @param nbTypeDeCase : int renseignant le nombre de type de cases du jeu.
      * @param nbJoueur :  int renseignant le nombre de joueurs du jeu.
-     * */
+     *
     public static ArrayList<Jeton> estSyntaxiquementCorrecte(List<String> regle, int nbTypePiece, int nbTypeDeCase, int nbJoueur) throws MauvaiseDefinitionRegleException{
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
 
@@ -112,11 +193,11 @@ public class GenerateurDeRegle {
                     curRegle = curRegle.substring(1);
                 }
                 switch (curRegle.charAt(0)) {
-                    /*CAS PIECE*/
+                    /*CAS PIECE
                     case 'P' -> curJeton = estSyntaxiquementCorrecte_PieceToken(curRegle, nbJoueur,nbTypePiece);
-                    /*CAS JOUEUR*/
+                    /*CAS JOUEUR
                     case 'J' -> curJeton = estSyntaxiquementCorrecte_Joueur(curRegle,nbJoueur);
-                    /*CAS CASE*/
+                    /*CAS CASE
                     case 'C' -> curJeton = estSyntaxiquementCorrecte_Case(curRegle,nbTypeDeCase);
                     default -> {
                         if (estAxiome(curRegle) || estConnecteur(curRegle)) {
@@ -286,8 +367,8 @@ public class GenerateurDeRegle {
 
 
     /*Fonction qui va se charger de transformer une regle sous forme d'une chaine de caractere,
-     * en une instance de REGLE manipulable plus simplement par le système.*/
-    public void analyser (List<Piece> type_piece, List<Case> type_case, List<Joueur> joueurs) throws MauvaiseDefinitionRegleException {
+     * en une instance de REGLE manipulable plus simplement par le système.
+    public void analyser (List<List<SujetDeRegle>> sujetsDeRegle, List<List<CibleDeRegle>> ciblesDeRegle) throws MauvaiseDefinitionRegleException {
         int ind = 0;
 
         //Pour chaque règles du jeu définies
@@ -315,5 +396,5 @@ public class GenerateurDeRegle {
             }
             ind++;
         }
-    }
+    }*/
 }

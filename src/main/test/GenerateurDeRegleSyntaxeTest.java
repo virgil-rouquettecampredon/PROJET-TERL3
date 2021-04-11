@@ -1,22 +1,39 @@
-import org.example.model.Regles.Jeton;
-import org.example.model.Regles.GenerateurDeRegle;
-import org.example.model.Regles.MauvaiseDefinitionRegleException;
-import org.junit.Test;
+import org.example.model.Piece;
+import org.example.model.Regles.*;
+import org.junit.Assert;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
+
 public class GenerateurDeRegleSyntaxeTest {
 
+    private GenerateurDeRegle_Jeton generateur;
+    private Automate<Jeton> auto;
+
+    @BeforeEach
+    public void initialiser_Generateur(){
+        auto = new Automate_Semantique();
+        auto.initialiserAutomate();
+        generateur = new GenerateurDeRegle_Jeton(auto);
+        Jeton.PIECE.setBorne(20);
+        Jeton.CASE.setBorne(20);
+        Jeton.JOUEUR.setBorne(20);
+    }
     /**==================================================
      * ================TESTS BONS Joueur=================
      * ==================================================*/
     @Test
     public final void testBlocJoueurALL_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Joueur("JALL",0);
-            assertEquals(Jeton.JOUEUR, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("JALL"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.JOUEUR, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -24,8 +41,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocJoueurChiffre_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Joueur("J1",2);
-            assertEquals(Jeton.JOUEUR, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("J1"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.JOUEUR, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -37,8 +55,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocCaseALL_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Case("CALL",0);
-            assertEquals(Jeton.CASE, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("CALL"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.CASE,jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -46,8 +65,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocCaseChiffre_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Case("C2",3);
-            assertEquals(Jeton.CASE, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("C2"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.CASE, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -59,8 +79,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceALL_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Piece("PALL",0);
-            assertEquals(Jeton.PIECE, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECE, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -68,8 +89,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceChiffre_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_Piece("P0",4);
-            assertEquals(Jeton.PIECE, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P0"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECE, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -81,8 +103,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceToken_ALL_ALL_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_PieceToken("PALL#JALL",0,0);
-            assertEquals(Jeton.PIECETOKEN, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#JALL"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECETOKEN, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -90,8 +113,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceToken_Chiffre_ALL_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_PieceToken("P1#JALL",0,2);
-            assertEquals(Jeton.PIECETOKEN, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P1#JALL"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECETOKEN, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -99,8 +123,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceToken_ALL_Chiffre_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_PieceToken("PALL#J2",4,2);
-            assertEquals(Jeton.PIECETOKEN, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#J2"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECETOKEN, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -108,8 +133,9 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocPieceToken_Chiffre_Chiffre_testBon() {
         try{
-            Jeton jeton = GenerateurDeRegle.estSyntaxiquementCorrecte_PieceToken("P2#J1",3,3);
-            assertEquals(Jeton.PIECETOKEN, jeton);
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P2#J1"));
+            assertEquals(1,jetons.size());
+            assertEquals(Jeton.PIECETOKEN, jetons.get(0));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -121,7 +147,7 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testBlocAxiomes_testBon() {
         String[] tabAxiome = {
-            "prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",   /*conditions*/
+                "prend", "sedeplace", "estpromu", "estsur", "estechec", "nb_deplacement", "estplace", "timer",   /*conditions*/
                 "=", "<", ">",                                                                               /*comparaisons*/
                 "tous-piece", "tous-joueur", "tous-typecase",                                                /*tokens nimporte*/
                 "victoire", "defaite", "pat", "prendre", "placer", "promouvoir", "deplacer",                    /*consequences*/
@@ -129,17 +155,40 @@ public class GenerateurDeRegleSyntaxeTest {
         };
 
         Jeton[] tabJetonAxiome = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ACTION, Jeton.ACTION, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
-                Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.PIECE, Jeton.JOUEUR, Jeton.CASE,
-            Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION,
+                Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.TOUS, Jeton.TOUS, Jeton.TOUS,
+                Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION,
                 Jeton.ALIAS
         };
-        for (int i = 0; i < tabAxiome.length; i++) {
-            assertTrue(GenerateurDeRegle.estAxiome(tabAxiome[i]));
-            assertEquals(tabJetonAxiome[i],GenerateurDeRegle.getAxiome(tabAxiome[i]));
+
+        Jeton[] tabJetonAxiomeBis = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ACTION, Jeton.ACTION, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
+                Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.COMPARAISON, Jeton.PIECE, Jeton.JOUEUR, Jeton.CASE,
+                Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCETERMINALE, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION, Jeton.CONSEQUENCEACTION,
+                Jeton.ALIAS
+        };
+
+        int i = 0;
+        for (Jeton j : tabJetonAxiome) {
+            assertTrue(j.estReconnu(tabAxiome[i]));
+            i++;
         }
-        String fauxAxiome = "Un_Axiome_Faux";
-        assertFalse(GenerateurDeRegle.estAxiome(fauxAxiome));
-        assertEquals(Jeton.AUCUN,GenerateurDeRegle.getAxiome(fauxAxiome));
+
+        try {
+            List<Jeton> jetons = generateur.analyseSyntaxique(new ArrayList<String>(Arrays.asList(tabAxiome)));
+            int y = 0;
+            for (Jeton jet : tabJetonAxiomeBis) {
+                assertEquals(jet, jetons.get(y));
+                y++;
+            }
+        } catch (MauvaiseDefinitionRegleException e) {
+            fail("Exception Levée : " + e.getMessage());
+        }
+
+        try {
+            List<Jeton> jetonsBis = generateur.analyseSyntaxique(Arrays.asList("Un_Axiome_Faux"));
+            fail("Exception non détecté");
+        } catch (MauvaiseDefinitionRegleException e) {
+            assertEquals("Axiome inconnu au bloc de regle numero : [0]", e.getMessage());
+        }
     }
 
     /**==================================================
@@ -148,7 +197,6 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testScenario1_testBon() {
         ArrayList<String> regle = new ArrayList<>();
-        regle.add("0"); //filtré
         regle.add("P0#J0");
         regle.add("sedeplace");
         regle.add("tous-typecase");
@@ -166,7 +214,7 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.CONSEQUENCETERMINALE);
 
         try{
-            ArrayList<Jeton> jetons = GenerateurDeRegle.estSyntaxiquementCorrecte(regle,10,10,10);
+            List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(jetons.get(i), regleJeton.get(i));
             }
@@ -177,7 +225,6 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testScenario2_testBon() {
         ArrayList<String> regle = new ArrayList<>();
-        regle.add("1"); //filtré
         regle.add("tous-piece");
         regle.add("prend");
         regle.add("P0#J2");
@@ -200,13 +247,13 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.CONSEQUENCEACTION);
 
         try{
-            ArrayList<Jeton> jetons = GenerateurDeRegle.estSyntaxiquementCorrecte(regle,10,10,10);
+            List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(jetons.get(i), regleJeton.get(i));
             }
-            assertEquals("PALL",regle.get(1));
-            assertEquals("JALL",regle.get(5));
-            assertEquals("CALL",regle.get(7));
+            assertEquals("PALL",regle.get(0));
+            assertEquals("JALL",regle.get(4));
+            assertEquals("CALL",regle.get(6));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
@@ -214,7 +261,6 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testScenario3_testBon() {
         ArrayList<String> regle = new ArrayList<>();
-        regle.add("1"); //filtré
         regle.add("P0#J0");
         regle.add("sedeplace");
         regle.add("C2");
@@ -238,7 +284,7 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.CONSEQUENCETERMINALE);
 
         try{
-            ArrayList<Jeton> jetons = GenerateurDeRegle.estSyntaxiquementCorrecte(regle,10,10,10);
+            List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(regleJeton.get(i),jetons.get(i));
             }
@@ -249,7 +295,6 @@ public class GenerateurDeRegleSyntaxeTest {
     @Test
     public final void testScenario4_testBon() {
         ArrayList<String> regle = new ArrayList<>();
-        regle.add("1"); //filtré
         regle.add("P0#J0");
         regle.add("sedeplace");
         regle.add("C2");
@@ -278,14 +323,13 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.NOMBRE);
 
         try{
-            ArrayList<Jeton> jetons = GenerateurDeRegle.estSyntaxiquementCorrecte(regle,10,20,10);
+            List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(regleJeton.get(i),jetons.get(i));
             }
-            assertEquals("masupercase",regle.get(6));
+            assertEquals("masupercase",regle.get(5));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }
-
     }
 }
