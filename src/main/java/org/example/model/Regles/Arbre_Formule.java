@@ -6,18 +6,18 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
     //Noeud racine de l'arbre
     private Noeud<A> racine;
 
-    /**Méthode permettant d'évaluer une formule logique mise sous forme d'un arbre.**/
-    @Override
-    public boolean evaluer() throws ArbreException{
-        try {
-            return racine.evaluer();
-        }catch (EvaluableException e){
-            throw new ArbreException("Arbre_Formule error : " + e.getMessage());
-        }
-    }
+    //Chaine pour les warnings
+    protected String warning;
 
     public Arbre_Formule(Noeud<A> racine){
         this.racine = racine;
+        this.warning = "";
+    }
+
+    /**Méthode permettant d'évaluer une formule logique mise sous forme d'un arbre.**/
+    @Override
+    public boolean evaluer(){
+        return racine.evaluer();
     }
 
     /**Getter et Setter**/
@@ -56,5 +56,9 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
         public void setFilsG(Noeud<A> filsG) { this.filsG = filsG; }
         public void setFilsD(Noeud<A> filsD) { this.filsD = filsD; }
         public A getElem() { return elem;}
+    }
+
+    public String getWarning(){
+        return this.warning;
     }
 }

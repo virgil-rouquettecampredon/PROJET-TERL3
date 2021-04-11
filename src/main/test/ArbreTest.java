@@ -24,13 +24,13 @@ public class ArbreTest {
     public void initialiser_Automate() {
         condVrai = new Condition() {
             @Override
-            public boolean evaluer() throws EvaluableException {
+            public boolean evaluer(){
                 return true;
             }
         };
         condFaux = new Condition() {
             @Override
-            public boolean evaluer() throws EvaluableException {
+            public boolean evaluer(){
                 return false;
             }
         };
@@ -38,14 +38,44 @@ public class ArbreTest {
 
 
     /**==============================================
-     * ==============TESTS Mauvais===================
+     * ======== TESTS Mauvais CONSTRUCTION ==========
      * ==============================================*/
 
     @Test
-    public final void test_(){
+    public final void test_Construction_ManqueCond_Mauvais(){
         jetons = Arrays.asList(Jeton.CONDITION,Jeton.ET,Jeton.CONDITION);
-        conditions = Arrays.asList(condVrai,condVrai);
-
+        conditions = Arrays.asList(condVrai);
+        arbre = new Arbre_Condition(jetons,conditions);
+        try {
+            arbre.construire();
+            fail("Aucune Exception détectée");
+        }catch (ArbreException e){
+            assertEquals("Construction error : Erreur : Condition manquante à : 1 (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_Construction_Mauvais(){
+        jetons = Arrays.asList(Jeton.CONDITION,Jeton.ET,Jeton.CONDITION);
+        conditions = Arrays.asList(condVrai,condFaux,condVrai);
+        arbre = new Arbre_Condition(jetons,conditions);
+        try {
+            arbre.construire();
+            assertEquals("Vous n'avez pas utilisé l'ensemble des conditions définies à la construction de votre Arbre_Condition.", arbre.getWarning());
+        }catch (ArbreException e){
+            fail("Aucune Exception détectée");
+        }
     }
 
+    @Test
+    public final void test_Construction_ParentheseOuvrantePasFermante_Mauvais(){
+        jetons = Arrays.asList(Jeton.PARENTHESEOUVRANTE,Jeton.CONDITION,Jeton.ET,Jeton.CONDITION);
+        conditions = Arrays.asList(condVrai,condFaux);
+        arbre = new Arbre_Condition(jetons,conditions);
+        try {
+            arbre.construire();
+            fail("Aucune Exception détectée");
+        }catch (ArbreException e){
+            assertEquals("Construction error : Erreur : Impossible d'avancer : condition (4)",e.getMessage());
+        }
+    }
 }

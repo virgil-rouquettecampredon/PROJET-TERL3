@@ -253,4 +253,5 @@ public enum Jeton implements Serializable, EstToken {
         messageErreur = valeur + " non reconnu";
         return false;
     }
+
 }

@@ -24,6 +24,7 @@ public class Regle implements Serializable {
     public Regle(List<Consequence> consequences,List<Condition> conditions,List<Jeton> jetons) throws MauvaiseDefinitionRegleException{
         try {
             arbre_conditions = new Arbre_Condition(jetons,conditions);
+            arbre_conditions.construire();
             arbre_conditions.evaluer();
         }catch (ArbreException e){
             throw new MauvaiseDefinitionRegleException("Regle : Impossible de générer l'arbre de Condition : " + e.getMessage());
@@ -39,6 +40,7 @@ public class Regle implements Serializable {
     public void genererArbreCondition(List<Condition> conditions,List<Jeton> jetons) throws MauvaiseDefinitionRegleException{
         try{
             arbre_conditions = new Arbre_Condition(jetons,conditions);
+            arbre_conditions.construire();
             arbre_conditions.evaluer();
         }catch (ArbreException e){
             throw new MauvaiseDefinitionRegleException("Regle : Impossible de générer l'arbre de Condition : " + e.getMessage());
@@ -46,17 +48,12 @@ public class Regle implements Serializable {
     }
 
 
-    public void analyser() throws MauvaiseDefinitionRegleException{
-        try{
-            if(arbre_conditions.evaluer()){
-                for (Consequence cons:consequences) {
-                    cons.comportement();
-                }
+    public void analyser() {
+        if(arbre_conditions.evaluer()){
+            for (Consequence cons:consequences) {
+                cons.comportement();
             }
-        }catch (ArbreException e){
-            throw new MauvaiseDefinitionRegleException("Problème dans l'évaluation de la règle : " + e.getMessage());
         }
-
     }
 
     public void evaluer2(){
