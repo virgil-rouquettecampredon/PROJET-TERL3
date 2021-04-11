@@ -297,7 +297,7 @@ public class Automate_Semantique extends Automate<Jeton>{
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Joueur>());
+                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>("estpromu"));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
@@ -307,6 +307,7 @@ public class Automate_Semantique extends Automate<Jeton>{
                                         case "0236" -> {
                                             //Cas Piece+Joueur+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                conditionsDeLaRegle.add(new ConditionEtat<Joueur>("estpromu"));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {

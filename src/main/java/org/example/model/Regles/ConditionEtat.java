@@ -2,9 +2,11 @@ package org.example.model.Regles;
 
 public class ConditionEtat<A extends SujetDeRegle> extends Condition {
 
-    private Jeton etat;
+    private String etat;
 
-    //public Condition
+    public ConditionEtat(String etat) {
+        this.etat = etat;
+    }
 
     public boolean evaluer(){
         //A IMPLEMENTER
