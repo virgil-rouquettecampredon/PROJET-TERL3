@@ -2,6 +2,7 @@ package org.example.model.Regles;
 
 
 import org.example.model.Piece;
+import org.example.model.Joueur;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -296,7 +297,7 @@ public class Automate_Semantique extends Automate<Jeton>{
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                //conditionsDeLaRegle.add(new ConditionEtat<Joueur>());
+                                                conditionsDeLaRegle.add(new ConditionEtat<Joueur>());
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
