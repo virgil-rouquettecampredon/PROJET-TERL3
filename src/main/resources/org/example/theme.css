@@ -5,7 +5,8 @@
     -backButton-color : #723813;
     -specialButton-color : #8DC7EC;
 
-    -text-on-bg : white;
+    -text-on-bg : black;
+    -text-on-btn : white;
     -font-semibold : "Segoe UI Semibold";
     -font-light : "Segoe UI Light";
 }
@@ -31,7 +32,7 @@
 .label-bright {
     -fx-font-size: 11pt;
     -fx-font-family: -font-semibold;
-    -fx-text-fill: -text-on-bg;
+    -fx-text-fill: -text-on-btn;
     -fx-font-weight: bold;
     -fx-opacity: 1;
 }
@@ -39,7 +40,7 @@
 .label-header {
     -fx-font-size: 40pt;
     -fx-font-family: -font-semibold;
-    -fx-text-fill: -text-on-bg;
+    -fx-text-fill: -text-on-btn;
     -fx-opacity: 1;
 }
 
@@ -51,7 +52,7 @@
 .label-input {
     -fx-font-size: 30pt;
     -fx-font-family: -font-light;
-    -fx-text-fill: -text-on-bg;
+    -fx-text-fill: -text-on-btn;
 }
 
 .table-view {
@@ -134,25 +135,25 @@
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: -bg-color;
+    -fx-border-radius: 10px;
+    -fx-background-color: -btn-color;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 11pt;
-    -fx-text-fill: -text-on-bg;
+    -fx-font-size: 18pt;
+    -fx-text-fill: -text-on-btn;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:hover {
-    -fx-background-color: derive(-bg-color, 20%);
+    -fx-background-color: derive(-btn-color, 20%);
 }
 
 .button:pressed, .button:default:hover:pressed {
-  -fx-background-color: derive(-bg-color, 50%);
-  -fx-text-fill: -bg-color;
+  -fx-background-color: derive(-btn-color, 50%);
 }
 
 .button:focused {
     -fx-border-color: white, white;
-    -fx-border-width: 1, 1;
+    -fx-border-width: 5;
     -fx-border-style: solid, segments(1, 1);
     -fx-border-radius: 0, 0;
     -fx-border-insets: 1 1 1 1, 0;
@@ -166,7 +167,7 @@
 
 .button:default {
     -fx-background-color: -fx-focus-color;
-    -fx-text-fill: -text-on-bg;
+    -fx-text-fill: -text-on-btn;
 }
 
 .button:default:hover {
@@ -205,4 +206,6 @@
 
 .buttonLight {
     -fx-padding: 0;
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
 }

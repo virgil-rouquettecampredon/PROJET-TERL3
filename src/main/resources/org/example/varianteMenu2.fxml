@@ -27,7 +27,7 @@
                         <Font name="Candara" size="36.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#initPosButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="MODIFIER POSITIONS INITIALES">
+                  <Button mnemonicParsing="false" onAction="#initPosButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="MODIFIER POSITIONS INITIALES" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Candara" size="36.0" />
                      </font>

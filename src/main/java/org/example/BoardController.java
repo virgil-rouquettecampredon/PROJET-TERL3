@@ -26,6 +26,8 @@ public class BoardController extends Controller {
 
     @Override
     public void initialise() {
+        getApp().varianteManager.getCurrent().getListGroupCases().clear();
+
         xInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getWitdhX());
         yInput.setText(""+getApp().varianteManager.getCurrent().getPlateau().getHeightY());
 

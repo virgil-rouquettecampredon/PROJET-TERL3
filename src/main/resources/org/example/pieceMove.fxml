@@ -70,7 +70,7 @@
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
                      <children>
                         <Label alignment="CENTER" styleClass="label-input" text="Apparence" />
-                        <Button mnemonicParsing="false" onAction="#openImageButton" onMouseEntered="#buttonHover" text="📂">
+                        <Button styleClass="background" mnemonicParsing="false" onAction="#openImageButton" onMouseEntered="#buttonHover" text="📂">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>
@@ -87,12 +87,12 @@
                   <VBox alignment="CENTER_RIGHT" maxWidth="100.0" prefHeight="264.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <children>
                         <Label alignment="CENTER" styleClass="label-input" text="Outil" />
-                        <Button fx:id="boxButton" disable="true" mnemonicParsing="false" onAction="#selectBoxTool" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="100.0" text="CASE">
+                        <Button fx:id="boxButton" styleClass="buttonLight" disable="true" mnemonicParsing="false" onAction="#selectBoxTool" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="100.0" text="CASE">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>
                         </Button>
-                        <Button fx:id="arrowButton" mnemonicParsing="false" onAction="#selectArowTool" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="100.0" text="FLECHE">
+                        <Button fx:id="arrowButton" styleClass="buttonLight" mnemonicParsing="false" onAction="#selectArowTool" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="100.0" text="FLECHE">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>

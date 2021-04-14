@@ -47,6 +47,6 @@ public class VarianteMenu2Controller extends Controller {
     @FXML
     private void endButton() throws IOException {
         getApp().soundManager.playSound("button-confirm");
-        getApp().setRoot("varianteMenu2");
+        getApp().setRoot("varianteMenu3");
     }
 }

@@ -39,11 +39,11 @@ public class GroupCaseController extends Controller {
     private ObservableList<GroupeRow> groupes;
     private int posX, posY;
     private ModeCase modeCase;
+    private Plateau plateau;
 
     @Override
     public void initialise() {
-        posX = 0;
-        posY = 0;
+
         modeCase = ModeCase.ABSOLU;
 
         nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -72,12 +72,18 @@ public class GroupCaseController extends Controller {
             groupes.add(new GroupeRow(gc));
         }
 
-        canvasManager = new CanvasManager(canvas, getApp().varianteManager.getCurrent().getPlateau());
+
+        plateau = getApp().varianteManager.getCurrent().getPlateau();
+        posX = plateau.getWitdhX()/2;
+        posY = plateau.getHeightY()/2;
+
+        canvasManager = new CanvasManager(canvas, plateau);
+
         updateCanvas();
     }
 
     private void addGroup() {
-        groupes.add(new GroupeRow(new GroupCases("Groupe"+groupes.size())));
+        groupes.add(new GroupeRow(new GroupCases("Groupe"+groupes.size(), plateau)));
 
         updateCanvas();
     }

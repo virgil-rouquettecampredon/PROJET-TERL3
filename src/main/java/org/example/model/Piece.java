@@ -20,18 +20,34 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     private ArrayList<VecteurDeDeplacement> vecDeplacements;
     private Boolean[] comportementPiece;
 
-    public Piece(String name, String sprite, Joueur joueur) {
+    private Boolean[] etatPiece;
+    private Piece pieceMange = null;
+    private Piece pieceMenace = null;
+    private Case caseDeplace = null;
+
+    public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements) {
         this.name = name;
         this.sprite = sprite;
-        this.nbMovement = 0;
-        this.nbLife = -1;
+        this.nbMovement = nbMovement;
+        this.nbLife = nbLife;
         this.joueur = joueur;
         this.posDeplacements = new ArrayList<>();
+        this.posDeplacements.addAll(posDeplacements);
         this.vecDeplacements = new ArrayList<>();
+        this.vecDeplacements.addAll(vecDeplacements);
+
         this.comportementPiece = new Boolean[3];
         for (int i = 0; i < 3; i++){
-            comportementPiece[i] = false;
+            this.comportementPiece[i] = false;
         }
+        this.etatPiece = new Boolean[42];
+        for (int i = 0; i < 42; i++) {
+            this.etatPiece[i] = false;
+        }
+    }
+
+    public Piece(String name, String sprite, Joueur joueur) {
+        this(name, sprite, 0, -1, joueur, new ArrayList<>(), new ArrayList<>());
     }
 
     public Piece(String name, String sprite) {
@@ -39,16 +55,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     }
 
     public Piece(Piece piece) {
-        name = piece.name;
-        sprite = piece.sprite;
-        nbMovement = piece.nbMovement;
-        nbLife = piece.nbLife;
-        joueur = piece.joueur;
-
-        posDeplacements = new ArrayList<>();
-        posDeplacements.addAll(piece.posDeplacements);
-        vecDeplacements = new ArrayList<>();
-        vecDeplacements.addAll(piece.vecDeplacements);
+        this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements);
 
         comportementPiece = new Boolean[3];
         for (int i = 0; i < 3; i++) {
@@ -96,6 +103,24 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         comportementPiece[2] = comportement;
     }
 
+
+    public void setAEtePromu(boolean etat) {
+        etatPiece[0] = etat;
+    }
+
+    public void setPieceMange(Piece p) {
+        pieceMange = p;
+    }
+
+    public void setPieceMenace(Piece p) {
+        pieceMenace = p;
+    }
+
+    public void setCaseDeplace(Case c) {
+        caseDeplace = c;
+    }
+
+
     public String getName() {
         return name;
     }
@@ -115,6 +140,24 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     public Joueur getJoueur() {
         return joueur;
     }
+
+
+    public boolean aEtePromu() {
+        return etatPiece[0];
+    }
+
+    public Piece getPieceMange() {
+        return pieceMange;
+    }
+
+    public Piece getPieceMenace() {
+        return pieceMenace;
+    }
+
+    public Case getCaseDeplace() {
+        return caseDeplace;
+    }
+
 
     public ArrayList<PositionDeDeplacement> getPosDeplacements() {
         return posDeplacements;

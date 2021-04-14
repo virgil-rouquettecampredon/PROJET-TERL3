@@ -171,10 +171,12 @@ public class CanvasManager {
         for (Case c : group.getCasesAbsolue()) {
             Position p = c.getPosition();
             if ((p.getX()+p.getY())%2==0) {
-                context.setFill(darkColorFromString(group.getName()));
+                //context.setFill(darkColorFromString(group.getName()));
+                context.setFill(Color.DARKGREEN);
             }
             else {
-                context.setFill(lightColorFromString(group.getName()));
+                //context.setFill(lightColorFromString(group.getName()));
+                context.setFill(Color.LIGHTGREEN);
             }
             context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
         }
@@ -182,10 +184,12 @@ public class CanvasManager {
         for (Position relP : group.getPositionsRelatives()) {
             Position p = new Position(relP.getX() + posX, relP.getY() + posY);
             if ((p.getX()+p.getY())%2==0) {
-                context.setFill(darkColorFromString(group.getName()+"a"));
+                //context.setFill(darkColorFromString(group.getName()+"a"));
+                context.setFill(Color.MEDIUMBLUE);
             }
             else {
-                context.setFill(lightColorFromString(group.getName()+"a"));
+                //context.setFill(lightColorFromString(group.getName()+"a"));
+                context.setFill(Color.color(68/255.0, 167/255.0, 242/255.0));
             }
             context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
         }
@@ -211,14 +215,14 @@ public class CanvasManager {
 
     private Color lightColorFromString(String s) {
         Random rand = new Random(s.hashCode());
-        double r = rand.nextDouble();
-        double g = rand.nextDouble();
-        double b = rand.nextDouble();
+        double r = rand.nextDouble()/2+.5;
+        double g = rand.nextDouble()/2+.5;
+        double b = rand.nextDouble()/2+.5;
 
         while (lightBoardColor.getRed() - r < .1 && lightBoardColor.getGreen() - g < .1 && lightBoardColor.getBlue() - b < .1) {
-            r = rand.nextDouble();
-            g = rand.nextDouble();
-            b = rand.nextDouble();
+            r = rand.nextDouble()/2+.5;
+            g = rand.nextDouble()/2+.5;
+            b = rand.nextDouble()/2+.5;
         }
 
         return Color.color(r, g, b);
