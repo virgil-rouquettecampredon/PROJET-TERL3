@@ -22,6 +22,14 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
                 }
             return this.getElem().evaluer();
         }
+
+        @Override
+        public String toString() {
+            if(estFeuille()){
+                return (getElem().evaluer())? "T": "F";
+            }
+            return  jeton + "<" + getFilsG().toString() + "," + getFilsD().toString() + ">";
+        }
     }
 
     private List<Jeton> jetons;

@@ -147,6 +147,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("ET<T,T>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -159,6 +160,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertFalse(arbre.evaluer());
+            assertEquals("ET<T,F>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -171,6 +173,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertFalse(arbre.evaluer());
+            assertEquals("ET<F,T>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -183,6 +186,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertFalse(arbre.evaluer());
+            assertEquals("ET<F,F>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -195,6 +199,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("OU<T,T>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -207,6 +212,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("OU<T,F>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -219,6 +225,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("OU<F,T>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -231,6 +238,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertFalse(arbre.evaluer());
+            assertEquals("OU<F,F>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -243,6 +251,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("OU<T,ET<T,F>>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -255,6 +264,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertFalse(arbre.evaluer());
+            assertEquals("ET<OU<T,T>,F>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -267,6 +277,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("ET<OU<F,T>,OU<T,F>>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }
@@ -279,6 +290,7 @@ public class ArbreTest {
         try {
             arbre.construire();
             assertTrue(arbre.evaluer());
+            assertEquals("OU<T,ET<ET<T,OU<T,ET<T,F>>>,F>>",arbre.toString());
         }catch (ArbreException e){
             fail("Exception détectée : " + e.getMessage());
         }

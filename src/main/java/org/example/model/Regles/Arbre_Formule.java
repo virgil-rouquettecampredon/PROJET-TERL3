@@ -56,9 +56,23 @@ public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvalua
         public void setFilsG(Noeud<A> filsG) { this.filsG = filsG; }
         public void setFilsD(Noeud<A> filsD) { this.filsD = filsD; }
         public A getElem() { return elem;}
+
+        public boolean estFeuille(){
+            return this.filsD == null && this.filsG == null;
+        }
+
+        @Override
+        public String toString() {
+            return "<" + elem + "," + filsG + "," + filsD + ">";
+        }
     }
 
     public String getWarning(){
         return this.warning;
+    }
+
+    @Override
+    public String toString() {
+        return racine.toString();
     }
 }
