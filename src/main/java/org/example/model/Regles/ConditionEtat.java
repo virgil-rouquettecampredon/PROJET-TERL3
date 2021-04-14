@@ -1,15 +1,20 @@
 package org.example.model.Regles;
 
+import java.util.List;
+import java.util.function.Function;
+
 public class ConditionEtat<A extends SujetDeRegle> extends Condition {
 
-    private String etat;
+    private Function<List<A>,Boolean> comportement;
+    //private List<A> listSujet;
+    private Sujet<A> sujet;
 
-    public ConditionEtat(String etat) {
-        this.etat = etat;
+    public ConditionEtat(Sujet sujet,Function<List<A>,Boolean> comportement){
+        this.sujet = sujet;
+        this.comportement = comportement;
     }
 
     public boolean evaluer(){
-        //A IMPLEMENTER
-        return false;
+        return comportement.apply(this.sujet.recupererTout());
     }
 }

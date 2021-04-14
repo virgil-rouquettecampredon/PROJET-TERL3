@@ -152,6 +152,10 @@ public enum Jeton implements Serializable, EstToken {
             return false;
         }
     },
+
+    //@TODO : Rajouter cas case relative
+
+
     PIECETOKEN("piece token") {
         @Override
         public boolean estReconnu(String piece) {
@@ -241,6 +245,10 @@ public enum Jeton implements Serializable, EstToken {
 
     public String getValeur() {
         return valeur;
+    }
+
+    public List<String> getElementsReconnaissables() {
+        return elementsReconnaissables;
     }
 
     @Override

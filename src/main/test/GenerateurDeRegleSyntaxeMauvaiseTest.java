@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class GenerateurDeRegleSyntaxeMauvaiseTest {
 
     private GenerateurDeRegle_Jeton generateur;
-    private Automate<Jeton> auto;
+    private Automate_Regles<Jeton> auto;
 
     @BeforeEach
     public void initialiser_Generateur(){

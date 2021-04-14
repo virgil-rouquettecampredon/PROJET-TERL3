@@ -68,6 +68,31 @@ public class ArbreTest {
         jetons = Arrays.asList(Jeton.PARENTHESEOUVRANTE,Jeton.CONDITION,Jeton.ET,Jeton.CONDITION);
         conditions = Arrays.asList(condVrai,condFaux);
         arbre = new Arbre_Condition(jetons,conditions);
+
+        try {
+            arbre.construire();
+            fail("Aucune Exception détectée");
+        }catch (ArbreException e){
+            assertEquals("Construction error : Erreur : élément non reconnu : [attendu : PARENTHESEFERMANTE | recu : null] (4)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_Construction_ParentheseOuvrantePasFermante_MultiParenthese_Mauvais(){
+        jetons = Arrays.asList(Jeton.PARENTHESEOUVRANTE,Jeton.PARENTHESEOUVRANTE,Jeton.CONDITION,Jeton.ET,Jeton.CONDITION,Jeton.PARENTHESEFERMANTE,Jeton.ET,Jeton.CONDITION);
+        conditions = Arrays.asList(condVrai,condFaux,condVrai);
+        arbre = new Arbre_Condition(jetons,conditions);
+        try {
+            arbre.construire();
+            fail("Aucune Exception détectée");
+        }catch (ArbreException e){
+            assertEquals("Construction error : Erreur : élément non reconnu : [attendu : PARENTHESEFERMANTE | recu : null] (8)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_Construction_JetonNonReconnu_1_Mauvais(){
+        jetons = Arrays.asList(Jeton.CONDITION,Jeton.CONDITION,Jeton.OU);
+        conditions = Arrays.asList(condVrai,condFaux);
+        arbre = new Arbre_Condition(jetons,conditions);
         try {
             arbre.construire();
             fail("Aucune Exception détectée");

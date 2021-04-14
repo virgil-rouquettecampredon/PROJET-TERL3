@@ -15,13 +15,13 @@ public abstract class GenerateurDeRegle<A extends EstToken> {
     //Liste d'objets Tokken utile pour l'analyse syntaxique
     protected List<A> objetsSyntaxiques;
     //Automate utilisé pour l'analyse semantique
-    protected Automate<A> automate;
+    protected Automate_Regles<A> automate;
 
     //Listes de Regle
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
 
-    public GenerateurDeRegle(List<A> objetsSemantiques,Automate<A> automate){
+    public GenerateurDeRegle(List<A> objetsSemantiques, Automate_Regles<A> automate){
         this.automate = automate;
         this.objetsSyntaxiques = objetsSemantiques;
 
@@ -97,9 +97,8 @@ public abstract class GenerateurDeRegle<A extends EstToken> {
         return null;
     }
 
-    /**Méthode permettant de générer les règles qui seront ajoutées dans les deux listes de règles
-     * @param objetsDeRegle : Liste de liste d'objets pouvant se retrouver dans une règle**/
-    public abstract void genererRegles(List<List<ObjetsDeRegle>> objetsDeRegle) throws MauvaiseDefinitionRegleException;
+    /**Méthode permettant de générer les règles qui seront ajoutées dans les deux listes de r**/
+    public abstract void genererRegles() throws MauvaiseDefinitionRegleException;
 /*
     //Tableau des axiomes reconnaissables par notre système
     //Utile lors de l'analyse syntaxique dans un premier temps,

@@ -5,7 +5,11 @@ import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
 import org.example.model.Case;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class Fonctions_Comportements {
 

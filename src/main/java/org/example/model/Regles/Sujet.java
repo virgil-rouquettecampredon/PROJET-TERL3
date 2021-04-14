@@ -13,8 +13,6 @@ public abstract class Sujet<T extends SujetDeRegle> {
 
 
 
-
-
     /*private String tokenTypePiece;               //
     private ArrayList<Joueur> proprietaire;  //
 

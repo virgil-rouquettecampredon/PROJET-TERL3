@@ -17,6 +17,10 @@ public abstract class Automate<A extends EstToken>{
             this.etiquetteArete = etiquette;
             this.etatArrive = arrive;
         }
+
+        public A getEtiquetteArete() {
+            return etiquetteArete;
+        }
     }
 
     // ===== Modélisation d'un état de l'automate
@@ -70,6 +74,10 @@ public abstract class Automate<A extends EstToken>{
          * @return la code de retour de this.**/
         public int getCodeDeRetour(){
             return codeDeRetour;
+        }
+
+        public List<TransitionSortante> getTransitions() {
+            return transitions;
         }
     }
 

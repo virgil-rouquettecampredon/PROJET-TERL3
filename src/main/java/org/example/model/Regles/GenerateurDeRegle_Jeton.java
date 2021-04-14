@@ -7,10 +7,10 @@ import java.util.List;
 
 public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
 
-    public GenerateurDeRegle_Jeton(Automate<Jeton> auto, List<Jeton> jetons){
+    public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){
         super(jetons,auto);
     }
-    public GenerateurDeRegle_Jeton(Automate<Jeton> auto){
+    public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto){
         super(Arrays.asList(Jeton.values()),auto);
     }
 
@@ -141,7 +141,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
         return regleSousFormeJeton;
     }
 
-    public void genererRegles(List<List<ObjetsDeRegle>> objetsDeRegle) throws MauvaiseDefinitionRegleException{
+    public void genererRegles() throws MauvaiseDefinitionRegleException{
         List<Jeton> regleSousFormeDejetons;
         List<String> regleSousFormeDeChaine;
 
