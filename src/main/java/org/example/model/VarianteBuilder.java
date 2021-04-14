@@ -11,6 +11,7 @@ public class VarianteBuilder {
     private Plateau plateau;
     private ArrayList<Joueur> joueurs;
     private ArrayList<Regle> regles;
+    private ArrayList<GroupCases> listGroupCases;
 
     public VarianteBuilder() {
         name = "Default variante";
@@ -21,6 +22,7 @@ public class VarianteBuilder {
         joueurs.add(j1);
         joueurs.add(j2);
         regles = new ArrayList<>();
+        listGroupCases = new ArrayList<>();
     }
 
     public VarianteBuilder setName(String name) {
@@ -43,6 +45,11 @@ public class VarianteBuilder {
         return this;
     }
 
+    public VarianteBuilder setListGroupCases(ArrayList<GroupCases> listGroupCases) {
+        this.listGroupCases = listGroupCases;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
@@ -59,6 +66,10 @@ public class VarianteBuilder {
         return regles;
     }
 
+    public ArrayList<GroupCases> getListGroupCases() {
+        return listGroupCases;
+    }
+
     public ArrayList<Piece> getAllPawn() {
         ArrayList<Piece> lp = new ArrayList<>();
         for (Joueur j:
@@ -69,6 +80,6 @@ public class VarianteBuilder {
     }
 
     public Variante createVariante() {
-        return new Variante(name, plateau, joueurs, regles);
+        return new Variante(name, plateau, joueurs, regles, listGroupCases);
     }
 }

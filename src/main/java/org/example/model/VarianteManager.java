@@ -75,7 +75,7 @@ public class VarianteManager {
         plateau.getEchiquier().get(0).get(5).setPieceOnCase(nKingP2);
         j1.getPawnList().add(nKingP2);
 
-        Variante classique = new Variante("Classique", plateau, joueurs, regles);
+        Variante classique = new Variante("Classique", plateau, joueurs, regles, new ArrayList<>());
         return classique;
     }
 

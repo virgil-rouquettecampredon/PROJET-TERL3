@@ -10,12 +10,16 @@ import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CanvasManager {
     private Canvas canvas;
     private GraphicsContext context;
     private double rectSize;
     private Plateau plateau;
+
+    private Color lightBoardColor = Color.PINK;
+    private Color darkBoardColor = Color.PURPLE;
 
     public CanvasManager(Canvas canvas, Plateau plateau) {
         this.canvas = canvas;
@@ -39,7 +43,7 @@ public class CanvasManager {
 
         rectSize = canvas.getWidth()/nbSquareX;
 
-        context.setFill(Color.PURPLE);
+        context.setFill(darkBoardColor);
         context.fillRect(
                 0,
                 0,
@@ -47,15 +51,15 @@ public class CanvasManager {
                 canvas.getHeight());
 
 
-        context.setFill(Color.PINK);
+        context.setFill(lightBoardColor);
         for (int i = 0; i < nbSquareY; i++) {
             for (int j = 0; j < nbSquareX; j++) {
                 if (plateau.getEchiquier().get(i).get(j).isClickable()) {
                     if ((j+i)%2==0) {
-                        context.setFill(Color.PURPLE);
+                        context.setFill(darkBoardColor);
                     }
                     else {
-                        context.setFill(Color.PINK);
+                        context.setFill(lightBoardColor);
                     }
                 }
                 else {
@@ -161,6 +165,63 @@ public class CanvasManager {
             h = img.getHeight()/img.getWidth() * rectSize;
         }
         context.drawImage(img, cx-w/2, cy-h/2, w, h);
+    }
+
+    public void drawGroupCases(int posX, int posY, GroupCases group) {
+        for (Case c : group.getCasesAbsolue()) {
+            Position p = c.getPosition();
+            if ((p.getX()+p.getY())%2==0) {
+                context.setFill(darkColorFromString(group.getName()));
+            }
+            else {
+                context.setFill(lightColorFromString(group.getName()));
+            }
+            context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
+        }
+
+        for (Position relP : group.getPositionsRelatives()) {
+            Position p = new Position(relP.getX() + posX, relP.getY() + posY);
+            if ((p.getX()+p.getY())%2==0) {
+                context.setFill(darkColorFromString(group.getName()+"a"));
+            }
+            else {
+                context.setFill(lightColorFromString(group.getName()+"a"));
+            }
+            context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
+        }
+
+        context.setFill(Color.RED);
+        context.fillOval((posX * rectSize)+(rectSize/4), (posY * rectSize)+(rectSize/4), (rectSize/2), (rectSize/2));
+    }
+
+    private Color darkColorFromString(String s) {
+        Random rand = new Random(s.hashCode());
+        double r = rand.nextDouble()/2;
+        double g = rand.nextDouble()/2;
+        double b = rand.nextDouble()/2;
+
+        while (darkBoardColor.getRed() - r < .1 && darkBoardColor.getGreen() - g < .1 && darkBoardColor.getBlue() - b < .1) {
+            r = rand.nextDouble()/2;
+            g = rand.nextDouble()/2;
+            b = rand.nextDouble()/2;
+        }
+
+        return Color.color(r, g, b);
+    }
+
+    private Color lightColorFromString(String s) {
+        Random rand = new Random(s.hashCode());
+        double r = rand.nextDouble();
+        double g = rand.nextDouble();
+        double b = rand.nextDouble();
+
+        while (lightBoardColor.getRed() - r < .1 && lightBoardColor.getGreen() - g < .1 && lightBoardColor.getBlue() - b < .1) {
+            r = rand.nextDouble();
+            g = rand.nextDouble();
+            b = rand.nextDouble();
+        }
+
+        return Color.color(r, g, b);
     }
 
     public Case getCase(double mouseX, double mouseY) {

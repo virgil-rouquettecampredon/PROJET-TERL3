@@ -11,12 +11,14 @@ public class Variante implements Serializable {
     private Plateau plateau;
     private ArrayList<Joueur> joueurs;
     private ArrayList<Regle> regles;
+    private ArrayList<GroupCases> listGroupCases;
 
-    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles) {
+    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles, ArrayList<GroupCases> listGroupCases) {
         this.name = name;
         this.plateau = plateau;
         this.joueurs = joueurs;
         this.regles = regles;
+        this.listGroupCases = listGroupCases;
     }
 
     public Plateau getPlateau() {
@@ -49,6 +51,14 @@ public class Variante implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<GroupCases> getListGroupCases() {
+        return listGroupCases;
+    }
+
+    public void setListGroupCases(ArrayList<GroupCases> listGroupCases) {
+        this.listGroupCases = listGroupCases;
     }
 
     @Override
