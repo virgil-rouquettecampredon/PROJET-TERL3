@@ -3,12 +3,9 @@ package org.example.model.Regles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sujet<T extends SujetDeRegle> {
+public abstract class Sujet<T extends SujetDeRegle> {
 
-    public ArrayList<T> recupererTout(List<T> list) {
-        //A IMPLEMENTER
-        return null;
-    }
+    public ArrayList<T> recupererTout(/*List<T> list*/) {/*A IMPLEMENTER*/ return null; }
 }
 
 
