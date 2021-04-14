@@ -23,12 +23,6 @@ public class VarianteMenu2Controller extends Controller {
     }
 
     @FXML
-    private void rulesButton() throws IOException {
-        getApp().soundManager.playSound("button-click");
-        getApp().setRoot("rules");
-    }
-
-    @FXML
     public void groupCaseButton() throws IOException {
         getApp().soundManager.playSound("button-click");
         getApp().setRoot("groupCase");
@@ -38,7 +32,7 @@ public class VarianteMenu2Controller extends Controller {
     private void backButton() {
         getApp().soundManager.playSound("button-cancel");
         Optional<ButtonType> result =
-                showAlert(Alert.AlertType.CONFIRMATION, "Attention !\nSi vous revenez en arrière, les pièces posées, les pièces créé et les règles créées seront supprimés. \nÊtes vous sûr de revenir en arrière ?");
+                showAlert(Alert.AlertType.CONFIRMATION, "Attention !\nSi vous revenez en arrière, les pièces posées, les pièces créés seront supprimés. \nÊtes vous sûr de revenir en arrière ?");
         result.ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
@@ -53,6 +47,6 @@ public class VarianteMenu2Controller extends Controller {
     @FXML
     private void endButton() throws IOException {
         getApp().soundManager.playSound("button-confirm");
-        getApp().setRoot("save");
+        getApp().setRoot("varianteMenu2");
     }
 }

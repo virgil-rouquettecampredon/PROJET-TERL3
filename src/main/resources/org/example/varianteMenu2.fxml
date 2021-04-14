@@ -42,11 +42,6 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#rulesButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="MODIFIER REGLES">
-                     <font>
-                        <Font name="Candara" size="36.0" />
-                     </font>
-                  </Button>
                   <Button mnemonicParsing="false" onAction="#groupCaseButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="DEFINIR GROUPE DE CASE">
                      <font>
                         <Font name="Candara" size="36.0" />
