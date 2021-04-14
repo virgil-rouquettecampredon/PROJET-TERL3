@@ -9,6 +9,8 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     private String name;
@@ -58,15 +60,28 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements);
 
         comportementPiece = new Boolean[3];
-        for (int i = 0; i < 3; i++) {
-            comportementPiece[i] = piece.comportementPiece[i];
-        }
+        System.arraycopy(piece.comportementPiece, 0, comportementPiece, 0, 3);
     }
 
     public Position[] deplacementTheoriques(){
         // A completer
 
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Piece piece = (Piece) o;
+        return  name.equals(piece.name) && sprite.equals(piece.sprite) &&  posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements) && Arrays.equals(comportementPiece, piece.comportementPiece);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name, sprite, nbMovement, nbLife, joueur, posDeplacements, vecDeplacements);
+        result = 31 * result + Arrays.hashCode(comportementPiece);
+        return result;
     }
 
     /*DEBUT GETTER SETTER*/

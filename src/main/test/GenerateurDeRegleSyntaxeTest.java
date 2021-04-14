@@ -1,6 +1,4 @@
-import org.example.model.Piece;
 import org.example.model.Regles.*;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -18,7 +16,7 @@ public class GenerateurDeRegleSyntaxeTest {
 
     @BeforeEach
     public void initialiser_Generateur(){
-        auto = new Automate_Semantique();
+        auto = new Automate_Regles_Semantique();
         auto.initialiserAutomate();
         generateur = new GenerateurDeRegle_Jeton(auto);
         Jeton.PIECE.setBorne(20);

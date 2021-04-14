@@ -16,8 +16,40 @@ public class GroupCases implements Serializable {
         this.plateau = plateau;
     }
 
+    /*GETTER ET SETTER*/
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Case> getCasesAbsolue() {
+        return casesAbsolue;
+    }
+
+    public void setCasesAbsolue(ArrayList<Case> casesAbsolue) {
+        this.casesAbsolue = casesAbsolue;
+    }
+
+    public ArrayList<Position> getPositionsRelatives() {
+        return positionsRelatives;
+    }
+
+    public void setPositionsRelatives(ArrayList<Position> positionsRelatives) {
+        this.positionsRelatives = positionsRelatives;
+    }
+
+
+    /**Méthode qui retourne l'ensemble des cases du groupe
+     * @param posX : indice X de la position servant au calculs des cases en position relative.
+     * @param posY : indice Y de la position servant au calculs des cases en position relative.
+     * **/
+    public ArrayList<Case> getAllCases(int posX, int posY) {
+        ArrayList<Case> allCases = new ArrayList<>(casesAbsolue);
+        allCases.addAll(getCasesRelatives(posX, posY));
+        return allCases;
     }
 
     /**Méthode qui retourne l'ensemble des cases du groupe

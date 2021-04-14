@@ -1,11 +1,7 @@
-import org.example.model.Piece;
 import org.example.model.Regles.*;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +14,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
 
     @BeforeEach
     public void initialiser_Generateur(){
-        auto = new Automate_Semantique();
+        auto = new Automate_Regles_Semantique();
         auto.initialiserAutomate();
         generateur = new GenerateurDeRegle_Jeton(auto);
     }

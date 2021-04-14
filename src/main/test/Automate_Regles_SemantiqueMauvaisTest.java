@@ -1,24 +1,20 @@
-import org.example.model.Piece;
 import org.example.model.Regles.*;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class Automate_SemantiqueMauvaisTest {
+public class Automate_Regles_SemantiqueMauvaisTest {
 
-    private Automate_Semantique automate;
+    private Automate_Regles_Semantique automate;
     private Regle regle;
 
     @BeforeEach
     public void initialiser_Automate(){
-        automate = new Automate_Semantique();
+        automate = new Automate_Regles_Semantique();
         automate.initialiserAutomate();
     }
 

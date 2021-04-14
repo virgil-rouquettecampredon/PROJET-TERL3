@@ -1,10 +1,5 @@
 package org.example.model.Regles;
 
-import org.example.model.Case;
-import org.example.model.Joueur;
-import org.example.model.Piece;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 public abstract class GenerateurDeRegle<A extends EstToken> {

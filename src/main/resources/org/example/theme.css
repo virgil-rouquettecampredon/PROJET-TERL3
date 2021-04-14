@@ -1,8 +1,11 @@
+
+
 /*https://code.makery.ch/fr/library/javafx-tutorial/part4/*/
 * {
-    -bg-color : #1d1d1d;
+    -bg-color : #F9CB9C;
+    -btn-color : transparent;
     /*#F9CB9C*/
-    -backButton-color : #723813;
+    -backButton-color : #C27BA0;
     -specialButton-color : #8DC7EC;
 
     -text-on-bg : black;
@@ -19,6 +22,24 @@
     -fx-background-color: -bg-color;
 }
 
+.dialog-pane .button{
+    -fx-font-size: 10pt;
+    -fx-text-fill: white;
+    -fx-border-radius: 10px;
+    -fx-border-color: #9898e5;
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+}
+
+.dialog-pane .button:hover{
+    -fx-border-color: #656592;
+
+}
+
+.dialog-pane .button:pressed{
+    -fx-text-fill: #9898e5;
+    -fx-border-color: #9898e5;
+}
 .dialog-pane:header .header-panel {
     -fx-background-color: -bg-color;
 }
@@ -53,6 +74,12 @@
     -fx-font-size: 30pt;
     -fx-font-family: -font-light;
     -fx-text-fill: -text-on-btn;
+}
+
+.label-piece{
+    -fx-font-size: 13pt;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
 }
 
 .table-view {
@@ -133,7 +160,7 @@
 .button {
     -fx-padding: 5 22 5 22;
     -fx-border-color: #e2e2e2;
-    -fx-border-width: 2;
+    -fx-border-width: 5;
     -fx-background-radius: 0;
     -fx-border-radius: 10px;
     -fx-background-color: -btn-color;
@@ -156,6 +183,7 @@
     -fx-border-width: 5;
     -fx-border-style: solid, segments(1, 1);
     -fx-border-radius: 0, 0;
+    -fx-border-radius: 10px;
     -fx-border-insets: 1 1 1 1, 0;
 }
 
@@ -175,32 +203,33 @@
 }
 
 .backButton {
-    -fx-background-color: -backButton-color;
+    -fx-border-color: -backButton-color;
 }
 
 .backButton:hover {
-    -fx-background-color: derive(-backButton-color, 30%);
-    -fx-text-fill: -bg-color;
+    -fx-border-color: derive(-backButton-color, -30%);
+    -fx-text-fill: derive(-backButton-color, -30%);
+    -fx-font-weight: bold;
 }
 
 .backButton:pressed {
-  -fx-background-color: derive(-backButton-color, 50%);
-  -fx-text-fill: -bg-color;
-}
-
-.specialButton {
-    -fx-border-color: -bg-color;
-    -fx-background-color: -specialButton-color;
-    -fx-text-fill: black;
-}
-
-.specialButton:hover {
-    -fx-background-color: derive(-specialButton-color, -30%);
+    -fx-border-color: derive(-backButton-color, -30%);
     -fx-text-fill: white;
 }
 
+.specialButton {
+    -fx-border-color: -specialButton-color;
+    -fx-text-fill: white;
+}
+
+.specialButton:hover {
+    -fx-text-fill: derive(-specialButton-color, -30%);
+    -fx-font-weight: bold;
+    -fx-border-color: derive(-specialButton-color, -30%);
+}
+
 .specialButton:pressed {
-    -fx-background-color: derive(-specialButton-color, -50%);
+    -fx-border-color: derive(-specialButton-color, -50%);
     -fx-text-fill: white;
 }
 
@@ -209,3 +238,4 @@
     -fx-font-size: 14pt;
     -fx-font-weight: bold;
 }
+

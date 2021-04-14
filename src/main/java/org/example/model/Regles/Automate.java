@@ -199,12 +199,7 @@ public abstract class Automate<A extends EstToken>{
         this.etatDeDepart = etatDeDepart;
     }
 
+
     /** Méthode abstraite permettant l'initialisation de l'automate (à définir dans les sous-classes)**/
     public abstract void initialiserAutomate();
-
-    /** Méthode abstraite permettant l'analyse de l'automate
-     * @return une liste de BlocDeRegle représenatant la règle bien former sémantiquement sous d'objets manipulables par le système.
-     * @param regleString : Regle sous forme de liste de mots
-     * @param regleSyntaxe : Regle sous forme de Jeton, issue de l'analyse syntaxique.**/
-    public abstract Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException;
 }

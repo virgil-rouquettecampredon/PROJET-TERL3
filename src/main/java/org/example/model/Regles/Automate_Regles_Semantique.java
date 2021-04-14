@@ -1,21 +1,17 @@
 package org.example.model.Regles;
 
 
-import org.example.model.Piece;
-import org.example.model.Joueur;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Automate_Semantique extends Automate<Jeton>{
+public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
-    public Automate_Semantique(){
+    public Automate_Regles_Semantique(){
         super(26,0);
     }
 
-    public Automate_Semantique(List<String> nomEtat){
+    public Automate_Regles_Semantique(List<String> nomEtat){
         super(26,0, nomEtat);
     }
 
@@ -297,7 +293,8 @@ public class Automate_Semantique extends Automate<Jeton>{
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>("estpromu"));
+                                                //conditionsDeLaRegle.add(new ConditionEtat<Piece>(
+                                                //        new Sujet<Piece>(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
@@ -307,7 +304,7 @@ public class Automate_Semantique extends Automate<Jeton>{
                                         case "0236" -> {
                                             //Cas Piece+Joueur+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Joueur>("estpromu"));
+                                                //conditionsDeLaRegle.add(new ConditionEtat<Joueur>("estpromu"));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {

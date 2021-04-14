@@ -26,9 +26,9 @@
                 <Label  styleClass="label-header" text="Piece"/>
                 <TableView fx:id="tab" prefHeight="350.0" prefWidth="785.0">
                     <columns>
-                        <TableColumn fx:id="imgCol" prefWidth="195.0"/>
-                        <TableColumn fx:id="nomCol" minWidth="0.0" prefWidth="96.0"/>
-                        <TableColumn fx:id="joueurCol" prefWidth="421.0"/>
+                        <TableColumn fx:id="imgCol" prefWidth="195.0" />
+                        <TableColumn fx:id="nomCol" minWidth="0.0" prefWidth="96.0" styleClass="label-piece"/>
+                        <TableColumn fx:id="joueurCol" prefWidth="421.0" styleClass="label-piece"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
