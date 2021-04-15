@@ -1,4 +1,4 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Automate;
 
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.example.model.Piece;
 import org.example.model.Case;
 import org.example.model.Joueur;
-import org.example.model.Regles.IntegerRegle;
+import org.example.model.Regles.*;
 
 public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
@@ -213,7 +213,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
       "=", "<", ">",
       "tous-piece", "tous-joueur", "tous-typecase","victoire", "defaite", "pat", "manger", "placer", "promouvoir", "deplacer"*/
     @SuppressWarnings("Duplicates")
-    public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException{
+    public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException {
         int curEtat = this.getEtatDeDepart();
         //Regle à retourner après le traitement
         Regle regle = new Regle();

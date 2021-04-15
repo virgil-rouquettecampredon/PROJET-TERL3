@@ -1,8 +1,11 @@
 package org.example.model.Regles;
 
+import org.example.model.Regles.Structure.Arbre.ArbreException;
+import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
+import org.example.model.Regles.Structure.Arbre.Arbre_Formule;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Regle implements Serializable {

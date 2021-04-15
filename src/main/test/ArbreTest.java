@@ -1,11 +1,10 @@
-import org.example.model.Piece;
 import org.example.model.Regles.*;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
+import org.example.model.Regles.Structure.Arbre.ArbreException;
+import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
+import org.example.model.Regles.Structure.Arbre.Arbre_Formule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

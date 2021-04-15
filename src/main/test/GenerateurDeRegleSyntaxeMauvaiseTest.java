@@ -1,4 +1,6 @@
 import org.example.model.Regles.*;
+import org.example.model.Regles.Structure.Automate.Automate_Regles;
+import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,6 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Automate;
+
+import org.example.model.Regles.EstToken;
 
 import java.util.ArrayList;
 import java.util.Iterator;

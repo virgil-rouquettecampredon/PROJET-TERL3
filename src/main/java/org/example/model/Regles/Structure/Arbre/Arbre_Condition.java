@@ -1,8 +1,10 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Arbre;
+
+import org.example.model.Regles.*;
 
 import java.util.List;
 
-public class Arbre_Condition extends Arbre_Formule<Condition>{
+public class Arbre_Condition extends Arbre_Formule<Condition> {
 
     class Noeud_Condition extends Noeud<Condition> {
         private Jeton jeton;
@@ -60,7 +62,7 @@ public class Arbre_Condition extends Arbre_Formule<Condition>{
      * Cette construction particulière va permettre de conserver les priorités liées au parenthésage ainsi que la précédence des connecteurs logiques.**/
 
     //Méthode permettant d'avancer (si possible) dans la liste des Jetons
-    public void avancer() throws EvaluableException{
+    public void avancer() throws EvaluableException {
         try {
             indiceJeton++;
             curJeton = jetons.get(indiceJeton);

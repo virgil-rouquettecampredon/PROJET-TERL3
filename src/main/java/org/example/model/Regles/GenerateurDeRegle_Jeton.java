@@ -1,5 +1,7 @@
 package org.example.model.Regles;
 
+import org.example.model.Regles.Structure.Automate.Automate_Regles;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

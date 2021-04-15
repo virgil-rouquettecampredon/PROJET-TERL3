@@ -1,7 +1,11 @@
 
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Automate;
 
-import java.util.ArrayList;
+import org.example.model.Regles.EstToken;
+import org.example.model.Regles.Jeton;
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
+import org.example.model.Regles.Regle;
+
 import java.util.List;
 
 public abstract class Automate_Regles<A extends EstToken> extends Automate<A>{

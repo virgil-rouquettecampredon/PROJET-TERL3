@@ -1,29 +1,23 @@
 package org.example;
 
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import org.example.model.*;
 import org.example.model.Regles.ElementRegle;
 import org.example.model.Regles.Jeton_Interface;
-import org.example.model.Regles.Automate_Interface;
-import org.example.model.Regles.Automate_Interface_Condition;
-import org.example.model.Regles.Automate_Interface_Consequence;
+import org.example.model.Regles.Structure.Automate.Automate_Interface;
+import org.example.model.Regles.Structure.Automate.Automate_Interface_Condition;
+import org.example.model.Regles.Structure.Automate.Automate_Interface_Consequence;
 import org.example.model.Regles.Regle;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class EditRuleController extends Controller {
     @FXML

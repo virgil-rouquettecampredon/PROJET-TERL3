@@ -21,4 +21,16 @@ public class ElementRegle {
     }
 
     public Jeton_Interface getJetonAssocie(){ return this.jetonAssocie;}
+
+    public void setNomInterface(String nomInterface) {
+        this.nomInterface = nomInterface;
+    }
+
+    public void setNomRegle(String nomRegle) {
+        this.nomRegle = nomRegle;
+    }
+
+    public void setJetonAssocie(Jeton_Interface jetonAssocie) {
+        this.jetonAssocie = jetonAssocie;
+    }
 }
