@@ -32,8 +32,31 @@ public class Automate_Interface_ConsequenceTest {
     /*=================================================================
     * ========================= TESTS MAUVAIS =========================
     * =================================================================*/
-    @Test
-    public final void test(){
 
+
+    //TEST ETAT INITIAL
+    @Test
+    public final void test_selectionnerElement_Phase0_Mauvais(){
+        ElementRegle e = new ElementRegle(Jeton_Interface.ALORS,"test","test");
+        try {
+            auto.selectionnerElement(e);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Transition inconnue : 0 --ALORS-> ?",ex.getMessage());
+        }
+    }
+
+    //TEST JOUEUR
+    @Test
+    public final void test_selectionnerElement_Phase1_JOUEUR_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ALORS,"test","test");
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Transition inconnue : 1 --JOUEUR-> ?",ex.getMessage());
+        }
     }
 }

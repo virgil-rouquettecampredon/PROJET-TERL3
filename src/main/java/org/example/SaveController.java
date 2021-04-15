@@ -44,7 +44,7 @@ public class SaveController extends Controller {
     private void continueButton() throws IOException {
         getApp().soundManager.playSound("button-confirm");
         if (!valid) {
-            Optional<ButtonType> result = showAlert(Alert.AlertType.CONFIRMATION, "Attention! Vous n'avez pas sauvegarder! Quitter quand même?");
+            Optional<ButtonType> result = showAlert(Alert.AlertType.CONFIRMATION, "Attention! Vous n'avez pas sauvegarder! Quitter quand même ?");
             result.ifPresent(response -> {if (response == ButtonType.OK) {
                 try {
                     getApp().setRoot("home");

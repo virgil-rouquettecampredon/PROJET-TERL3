@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -525,8 +526,65 @@ public class Automate_Interface_ConditionTest {
             auto.selectionnerElement(e7);
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException ex){
-            assertEquals("",ex.getMessage());
+            assertEquals("Impossible de terminer les conséquences, il manque encore une parenthèse fermante",ex.getMessage());
         }
     }
 
+    @Test
+    public final void test_selectionnerElement_PARENTHESAGE_3_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PARENTHESE_OUVRANTE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.ESTMENACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.PARENTHESE_FERMANTE,"test","test");
+        ElementRegle e7 = new ElementRegle(Jeton_Interface.ALORS,"test","test");
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e7);
+            fail("Excepion non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer une parenthèse fermante ici",ex.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_selectionnerElement_PARENTHESAGE_4_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PARENTHESE_OUVRANTE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.ESTMENACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.PARENTHESE_FERMANTE,"test","test");
+        ElementRegle e7 = new ElementRegle(Jeton_Interface.ALORS,"test","test");
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e7);
+
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible de terminer les conséquences, il manque encore 2 parenthèses fermantes",ex.getMessage());
+        }
+    }
+
+
+
+    /*=================================================================
+     *========================== TESTS BONS ===========================
+     *=================================================================*/
 }

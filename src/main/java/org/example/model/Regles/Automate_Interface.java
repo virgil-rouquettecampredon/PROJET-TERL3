@@ -5,12 +5,20 @@ package org.example.model.Regles;
 import java.util.List;
 
 public abstract class Automate_Interface<A extends EstToken> extends Automate<A> {
+    protected int curEtat;
+
     public Automate_Interface(int nbEtat,int etatDeDepart){
         super(nbEtat,etatDeDepart);
+        curEtat = 0;
     }
 
     public Automate_Interface(int nbEtat,int etatDeDepart, List<String> valEtat){
         super(nbEtat,etatDeDepart,valEtat);
+        curEtat = 0;
+    }
+
+    public int getCurEtat(){
+        return curEtat;
     }
 
     /** Méthode abstraite permettant de générer les éléments sélectionnables depuis l'interface.

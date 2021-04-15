@@ -15,7 +15,6 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
     private List<GroupCases> cases;
     private List<Joueur> joueurs;
 
-    private int curEtat;
 
     public Automate_Interface_Consequence(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
         super(13, 0);
@@ -23,8 +22,6 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.pieces = pieces;
         this.cases = cases;
         this.joueurs = joueurs;
-
-        curEtat = 0;
     }
 
     public void initialiserAutomate() {
@@ -133,14 +130,28 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
     }
 
     public void selectionnerElement(ElementRegle elR) throws MauvaiseDefinitionRegleException{
-        if(elR.getJetonAssocie() == Jeton_Interface.ET){
-            curEtat = 0;
-        }else{
-            int etat = this.etatSuivant(curEtat, elR.getJetonAssocie());
-            if(etat == -1){
-                throw new MauvaiseDefinitionRegleException("Transition inconnue : " + curEtat + " --" + elR.getJetonAssocie() + "-> ?");
-            }
-            curEtat = etat;
+        int etat = this.etatSuivant(curEtat, elR.getJetonAssocie());
+        Etat e = this.recupererEtat(curEtat);
+        if(e == null){
+            throw new MauvaiseDefinitionRegleException("Etat courant inconnu : " + curEtat);
         }
+        if(e.estTerminal()){
+            if(elR.getJetonAssocie() == Jeton_Interface.ET) {
+                //Si on se trouve sur un état terminal et que l'on cherche à lire un ET ou un OU
+                //On a finit de traiter une condition, on retourne donc à l'état initial
+                curEtat = 0;
+                return;
+            }
+        }
+        //Si on est pas sur un etat terminal et que la transition que l'on veut lire n'existe pas (etatSuivant = -1), on lève une erreur
+        if(etat == -1){
+            throw new MauvaiseDefinitionRegleException("Transition inconnue : " + curEtat + " --" + elR.getJetonAssocie() + "-> ?");
+        }
+        curEtat = etat;
+    }
+
+
+    public void testInterface() throws MauvaiseDefinitionRegleException{
+        return;
     }
 }

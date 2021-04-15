@@ -35,7 +35,7 @@ public enum Jeton_Interface implements EstToken{
     //==== COMPTEUR ====
     COMPTEUR_DEPLACEMENT("nb_deplacement"),
     COMPTEUR_TEMPSRESTANT("timer"),
-    NOMBRE(),
+    NOMBRE(""),
     //@TODO compteur nbVie PIECE
 
     //Jetons CONSEQUENCE
@@ -48,7 +48,7 @@ public enum Jeton_Interface implements EstToken{
     ALIAS("as"),
     PARENTHESE_OUVRANTE("("),
     PARENTHESE_FERMANTE(")"),
-    FIN();
+    FIN("");
 
 
     private List<String> elementsReconnaissables;
