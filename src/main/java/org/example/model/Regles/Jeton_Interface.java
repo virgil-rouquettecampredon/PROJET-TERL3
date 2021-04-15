@@ -21,8 +21,6 @@ public enum Jeton_Interface implements EstToken{
     JOUEUR(),
     PIECETOKEN(),
 
-    //TOUS("tous-piece", "tous-joueur", "tous-typecase"),
-
     //Jetons CONDITION
     //==== ETAT ====
     PROMU("estpromu"),
@@ -37,6 +35,7 @@ public enum Jeton_Interface implements EstToken{
     //==== COMPTEUR ====
     COMPTEUR_DEPLACEMENT("nb_deplacement"),
     COMPTEUR_TEMPSRESTANT("timer"),
+    NOMBRE(),
     //@TODO compteur nbVie PIECE
 
     //Jetons CONSEQUENCE
@@ -48,7 +47,8 @@ public enum Jeton_Interface implements EstToken{
 
     ALIAS("as"),
     PARENTHESE_OUVRANTE("("),
-    PARENTHESE_FERMANTE(")");
+    PARENTHESE_FERMANTE(")"),
+    FIN();
 
 
     private List<String> elementsReconnaissables;
