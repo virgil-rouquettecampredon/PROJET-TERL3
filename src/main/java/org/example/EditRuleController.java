@@ -11,9 +11,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import org.example.model.*;
+import org.example.model.Regles.ElementRegle;
+import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.Automate_Interface;
+import org.example.model.Regles.Automate_Interface_Condition;
+import org.example.model.Regles.Automate_Interface_Consequence;
+import org.example.model.Regles.Regle;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 public class EditRuleController extends Controller {
     @FXML
@@ -23,49 +33,138 @@ public class EditRuleController extends Controller {
     @FXML
     public VBox consequenceVBox;
 
-    private ArrayList<ComboBox<String>> conditionBoxes;
-    private ArrayList<ComboBox<String>> consequenceBoxes;
+    private ArrayDeque<ControlElement> conditionBoxes;
+    private ArrayDeque<ControlElement> consequenceBoxes;
 
-    public ArrayList<HBox> conditionHBoxes;
-    public ArrayList<HBox> consequenceHBoxes;
+    private ArrayDeque<HBox> conditionHBoxes;
+    private ArrayDeque<HBox> consequenceHBoxes;
+
+
+    //Automtes pour l'aide à la création des règles
+    private Automate_Interface<Jeton_Interface> automateCondition;
+    private Automate_Interface<Jeton_Interface> automateConsequence;
+
+
+    @FXML
+    private void validateButton() throws IOException {
+        getApp().soundManager.playSound("button-click");
+        //TODO: valider
+        /*
+        Regle regle = new Regle();
+        for (ComboBox<String> condition : conditionBoxes) {
+            regle.addCondition(condition.getValue());
+        }
+        for (ComboBox<String> consequence : consequenceBoxes) {
+            regle.addConsequence(consequence.getValue());
+        }
+         */
+        getApp().setRoot("rules");
+    }
 
     @Override
     public void initialise() {
-        conditionBoxes = new ArrayList<>();
-        consequenceBoxes = new ArrayList<>();
+        //getApp().varianteManager.getCurrent().
+        VarianteBuilder current = getApp().varianteManager.getCurrent();
+        List<Piece> pieces = current.getAllPawn();
+        List<GroupCases> cases = current.getListGroupCases();
+        List<Joueur> joueurs = current.getJoueurs();
 
-        conditionHBoxes = new ArrayList<>();
+
+        automateCondition = new Automate_Interface_Condition(pieces,cases,joueurs);
+        automateConsequence = new Automate_Interface_Consequence(pieces,cases,joueurs);
+        automateCondition.initialiserAutomate();
+        automateConsequence.initialiserAutomate();
+
+
+        conditionBoxes = new ArrayDeque<>();
+        consequenceBoxes = new ArrayDeque<>();
+
+        conditionHBoxes = new ArrayDeque<>();
+        consequenceHBoxes = new ArrayDeque<>();
+
         HBox conditionHBox = generateNewHBox();
         conditionHBoxes.add(conditionHBox);
         conditionVBox.getChildren().add(conditionHBox);
 
-        consequenceHBoxes = new ArrayList<>();
         HBox consequenceHBox = generateNewHBox();
         consequenceHBoxes.add(consequenceHBox);
         consequenceVBox.getChildren().add(consequenceHBox);
 
-        appearNextCondition();
-        appearNextConsequence();
+        if (userVar != null) {
+            Regle regle = (Regle) userVar;
+            /*for (Machin m : regle.getCondition()) {
+                appearNext(generateNewConditionComboBox(m), conditionBoxes, conditionHBoxes, conditionVBox);
+            }
+            for (Machin m : regle.getConsequence()) {
+                appearNext(generateNewConsequenceComboBox(m), consequenceBoxes, consequenceHBoxes, consequenceVBox);
+            }
+
+             */
+        }
+        else {
+            appearNextCondition();
+            appearNextConsequence();
+        }
+
     }
 
-    private ComboBox<String> generateNewConditionComboBox() {
-        ComboBox<String> box = new ComboBox<>();
-        box.setPromptText("Sujet");
-        //TODO A changer
-        box.getItems().addAll("Joueur", "Piece", "PieceToken", "Et");
+    /*private ComboBox<String> generateNewConditionComboBox(Machin m) {
+        ComboBox<String> box = generateNewConditionComboBox();
+        box.setValue(m);
+    }*/
 
-        box.setOnAction(e -> conditionBoxAction(consequenceBoxes.size()));
-        return box;
+    private ControlElement generateNewConditionComboBox() {
+        boolean demandeEntier = false;//todo
+        int index = conditionBoxes.size();
+
+        ControlElement control;
+        if (demandeEntier) {
+            TextField field = new TextField();
+            field.setPromptText("Nombre");
+
+            field.setOnAction(e -> conditionInputAction(index));
+            control = new ControlElement(field);
+        }
+        else {
+            ComboBox<ComboBoxItem> box = new ComboBox<>();
+            box.setPromptText("Sujet");
+
+            //TODO A changer
+            //box.getItems().addAll("Joueur", "Piece", "PieceToken", "Et");
+
+            box.setOnAction(e -> conditionBoxAction(index));
+
+            control = new ControlElement(box);
+        }
+
+        return control;
     }
 
-    private ComboBox<String> generateNewConsequenceComboBox() {
-        ComboBox<String> box = new ComboBox<>();
-        box.setPromptText("Sujet");
-        //TODO A changer
-        box.getItems().addAll("Joueur", "Piece", "PieceToken", "Et");
+    private ControlElement generateNewConsequenceComboBox() {
+        boolean demandeEntier = false; //todo
+        int index = consequenceBoxes.size();
 
-        box.setOnAction(e -> consequenceBoxAction(consequenceBoxes.size()));
-        return box;
+        ControlElement control;
+        if (demandeEntier) {
+            TextField field = new TextField();
+            field.setPromptText("Nombre");
+
+            field.setOnAction(e -> consequenceInputAction(index));
+            control = new ControlElement(field);
+        }
+        else {
+            ComboBox<ComboBoxItem> box = new ComboBox<>();
+            box.setPromptText("Sujet");
+
+            //TODO A changer
+            //box.getItems().addAll("Joueur", "Piece", "PieceToken", "Et");
+
+            box.setOnAction(e -> consequenceBoxAction(index));
+
+            control = new ControlElement(box);
+        }
+
+        return control;
     }
 
     private HBox generateNewHBox() {
@@ -76,48 +175,47 @@ public class EditRuleController extends Controller {
         return hbox;
     }
 
-    @FXML
-    private void validateButton() throws IOException {
-        getApp().soundManager.playSound("button-click");
-        //TODO: valider
-        getApp().setRoot("rules");
+    private boolean lastBoxIsAndOr(ArrayDeque<ControlElement> list) {
+        ComboBox<ComboBoxItem> last = list.getLast().getComboBox();
+        if (last != null) {
+            last.getSelectionModel().getSelectedItem();
+            return last.equals("Et") || last.equals("Ou");//Todo elementRegle est ET
+        }
+        else {
+            return false;
+        }
     }
 
-    private boolean lastBoxIsAndOr(ArrayList<ComboBox<String>> list) {
-        String lastBox = list.get(list.size()-1).getSelectionModel().getSelectedItem();
-        return lastBox.equals("Et") || lastBox.equals("Ou");
+    private void deleteLastBox(ArrayDeque<ControlElement> boxes, ArrayDeque<HBox> hBoxes, VBox vBox) {
+        //supprimer le dernier comboBox
+        ControlElement last = boxes.removeLast();
+        HBox lastHBox = hBoxes.getLast();
+        if (last.getComboBox() != null) {
+            lastHBox.getChildren().remove(last.getComboBox());
+        }
+        else {
+            lastHBox.getChildren().remove(last.getField());
+        }
+
+
+        //Si la dernière HBox est vide alors la supprimer
+        if (lastHBox.getChildren().size() == 0) {
+            HBox sameLastBox = hBoxes.removeLast();
+
+            vBox.getChildren().remove(lastHBox);
+        }
     }
 
     private void deleteLastConditionBox() {
-        conditionBoxes.remove(conditionBoxes.size()-1);
-
-        HBox lastHBox = conditionHBoxes.get(conditionHBoxes.size()-1);
-        lastHBox.getChildren().remove(lastHBox.getChildren().size()-1);
-
-        if (conditionHBoxes.get(conditionHBoxes.size()-1).getChildren().size()==0) {
-            conditionHBoxes.remove(conditionHBoxes.size()-1);
-
-            conditionVBox.getChildren().remove(conditionVBox.getChildren().size()-1);
-        }
+        deleteLastBox(conditionBoxes, conditionHBoxes, conditionVBox);
     }
 
     private void deleteLastConsequenceBox() {
-        consequenceBoxes.remove(consequenceBoxes.size()-1);
-
-        HBox lastHBox = consequenceHBoxes.get(consequenceHBoxes.size()-1);
-        lastHBox.getChildren().remove(lastHBox.getChildren().size()-1);
-
-        if (consequenceHBoxes.get(consequenceHBoxes.size()-1).getChildren().size()==0) {
-            consequenceHBoxes.remove(consequenceHBoxes.size()-1);
-
-            consequenceVBox.getChildren().remove(consequenceVBox.getChildren().size()-1);
-        }
+        deleteLastBox(consequenceBoxes, consequenceHBoxes, consequenceVBox);
     }
 
     private void conditionBoxAction(int index) {
-        System.out.println(index);
-
-        int size = conditionBoxes.size()-1;
+        int size = conditionBoxes.size() -1;
         for (int i = index; i < size; i++) {
             deleteLastConditionBox();
         }
@@ -125,10 +223,17 @@ public class EditRuleController extends Controller {
         appearNextCondition();
     }
 
-    private void consequenceBoxAction(int index) {
-        System.out.println(index);
+    private void conditionInputAction(int index) {
+        try {
+            Integer.parseInt(conditionBoxes.getLast().getField().getText());
+        } catch (NumberFormatException e) {
+            return;
+        }
+        conditionBoxAction(index);
+    }
 
-        int size = consequenceBoxes.size()-1;
+    private void consequenceBoxAction(int index) {
+        int size = consequenceBoxes.size() -1;
         for (int i = index; i < size; i++) {
             deleteLastConsequenceBox();
         }
@@ -136,19 +241,36 @@ public class EditRuleController extends Controller {
         appearNextConsequence();
     }
 
-    private void appearNext(ComboBox<String> box, ArrayList<ComboBox<String>> comboList, ArrayList<HBox> hBoxList, VBox vBox) {
-        //SI ET/OU ALORS AJOUTER DANS UN AUTRE HBOX, LE PROCHAIN DANS ENCORE UN AUTRE
+    private void consequenceInputAction(int index) {
+        try {
+            Integer.parseInt(consequenceBoxes.getLast().getField().getText());
+        } catch (NumberFormatException e) {
+            return;
+        }
+        consequenceBoxAction(index);
+    }
+
+    private void appearNext(ControlElement box, ArrayDeque<ControlElement> comboList, ArrayDeque<HBox> hBoxList, VBox vBox) {
+        //SI "ET" ou "OU" ALORS AJOUTER DANS UN AUTRE HBOX, LE PROCHAIN DANS ENCORE UN AUTRE
         //SINON AJOUTER DANS LE DERNIER HBOX
         if (comboList.size()>0 && lastBoxIsAndOr(comboList)) {
             HBox conditionHBox = generateNewHBox();
-            conditionHBox.getChildren().add(box);
+            if (box.getComboBox() != null) {
+                conditionHBox.getChildren().add(box.getComboBox());
+            }
+            else {
+                conditionHBox.getChildren().add(box.getField());
+            }
             hBoxList.add(conditionHBox);
             vBox.getChildren().add(conditionHBox);
         }
         else {
-            System.out.println(hBoxList.get(hBoxList.size()-1).getChildren());
-            hBoxList.get(hBoxList.size()-1).getChildren().add(box);
-            System.out.println(hBoxList.get(hBoxList.size()-1).getChildren());
+            if (box.getComboBox() != null) {
+                hBoxList.getLast().getChildren().add(box.getComboBox());
+            }
+            else {
+                hBoxList.getLast().getChildren().add(box.getField());
+            }
         }
 
         comboList.add(box);
@@ -164,5 +286,41 @@ public class EditRuleController extends Controller {
 
     public void infoButton() {
         showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte edition regle
+    }
+
+    public static class ControlElement {
+        private ComboBox<ComboBoxItem> comboBox;
+        private TextField field;
+        private boolean isComboBox;
+
+        public ControlElement(ComboBox<ComboBoxItem> comboBox) {
+            this.comboBox = comboBox;
+            isComboBox = true;
+        }
+
+        public ControlElement(TextField field) {
+            this.field = field;
+            isComboBox = false;
+        }
+
+        public ComboBox<ComboBoxItem> getComboBox() {
+            return comboBox;
+        }
+
+        public TextField getField() {
+            return field;
+        }
+    }
+
+    public static class ComboBoxItem {
+        private ElementRegle elementregle;
+
+        public ComboBoxItem(ElementRegle elementregle) {
+            this.elementregle = elementregle;
+        }
+
+        public String toString() {
+            return elementregle.getNomInterface();
+        }
     }
 }

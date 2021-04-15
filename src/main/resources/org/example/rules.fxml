@@ -21,13 +21,11 @@
       </ImageView>
       <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label  styleClass="label-header" text="Liste de règles" />
+            <Label styleClass="label-header" text="Liste de règles" />
             <TableView fx:id="tab" editable="true" prefHeight="400.0">
-              <columns>
-                <TableColumn fx:id="delCol" editable="false" prefWidth="100.0" resizable="false" sortable="false" />
-                <TableColumn fx:id="editCol" editable="false" prefWidth="100.0" resizable="false" sortable="false" />
-                  <TableColumn fx:id="ruleCol" editable="false" prefWidth="745.0" resizable="false" sortable="false" />
-              </columns>
+               <columns>
+                  <TableColumn fx:id="ruleCol" editable="false" prefWidth="919.0" />
+               </columns>
                <VBox.margin>
                   <Insets left="50.0" right="50.0" />
                </VBox.margin>

@@ -1,136 +1,123 @@
 package org.example;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import org.example.model.Regles.Regle;
 
 import java.io.IOException;
 
 public class RulesController extends Controller {
 
     @FXML
-    public TableView<RuleRow> tab;
+    public TableView<RegleRow> tab;
     @FXML
-    public TableColumn<RuleRow, Button> delCol;
-    @FXML
-    public TableColumn<RuleRow, Button> editCol;
-    @FXML
-    public TableColumn<RuleRow, Label> ruleCol;
+    public TableColumn<RegleRow, String> ruleCol;
 
-    private ObservableList<RulesController.RuleRow> rules;
+    private ObservableList<RegleRow> rules;
 
     @FXML
     private void confirmButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        //TODO: valider texte de l'input
-        getApp().setRoot("varianteMenu2");
+        //TODO: valider
+        getApp().setRoot("varianteMenu3");
     }
 
     @FXML
     private void addButton() {
         getApp().soundManager.playSound("button-click");
-        //TODO AJOUTER UNE PIECE
-        //Rule r = new Rule();
-        Button be = new Button("Edit");
-        be.setOnAction(event -> {
-            try {
-                editRule(); //(r)
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        Button bd = new Button("Delete");
-        bd.setOnAction(event -> {
-            deletRule(); //(r)
-        });
-        Label l = new Label("Si Pawn meurs alors perdu");
-
-        RulesController.RuleRow rr = new RulesController.RuleRow(be, bd, l);// p);
-        rules.add(rr);
+        try {
+            getApp().setRoot("editRule");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    public void initialize() {
-        //TODO REMPLIR PROPREMENT AVEC LES DONNES ENREGISTREES
-        editCol.setCellValueFactory(cellData -> cellData.getValue().editProperty());
-        delCol.setCellValueFactory(cellData -> cellData.getValue().delProperty());
+    @Override
+    public void initialise() {
         ruleCol.setCellValueFactory(cellData -> cellData.getValue().ruleTextProperty());
 
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editItem = new MenuItem("Modifier");
+        editItem.setOnAction((event) -> {
+            editRegle();
+        });
+
+        MenuItem addItem = new MenuItem("Ajouter");
+        addItem.setOnAction((event) -> {
+            addButton();
+        });
+
+        MenuItem deleteItem = new MenuItem("Supprimer");
+        deleteItem.setOnAction((event) -> {
+            deletRegle();
+        });
+
+        contextMenu.getItems().addAll(editItem, addItem, deleteItem);
+        tab.setContextMenu(contextMenu);
+
         rules = FXCollections.observableArrayList();
+        for (Regle r : getApp().varianteManager.getCurrent().getRegles()) {
+            rules.add(new RegleRow(r));
+        }
         tab.setItems(rules);
     }
 
-    public void editRule() throws IOException {
-        //r parameter
-        //TODO passer r à la scene
+    public void editRegle() {
         getApp().soundManager.playSound("button-click");
-        getApp().setRoot("editRule");
+
+        RegleRow r = tab.getSelectionModel().getSelectedItem();
+        if (r == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucune regle selectionne");
+            return;
+        }
+
+        try {
+            getApp().setRoot("editRule", r.getRegle());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void deletRule() {
+    public void deletRegle() {
         getApp().soundManager.playSound("lose");
-        //rules.remove(r);
+
+        RegleRow r = tab.getSelectionModel().getSelectedItem();
+        if (r == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : aucune regle selectionne");
+            return;
+        }
+
+        rules.remove(r);
     }
 
-    private static class RuleRow {
-        private final SimpleObjectProperty<Button> edit;
-        private final SimpleObjectProperty<Button> del;
-        private final SimpleObjectProperty<Label> ruleText;
-        //private final Rule rule;
+    private static class RegleRow {
+        private final SimpleStringProperty ruleText;
+        private final Regle rule;
 
-        public RuleRow(Button edit, Button del, Label ruleText) {//, Rule rule) {
-            this.edit = new SimpleObjectProperty<>(edit);
-            this.del = new SimpleObjectProperty<>(del);
-            this.ruleText = new SimpleObjectProperty<>(ruleText);
-            //this.rule = rule;
+        public RegleRow(Regle rule) {
+            this.rule = rule;
+            this.ruleText = new SimpleStringProperty(rule.toString()); //todo a changer
         }
 
-        public Button getEdit() {
-            return edit.get();
-        }
-
-        public SimpleObjectProperty<Button> editProperty() {
-            return edit;
-        }
-
-        public void setEdit(Button edit) {
-            this.edit.set(edit);
-        }
-
-        public Button getDel() {
-            return del.get();
-        }
-
-        public SimpleObjectProperty<Button> delProperty() {
-            return del;
-        }
-
-        public void setDel(Button del) {
-            this.del.set(del);
-        }
-
-        public Label getRuleText() {
+        public String getRegleText() {
             return ruleText.get();
         }
 
-        public SimpleObjectProperty<Label> ruleTextProperty() {
+        public SimpleStringProperty ruleTextProperty() {
             return ruleText;
         }
 
-        public void setRuleText(Label ruleText) {
+        public void setRegleText(String ruleText) {
             this.ruleText.set(ruleText);
         }
 
-        /*
-        public Piece getRule() {
+        public Regle getRegle() {
             return rule;
         }
-        */
-
     }
 }

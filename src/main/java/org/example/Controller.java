@@ -36,7 +36,9 @@ public class Controller {
     public Optional<ButtonType> showAlert(Alert.AlertType type, String text) {
         Alert alert = new Alert(type);
         alert.setContentText(text);
+        alert.setResizable(true);
         alert.getDialogPane().getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        alert.getDialogPane().setPrefWidth(1000);
         return alert.showAndWait();
     }
 }
