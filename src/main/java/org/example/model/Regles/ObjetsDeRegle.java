@@ -1,3 +1,8 @@
 package org.example.model.Regles;
 
-public interface ObjetsDeRegle {}
+import java.util.List;
+
+public interface ObjetsDeRegle {
+
+    //List<Object> recupererTout();
+}

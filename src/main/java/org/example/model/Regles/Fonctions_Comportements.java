@@ -99,16 +99,35 @@ public class Fonctions_Comportements {
         return false;
     };
 
+    /** Condition : PIECE+ESTPLACE+CASE
+     * @param pieces : liste des pièces possible
+     * @param cases : liste des cases possible
+     * @return vrai si au moins une pièce dans la liste des pièces est placé sur une case dans la liste des cases ce tour-ci*/
+    public static final BiFunction<List<Piece>, List<Case>, Boolean> est_place = (pieces, cases) -> {
+        for (Piece piece: pieces) {
+            for (Case casePlateau: cases) {
+                if (casePlateau.getPieceOnCase().equals(piece)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
 
     /*-----------------------------CONDITION COMPARAISON-------------------------*/
+
+        /*-----DEPLACEMENT-----*/
     /** Condition : PIECE+DEPINF+INTEGER
      * @param pieces : liste des pièces possible
-     * @param valeur : valeur à comparer
+     * @param valeur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement inferieur valeur*/
-    public static final BiFunction<List<Piece>, Integer, Boolean> deplacement_inferieur_a = (pieces, valeur) -> {
-        for (Piece piece: pieces) {
-            if(piece.getNbMovement() < valeur) {
-                return true;
+    public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_inferieur_a = (pieces, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Piece piece : pieces) {
+                if (piece.getNbMovement() < lvaleur.get(0).getVal()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -116,12 +135,14 @@ public class Fonctions_Comportements {
 
     /** Condition : PIECE+DEPEGAL+INTEGER
      * @param pieces : liste des pièces possible
-     * @param valeur : valeur à comparer
+     * @param valeur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement egal valeur*/
-    public static final BiFunction<List<Piece>, Integer, Boolean> deplacement_egal_a = (pieces, valeur) -> {
-        for (Piece piece: pieces) {
-            if(piece.getNbMovement() == valeur) {
-                return true;
+    public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_egal_a = (pieces, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Piece piece : pieces) {
+                if (piece.getNbMovement() == lvaleur.get(0).getVal()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -129,19 +150,66 @@ public class Fonctions_Comportements {
 
     /** Condition : PIECE+DEPSUP+INTEGER
      * @param pieces : liste des pièces possible
-     * @param valeur : valeur à comparer
+     * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement superieur valeur*/
-    public static final BiFunction<List<Piece>, Integer, Boolean> deplacement_superieur_a = (pieces, valeur) -> {
-        for (Piece piece: pieces) {
-            if(piece.getNbMovement() > valeur) {
-                return true;
+    public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_superieur_a = (pieces, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Piece piece : pieces) {
+                if (piece.getNbMovement() > lvaleur.get(0).getVal()) {
+                    return true;
+                }
             }
         }
             return false;
     };
 
 
+    /*-----TIMER-----*/
 
+    /** Condition : PIECE+DEPSUP+INTEGER
+     * @param joueurs : liste des joueurs possible
+     * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
+     * @return vrai si au moins un joueur a un timer inférieur valeur*/
+    public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_inferieur_a = (joueurs, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Joueur joueur : joueurs) {
+                if (joueur.getTimer() < lvaleur.get(0).getVal()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    /** Condition : PIECE+DEPSUP+INTEGER
+     * @param joueurs : liste des joueurs possible
+     * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
+     * @return vrai si au moins un joueur a un timer égal valeur*/
+    public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_egal_a = (joueurs, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Joueur joueur : joueurs) {
+                if (joueur.getTimer() == lvaleur.get(0).getVal()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    /** Condition : PIECE+DEPSUP+INTEGER
+     * @param joueurs : liste des joueurs possible
+     * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
+     * @return vrai si au moins un joueur a un timer supérieur valeur*/
+    public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_superieur_a = (joueurs, lvaleur) -> {
+        if (lvaleur != null) {
+            for (Joueur joueur : joueurs) {
+                if (joueur.getTimer() > lvaleur.get(0).getVal()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
 /* --------------------------------------------------------------------------------------------------
  * -------------------------------------------CONSEQUENCE--------------------------------------------
  * --------------------------------------------------------------------------------------------------*/

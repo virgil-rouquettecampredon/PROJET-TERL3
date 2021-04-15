@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.example.model.Piece;
+import org.example.model.Case;
+import org.example.model.Joueur;
+import org.example.model.Regles.IntegerRegle;
+
 public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
     public Automate_Regles_Semantique(){
@@ -225,6 +230,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
         List<Jeton> jetonsarborescence = new ArrayList<>();
         List<Condition> conditionsDeLaRegle = new ArrayList<>();
+        List<Consequence> consequencesDeLaRegle = new ArrayList<>();
 
         int indParenthese = 0;
 
@@ -293,8 +299,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                //conditionsDeLaRegle.add(new ConditionEtat<Piece>(
-                                                //        new Sujet<Piece>(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
+                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
+                                                        new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
@@ -304,7 +310,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "0236" -> {
                                             //Cas Piece+Joueur+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                //conditionsDeLaRegle.add(new ConditionEtat<Joueur>("estpromu"));
+                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
+                                                        new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2), regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
@@ -314,6 +321,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "036" -> {
                                             //Cas PieceToken+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
+                                                        new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
                                                 nbConditions++;
                                                 jetonsarborescence.add(Jeton.CONDITION);
                                             } else {
@@ -338,10 +347,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "0259" -> {
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" ->{
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -354,10 +371,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "0359" -> {
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -370,10 +395,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "02359" -> {
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -399,10 +432,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+action+piece+joueur
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -415,10 +456,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+action+piecetoken
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -431,10 +480,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piecetoken+action+piece+joueur
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -447,10 +504,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piecetoken+action+piecetoken
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -463,10 +528,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+Joueur+action+piece+joueur
                                             switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -479,10 +552,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+Joueur+action+piecetoken
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estechec" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -508,18 +589,34 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+Action+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -532,18 +629,34 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas PieceToken+Action+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -556,18 +669,34 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             //Cas Piece+Joueur+Action+Case
                                             switch (regleString.get(indRegleSyntaxe-1)) {
                                                 case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                            new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
                                                     nbConditions++;
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
@@ -591,6 +720,26 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                     //Cas Joueur+Compteur+Comparaison+Nombre
                                     if (parcours.equals("014813")) {
                                         if (regleString.get(indRegleSyntaxe - 2).equals("timer")) {
+                                            switch(regleString.get(indRegleSyntaxe-1)){
+                                                case "<" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
+                                                            new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.timer_inferieur_a));
+                                                }
+                                                case "=" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
+                                                            new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.timer_egal_a));
+                                                }
+                                                case ">" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
+                                                            new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                            new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.timer_superieur_a));
+                                                }
+                                            }
                                             nbConditions++;
                                             jetonsarborescence.add(Jeton.CONDITION);
                                         } else {
@@ -612,6 +761,26 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "0271214" -> {
                                             //Cas Piece+Compteur+Comparaison+Nombre
                                             if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                                switch(regleString.get(indRegleSyntaxe-1)){
+                                                    case "<" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_inferieur_a));
+                                                    }
+                                                    case "=" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_egal_a));
+                                                    }
+                                                    case ">" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_superieur_a));
+                                                    }
+                                                }
                                                 nbConditions++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -620,6 +789,26 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "02371214" -> {
                                             //Cas Piece+Joueur+Compteur+Comparaison+Nombre
                                             if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                                switch(regleString.get(indRegleSyntaxe-1)) {
+                                                    case "<" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_inferieur_a));
+                                                    }
+                                                    case "=" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_egal_a));
+                                                    }
+                                                    case ">" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_superieur_a));
+                                                    }
+                                                }
                                                 nbConditions++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -628,6 +817,26 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "0371214" -> {
                                             //Cas PieceToken+Compteur+Comparaison+Nombre
                                             if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                                switch(regleString.get(indRegleSyntaxe-1)){
+                                                    case "<" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_inferieur_a));
+                                                    }
+                                                    case "=" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_egal_a));
+                                                    }
+                                                    case ">" -> {
+                                                        conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
+                                                                new TraducteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new TraducteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                Fonctions_Comportements.deplacement_superieur_a));
+                                                    }
+                                                }
                                                 nbConditions++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Compteur-Comparaison-Nombre inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
