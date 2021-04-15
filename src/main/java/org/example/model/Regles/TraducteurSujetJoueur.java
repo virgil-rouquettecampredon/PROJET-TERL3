@@ -6,11 +6,11 @@ import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
 
-public class SujetJoueur extends Sujet<Joueur> {
+public class TraducteurSujetJoueur extends Sujet<Joueur> {
 
     private String str_source;
 
-    public SujetJoueur(String str_source) {
+    public TraducteurSujetJoueur(String str_source) {
         this.str_source = str_source;
     }
 

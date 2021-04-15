@@ -202,9 +202,12 @@ public class PieceMoveController extends Controller {
     }
 
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "Ici, vous pouvez modifier le nom de la pièce créée ou modifier, ainsi que le joueur auquel elle appartient et de même pour l'image de la pièce (Ce sera une image sur votre ordinateur).\n\n ");//todo finir texte pour déplacement de la pièce
-    }
+        showAlert(Alert.AlertType.INFORMATION, "Ici, vous pouvez modifier le nom de la pièce créée ou modifier, ainsi que le joueur auquel elle appartient et de même pour l'image de la pièce (Ce sera une image sur votre ordinateur).");
+        showAlert(Alert.AlertType.INFORMATION, "Concernant les déplacements de la pièce, Le plateau situé à droite représente un plateau de jeu avec une taille définie précédement. Si vous voulez crééer des déplacements spécifiques telles que un déplacement simple ou un déplacement qui sert à prendre une pièce (comme pour le pion par exemple) ou bien un déplacement qui fait les deux.");
+        showAlert(Alert.AlertType.INFORMATION,"Le selecteur d'outils, permet de faire des déplacements relatifs à la case tel que le cavalier peut le faire ou bien un déplamcent sur un axe tel qu'il est fait sur la tour par exemple. Avec ce principe,  vous pouvez faire un déplacement horizontal de 2 en 2 cases.\nMaintenant si vous vous être trompé sur un déplacements, vous pouvez le supprimer en faisant clique droit sur le déplacement et en sélectionnant le bon outils ainsi que le bon type de déplacement (Déplacer, Prendre, Les deux) et ensuite le déplacement sera donc supprimer.");
+        showAlert(Alert.AlertType.INFORMATION,"De plus les pièces seront aussi définies selon 3 choix, promouvable (comme le pion par exemple), traître (c'est à dire que vous pourrez prendre des pièces alliées) ou encore condition de victoire (comme le roi).\nDe plus si une pièce est condition de victoire, un nombre de vies apparaître. Ce nombre signifie le nombre de fois que cette pièce peut être mise en échec (chaque mise en échec enlève 1 au nombre de vie) avant d'être considéré prise par l'adversaire, par défault il est à -1 (c'est à dire qu'il ne mourra pas pour un certains nombre de mise en échec sur la pièce comme pour le jeu de base).");
 
+    }
     public void onClick(MouseEvent mouseEvent) {
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
         int relativeX = c.getPosition().getX()-posX;

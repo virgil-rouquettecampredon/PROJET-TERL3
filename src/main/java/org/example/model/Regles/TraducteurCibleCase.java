@@ -7,11 +7,11 @@ import org.example.model.Plateau;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CibleCase extends Cible<Case> {
+public class TraducteurCibleCase extends TraducteurCible<Case> {
 
     private String str_source;
 
-    public CibleCase(String str_source) {
+    public TraducteurCibleCase(String str_source) {
         this.str_source = str_source;
     }
 

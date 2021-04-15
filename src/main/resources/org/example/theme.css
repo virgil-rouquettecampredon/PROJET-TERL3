@@ -33,7 +33,7 @@
 
 .dialog-pane .button:hover{
     -fx-border-color: #656592;
-
+    -fx-effect: dropshadow( three-pass-box, white, 10.0, 0.0, 0.0, 0.0);
 }
 
 .dialog-pane .button:pressed{
@@ -152,11 +152,6 @@
     -fx-font-family: -font-semibold;
 }
 
-/*
- * Metro style Push Button
- * Author: Pedro Duque Vieira
- * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
- */
 .button {
     -fx-padding: 5 22 5 22;
     -fx-border-color: #e2e2e2;
@@ -171,11 +166,12 @@
 }
 
 .button:hover {
-    -fx-background-color: derive(-btn-color, 20%);
+    -fx-font-weight: bold;
 }
 
 .button:pressed, .button:default:hover:pressed {
-  -fx-background-color: derive(-btn-color, 50%);
+    -fx-border-color: #c3a7a7;
+    -fx-text-fill: #d9c3c3;
 }
 
 .button:focused {
@@ -191,15 +187,15 @@
     -fx-opacity: .9;
     -fx-background-color: derive(-bg-color, 70%);;
     -fx-text-fill: -text-on-bg;
+    -fx-border-radius: 0px;
 }
 
 .button:default {
-    -fx-background-color: -fx-focus-color;
     -fx-text-fill: -text-on-btn;
 }
 
 .button:default:hover {
-    -fx-background-color: derive(-fx-focus-color,30%);
+    -fx-font-weight: bold;
 }
 
 .backButton {
@@ -237,5 +233,6 @@
     -fx-padding: 0;
     -fx-font-size: 14pt;
     -fx-font-weight: bold;
+    -fx-border-radius: 0px;
 }
 

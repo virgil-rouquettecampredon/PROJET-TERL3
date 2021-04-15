@@ -8,13 +8,13 @@ import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
 
-public class SujetPiece extends Sujet<Piece> {
+public class TraducteurSujetPiece extends Sujet<Piece> {
 
     private String str_source;
     private List<Joueur> proprios;
 
-    public SujetPiece(String str_source) { this.str_source = str_source; }
-    public SujetPiece(String str_joueur, String str_type) {
+    public TraducteurSujetPiece(String str_source) { this.str_source = str_source; }
+    public TraducteurSujetPiece(String str_joueur, String str_type) {
         this.str_source = str_joueur + "#" + str_type;
     }
 
@@ -30,7 +30,7 @@ public class SujetPiece extends Sujet<Piece> {
             String[] str_proprio_type = this.str_source.split("#");
             List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
 
-            SujetJoueur sujj = new SujetJoueur(str_proprio_type[1]);
+            TraducteurSujetJoueur sujj = new TraducteurSujetJoueur(str_proprio_type[1]);
             List<Joueur> proprios = sujj.recupererTout(ord);
 
             for (Piece p: paflitrer){
