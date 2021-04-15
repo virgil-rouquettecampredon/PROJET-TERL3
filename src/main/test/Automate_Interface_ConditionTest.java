@@ -2,14 +2,13 @@ import org.example.model.GroupCases;
 import org.example.model.Joueur;
 import org.example.model.Piece;
 import org.example.model.Regles.*;
-import org.junit.Before;
+import org.example.model.Regles.Structure.Automate.Automate_Interface;
+import org.example.model.Regles.Structure.Automate.Automate_Interface_Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -581,10 +580,4 @@ public class Automate_Interface_ConditionTest {
             assertEquals("Impossible de terminer les conséquences, il manque encore 2 parenthèses fermantes",ex.getMessage());
         }
     }
-
-
-
-    /*=================================================================
-     *========================== TESTS BONS ===========================
-     *=================================================================*/
 }

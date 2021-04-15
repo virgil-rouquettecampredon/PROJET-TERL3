@@ -1,15 +1,18 @@
 
 
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Automate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
 import org.example.model.GroupCases;
 import org.example.model.Piece;
-import org.example.model.Case;
 import org.example.model.Joueur;
+import org.example.model.Regles.ElementRegle;
+import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
 
 import static org.junit.Assert.fail;
 
@@ -210,6 +213,18 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
     }
 
     public static void main(String[] args) {
+        //GESTION COULEUR
+        String COLOR_RESET = "\u001B[0m";
+        String COLOR_BLACK = "\u001B[30m";
+        String COLOR_RED = "\u001B[31m";
+        String COLOR_GREEN = "\u001B[32m";
+        String COLOR_YELLOW = "\u001B[33m";
+        String COLOR_BLUE = "\u001B[34m";
+        String COLOR_PURPLE = "\u001B[35m";
+        String COLOR_CYAN = "\u001B[36m";
+        String COLOR_WHITE = "\u001B[37m";
+
+
         List<Joueur> joueurs = new ArrayList<>();
         List<GroupCases> cases = new ArrayList<>();
         List<Piece> pieces = new ArrayList<>();
@@ -218,6 +233,8 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         auto.initialiserAutomate();
         Scanner scan = new Scanner(System.in);
         String regle = "";
+
+        List<ElementRegle> regleChoix = new ArrayList<>();
         try{
             while (auto.getCurEtat() != -1) {
                 List<ElementRegle> elem = auto.elementSelectionnables();
@@ -235,19 +252,22 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                             reponse = rep;
                             bon = true;
                             choix = elem.get(0);
+                            choix.setNomInterface(rep);
                         }catch (NumberFormatException nex){
-                            mes = "J'ai dit valide : ";
+                            mes = COLOR_RED + "J'ai dit valide : " + COLOR_RESET;
                         }
                     }
                 }else{
-                    System.out.println("Elements possibles (sélectionner indice) : ");
+                    System.out.println("Elements possibles (sélectionner "+COLOR_GREEN+"indice" +COLOR_RESET+") : ");
                     int ind = 1;
                     for (ElementRegle e : elem){
-                        System.out.println(ind + " -> " + e.getNomInterface());
+                        System.out.println(COLOR_GREEN+ind +COLOR_RESET+ " -> " + e.getNomInterface());
                         ind++;
                     }
-                    String rep;
-                    System.out.println("Choix : " + (rep = scan.next()));
+                    System.out.print("Choix : " + COLOR_GREEN);
+                    String rep = scan.next();
+                    System.out.println(rep + COLOR_RESET);
+
                     int indRep = Integer.parseInt(rep);
                     --indRep;
                     if(indRep <0 || indRep>ind) {
@@ -257,9 +277,42 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                         reponse = choix.getNomInterface();
                     }
                 }
-                regle += "[" + reponse + "]";
+                regleChoix.add(choix);
+                regle += "[" + COLOR_BLUE + reponse + COLOR_RESET +"]";
                 System.out.println("Regle : " + regle);
                 auto.selectionnerElement(choix);
+            }
+
+            //AFFICHAGE DE LA REGLE
+            System.out.println("REGLE CREE : ");
+            Iterator<ElementRegle> ite = regleChoix.iterator();
+            while (ite.hasNext()){
+                ElementRegle e = ite.next();
+                if(e != null){
+                    if(e.getJetonAssocie() == Jeton_Interface.NON){
+                        ElementRegle eBis = ite.next();
+                        if(eBis != null){
+                            String s;
+                            switch (eBis.getNomInterface()){
+                                case "="-> s = "!=";
+                                case "<"-> s = ">=";
+                                case ">"-> s = "<=";
+                                default -> s= eBis.getNomInterface();
+                            }
+                            System.out.print(COLOR_PURPLE + "{" + COLOR_CYAN + s + COLOR_PURPLE+ "}" + COLOR_RESET);
+                        }
+                    }else {
+                        if(e.getJetonAssocie() == Jeton_Interface.PARENTHESE_OUVRANTE || e.getJetonAssocie() == Jeton_Interface.PARENTHESE_FERMANTE){
+                            System.out.print(e.getNomInterface());
+                        }else{
+                            if(e.getJetonAssocie() != Jeton_Interface.ET && e.getJetonAssocie() != Jeton_Interface.OU && e.getJetonAssocie() != Jeton_Interface.ALORS){
+                                System.out.print(COLOR_PURPLE + "{" + COLOR_CYAN + e.getNomInterface() + COLOR_PURPLE+ "}" + COLOR_RESET);
+                            }else{
+                                System.out.print(COLOR_YELLOW +e.getNomInterface()+ COLOR_RESET);
+                            }
+                        }
+                    }
+                }
             }
         }catch(MauvaiseDefinitionRegleException ex){
             System.err.println("Exception détectée : " + ex.getMessage());

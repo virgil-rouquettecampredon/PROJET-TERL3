@@ -1,6 +1,10 @@
 
 
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Automate;
+
+import org.example.model.Regles.ElementRegle;
+import org.example.model.Regles.EstToken;
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
 
 import java.util.List;
 
