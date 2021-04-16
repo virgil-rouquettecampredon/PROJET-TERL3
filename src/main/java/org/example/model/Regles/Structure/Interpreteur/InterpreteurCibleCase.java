@@ -1,4 +1,4 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Interpreteur;
 
 import org.example.model.Case;
 import org.example.model.OrdonnanceurDeJeu;
@@ -7,11 +7,11 @@ import org.example.model.Plateau;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraducteurCibleCase extends TraducteurCible<Case> {
+public class InterpreteurCibleCase extends InterpreteurCible<Case> {
 
     private String str_source;
 
-    public TraducteurCibleCase(String str_source) {
+    public InterpreteurCibleCase(String str_source) {
         this.str_source = str_source;
     }
 

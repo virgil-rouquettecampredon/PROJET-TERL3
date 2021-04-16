@@ -1,6 +1,6 @@
 
 
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Interpreteur;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -8,13 +8,13 @@ import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
 
-public class TraducteurSujetPiece extends Sujet<Piece> {
+public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
 
     private String str_source;
     private List<Joueur> proprios;
 
-    public TraducteurSujetPiece(String str_source) { this.str_source = str_source; }
-    public TraducteurSujetPiece(String str_joueur, String str_type) {
+    public InterpreteurSujetPiece(String str_source) { this.str_source = str_source; }
+    public InterpreteurSujetPiece(String str_joueur, String str_type) {
         this.str_source = str_joueur + "#" + str_type;
     }
 
@@ -30,7 +30,7 @@ public class TraducteurSujetPiece extends Sujet<Piece> {
             String[] str_proprio_type = this.str_source.split("#");
             List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
 
-            TraducteurSujetJoueur sujj = new TraducteurSujetJoueur(str_proprio_type[1]);
+            InterpreteurSujetJoueur sujj = new InterpreteurSujetJoueur(str_proprio_type[1]);
             List<Joueur> proprios = sujj.recupererTout(ord);
 
             for (Piece p: paflitrer){

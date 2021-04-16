@@ -1,9 +1,10 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Interpreteur;
 
-import java.util.ArrayList;
+import org.example.model.Regles.SujetDeRegle;
+
 import java.util.List;
 
-public abstract class Sujet<T extends SujetDeRegle> implements Traducteur_Objet_Regle {
+public abstract class InterpreteurSujet<T extends SujetDeRegle> implements Interpreteur_Objet_Regle {
 
     public List<T> recupererTout(/*List<T> list*/) {/*A IMPLEMENTER*/ return null; }
 }
@@ -21,8 +22,8 @@ public abstract class Sujet<T extends SujetDeRegle> implements Traducteur_Objet_
         this.proprietaire = new ArrayList<>();
     }*/
 
-    // OU abstract ou interface
-    //public ArrayList<E> getElements();
+// OU abstract ou interface
+//public ArrayList<E> getElements();
     /*
     public TokenPiece implements Token<E> {
         private String type;

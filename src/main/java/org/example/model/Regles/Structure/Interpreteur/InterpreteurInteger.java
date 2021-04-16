@@ -1,14 +1,16 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Interpreteur;
+
+import org.example.model.Regles.IntegerRegle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TraducteurInteger implements Traducteur_Objet_Regle {
+public class InterpreteurInteger implements Interpreteur_Objet_Regle {
 
     private String str_int;
     private IntegerRegle int_regle;
 
-    public TraducteurInteger(String str_int) {
+    public InterpreteurInteger(String str_int) {
         this.str_int = str_int;
     }
 

@@ -1,16 +1,15 @@
-package org.example.model.Regles;
+package org.example.model.Regles.Structure.Interpreteur;
 
 import java.util.List;
 import java.util.ArrayList;
 import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
-import org.example.model.Piece;
 
-public class TraducteurSujetJoueur extends Sujet<Joueur> {
+public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
 
     private String str_source;
 
-    public TraducteurSujetJoueur(String str_source) {
+    public InterpreteurSujetJoueur(String str_source) {
         this.str_source = str_source;
     }
 
