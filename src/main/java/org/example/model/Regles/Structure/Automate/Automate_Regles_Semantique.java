@@ -20,7 +20,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
     }
 
     public Automate_Regles_Semantique(List<String> nomEtat){
-        super(26,0, nomEtat);
+        super(27,0, nomEtat);
     }
 
     public void initialiserAutomate(){
@@ -42,16 +42,28 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         this.ajouterUneTransition(4,Jeton.NON,4);
         this.ajouterUneTransition(7,Jeton.NON,7);
 
+        //Permet de ne pas renseigner la traversée de cet état dans le parcours de l'automate
+        //La négation d'une condition ne change pas fondamentalement le traitement sémantique de celle-ci
+        //L'inversion est ici gérée au niveau de la création de l'arbre condition de la règle
+        this.setValeurEtat(26,"");
+        this.ajouterUneTransition(0,Jeton.NON,26);
+        this.ajouterUneTransition(24,Jeton.NON,26);
+
+
         //GESTION DU PARENTHESAGE
-        this.setValeurEtat(24,"");
         this.ajouterUneTransition(0,Jeton.PARENTHESEOUVRANTE,24);
         this.ajouterUneTransition(24,Jeton.PARENTHESEOUVRANTE,24);
+        this.ajouterUneTransition(26,Jeton.PARENTHESEOUVRANTE,24);
 
         this.ajouterUneTransition(24,Jeton.JOUEUR,1);
         this.ajouterUneTransition(24,Jeton.PIECE,2);
         this.ajouterUneTransition(24,Jeton.PIECETOKEN,3);
 
+        //Permet de ne pas renseigner la traversée de cet état dans le parcours de l'automate
+        //Le parenthésage ne change pas le traitement sémantique d'un bloc de regle
         this.setValeurEtat(25,"");
+        this.setValeurEtat(24,"");
+
         this.ajouterUneTransition(13,Jeton.PARENTHESEFERMANTE,25);
         this.ajouterUneTransition(9,Jeton.PARENTHESEFERMANTE,25);
         this.ajouterUneTransition(10,Jeton.PARENTHESEFERMANTE,25);
@@ -239,10 +251,12 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
         for (Jeton j: regleSyntaxe) {
             switch (j) {
+                //Gestion du parenthésage
                 case PARENTHESEOUVRANTE: {
                     jetonsarborescence.add(Jeton.PARENTHESEOUVRANTE);
                     indParenthese++;
                 }
+                //Gestion du parenthésage
                 case PARENTHESEFERMANTE: {
                     jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
                     indParenthese--;
@@ -250,19 +264,35 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                         throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                     }
                 }
-                case ET: { jetonsarborescence.add(Jeton.ET); }
-                case OU: { jetonsarborescence.add(Jeton.OU); }
+                //Gestion des connecteurs (Pour l'arbre des conditions)
+                case ET: {
+                    if (traitementCondition) {
+                        jetonsarborescence.add(Jeton.ET);
+                    }
+                }
+                case OU: {
+                    if (traitementCondition) {
+                        jetonsarborescence.add(Jeton.OU);
+                    }
+                }
+                case NON: {
+                    if (traitementCondition) {
+                        jetonsarborescence.add(Jeton.NON);
+                    }
+                }
+                //Gestion du ALORS (fin du traitement des conditions)
                 case ALORS: {
                     if (traitementCondition) {
                         traitementCondition = false;
                         if(indParenthese != 0){
-                            throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, trop de parenthèses paranthese " + ((indParenthese < 0)? "fermante" : "ouvrante") + " : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                            throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, trop de parenthèses " + ((indParenthese < 0)? "fermante" : "ouvrante") + " : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                         }
                     } else {
                         throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                     }
                 }
             }
+            //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
 
             //Récupération de l'indice du prochain état d'après la transition donnée
@@ -1154,6 +1184,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une condition pour créer une règle");
         }
 
+        //Ensuite, on essaye de générer l'arbre de conditions de notre règle
         regle.genererArbreCondition(conditionsDeLaRegle,jetonsarborescence);
         return regle;
     }

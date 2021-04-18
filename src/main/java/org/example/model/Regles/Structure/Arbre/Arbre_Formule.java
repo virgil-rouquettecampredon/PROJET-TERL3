@@ -3,7 +3,7 @@ package org.example.model.Regles.Structure.Arbre;
 import org.example.model.Regles.EstEvaluable;
 
 public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvaluable{
-    /**Méthode permettant de modéliser un arbre d'évaluation de formule de logique.**/
+    /**Classe permettant de modéliser un arbre d'évaluation de formule de logique.**/
 
     //Noeud racine de l'arbre
     private Noeud<A> racine;

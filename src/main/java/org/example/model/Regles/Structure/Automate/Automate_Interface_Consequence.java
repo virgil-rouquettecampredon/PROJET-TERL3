@@ -5,6 +5,7 @@ package org.example.model.Regles.Structure.Automate;
 import org.example.model.GroupCases;
 import org.example.model.Joueur;
 import org.example.model.Piece;
+import org.example.model.Plateau;
 import org.example.model.Regles.ElementRegle;
 import org.example.model.Regles.Jeton_Interface;
 import org.example.model.Regles.MauvaiseDefinitionRegleException;
@@ -88,6 +89,16 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         //ETAT 13
     }
 
+    public void revenirEnArriere(){
+        if(etatsParcourus.size()>0){
+            curEtat = etatsParcourus.removeLast();
+            jetonsReconnus.removeLast();
+        }else{
+            //Si on ne peut pas revenir en arrière, on recommence au début
+            curEtat = 0;
+        }
+    }
+
     public List<ElementRegle> elementSelectionnables() throws MauvaiseDefinitionRegleException {
         List<ElementRegle> elements = new ArrayList<>();
         Etat e = this.recupererEtat(curEtat);
@@ -135,7 +146,15 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
     }
 
     public void selectionnerElement(ElementRegle elR) throws MauvaiseDefinitionRegleException{
+        //On ajoute l'état dans lequel on est actuellement au parcours
+        etatsParcourus.addLast(curEtat);
+
+        //Puis on gère ensuite le choix de l'utilisateur
+        jetonsReconnus.addLast(elR.getJetonAssocie());
+
+        //On récupère l'état suivant en fonction du choix donné en paramètre
         int etat = this.etatSuivant(curEtat, elR.getJetonAssocie());
+        //On récupère aussi l'état actuel dans lequel on se trouve
         Etat e = this.recupererEtat(curEtat);
         if(e == null){
             throw new MauvaiseDefinitionRegleException("Etat courant inconnu : " + curEtat);
@@ -159,9 +178,11 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         if(etat == -1){
             throw new MauvaiseDefinitionRegleException("Transition inconnue : " + curEtat + " --" + elR.getJetonAssocie() + "-> ?");
         }
+        //Sinon on valide le choix au niveau de l'automate en déplacant le curseur curEtat
         curEtat = etat;
     }
 
+    /*Méthode main permettant de tester au niveau du terminal le bon fonctionnement de l'automate*/
     public static void main(String[] args) {
         //GESTION COULEUR
         String COLOR_RESET = "\u001B[0m";
@@ -174,10 +195,28 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         String COLOR_CYAN = "\u001B[36m";
         String COLOR_WHITE = "\u001B[37m";
 
+        String BLACK_BRIGHT = "\033[0;90m";  // BLACK
+        String RED_BRIGHT = "\033[0;91m";    // RED
+        String GREEN_BRIGHT = "\033[0;92m";  // GREEN
+        String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
+        String BLUE_BRIGHT = "\033[0;94m";   // BLUE
+        String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
+        String CYAN_BRIGHT = "\033[0;96m";   // CYAN
+        String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
+        //Liste des éléments pouvant composer notre règle
         List<Joueur> joueurs = new ArrayList<>();
         List<GroupCases> cases = new ArrayList<>();
         List<Piece> pieces = new ArrayList<>();
+
+        joueurs.add(new Joueur("toto",1));
+        joueurs.add(new Joueur("titi",0));
+
+        cases.add(new GroupCases("MonGroupeDeCases",new Plateau()));
+
+        pieces.add(new Piece("Roi",""));
+        pieces.add(new Piece("Fou",""));
+        pieces.add(new Piece("Cavalier",""));
 
         Automate_Interface<Jeton_Interface> auto = new Automate_Interface_Consequence(pieces,cases,joueurs);
         auto.initialiserAutomate();
@@ -187,28 +226,55 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         List<ElementRegle> regleChoix = new ArrayList<>();
         try{
             while (auto.getCurEtat() != -1) {
+                //Récupération des éléments à afficher
                 List<ElementRegle> elem = auto.elementSelectionnables();
 
-                System.out.println("Elements possibles test (sélectionner " +COLOR_GREEN+"indice" +COLOR_RESET+ ") : ");
+                //Affichage des choix possibles
+                if(regleChoix.size() > 0){
+                    System.out.println("Elements possibles (sélectionner "+COLOR_GREEN+"indice" +COLOR_RESET+" ou " + COLOR_RED + "#P " +COLOR_RESET+ "pour revenir en arrière) : ");
+                }else{
+                    System.out.println("Elements possibles (sélectionner "+COLOR_GREEN+"indice" +COLOR_RESET+ ") : ");
+                }
                 int ind = 1;
                 for (ElementRegle e : elem){
                     System.out.println(COLOR_GREEN + ind + COLOR_RESET+" -> " + e.getNomInterface());
                     ind++;
                 }
+                //Affichage et traitement du choix
                 System.out.print("Choix : " + COLOR_GREEN);
                 String rep = scan.next();
-                System.out.println(rep + COLOR_RESET);
+                System.out.print(COLOR_RESET);
 
-                int indRep = Integer.parseInt(rep);
-                --indRep;
-                if(indRep <0 || indRep>ind) {
-                    throw new MauvaiseDefinitionRegleException("Seul un nombre valide est autorisé");
+                //Gestion retour en arrière
+                if(rep.equals("#P") && regleChoix.size()>0){
+                    int etatEnleve = auto.getCurEtat();
+                    auto.revenirEnArriere();
+                    ElementRegle elemSup = regleChoix.remove(regleChoix.size()-1);
+                    //Gestion chaine de caractère regle
+                    regle = regle.substring(0,regle.lastIndexOf("]"));
+                    regle = regle.substring(0,regle.lastIndexOf("]") +1);
+                    System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface()+ CYAN_BRIGHT +" ("+ etatEnleve+")" + COLOR_RESET);
+                    System.out.println("Regle : " + regle + "\n");
                 }else {
-                    ElementRegle choix = elem.get(indRep);
-                    regleChoix.add(choix);
-                    regle += "[" +COLOR_BLUE+choix.getNomInterface() +COLOR_RESET + "]";
-                    System.out.println("Regle : " + regle);
-                    auto.selectionnerElement(choix);
+                    int indRep = Integer.parseInt(rep);
+                    --indRep;
+                    if (indRep < 0 || indRep > ind) {
+                        throw new MauvaiseDefinitionRegleException("Seul un nombre valide est autorisé");
+                    } else {
+                        //Gestion + Affichage Regle à un instant t de l'exécution
+                        ElementRegle choix = elem.get(indRep);
+                        regleChoix.add(choix);
+                        regle += "[" + COLOR_BLUE + choix.getNomInterface() + COLOR_RESET + "]";
+                        System.out.println("Regle : " + regle);
+                        auto.selectionnerElement(choix);
+
+                        //Affichage etats parcourus dans l'automate
+                        System.out.print("Etats déjà parcourus : " + PURPLE_BRIGHT);
+                        for (Integer i: auto.etatsParcourus) {
+                            System.out.print(i +" ");
+                        }
+                        System.out.println(COLOR_RESET + "(" + auto.getCurEtat()+")\n");
+                    }
                 }
 
             }
