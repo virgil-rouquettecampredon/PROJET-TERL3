@@ -28,13 +28,16 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
     }
 
     public List<Jeton> analyseSyntaxique(List<String> regle) throws MauvaiseSyntaxeRegleException{
+        //Liste de jetons à retourner à la fin du traitement
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
 
+        //Pour chacun des mots composant la règle
         for (int i = 0; i<regle.size();i++){
             Jeton curJeton;
             String curRegle = regle.get(i);
 
             try {
+                //Permets de reconnaitre des blocs NEGATION de la forme "N..."
                 while(curRegle.length()>0 && estReconnu(curRegle.charAt(0) + "").equals(Jeton.NON)){
                     regleSousFormeJeton.add(Jeton.NON);
                     curRegle = curRegle.substring(1);
@@ -107,9 +110,12 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
                     default -> {
                         //Si un jeton est reconnu
                         if(!(curJeton = estReconnu(curRegle)).equals(Jeton.AUCUN)){
+                            //Si c'est un jeton alias de reconnus, alors on le supprime de la regle (as)
+                            //On ne garde ainsi que la valeur pour laquelle le jeton est associé
                             if(curJeton.equals(Jeton.ALIAS)){
                                 regle.remove(i);
                             }
+                            //Si c'est un jeton tous de reconnus, alors on le remplace par sa valeur correspondante
                             if(curJeton.equals(Jeton.TOUS)){
                                 switch (curRegle){
                                     case "tous-piece" -> {
@@ -156,9 +162,12 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
                 // 1 : Regle après le coup d'un joueur
                 if(premier.equals("0") || premier.equals("1")) {
                     try{
+                        //Analyse syntaxique de la règle
+                        //(que des termes connus du système composant la règle)
                         regleSousFormeDejetons = analyseSyntaxique(regleSousFormeDeChaine);
+                        //Analyse sémantique de la règle
+                        //(bon agancement de termes connus du système)
                         Regle r = this.automate.analyserUneRegle(regleSousFormeDejetons,regleSousFormeDeChaine);
-
                         if(premier.equals("0")){
                             this.ajouterRegleAvantCoup(r);
                         }else{

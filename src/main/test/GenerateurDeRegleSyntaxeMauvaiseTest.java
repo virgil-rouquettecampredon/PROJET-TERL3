@@ -4,6 +4,7 @@ import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -480,6 +481,37 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
             assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (numero trop grand) incorrecte] au bloc de regle numero : [0]",m.getMessage());
+        }
+    }
+
+    @Test
+    public final void testBlocJoueurPasReconnus_testMauvais() {
+        generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("J12"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Impossible de reconnaire un Joueur au bloc de regle numero : [0]",m.getMessage());
+        }
+    }
+    @Test
+    public final void testBlocPiecePasReconnus_testMauvais() {
+        generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P12"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Impossible de reconnaire une piece ou une pieceToken au bloc de regle numero : [0]",m.getMessage());
+        }
+    }
+    @Test
+    public final void testBlocCasePasReconnus_testMauvais() {
+        generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("C12"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Impossible de reconnaire une Case au bloc de regle numero : [0]",m.getMessage());
         }
     }
 }

@@ -202,7 +202,19 @@ public enum Jeton implements Serializable, EstToken {
     //Jeton connecteur
     ET("et","ET"),
     OU("ou","OU"),
-    NON("non","N"),
+    NON("non","non","NON","N"){
+        @Override
+        public boolean estReconnu(String s){
+            if(s.length()>0 && s.charAt(0) == 'N') return true;
+            for (String st: NON.elementsReconnaissables){
+                if(s.equals(st)){
+                    return true;
+                }
+            }
+            NON.messageErreur = NON.valeur + " non reconnu";
+            return false;
+        }
+    },
 
     //Jetons référencant les conséquences
     ALORS("alors","alors"),
