@@ -1,8 +1,5 @@
 package org.example.model.Regles;
 
-import java.util.List;
-
 public interface ObjetsDeRegle {
-
-    //List<Object> recupererTout();
+    //Interface permettant de définir un objet comme étant objet d'une règle (SujetDeRegle ou CibleDeRegle)
 }

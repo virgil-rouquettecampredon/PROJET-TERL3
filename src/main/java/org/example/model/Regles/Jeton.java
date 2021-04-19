@@ -181,7 +181,7 @@ public enum Jeton implements Serializable, EstToken {
     //Jeton pour les macros, à traiter dans le générateur
     TOUS("macro tous","tous-piece", "tous-joueur", "tous-typecase"),
 
-    //Jeton Action ou etat
+    //Jetons Action ou Etat
     ACTION("action","prend","sedeplace","estplace","estsur","estechec"),
     ETAT("etat","estpromu"),
     COMPTEUR("compteur","nb_deplacement","timer"),
@@ -199,7 +199,7 @@ public enum Jeton implements Serializable, EstToken {
         }
     },
 
-    //Jeton connecteur
+    //Jetons connecteurs
     ET("et","ET"),
     OU("ou","OU"),
     NON("non","non","NON","N"){
@@ -246,6 +246,9 @@ public enum Jeton implements Serializable, EstToken {
         this.borne = 0;
         this.messageErreur = "";
     }
+
+
+    /*Getter et Setter*/
 
     public void setBorne(int b){
         this.borne = b;
