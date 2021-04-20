@@ -514,4 +514,5 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             assertEquals("Impossible de reconnaire une Case au bloc de regle numero : [0]",m.getMessage());
         }
     }
+
 }
