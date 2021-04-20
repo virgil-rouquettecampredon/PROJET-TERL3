@@ -2,6 +2,7 @@ package org.example.model.Regles;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum Jeton implements Serializable, EstToken {
@@ -36,7 +37,7 @@ public enum Jeton implements Serializable, EstToken {
                     } else {
                         try {
                             int nb = Integer.parseInt(piece.substring(1));
-                            if (nb < PIECE.borne) {
+                            if (nb < PIECE.borne[0]) {
                                 if (nb >= 0) {
                                     return true;
                                 } else {
@@ -47,7 +48,7 @@ public enum Jeton implements Serializable, EstToken {
                             }
                             return false;
                         } catch (NumberFormatException e) {
-                            PIECE.messageErreur = "Syntaxe de piece (numero) incorrecte";
+                            PIECE.messageErreur = "Syntaxe de piece (numero) incorrecte, un entier positif est requis";
                             return false;
                         }
                     }
@@ -55,11 +56,12 @@ public enum Jeton implements Serializable, EstToken {
                     PIECE.messageErreur = "Syntaxe de piece incorrecte (doit commencer par P)";
                 }
             } else {
-                PIECE.messageErreur = "Syntaxe de piece incorrecte";
+                PIECE.messageErreur = "Syntaxe de piece incorrecte (syntaxe de la forme PALL ou PN où N est un entier positif)";
             }
             return false;
         }
     },
+
     JOUEUR("joueur") {
         @Override
         public boolean estReconnu(String joueur) {
@@ -77,12 +79,12 @@ public enum Jeton implements Serializable, EstToken {
                                 JOUEUR.messageErreur = "Syntaxe du joueur (JAL + mauvais carac) incorrecte";
                             }
                         } else {
-                            JOUEUR.messageErreur = "Syntaxe du joueur (JA + mauvais carac) incorrecte";
+                            JOUEUR.messageErreur = "Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte";
                         }
                     } else {
                         try {
                             int nb = Integer.parseInt(joueur.substring(1));
-                            if (nb < JOUEUR.borne) {
+                            if (nb < JOUEUR.borne[0]) {
                                 if (nb >= 0) {
                                     return true;
                                 } else {
@@ -94,19 +96,39 @@ public enum Jeton implements Serializable, EstToken {
                             return false;
 
                         } catch (NumberFormatException e) {
-                            JOUEUR.messageErreur = "Syntaxe du joueur (numero) incorrecte";
+                            JOUEUR.messageErreur = "Syntaxe du joueur (numero) incorrecte, un entier positif est requis";
                             return false;
                         }
                     }
+                } else if (joueur.charAt(0) == 'E') {
+                    try {
+                        int nb = Integer.parseInt(joueur.substring(1));
+                        if (nb < JOUEUR.borne[1]) {
+                            if (nb >= 0) {
+                                return true;
+                            } else {
+                                JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop petit) incorrecte";
+                            }
+                        } else {
+                            JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop grand) incorrecte";
+                        }
+                        return false;
+
+                    } catch (NumberFormatException e) {
+                        JOUEUR.messageErreur = "Syntaxe de l'équipe (numero) incorrecte, un entier positif est requis";
+                        return false;
+                    }
+
                 } else {
                     JOUEUR.messageErreur = "Syntaxe du joueur incorrecte (doit commencer par J)";
                 }
             } else {
-                JOUEUR.messageErreur = "Syntaxe du joueur incorrecte";
+                JOUEUR.messageErreur = "Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif)";
             }
             return false;
         }
     },
+
     CASE("case") {
         @Override
         public boolean estReconnu(String cases) {
@@ -129,7 +151,7 @@ public enum Jeton implements Serializable, EstToken {
                     } else {
                         try {
                             int nb = Integer.parseInt(cases.substring(1));
-                            if (nb < CASE.borne) {
+                            if (nb < CASE.borne[0]) {
                                 if (nb >= 0) {
                                     return true;
                                 } else {
@@ -152,6 +174,39 @@ public enum Jeton implements Serializable, EstToken {
             return false;
         }
     },
+
+    /*EQUIPE("equipe"){
+        @Override
+        public boolean estReconnu(String equipe) {
+            if (equipe.length() > 1) {
+                if (equipe.charAt(0) == 'E') {
+                    try {
+                        int nb = Integer.parseInt(equipe.substring(1));
+                        if (nb < EQUIPE.borne) {
+                            if (nb >= 0) {
+                                return true;
+                            } else {
+                                JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop petit) incorrecte";
+                            }
+                        } else {
+                            JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop grand) incorrecte";
+                        }
+                        return false;
+
+                    } catch (NumberFormatException e) {
+                        JOUEUR.messageErreur = "Syntaxe de l'équipe (numero) incorrecte, un entier positif est requis";
+                        return false;
+                    }
+
+                } else {
+                    JOUEUR.messageErreur = "Syntaxe de l'équipe incorrecte (doit commencer par E)";
+                }
+            } else {
+                JOUEUR.messageErreur = "Syntaxe de l'équipe incorrecte (syntaxe de la forme EN où N est un entier positif)";
+            }
+            return false;
+        }
+    },*/
 
     //@TODO : Rajouter cas case relative
 
@@ -181,7 +236,7 @@ public enum Jeton implements Serializable, EstToken {
     //Jeton pour les macros, à traiter dans le générateur
     TOUS("macro tous","tous-piece", "tous-joueur", "tous-typecase"),
 
-    //Jetons Action ou Etat
+    //Jeton Action ou etat
     ACTION("action","prend","sedeplace","estplace","estsur","estechec"),
     ETAT("etat","estpromu"),
     COMPTEUR("compteur","nb_deplacement","timer"),
@@ -199,7 +254,7 @@ public enum Jeton implements Serializable, EstToken {
         }
     },
 
-    //Jetons connecteurs
+    //Jeton connecteur
     ET("et","ET"),
     OU("ou","OU"),
     NON("non","non","NON","N"){
@@ -235,7 +290,11 @@ public enum Jeton implements Serializable, EstToken {
     private String valeur;
     private List<String> elementsReconnaissables;
     private String messageErreur;
-    private int borne;
+
+    /** La borne peut avoir plusieurs valeurs dans le cas du jeton joueur qui traite aussi les équipes
+     * où il faut stocker la borne du nombre de joueur et la borne du nombre d'équipe
+     * Dans les autres cas le tableau n'a qu'un seul élément. */
+    private int[] borne;
 
     Jeton(String... s){
         this.valeur = s[0];
@@ -243,15 +302,20 @@ public enum Jeton implements Serializable, EstToken {
         for (int i =1; i<s.length;i++){
             elementsReconnaissables.add(s[i]);
         }
-        this.borne = 0;
+        this.borne = new int[2];    //init à 0
         this.messageErreur = "";
     }
 
-
-    /*Getter et Setter*/
-
     public void setBorne(int b){
-        this.borne = b;
+        this.borne[0] = b;
+    }
+
+    public void setBorne(int b, int index){
+        try {
+            this.borne[index] = b;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            this.borne[0] = b;
+        }
     }
 
     public String getMessageErreur(){
@@ -260,6 +324,18 @@ public enum Jeton implements Serializable, EstToken {
 
     public String getValeur() {
         return valeur;
+    }
+
+    public int getBorne() {
+        return this.borne[0];
+    }
+
+    public int getBorne(int index) {
+        try {
+            return this.borne[index];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return this.borne[0];
+        }
     }
 
     public List<String> getElementsReconnaissables() {

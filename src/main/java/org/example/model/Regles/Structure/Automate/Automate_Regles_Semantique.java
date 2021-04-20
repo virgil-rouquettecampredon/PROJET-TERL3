@@ -9,10 +9,16 @@ import org.example.model.Piece;
 import org.example.model.Case;
 import org.example.model.Joueur;
 import org.example.model.Regles.*;
+import org.example.model.Regles.Structure.Interpreteur.InterpreteurCible;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurCibleCase;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetJoueur;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetPiece;
 
+
+/** Automate_Regle_Semantique verifie la sémantique d'une règle à l'aide d'un Automate_Règle.
+ * Si la règle est correct, analyserUneRegle retourne l'objet Regle correspondant,
+ * Sinon, la méthode retourne une MauvaiseSemantiqueRegleException avec le message adequat.
+ * */
 public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
     public Automate_Regles_Semantique(){
@@ -894,12 +900,21 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         //"victoire", "defaite", "pat"
                                         switch (regleString.get(indRegleSyntaxe)) {
                                             case "victoire" -> {
+                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.victoire));
                                                 nbConsequence++;
                                             }
                                             case "defaite" -> {
+                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.defaite));
                                                 nbConsequence++;
                                             }
                                             case "pat" -> {
+                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.pat));
                                                 nbConsequence++;
                                             }
                                             default -> {
@@ -928,6 +943,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "15172021" -> {
                                             // Piece+Consequence+Piece
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -936,6 +955,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "1517182021" -> {
                                             // Piece+Joueur+Consequence+Piece
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -944,6 +967,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "15182021" -> {
                                             // Piecetoken+Consequence+Piece
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -953,23 +980,28 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         //en passant par 20-23 (case + pièce)
                                         // SUJET-CONSEQUENCE-CASE-PIECE
                                         case "1516202321" -> {
-                                            // Joueur+Consequence+Piece
+                                            // Joueur+Consequence+Case+Piece
                                             if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {
+                                                //EN TRAVAUX RIGHT NOW (signé hugo le boss)
+                                                new ConsequenceAction<Piece, Case>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe - 3), regleString.get(indRegleSyntaxe)),
+                                                        new InterpreteurCibleCase(regleString.get(indRegleSyntaxe - 1)),
+                                                        Fonctions_Comportements.placer);
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                         case "1517202321" -> {
-                                            // Piece+Consequence+Piece
+                                            // Piece+Consequence+Case+Piece
                                             throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         case "151718202321" -> {
-                                            // Piece+Joueur+Consequence+Piece
+                                            // Piece+Joueur+Case+Piece
                                             throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         case "1518202321" -> {
-                                            // PieceToken+Consequence+Piece
+                                            // PieceToken+Consequence+Case+Piece
                                             throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Case-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         default -> {
@@ -993,6 +1025,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "15172022" -> {
                                             // Piece+ConsequenceAction+PieceToken
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1001,6 +1037,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "1517182022" -> {
                                             // Joueur+Piece+ConsequenceAction+PieceToken
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
+                                                //TODO: Changer de Hugo, le notre est obsolète
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1009,6 +1050,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "15182022" -> {
                                             // PieceToken+ConsequenceAction+PieceToken
                                             if (regleString.get(indRegleSyntaxe - 1).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1024,6 +1069,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "1517202122" -> {
                                             // Piece+ConsequenceAction+Piece+Joueur
                                             if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1032,6 +1081,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "151718202122" -> {
                                             // Piece+Joueur+ConsequenceAction+Piece+Joueur
                                             if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1040,6 +1093,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         case "1518202122" -> {
                                             // PieceToken+ConsequenceAction+Piece+Joueur
                                             if (regleString.get(indRegleSyntaxe - 2).equals("prendre")) {
+                                                consequencesDeLaRegle.add(new ConsequenceAction<Piece, Piece>(
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                        Fonctions_Comportements.prendre_piece));
                                                 nbConsequence++;
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-ConsequenceAction-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1067,11 +1124,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         //en passant par 23 (20-23)(case + piecetoken)
                                         case "1516202322" -> {
                                             // Joueur+ConsequenceAction+Case+PieceToken
-                                            if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {
-                                                nbConsequence++;
-                                            } else {
-                                                throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
-                                            }
+                                            // TODO Rachetez un Hugo plus qualifiés et un peu plus beau que er wan sinon un binome serai plus beau et intelligent que l'autre
+                                            throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         case "1517202322" -> {
                                             // Piece+ConsequenceAction+Case+PieceToken
@@ -1107,9 +1161,17 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             // Piece+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
                                                 default -> {
@@ -1121,9 +1183,17 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             // Piece+Joueur+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
                                                 default -> {
@@ -1135,9 +1205,17 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                             // PieceToken+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
                                                 default -> {

@@ -8,7 +8,11 @@ import org.example.model.Regles.Regle;
 
 import java.util.List;
 
-public abstract class Automate_Regles<A extends EstToken> extends Automate<A>{
+
+/** Automate_Regles est un type d'Automate particulier à la création de règles,
+ * Cela permet de pouvoir créée notre système de règle et d'en créer d'autre si besoin
+ * */
+public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
 
     public Automate_Regles(int nbEtat, int etatDeDepart){
         super(nbEtat,etatDeDepart);

@@ -218,25 +218,25 @@ public class Fonctions_Comportements {
      * @param ordonnanceur : ordonnanceur de jeu
      * @param joueur : joueur gagnant
      * @fn désigne j comme gagnant et termine la partie*/
-    public static final BiFunction<OrdonnanceurDeJeu, List<Joueur>, Void> victoire = (ordonnanceur, joueurs) -> { return null; };
+    public static final Function<List<Joueur>, Void> victoire = (joueurs) -> { return null; };
 
     /** Consequence : JOUEUR + PERD
      * @param ordonnanceur : ordonnanceur de jeu
      * @param joueur : joeur perdant
      * @fn désigne j comme perdant et termine la partie*/
-    public static final BiFunction<OrdonnanceurDeJeu, List<Joueur>, Void> defaite = (ordonnanceur, joueurs) -> { return null; };
+    public static final Function<List<Joueur>, Void> defaite = (joueurs) -> { return null; };
 
     /** Consequence : JOUEUR + PAT
      * @param ordonnanceur : ordonnanceur de jeu
      * @fn désigne pat et termine la partie*/
-    public static final Function<OrdonnanceurDeJeu, Void> pat = (ordonnanceur) -> { return null; };
+    public static final Function<List<Joueur>, Void> pat = (joueurs) -> { return null; };
 
     /** Consequence : PIECE + PREND + PIECE
      * @param pieces_a : liste des pieces attaquantes possible
      * @param pieces_v : liste des pieces victimes possible
      * @fn le joueur choisi la pièce attaquante parmis la liste pièces_a et choisi la pièce que celle-ci va prendre
      * parmis la liste des pièces victime dans pieces_v  */
-    public static final BiFunction<List<Piece>, List<Piece>, Void> prendre_pîece = (pieces_a, pieces_v) -> { return null; };
+    public static final BiFunction<List<Piece>, List<Piece>, Void> prendre_piece = (pieces_a, pieces_v) -> { return null; };
 
     /** Consequence : PIECE + PREND + CASE
      * @param pieces : liste des pieces attaquantes possible

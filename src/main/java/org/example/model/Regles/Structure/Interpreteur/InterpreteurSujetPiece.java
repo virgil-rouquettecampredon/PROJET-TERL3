@@ -13,7 +13,10 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
     private String str_source;
     private List<Joueur> proprios;
 
-    public InterpreteurSujetPiece(String str_source) { this.str_source = str_source; }
+    public InterpreteurSujetPiece(String str_source) {
+        this.str_source = str_source;
+    }
+
     public InterpreteurSujetPiece(String str_joueur, String str_type) {
         this.str_source = str_joueur + "#" + str_type;
     }

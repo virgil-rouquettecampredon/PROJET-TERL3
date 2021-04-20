@@ -21,9 +21,9 @@ public class GenerateurDeRegleSyntaxeTest {
         auto = new Automate_Regles_Semantique();
         auto.initialiserAutomate();
         generateur = new GenerateurDeRegle_Jeton(auto);
-        Jeton.PIECE.setBorne(20);
-        Jeton.CASE.setBorne(20);
-        Jeton.JOUEUR.setBorne(20);
+        Jeton.PIECE.setBorne(20, 0);
+        Jeton.CASE.setBorne(20, 0);
+        Jeton.JOUEUR.setBorne(20, 0);
     }
     /**==================================================
      * ================TESTS BONS Joueur=================
