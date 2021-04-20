@@ -309,14 +309,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                      *      Ne peut pas avancer (mais est terminal)
                      *
                      * */
-                    if ( (peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
+                    if ((peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                             && ( (          traitementCondition
-                                            &&
-                                            estConnecteurCondition(regleSyntaxe.get(indRegleSyntaxe + 1)))
-                                ||
-                                    (       !traitementCondition
-                                            &&
-                                            estConnecteurConsequence(regleSyntaxe.get(indRegleSyntaxe + 1))) ) )
+                            &&
+                            estConnecteurCondition(regleSyntaxe.get(indRegleSyntaxe + 1)))
+                            ||
+                            (       !traitementCondition
+                                    &&
+                                    estConnecteurConsequence(regleSyntaxe.get(indRegleSyntaxe + 1))) ) )
                             ||
                             !peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                         )  {

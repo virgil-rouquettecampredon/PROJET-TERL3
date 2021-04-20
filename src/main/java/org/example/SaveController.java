@@ -34,7 +34,7 @@ public class SaveController extends Controller {
                 showAlert(Alert.AlertType.ERROR, "Erreur : impossible de sauvegarder le fichier : "+file.getAbsolutePath());
                 return;
             }
-            button.getStyleClass().remove("backButton");
+            button.getStyleClass().remove("buttonLight");
             button.getStyleClass().add("specialButton");
             valid = true;
         }
@@ -57,5 +57,10 @@ public class SaveController extends Controller {
             getApp().varianteManager.applyCurrent();
             getApp().setRoot("home");
         }
+    }
+
+    public void backButton() throws IOException {
+        getApp().soundManager.playSound("button-confirm");
+        getApp().setRoot("varianteMenu3");
     }
 }

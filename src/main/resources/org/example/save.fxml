@@ -5,6 +5,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -23,11 +24,20 @@
                   <Font name="Candara" size="36.0" />
                </font>
             </Button>
-            <Button fx:id="button" mnemonicParsing="false" onAction="#continueButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="CONTINUER">
-               <font>
-                  <Font name="Candara" size="36.0" />
-               </font>
-            </Button>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#backButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="PRECEDENT">
+                     <font>
+                        <Font name="Candara" size="36.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="button" mnemonicParsing="false" onAction="#continueButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="buttonLight" text="CONTINUER">
+                     <font>
+                        <Font name="Candara" size="36.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

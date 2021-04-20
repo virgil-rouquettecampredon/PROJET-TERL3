@@ -1,10 +1,11 @@
 
 package org.example.model.Regles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Jeton_Interface implements EstToken{
+public enum Jeton_Interface implements EstToken, Serializable {
 
     //Jetons COMMUNS aux deux modèles
     //==== CONNECTEURS ====

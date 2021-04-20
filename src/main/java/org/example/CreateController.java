@@ -17,6 +17,7 @@ public class CreateController extends Controller {
 
         if (!input.getText().isEmpty()) {
             getApp().varianteManager.setCurrent(new VarianteBuilder().setName(input.getText()));
+            getApp().varianteManager.addClassiquePlayers();
             System.out.println(input.getText());
             getApp().setRoot("VarianteMenu1");
         }

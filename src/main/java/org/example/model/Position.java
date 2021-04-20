@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Position implements Serializable {
-    private int x;
-    private int y;
+    private int x;                  // La position x dans le plateau
+    private int y;                  // La position y dans le plateau
 
     public Position(int x, int y) {
         this.x = x;

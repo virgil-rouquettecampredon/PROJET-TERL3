@@ -143,7 +143,12 @@ public class PieceMoveController extends Controller {
                 showAlert(Alert.AlertType.ERROR, "Erreur : nombre de vie inférieur à -1 ("+vieInput.getText()+")");
                 return;
             }
+            if (vie == 0){
+                showAlert(Alert.AlertType.ERROR, "Vous ne pouvez pas créer une pièce avec un nombre de vie égal à 0 car cela signifirai que la pièce est déjà morte");
+                return;
+            }
         }
+
         
         Piece p;
         if (userVar != null) {
@@ -185,6 +190,7 @@ public class PieceMoveController extends Controller {
 
             image.setImage(new Image("file:"+file));
         }
+        updateCanvas();
     }
 
     public void selectBoxTool() {

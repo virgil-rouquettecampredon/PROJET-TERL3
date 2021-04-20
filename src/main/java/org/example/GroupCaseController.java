@@ -1,23 +1,16 @@
 package org.example;
 
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.example.model.*;
-import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
-import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GroupCaseController extends Controller {
     @FXML
@@ -135,7 +128,7 @@ public class GroupCaseController extends Controller {
             case PRIMARY -> {
                 switch (modeCase) {
                     case ABSOLU -> {
-                        if (gr != null && c.isClickable() && !gr.getGroup().getCasesAbsolue().contains(c)) {
+                        if (gr != null && c.isAccessible() && !gr.getGroup().getCasesAbsolue().contains(c)) {
                             gr.getGroup().getCasesAbsolue().add(c);
                         }
                     }

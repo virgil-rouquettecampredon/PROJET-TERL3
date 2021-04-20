@@ -521,7 +521,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
         }catch (MauvaiseDefinitionRegleException e){
-            assertEquals("Bloc Sujet-ConsequenceTerminale inconnu [1]",e.getMessage());
+            assertEquals("Bloc Joueur-ConsequenceTerminale inconnu [1]",e.getMessage());
         }
     }
 

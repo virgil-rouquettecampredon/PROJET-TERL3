@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Plateau implements Serializable {
-    private int heightY;
-    private int witdhX;
-    private ArrayList<ArrayList<Case>> echiquier;
+    private int heightY;                                // Hauteur du plateau
+    private int witdhX;                                 // Largeur du plateau
+    private ArrayList<ArrayList<Case>> echiquier;       // Liste des case du plateau
 
-
+    /**
+     * Constructeur par défault
+     */
     public Plateau() {
         this.heightY = 8;
         this.witdhX = 8;
         updateSize();
     }
+
 
     public Plateau(int heightY, int witdhX) {
         this.heightY = heightY;
@@ -27,6 +30,9 @@ public class Plateau implements Serializable {
 
     }
 
+    /**
+     * Vide le plateau de toutes ses pièces
+     */
     public void clear() {
         for (int i = 0; i < heightY; i++) {
             for (int j = 0; j < witdhX; j++) {

@@ -6,17 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import org.example.model.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class InitPosController extends Controller {
     @FXML
@@ -101,7 +97,7 @@ public class InitPosController extends Controller {
 
         switch (mouseEvent.getButton()) {
             case PRIMARY -> {
-                if (c.isClickable() && pr != null) {
+                if (c.isAccessible() && pr != null) {
                     Piece p = new Piece(pr.getPiece());
                     Joueur j = joueurBox.getValue().getJoueur();
                     p.setJoueur(j);

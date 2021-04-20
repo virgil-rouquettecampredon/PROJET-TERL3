@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
-    private String name;
-    private int equipe;
-    private ArrayList<Piece> graveyard;
-    private ArrayList<Piece> pawnList;
-    private ArrayList<Piece> typePawnList;
-    private int timer;
+    private String name;                        // Nom du joueur
+    private int equipe;                         // Équipe du joueur
+    private ArrayList<Piece> graveyard;         // Liste des pièce dans la défausse du joueur
+    private ArrayList<Piece> pawnList;          // Liste de toutes les pièces du joueur (le nombre de pièces total du joueur)
+    private ArrayList<Piece> typePawnList;      // Liste de tous les types de pièces du joueur
+    private int timer;                          // Temps du joueur utilisé depuis le début de la partie
 
 
     public Joueur(String name, int equipe) {

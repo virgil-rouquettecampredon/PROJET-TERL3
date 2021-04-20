@@ -2,9 +2,10 @@ package org.example.model.Regles;
 
 import org.example.model.Regles.Structure.Automate.Automate_Regles;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class GenerateurDeRegle<A extends EstToken> {
+public abstract class GenerateurDeRegle<A extends EstToken>{
 
     //Liste des règles données sous forme de chaine de caractère (liste de mots) à la construction du GenerateurDeRegle
     private List<List<String>> reglesSousFormeDeChaine;

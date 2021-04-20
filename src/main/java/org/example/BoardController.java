@@ -24,6 +24,7 @@ public class BoardController extends Controller {
 
     private CanvasManager canvasManager;
 
+
     @Override
     public void initialise() {
         getApp().varianteManager.getCurrent().getListGroupCases().clear();

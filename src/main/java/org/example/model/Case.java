@@ -5,14 +5,14 @@ import org.example.model.Regles.CibleDeRegle;
 import java.io.Serializable;
 
 public class Case implements CibleDeRegle, Serializable {
-    private Position position;
-    private Piece pieceOnCase;
-    private boolean clickable;
+    private Position position;                          // Position sur le plateau
+    private Piece pieceOnCase;                          // Pièce située sur la case, ou null si aucune pièce
+    private boolean accessible;                          // Case accessible ou non
 
     public Case(int x, int y, boolean clickable) {
         position = new Position(x, y);
         this.pieceOnCase = null;
-        this.clickable = true;
+        this.accessible = true;
     }
 
     public Case(int x, int y) {
@@ -25,12 +25,12 @@ public class Case implements CibleDeRegle, Serializable {
     }
 
     /*DEBUT GETTER SETTER*/
-    public boolean isClickable() {
-        return clickable;
+    public boolean isAccessible() {
+        return accessible;
     }
 
     public void switchClickable() {
-        clickable = !clickable;
+        accessible = !accessible;
     }
 
     public Position getPosition() {

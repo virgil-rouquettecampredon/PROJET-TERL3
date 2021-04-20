@@ -27,22 +27,9 @@ public class VarianteMenu1Controller extends Controller {
         getApp().soundManager.playSound("button-confirm");
 
         if (getApp().varianteManager.getCurrent().getAllPawn().size() == 0) {
-            //mettre les pieces par defaut
-            File pawnFile = new File("src/main/resources/org/example/images/pawn.png");
-            File kingFile = new File("src/main/resources/org/example/images/king.png");
-            ArrayList<Joueur> j = getApp().varianteManager.getCurrent().getJoueurs();
-            Joueur j2 = j.get(0);
-            if (j.size() > 1) {
-                j2 = j.get(1);
-            }
-            Piece p1 = new Piece("Paw", "file:" + pawnFile.getAbsolutePath(), j.get(0));
-            p1.getJoueur().getTypePawnList().add(p1);
-            p1.setEstPromouvable(true);
-
-            Piece p2 = new Piece("King", "file:" + kingFile.getAbsolutePath(), j2);
-            p2.getJoueur().getTypePawnList().add(p2);
-            p2.setEstConditionDeVictoire(true);
+            getApp().varianteManager.addClassiquePawn(getApp().varianteManager.getCurrent().getJoueurs(), getApp().varianteManager.getCurrent().getPlateau());
         }
+        getApp().varianteManager.addClassiqueOrderPlayer();
 
         getApp().setRoot("varianteMenu2");
     }

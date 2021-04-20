@@ -16,14 +16,18 @@ import java.io.IOException;
 
 public class App extends Application {
 
-    public Scene scene;
+    public Scene scene;                         // Scene principale de l'application
 
-    public SoundManager soundManager;
-    public VarianteManager varianteManager;
+    public SoundManager soundManager;           // Gestionnaire du son
+    public VarianteManager varianteManager;     // Gestionnaire des variantes
 
+    /**
+     * Equivalent du main pour javaFX
+     * @param stage donné par javaFX pour transtmettre la scene principale
+     * @throws IOException quand on ne peux pas charger la permière scene
+     */
     @Override
     public void start(Stage stage) throws IOException {
-        //commentaire a supprimer pour push
         soundManager = new SoundManager();
         varianteManager = new VarianteManager();
 
@@ -37,13 +41,23 @@ public class App extends Application {
             System.exit(0);
         });
         stage.show();
-        //commentaire
     }
 
+    /**
+     * Charger une scene dans la fenetre principale
+     * @param fxml le nom du fichier fxml à charger (ex: "home" pour home.fxml)
+     * @throws IOException si impossible de charger
+     */
     public void setRoot(String fxml) throws IOException {
         setRoot(fxml, null);
     }
 
+    /**
+     * Charger une scene dans la fenetre principale
+     * @param fxml le nom du fichier fxml à charger (ex: "home" pour home.fxml)
+     * @param var variable optionnelle qui sera chargé dans Controller et qui peux être récupéré
+     * @throws IOException
+     */
     public void setRoot(String fxml, Object var) throws IOException {
         scene.setRoot(loadFXML(fxml, var));
     }

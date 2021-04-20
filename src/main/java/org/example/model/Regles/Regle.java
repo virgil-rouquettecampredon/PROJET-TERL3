@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Regle implements Serializable {
+public class Regle {
     private Arbre_Formule<Condition> arbre_conditions;
     private List<Consequence> consequences;
 

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> extends Condition {
-    /*Classe modélisant une condition dont l'élément d'action est une action (sedeplace, estsur ...)*/
-    private BiFunction<List<A>, List<B>,Boolean> comportement;          //Fonction permettant de modéliser le comportement de la Condition
-    private InterpreteurSujet interpretSujet;                           //Interpréteur
+
+    private BiFunction<List<A>, List<B>,Boolean> comportement;
+    private InterpreteurSujet interpretSujet;
     private Interpreteur_Objet_Regle interpretCible;
 
     public ConditionAction(InterpreteurSujet interpretSujet, Interpreteur_Objet_Regle interpretCible, BiFunction<List<A>, List<B>,Boolean> comportement){

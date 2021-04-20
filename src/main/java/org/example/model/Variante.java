@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.Regles.GenerateurDeRegle;
+import org.example.model.Regles.Jeton;
 import org.example.model.Regles.Regle;
 
 import java.io.Serializable;
@@ -7,16 +9,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Variante implements Serializable {
-    private String name;
-    private Plateau plateau;
-    private ArrayList<Joueur> joueurs;
-    private ArrayList<Regle> regles;
-    private ArrayList<GroupCases> listGroupCases;
+    private String name;                                // Nom de la variante
+    private Plateau plateau;                            // Le plateau correspondant à cette variantes
+    private ArrayList<Joueur> joueurs;                  // La liste des joueurs de cette variantes
+    private ArrayList<Joueur> ordreJoueurs;             // La liste des joueurs dans l'ordre des tour (avec duplication, etc)
+    private ArrayList<RegleInterface> regles;           // Les listes de Regles
+    private ArrayList<GroupCases> listGroupCases;       // La liste de toutes les groupes de cases définies dans cette variante
 
-    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Regle> regles, ArrayList<GroupCases> listGroupCases) {
+    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
         this.name = name;
         this.plateau = plateau;
         this.joueurs = joueurs;
+        this.ordreJoueurs = ordreJoueurs;
         this.regles = regles;
         this.listGroupCases = listGroupCases;
     }
@@ -37,12 +41,12 @@ public class Variante implements Serializable {
         this.joueurs = joueurs;
     }
 
-    public ArrayList<Regle> getRegles() {
+    public ArrayList<RegleInterface> getRegles() {
         return regles;
     }
 
-    public void setRegles(ArrayList<Regle> regles) {
-        this.regles = regles;
+    public void setRegles(ArrayList<RegleInterface> generateurDeRegle) {
+        this.regles = generateurDeRegle;
     }
 
     public String getName() {

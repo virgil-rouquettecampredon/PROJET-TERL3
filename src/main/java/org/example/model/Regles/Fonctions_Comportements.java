@@ -92,8 +92,10 @@ public class Fonctions_Comportements {
      * @return vrai si au moins une pièce dans la liste des pièces se deplace sur une case dans la liste des cases*/
     public static final BiFunction<List<Piece>, List<Case>, Boolean> se_deplace = (pieces, cases) -> {
             for (Piece p : pieces) {
-                if (cases.contains(p.getCaseDeplace())) {
-                    return true;
+                for (Case casePlateau: cases) {
+                    if (casePlateau.getPieceOnCase().equals(p) && p.getDeplaceCeTour()) {
+                        return true;
+                    }
                 }
             }
         return false;

@@ -1,16 +1,29 @@
 package org.example.model;
 
 
-public class OrdreDesJoueurs {
-    private String ordreStr;
-    private int curseur;
-    private int nbJoueur;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Supplier;
+
+public class OrdreDesJoueurs implements Supplier<Integer> {
+    /*Classe permettaant de définir un ordonnanceur pour les Joueurs*/
+
+    public static final String separateur = "J";        //Separateur standart de définition d'une chaine d'ordre de Joueur
+    private String ordreStr;                            //Chaine renseignant l'ordre des joueurs au nivaeu du système
+    private int curseur;                                //Curseur de parcours de la chaine ordreStr
+    private int nbJoueur;                               //Nombre de joueurs de la variante
+    private List<String> ordreSepare;                   //Liste de chaine renseignant l'ordre renseigné en ne récupérant que les valeurs d'indicage
 
     public OrdreDesJoueurs(String ordreStr, int nbJoueur) {
         this.ordreStr = ordreStr;
         this.nbJoueur = nbJoueur;
         this.curseur = 0;
-        //this.verifierOrdre();
+
+        ordreSepare = new ArrayList<>();
+        Collections.addAll(ordreSepare, ordreStr.split(separateur));
+        ordreSepare.remove(0);
     }
 
     /**Méthode permettant de verifier si une séquence est valide ou pas pour définir un ordre des joueurs.

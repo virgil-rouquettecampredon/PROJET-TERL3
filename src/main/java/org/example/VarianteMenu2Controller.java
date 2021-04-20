@@ -4,8 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import org.example.model.RegleInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class VarianteMenu2Controller extends Controller {
@@ -47,6 +49,15 @@ public class VarianteMenu2Controller extends Controller {
     @FXML
     private void endButton() throws IOException {
         getApp().soundManager.playSound("button-confirm");
+        ArrayList<RegleInterface> list =  getApp().varianteManager.getCurrent().getRegles();
+        list.clear();
+        getApp().varianteManager.addClassiqueRules(list, getApp().varianteManager.getCurrent().getJoueurs());
         getApp().setRoot("varianteMenu3");
+    }
+
+    @FXML
+    public void orderPlayerButton() throws IOException {
+        getApp().soundManager.playSound("button-click");
+        getApp().setRoot("orderPlayer");
     }
 }

@@ -13,19 +13,17 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
-    private String name;
-    private String sprite;
-    private int nbMovement;
-    private int nbLife;
-    private Joueur joueur;
-    private ArrayList<PositionDeDeplacement> posDeplacements;
-    private ArrayList<VecteurDeDeplacement> vecDeplacements;
-    private Boolean[] comportementPiece;
-
-    private Boolean[] etatPiece;
-    private Piece pieceMange = null;
-    private Piece pieceMenace = null;
-    private Case caseDeplace = null;
+    private String name;                                            // Nom de la pièce
+    private String sprite;                                          // Image qui sera afficher sur le plateau pour cette pièce
+    private int nbMovement;                                         // Le nombre total de mouvement qu'a effectué la pièce au cours de la partie jouée
+    private int nbLife;                                             // Le nombre de vie qu'a la pièce si elle est condition de victoire
+    private Joueur joueur;                                          // Le joueur auquelle appartient la pièce
+    private ArrayList<PositionDeDeplacement> posDeplacements;       // Les deplacement fixes de la pièce (ex :x+2; y+2)
+    private ArrayList<VecteurDeDeplacement> vecDeplacements;        // Les déplacement horizontaux de la pièce
+    private Boolean[] comportementPiece;                            // Donne les comportements de pièces (ex: conditionDeVictoire, Traitre, ...)
+    private Boolean[] etatPiece;                                    // Ce sont des conditions utilisé pour les règles (ex: aEtePromu)
+    private Piece pieceMange = null;                                // Retourne la pièce qui vient d'être mangé, sinon retourne null
+    private Piece pieceMenace = null;                               // Retourne la pièce qu'il menace
 
     public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements) {
         this.name = name;
@@ -56,6 +54,9 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         this(name, sprite, null);
     }
 
+
+    /**@param piece: La pèce utilisé afin de la dupliqué.
+     * La fonction duplique une pièce */
     public Piece(Piece piece) {
         this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements);
 
@@ -118,7 +119,6 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         comportementPiece[2] = comportement;
     }
 
-
     public void setAEtePromu(boolean etat) {
         etatPiece[0] = etat;
     }
@@ -131,10 +131,9 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         pieceMenace = p;
     }
 
-    public void setCaseDeplace(Case c) {
-        caseDeplace = c;
+    public void setDeplaceCeTour(boolean bool) {
+        etatPiece[1] = bool;
     }
-
 
     public String getName() {
         return name;
@@ -156,7 +155,6 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         return joueur;
     }
 
-
     public boolean aEtePromu() {
         return etatPiece[0];
     }
@@ -169,10 +167,9 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         return pieceMenace;
     }
 
-    public Case getCaseDeplace() {
-        return caseDeplace;
+    public boolean getDeplaceCeTour() {
+        return etatPiece[1];
     }
-
 
     public ArrayList<PositionDeDeplacement> getPosDeplacements() {
         return posDeplacements;
