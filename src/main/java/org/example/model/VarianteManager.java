@@ -181,12 +181,21 @@ public class VarianteManager {
         return variantes;
     }
 
+    /**
+     * Cree la variante courrante et l'ajoute dans la liste des variante
+     * @return la variante cree
+     */
     public Variante applyCurrent() {
         Variante vr = current.createVariante();
         variantes.add(vr);
         return vr;
     }
 
+    /**
+     * Sauvegarde dans un fichier la variante courrante
+     * @param path  Le chemin vers le fichier à creer
+     * @throws IOException Si le chemin n'est pas valide
+     */
     public void saveCurrent(String path) throws IOException{
         Variante vrToSave = applyCurrent();
         FileOutputStream fos = new FileOutputStream(path);
@@ -195,6 +204,12 @@ public class VarianteManager {
         oos.close();
     }
 
+    /**
+     * Importe une variante depuis un fichier et l'ajoute dans la liste de variante
+     * @param path  le chemin vers le fichier
+     * @return  La variante importée
+     * @throws IOException  Si le chemin n'est pas valide
+     */
     public Variante importFile(String path) throws IOException{
         try {
             FileInputStream fin = new FileInputStream(path);
