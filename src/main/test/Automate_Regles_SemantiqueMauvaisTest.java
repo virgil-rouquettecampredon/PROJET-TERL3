@@ -1048,11 +1048,61 @@ public class Automate_Regles_SemantiqueMauvaisTest {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
         } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Il faut définir au moins une consequence pour créer une règle",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testCase_PasDeCondition(){
+        List<String> reS = Arrays.asList("J15","victoire");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE);
+
+        automate.setEtatDeDepart(15);
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
             assertEquals("Il faut définir au moins une condition pour créer une règle",e.getMessage());
         }
     }
 
+    @Test
+    public final void testCase_ManqueParenthese_Fermante(){
+        List<String> reS = Arrays.asList("(","P2","estpromu","et","P2#J1","estpromu","alors");
+        List<Jeton> reJ = Arrays.asList(Jeton.PARENTHESEOUVRANTE, Jeton.PIECE, Jeton.ETAT, Jeton.ET, Jeton.PIECETOKEN, Jeton.ETAT, Jeton.ALORS);
 
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Probleme de paranthesage, trop de parenthèses ouvrante : 6",e.getMessage());
+        }
+    }
 
+    @Test
+    public final void testCase_ManqueParenthese_Ouvrante(){
+        List<String> reS = Arrays.asList("P2","estpromu","et","P2#J1","estpromu",")");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE, Jeton.ETAT, Jeton.ET, Jeton.PIECETOKEN, Jeton.ETAT, Jeton.PARENTHESEFERMANTE);
 
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : 5",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testCase_EtatDeDepartInvalide(){
+        List<String> reS = Arrays.asList("test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE);
+
+        automate.setEtatDeDepart(200);
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de commencer une analyse en partant de l'état de départ : 200",e.getMessage());
+        }
+    }
 }

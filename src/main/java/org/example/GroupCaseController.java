@@ -172,7 +172,12 @@ public class GroupCaseController extends Controller {
 
     @FXML
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "TEXT");//todo text info group cases
+        showAlert(Alert.AlertType.INFORMATION, "Sur cette partie, il vous est possible de renseigner des groupements particuliers de cases (réutilisables dans les règles).\n\n" +
+                "Pour ce faire, vous pourrez gérer vos différents groupes dans le menu de gauche (clic droit) \n" +
+                "Une fois un groupe sélectionné, vous pourrez lui renseigner des cases qui le composent (plateau de gauche).\n" +
+                "Ces cases peuvent soit être définies de manière absolue (vrai case du plateau) => sélectionner \"Case absolue\" puis clic gauche pour en ajouter, clic droit pour en enlever.\n" +
+                "Soit de manière relative (~position) par rapport à une case (ici la case au point rouge) => même manipulation en sélectionnant \"Case relative\".\n" +
+                "On peut déplacer la case au point rouge par un clic molette sur le plateau.");
     }
 
     @FXML

@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GroupCases implements Serializable {
-    private String name;                                    //Nom du groupe de case
-    private ArrayList<Case> casesAbsolue;                   //Liste de cases définies de manière absolue (renseignant de vrai cases du plateau)
-    private ArrayList<Position> positionsRelatives;         //Liste de cases définies de manière relative (renseignant des cases du plateau par rapport à une case passée en paramètre)
-    private Plateau plateau;                                //Plateau de jeu de la variante
+    /*Classe permettant de modéliser un regroupement de cases*/
+    private String name;                                // Nom du groupe
+    private ArrayList<Case> casesAbsolue;               // Liste des case en position Absolue
+    private ArrayList<Position> positionsRelatives;     // Liste des positions du plateau correspondant à des cases relatifs à une chose
+    private Plateau plateau;                            // Le plateau de jeu
 
     public GroupCases(String name, Plateau plateau) {
         this.name = name;

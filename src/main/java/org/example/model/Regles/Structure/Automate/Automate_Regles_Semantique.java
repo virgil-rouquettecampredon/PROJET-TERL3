@@ -239,7 +239,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         //Regle à retourner après le traitement
         Regle regle = new Regle();
         //Chaine de caractere fourni par le passage dans les états
-        String parcours = "0";
+        Etat dep = this.recupererEtat(this.getEtatDeDepart());
+        if(dep == null){
+            throw new MauvaiseDefinitionRegleException("Impossible de commencer une analyse en partant de l'état de départ : " + getEtatDeDepart());
+        }
+        String parcours = dep.getValeur();
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
 
@@ -258,40 +262,30 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         for (Jeton j: regleSyntaxe) {
             switch (j) {
                 //Gestion du parenthésage
-                case PARENTHESEOUVRANTE: {
+                case PARENTHESEOUVRANTE -> {
                     jetonsarborescence.add(Jeton.PARENTHESEOUVRANTE);
                     indParenthese++;
                 }
                 //Gestion du parenthésage
-                case PARENTHESEFERMANTE: {
+                case PARENTHESEFERMANTE -> {
                     jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
                     indParenthese--;
                     if(indParenthese<0){
-                        throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                        throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString));
                     }
                 }
                 //Gestion des connecteurs (Pour l'arbre des conditions)
-                case ET: {
+                case ET,OU,NON -> {
                     if (traitementCondition) {
-                        jetonsarborescence.add(Jeton.ET);
-                    }
-                }
-                case OU: {
-                    if (traitementCondition) {
-                        jetonsarborescence.add(Jeton.OU);
-                    }
-                }
-                case NON: {
-                    if (traitementCondition) {
-                        jetonsarborescence.add(Jeton.NON);
+                        jetonsarborescence.add(j);
                     }
                 }
                 //Gestion du ALORS (fin du traitement des conditions)
-                case ALORS: {
+                case ALORS -> {
                     if (traitementCondition) {
                         traitementCondition = false;
                         if(indParenthese != 0){
-                            throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, trop de parenthèses " + ((indParenthese < 0)? "fermante" : "ouvrante") + " : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
+                            throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, trop de parenthèses " + ((indParenthese < 0)? "fermante" : "ouvrante") + " : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString));
                         }
                     } else {
                         throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
@@ -923,7 +917,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         }
                                     }else{
                                         //Pas atteignable en théorie (on ne peut atteindre 19 que part Joueur)
-                                        throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceTerminale inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                        throw new MauvaiseSemantiqueRegleException("Bloc Sujet-ConsequenceTerminale inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]" + parcours);
                                     }
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Sujet-ConsequenceTerminale [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1259,7 +1253,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         }
 
         if(nbConsequence == 0){
-            throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une condition pour créer une règle");
+            throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une consequence pour créer une règle");
         }
 
         //Ensuite, on essaye de générer l'arbre de conditions de notre règle

@@ -13,37 +13,55 @@ public class OrdreDesJoueurs {
         //this.verifierOrdre();
     }
 
+    /**Méthode permettant de verifier si une séquence est valide ou pas pour définir un ordre des joueurs.
+     * @param ordreStr : chaine à analyser renseignant un ordre de jeu pour les joueurs de la variante.
+     * @param nbJoueur : nombre de joueurs présents sur la variante.**/
     public static void verifierOrdre(String ordreStr, int nbJoueur) throws OrdreDesJoueursException{
         boolean[] tabPresent = new boolean[nbJoueur];
-        int valueChar = 0;
         for (boolean b: tabPresent){ b=false; }
-        try {
-            for (char c : ordreStr.toCharArray()) {
-                //NumberFormatException
-                valueChar = Integer.parseInt(String.valueOf(c));
-                if (valueChar <= nbJoueur && valueChar>0) {
-                    tabPresent[valueChar-1] = true;
-                } else {
-                    throw new OrdreDesJoueursException("Joueur renseigné invalide.");
-                }
-            }
-            int indice = 1;
-            for (boolean b: tabPresent){
-                if (b == false){
-                    throw new OrdreDesJoueursException("Joueur non présent dans la séquence de jeu : " + indice);
-                }
-                indice++;
+
+        //Valeur de l'indice du joueur renseigné
+        int valueChar = 0;
+        //Indice courant du parcours de la chaine
+        int curIndice = 0;
+        String analyserString = ordreStr;
+
+        //Tant que l'on a pas fini de lire la chaine et qu'elle possède encore des éléments à traiter
+        while(analyserString.length()>0) {
+            curIndice = analyserString.indexOf(separateur) + 1;
+            analyserString = analyserString.substring(curIndice);
+
+            String j;
+            if (analyserString.contains(separateur)) {
+                j = analyserString.substring(0, analyserString.indexOf(separateur));
+            } else {
+                j = analyserString;
+                analyserString = "";
             }
 
-        }catch(OrdreDesJoueursException e){
-            throw e;
-        }catch (Exception e) {
-            throw new OrdreDesJoueursException("Nom de joueur renseigné innaproprié.");
+            //Analyser la sous-chaine en tant que indice de joueurs
+            try {
+                valueChar = Integer.parseInt(j);
+                if (valueChar <= nbJoueur && valueChar > 0) {
+                    tabPresent[valueChar - 1] = true;
+                } else {
+                    throw new OrdreDesJoueursException("Joueur renseigné invalide : " + valueChar);
+                }
+            } catch (NumberFormatException e) {
+                throw new OrdreDesJoueursException("Identificateur de Joueur invalide : " + j);
+            }
+        }
+
+        for (int i = 0; i<nbJoueur;i++){
+            if(!tabPresent[i]){
+                throw new OrdreDesJoueursException("Joueur non renseigné dans la chaine : " + (i+1));
+            }
         }
     }
 
-    public int getProchainJoueur(){
-        this.curseur = (curseur + 1)% ordreStr.length();
-        return ordreStr.charAt(curseur);
+    public Integer get(){
+        int i = Integer.parseInt(ordreSepare.get(curseur));
+        curseur = (curseur+1)%ordreSepare.size();
+        return i;
     }
 }
