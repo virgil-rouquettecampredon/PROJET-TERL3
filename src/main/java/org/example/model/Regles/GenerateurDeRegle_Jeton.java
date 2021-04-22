@@ -2,17 +2,20 @@ package org.example.model.Regles;
 
 import org.example.model.Regles.Structure.Automate.Automate_Regles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements Serializable {
 
+    Map<String,Jeton> listeAlias;
+
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){
         super(jetons,auto);
+        listeAlias = new HashMap<>();
     }
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto){
         super(Arrays.asList(Jeton.values()),auto);
+        listeAlias = new HashMap<>();
     }
 
     @Override
@@ -27,6 +30,9 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         return ((j = super.estReconnu(s)) == null)? Jeton.AUCUN : j;
     }
 
+    /**Méthode permettant d'analyser syntaxiquement une regle sous forme de liste de termes.
+     * Permet d'étiqueter les différents termes de la ragle pour une analyse sémantique ensuite.
+     * @param regle : règle à analyser sous forme de liste de termes (String)**/
     public List<Jeton> analyseSyntaxique(List<String> regle) throws MauvaiseSyntaxeRegleException{
         //Liste de jetons à retourner à la fin du traitement
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
@@ -111,9 +117,17 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                         //Si un jeton est reconnu
                         if(!(curJeton = estReconnu(curRegle)).equals(Jeton.AUCUN)){
                             //Si c'est un jeton alias de reconnus, alors on le supprime de la regle (as)
-                            //On ne garde ainsi que la valeur pour laquelle le jeton est associé
                             if(curJeton.equals(Jeton.ALIAS)){
-                                regle.remove(i);
+                                try {
+                                    //On ne garde ainsi que la valeur pour laquelle le jeton est associé
+                                    regle.remove(i);
+                                    //On va ensuite renseigner notre alias dans la table des alias
+                                    listeAlias.put(regle.remove(i - 1), regleSousFormeJeton.get(i - 1));
+                                    //Puis on passe à l'instruction d'après, on ne veut pas le renseigner dans la suite de notre traitement (on l'a déjà sauvegardé)
+                                    continue;
+                                }catch (IndexOutOfBoundsException e){
+                                    throw new MauvaiseSyntaxeRegleException("Impossible d'appliquer un ALIAS");
+                                }
                             }
                             //Si c'est un jeton tous de reconnus, alors on le remplace par sa valeur correspondante
                             if(curJeton.equals(Jeton.TOUS)){
@@ -183,5 +197,10 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 throw new MauvaiseDefinitionRegleException("Problème à la règle num [" + i + "] => règle vide");
             }
         }
+    }
+
+    /*Getter et Setter*/
+    public Map<String,Jeton> getListeAlias(){
+        return listeAlias;
     }
 }

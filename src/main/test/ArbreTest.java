@@ -2,6 +2,7 @@ import org.example.model.Regles.*;
 import org.example.model.Regles.Structure.Arbre.ArbreException;
 import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
 import org.example.model.Regles.Structure.Arbre.Arbre_Formule;
+import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ public class ArbreTest {
     private Condition condFaux;
 
     @BeforeEach
-    public void initialiser_Automate() {
+    public void initialiser_Auto(){
         condVrai = new Condition() {
             @Override
             public void verifierElements(OrdonnanceurDeJeu ord){ }

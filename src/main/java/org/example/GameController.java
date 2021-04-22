@@ -29,7 +29,15 @@ public class GameController extends Controller {
     public ScrollPane scroll;
 
     private CanvasManager canvasManager;
-    private Variante gameVariante;
+    private Variante<Jeton> gameVariante;
+
+
+    private OrdonnanceurDeJeu ordonnanceurDeJeu;
+
+    private Case caseOrigine = null;
+    private Case caseDestination = null;
+
+    private int indiceJoueur;
 
     @Override
     public void initialise(){

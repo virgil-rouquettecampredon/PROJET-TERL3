@@ -6,6 +6,7 @@ import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import org.example.model.Regles.ElementRegle;
 import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.Jeton;
 import org.example.model.Regles.Regle;
 
 import java.io.*;
@@ -15,7 +16,7 @@ import java.util.List;
 //Classe de transition entre l'interface et les variantes en mémoire
 public class VarianteManager {
     private VarianteBuilder current;        // La variante que l'on modifie à souhait par l'interface
-    private List<Variante> variantes;       // Liste des variantes importées depuis le démarrage de l'application
+    private List<Variante<Jeton>> variantes;       // Liste des variantes importées depuis le démarrage de l'application
 
     public VarianteManager() {
         variantes = new ArrayList<>();
@@ -281,7 +282,7 @@ public class VarianteManager {
      *  Genère une variante classique
      * @return  La variante classique
      */
-    private Variante createVarianteClassique() {
+    private Variante<Jeton> createVarianteClassique() {
         Plateau plateau = new Plateau(8, 8);
 
         Joueur j1 = new Joueur("Blanc", 0);
@@ -300,8 +301,7 @@ public class VarianteManager {
         ArrayList<RegleInterface> regles = new ArrayList<>();
         addClassiqueRules(regles, joueurs);
 
-        Variante classique = new Variante("Classique", plateau, joueurs, ordreJoueur, regles, new ArrayList<>());
-        return classique;
+        return new VarianteJeton("Classique", plateau, joueurs, ordreJoueur, regles, new ArrayList<>());
     }
 
     public void setCurrent(VarianteBuilder current) {
@@ -312,7 +312,7 @@ public class VarianteManager {
         return current;
     }
 
-    public List<Variante> getVariantes() {
+    public List<Variante<Jeton>> getVariantes() {
         return variantes;
     }
 
@@ -320,8 +320,8 @@ public class VarianteManager {
      * Cree la variante courrante et l'ajoute dans la liste des variante
      * @return la variante cree
      */
-    public Variante applyCurrent() {
-        Variante vr = current.createVariante();
+    public Variante<Jeton> applyCurrent() {
+        Variante<Jeton> vr = current.createVariante();
         variantes.add(vr);
         return vr;
     }
@@ -332,7 +332,7 @@ public class VarianteManager {
      * @throws IOException Si le chemin n'est pas valide
      */
     public void saveCurrent(String path) throws IOException{
-        Variante vrToSave = applyCurrent();
+        Variante<Jeton> vrToSave = applyCurrent();
         FileOutputStream fos = new FileOutputStream(path);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(vrToSave);
@@ -345,11 +345,11 @@ public class VarianteManager {
      * @return  La variante importée
      * @throws IOException  Si le chemin n'est pas valide
      */
-    public Variante importFile(String path) throws IOException{
+    public Variante<Jeton> importFile(String path) throws IOException{
         try {
             FileInputStream fin = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fin);
-            Variante vr = (Variante) ois.readObject();
+            Variante<Jeton> vr = (Variante<Jeton>) ois.readObject();
             ois.close();
 
             variantes.add(vr);

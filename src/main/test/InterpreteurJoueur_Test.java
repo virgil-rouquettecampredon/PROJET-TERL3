@@ -63,7 +63,7 @@ public class InterpreteurJoueur_Test{
      * ===============| TESTS MAUVAIS |==================
      * ==================================================*/
 
-    /*JOUEUR*/
+    /*JOUEUR
     @Test
     public final void testStringInvalideX_testMauvais() {
         interpretj = new InterpreteurSujetJoueur("X");
@@ -114,7 +114,7 @@ public class InterpreteurJoueur_Test{
     }
 
 
-    /*EQUIPE*/
+    /*EQUIPE
     @Test
     public final void testStringInvalideE_testMauvais() {
         interpretj = new InterpreteurSujetJoueur("E");
@@ -148,7 +148,7 @@ public class InterpreteurJoueur_Test{
 
     /**==================================================
      * =================| TESTS BONS |===================
-     * ==================================================*/
+     * ==================================================
 
     /*JOUEUR*/
     @Test

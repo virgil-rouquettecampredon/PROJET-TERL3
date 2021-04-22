@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -315,7 +316,6 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.NON);
         regleJeton.add(Jeton.NON);
         regleJeton.add(Jeton.CASE);
-        regleJeton.add(Jeton.ALIAS);
         regleJeton.add(Jeton.ALORS);
         regleJeton.add(Jeton.CONSEQUENCETERMINALE);
         regleJeton.add(Jeton.ET);
@@ -327,7 +327,9 @@ public class GenerateurDeRegleSyntaxeTest {
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(regleJeton.get(i),jetons.get(i));
             }
-            assertEquals("masupercase",regle.get(5));
+            Map<String,Jeton> alias = generateur.getListeAlias();
+            assertEquals(1,alias.size());
+            assertEquals(Jeton.CASE,alias.get("masupercase"));
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }

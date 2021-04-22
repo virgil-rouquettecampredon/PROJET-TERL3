@@ -71,6 +71,13 @@ public class Arbre_Condition extends Arbre_Formule<Condition> {
         curJeton = jetons.get(indiceJeton);
     }
 
+
+    /*Getter et Setter*/
+
+    public List<Condition> getListeConditions(){
+        return this.conditions;
+    }
+
     /**===============================================================================
      * ================= Analyse descendante récursive de la formule =================
      * ===============================================================================**/

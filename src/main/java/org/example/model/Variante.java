@@ -1,20 +1,28 @@
 package org.example.model;
 
+import org.example.model.Regles.ElementRegle;
 import org.example.model.Regles.GenerateurDeRegle;
+import org.example.model.Regles.GenerateurDeRegle_Jeton;
 import org.example.model.Regles.Jeton;
+import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 import org.example.model.Regles.Regle;
+import org.example.model.Regles.EstToken;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
-public class Variante implements Serializable {
+public abstract class Variante<A extends EstToken> implements Serializable {
     private String name;                                // Nom de la variante
     private Plateau plateau;                            // Le plateau correspondant à cette variantes
     private ArrayList<Joueur> joueurs;                  // La liste des joueurs de cette variantes
     private ArrayList<Joueur> ordreJoueurs;             // La liste des joueurs dans l'ordre des tour (avec duplication, etc)
     private ArrayList<RegleInterface> regles;           // Les listes de Regles
     private ArrayList<GroupCases> listGroupCases;       // La liste de toutes les groupes de cases définies dans cette variante
+
+    private GenerateurDeRegle<A> generateurDeRegle;     // Objet permettant de générer des Regle à partir de Token A quelconques
 
     public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
         this.name = name;
@@ -25,6 +33,10 @@ public class Variante implements Serializable {
         this.listGroupCases = listGroupCases;
     }
 
+    /**Méthode permettant d'initialiser correctement une variante d'après les paramètres qu'elle a recu à la construction**/
+    public abstract void initialiser() throws VarianteException;
+
+    /*Getter et Setter*/
     public Plateau getPlateau() {
         return plateau;
     }
@@ -65,6 +77,14 @@ public class Variante implements Serializable {
 
     public void setListGroupCases(ArrayList<GroupCases> listGroupCases) {
         this.listGroupCases = listGroupCases;
+    }
+
+    public GenerateurDeRegle<A> getGenerateurDeRegle(){
+        return generateurDeRegle;
+    }
+
+    public void setGenerateurDeRegle(GenerateurDeRegle<A> generateurDeRegle){
+        this.generateurDeRegle = generateurDeRegle;
     }
 
     @Override

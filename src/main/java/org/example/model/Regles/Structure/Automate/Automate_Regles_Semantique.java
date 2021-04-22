@@ -1118,7 +1118,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                         //en passant par 23 (20-23)(case + piecetoken)
                                         case "1516202322" -> {
                                             // Joueur+ConsequenceAction+Case+PieceToken
-                                            // TODO Rachetez un Hugo plus qualifiés et un peu plus beau que er wan sinon un binome serai plus beau et intelligent que l'autre
+                                            // TODO Rachetez un Hugo plus qualifiés et un peu plus beau que er wan sinon un binome serai plus beau et intelligent que l'autre (c'est déjà le cas, virgil nous downgrade)
                                             throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                         case "1517202322" -> {

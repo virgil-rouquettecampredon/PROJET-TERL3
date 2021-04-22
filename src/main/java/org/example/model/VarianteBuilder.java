@@ -86,7 +86,7 @@ public class VarianteBuilder {
         return lp;
     }
 
-    public Variante createVariante() {
-        return new Variante(name, plateau, joueurs, ordreJoueurs, regles, listGroupCases);
+    public VarianteJeton createVariante() {
+        return new VarianteJeton(name, plateau, joueurs, ordreJoueurs, regles, listGroupCases);
     }
 }
