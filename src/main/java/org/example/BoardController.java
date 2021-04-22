@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import org.example.model.CanvasManager;
 import org.example.model.Case;
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Position;
 
 import java.io.IOException;

@@ -70,6 +70,10 @@ public class Plateau implements Serializable {
         return echiquier;
     }
 
+    public Case getCase(Position p) {
+        return echiquier.get(p.getY()).get(p.getX());
+    }
+
     public void setHeightY(int heightY) {
         this.heightY = heightY;
         updateSize();

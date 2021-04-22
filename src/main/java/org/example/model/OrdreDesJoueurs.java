@@ -58,7 +58,7 @@ public class OrdreDesJoueurs implements Supplier<Integer> {
                 if (valueChar <= nbJoueur && valueChar > 0) {
                     tabPresent[valueChar - 1] = true;
                 } else {
-                    throw new OrdreDesJoueursException("Joueur renseigné invalide : " + valueChar);
+                    throw new OrdreDesJoueursException("Joueur renseigné invalide : ", valueChar);
                 }
             } catch (NumberFormatException e) {
                 throw new OrdreDesJoueursException("Identificateur de Joueur invalide : " + j);
@@ -67,7 +67,7 @@ public class OrdreDesJoueurs implements Supplier<Integer> {
 
         for (int i = 0; i<nbJoueur;i++){
             if(!tabPresent[i]){
-                throw new OrdreDesJoueursException("Joueur non renseigné dans la chaine : " + (i+1));
+                throw new OrdreDesJoueursException("Joueur non renseigné dans la chaine : ", (i+1));
             }
         }
     }

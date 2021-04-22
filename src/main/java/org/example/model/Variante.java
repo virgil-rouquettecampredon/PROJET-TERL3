@@ -45,6 +45,8 @@ public class Variante implements Serializable {
         return regles;
     }
 
+    public ArrayList<Joueur> getOrdrejoueur() { return ordreJoueurs;}
+
     public void setRegles(ArrayList<RegleInterface> generateurDeRegle) {
         this.regles = generateurDeRegle;
     }

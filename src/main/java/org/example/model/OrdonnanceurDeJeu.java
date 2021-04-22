@@ -1,6 +1,14 @@
 package org.example.model;
 
+import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
+import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
+import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OrdonnanceurDeJeu {
 
@@ -8,13 +16,10 @@ public class OrdonnanceurDeJeu {
     private List<Joueur> joueurs;
     //private List<List<Joueur>> equipes;
 
-    private List<String> types_pieces;
-    private List<Piece> pieces;
     private Plateau plateau;
 
-    public OrdonnanceurDeJeu(List<Joueur> joueurs, List<Piece> pieces, Plateau plateau){
+    public OrdonnanceurDeJeu(List<Joueur> joueurs, Plateau plateau){
         this.joueurs = joueurs;
-        this.pieces = pieces;
         this.plateau = plateau;
     }
 

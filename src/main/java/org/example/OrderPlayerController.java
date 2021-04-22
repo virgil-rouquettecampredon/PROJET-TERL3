@@ -90,7 +90,11 @@ public class OrderPlayerController extends Controller{
         try {
             OrdreDesJoueurs.verifierOrdre(sb.toString(), getApp().varianteManager.getCurrent().getJoueurs().size());
         } catch (OrdreDesJoueursException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur : "+e.getMessage());
+            String message = "Erreur : "+e.getMessage();
+            if (e.getIndice() != -1) {
+                message += getApp().varianteManager.getCurrent().getJoueurs().get(e.getIndice()-1).getName();
+            }
+            showAlert(Alert.AlertType.ERROR, message);
             return;
         }
 

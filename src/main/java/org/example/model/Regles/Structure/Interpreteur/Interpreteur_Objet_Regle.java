@@ -4,7 +4,7 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.util.List;
 
-public interface Interpreteur_Objet_Regle<T extends SujetDeRegle> {
+public interface Interpreteur_Objet_Regle<T extends ObjetsDeRegle> {
 
     List<T> recupererTout();
 }

@@ -44,7 +44,10 @@ public class GameController extends Controller {
         else {
             gameVariante = (Variante) userVar;
             varLabel.setText(gameVariante.getName());
-            playerLabel.setText(gameVariante.getJoueurs().get(0).getName());//todo a changer?
+            playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());
+            indiceJoueur = 0;
+
+            ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante.getJoueurs(), gameVariante.getPlateau());
 
             canvasManager = new CanvasManager(canvas, gameVariante.getPlateau());
             updateCanvas();
@@ -52,25 +55,72 @@ public class GameController extends Controller {
     }
 
     public void updateCanvas() {
+        playerLabel.setText(gameVariante.getOrdrejoueur().get(indiceJoueur).getName());
         canvasManager.drawCanvas();
+        if (caseOrigine != null) {
+            canvasManager.drawCase(caseOrigine.getPosition());
+        }
+        if (caseDestination != null) {
+            canvasManager.drawCase(caseDestination.getPosition());
+        }
         canvasManager.drawPawn();
     }
 
+    @FXML
     public void play(MouseEvent mouseEvent) throws IOException {
         //todo bien sur
         getApp().soundManager.playSound("button-hover");
-        System.out.println(mouseEvent);
-        coupsBox.getChildren().add(new Label(playerLabel.getText() + " : label de coup"));
-        scroll.setVvalue(2);
+        //System.out.println(mouseEvent);
 
-        if (playerLabel.getText().equals("Player1"))
-            playerLabel.setText("Player2");
-        else
-            playerLabel.setText("Player1");
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
-        if (c != null && c.getPosition().getX() == 0 && c.getPosition().getY() == 0) {
-            getApp().soundManager.playSound("win");
-            getApp().setRoot("gameOver", gameVariante);
+
+        if (c.isAccessible()) {
+            if (caseOrigine == null) {
+                if (c.getPieceOnCase() != null) {
+                    caseOrigine = c;
+                }
+            } else {
+                caseDestination = c;
+            }
+            if (caseDestination != null) {
+                jouerCoup();
+            }
         }
+        updateCanvas();
+
+        //todo a enlever
+        if (c.getPosition().getX()==0 && c.getPosition().getY()==0) {
+            getApp().setRoot("gameOver");
+        }
+    }
+
+    private Joueur joueurQuiJoue() {
+        return gameVariante.getOrdrejoueur().get(indiceJoueur);
+    }
+
+    private void jouerCoup() {
+        System.out.println(joueurQuiJoue().getName() + " : " + caseOrigine.getPieceOnCase().getName() + " to " + caseOrigine.getPosition());
+        try {
+            ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
+            addLabelCoup(joueurQuiJoue().getName() + " : " + caseOrigine.getPieceOnCase().getName() + " to " + caseOrigine.getPosition());
+            incrementerIndiceJoueur();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "PAS CONTENT !: "+e.getMessage());
+        }
+        caseOrigine = null;
+        caseDestination = null;
+    }
+
+    private void incrementerIndiceJoueur() {
+        indiceJoueur++;
+        if (indiceJoueur >= gameVariante.getOrdrejoueur().size()) {
+            indiceJoueur = 0;
+        }
+        updateCanvas();
+    }
+
+    private void addLabelCoup(String message) {
+        coupsBox.getChildren().add(new Label(message));
+        scroll.setVvalue(2);
     }
 }

@@ -49,4 +49,5 @@ public class Case implements CibleDeRegle, Serializable {
         this.pieceOnCase = pieceOnCase;
     }
     /*FIN GETTER SETTER*/
+
 }

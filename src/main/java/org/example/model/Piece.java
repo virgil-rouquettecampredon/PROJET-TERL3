@@ -80,9 +80,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(name, sprite, nbMovement, nbLife, joueur, posDeplacements, vecDeplacements);
+        int result = Objects.hash(name, sprite, posDeplacements, vecDeplacements);
         result = 31 * result + Arrays.hashCode(comportementPiece);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "["+name + " joueur="+joueur+"]";
     }
 
     /*DEBUT GETTER SETTER*/

@@ -296,4 +296,14 @@ public class CanvasManager {
         int y = (int) (mouseY / rectSize);
         return plateau.getEchiquier().get(y).get(x);
     }
+
+    public void drawCase(Position position) {
+        if ((position.getX()+position.getY())%2==0) {
+            context.setFill(lightMoveColor);
+        }
+        else {
+            context.setFill(darkMoveColor);
+        }
+        context.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+    }
 }

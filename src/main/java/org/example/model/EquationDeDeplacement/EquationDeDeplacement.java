@@ -67,6 +67,11 @@ public abstract class EquationDeDeplacement implements Serializable {
         return Objects.hash(evaluable, x, y);
     }
 
+    @Override
+    public String toString() {
+        return typeDeplacement.name()+":("+x+", "+y+")";
+    }
+
     public static enum TypeDeplacement {
         DEPLACER,
         PRENDRE,
