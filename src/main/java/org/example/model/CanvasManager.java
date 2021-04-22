@@ -17,8 +17,28 @@ public class CanvasManager {
     private double rectSize;            // La taille d'une case en pixels
     private Plateau plateau;            // Le plateau à afficher
 
-    private Color lightBoardColor = Color.PINK;     // La couleur du plateau sur les cases claires
-    private Color darkBoardColor = Color.PURPLE;    // La couleur du plateau sur les cases sombres
+    private Color lightBoardColor = Color.PINK;     // La couleur du plateau sur les cases sombres
+    private Color darkBoardColor = Color.PURPLE;    // La couleur du plateau sur les cases claires
+    private Color strokeColor = Color.BLACK;        // La couleur par defaut pour les traits
+
+    // Les couleurs des cases non accessibles
+    private Color lightNonAccessibleCaseColor = Color.DARKGRAY;
+    private Color darkNonAccessibleCaseColor = Color.GRAY;
+
+    // Les couleurs des déplacements uniquement
+    private Color lightMoveColor = Color.LIGHTGREEN;
+    private Color darkMoveColor = Color.DARKGREEN;
+    private Color arrowMoveColor = Color.GREEN;
+
+    // Les couleurs pour prendre uniquement
+    private Color lightTakeColor = Color.PALEVIOLETRED;
+    private Color darkTakeColor = Color.DARKRED;
+    private Color arrowTakeColor = Color.RED;
+
+    // Les couleurs des déplacements et pour prendre
+    private Color lightBothColor = Color.color(68/255.0, 167/255.0, 242/255.0);
+    private Color darkBothColor = Color.MEDIUMBLUE;
+    private Color arrowBothColor = Color.SKYBLUE;
 
     public CanvasManager(Canvas canvas, Plateau plateau) {
         this.canvas = canvas;
@@ -48,7 +68,7 @@ public class CanvasManager {
 
         rectSize = canvas.getWidth()/nbSquareX;
 
-        context.setFill(darkBoardColor);
+        context.setFill(lightBoardColor);
         context.fillRect(
                 0,
                 0,
@@ -56,23 +76,23 @@ public class CanvasManager {
                 canvas.getHeight());
 
 
-        context.setFill(lightBoardColor);
+        context.setFill(darkBoardColor);
         for (int i = 0; i < nbSquareY; i++) {
             for (int j = 0; j < nbSquareX; j++) {
                 if (plateau.getEchiquier().get(i).get(j).isAccessible()) {
                     if ((j+i)%2==0) {
-                        context.setFill(darkBoardColor);
+                        context.setFill(lightBoardColor);
                     }
                     else {
-                        context.setFill(lightBoardColor);
+                        context.setFill(darkBoardColor);
                     }
                 }
                 else {
                     if ((j+i)%2==0) {
-                        context.setFill(Color.GRAY);
+                        context.setFill(lightNonAccessibleCaseColor);
                     }
                     else {
-                        context.setFill(Color.DARKGRAY);
+                        context.setFill(darkNonAccessibleCaseColor);
                     }
                 }
                 context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
@@ -109,16 +129,16 @@ public class CanvasManager {
             double bPosEY = (e.getY()+posY) * rectSize;
             if ((e.getX()+posX + e.getY()+posY)%2==0) {
                 switch (e.getTypeDeplacement()) {
-                    case DEPLACER -> context.setFill(Color.DARKGREEN);
-                    case PRENDRE -> context.setFill(Color.DARKRED);
-                    case BOTH -> context.setFill(Color.MEDIUMBLUE);
+                    case DEPLACER -> context.setFill(lightMoveColor);
+                    case PRENDRE -> context.setFill(lightTakeColor);
+                    case BOTH -> context.setFill(lightBothColor);
                 }
             }
             else {
                 switch (e.getTypeDeplacement()) {
-                    case DEPLACER -> context.setFill(Color.LIGHTGREEN);
-                    case PRENDRE -> context.setFill(Color.PALEVIOLETRED);
-                    case BOTH -> context.setFill(Color.color(68/255.0, 167/255.0, 242/255.0));
+                    case DEPLACER -> context.setFill(darkMoveColor);
+                    case PRENDRE -> context.setFill(darkTakeColor);
+                    case BOTH -> context.setFill(darkBothColor);
                 }
             }
             context.fillRect(bPosEX, bPosEY, rectSize, rectSize);
@@ -127,9 +147,9 @@ public class CanvasManager {
         for (VecteurDeDeplacement e:
                 vecDeplacements) {
             switch (e.getTypeDeplacement()) {
-                case DEPLACER -> context.setStroke(Color.GREEN);
-                case PRENDRE -> context.setStroke(Color.RED);
-                case BOTH -> context.setStroke(Color.SKYBLUE);
+                case DEPLACER -> context.setStroke(arrowMoveColor);
+                case PRENDRE -> context.setStroke(arrowTakeColor);
+                case BOTH -> context.setStroke(arrowBothColor);
             }
             context.setLineWidth(5);
 
@@ -162,7 +182,7 @@ public class CanvasManager {
             */
             context.strokeOval(ceX-(rectSize/4), ceY-(rectSize/4), (rectSize/2), (rectSize/2));
         }
-        context.setStroke(Color.BLACK);
+        context.setStroke(strokeColor);
         putPiece(posX, posY, image);
     }
 
@@ -199,11 +219,11 @@ public class CanvasManager {
             Position p = c.getPosition();
             if ((p.getX()+p.getY())%2==0) {
                 //context.setFill(darkColorFromString(group.getName()));
-                context.setFill(Color.DARKGREEN);
+                context.setFill(lightMoveColor);
             }
             else {
                 //context.setFill(lightColorFromString(group.getName()));
-                context.setFill(Color.LIGHTGREEN);
+                context.setFill(darkMoveColor);
             }
             context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
         }
@@ -212,16 +232,16 @@ public class CanvasManager {
             Position p = new Position(relP.getX() + posX, relP.getY() + posY);
             if ((p.getX()+p.getY())%2==0) {
                 //context.setFill(darkColorFromString(group.getName()+"a"));
-                context.setFill(Color.MEDIUMBLUE);
+                context.setFill(lightBothColor);
             }
             else {
                 //context.setFill(lightColorFromString(group.getName()+"a"));
-                context.setFill(Color.color(68/255.0, 167/255.0, 242/255.0));
+                context.setFill(darkBothColor);
             }
             context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
         }
 
-        context.setFill(Color.RED);
+        context.setFill(arrowTakeColor);
         context.fillOval((posX * rectSize)+(rectSize/4), (posY * rectSize)+(rectSize/4), (rectSize/2), (rectSize/2));
     }
 
@@ -236,7 +256,7 @@ public class CanvasManager {
         double g = rand.nextDouble()/2;
         double b = rand.nextDouble()/2;
 
-        while (darkBoardColor.getRed() - r < .1 && darkBoardColor.getGreen() - g < .1 && darkBoardColor.getBlue() - b < .1) {
+        while (lightBoardColor.getRed() - r < .1 && lightBoardColor.getGreen() - g < .1 && lightBoardColor.getBlue() - b < .1) {
             r = rand.nextDouble()/2;
             g = rand.nextDouble()/2;
             b = rand.nextDouble()/2;
@@ -256,7 +276,7 @@ public class CanvasManager {
         double g = rand.nextDouble()/2+.5;
         double b = rand.nextDouble()/2+.5;
 
-        while (lightBoardColor.getRed() - r < .1 && lightBoardColor.getGreen() - g < .1 && lightBoardColor.getBlue() - b < .1) {
+        while (darkBoardColor.getRed() - r < .1 && darkBoardColor.getGreen() - g < .1 && darkBoardColor.getBlue() - b < .1) {
             r = rand.nextDouble()/2+.5;
             g = rand.nextDouble()/2+.5;
             b = rand.nextDouble()/2+.5;

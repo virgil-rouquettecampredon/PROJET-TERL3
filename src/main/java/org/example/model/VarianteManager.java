@@ -122,12 +122,12 @@ public class VarianteManager {
         }
 
         Piece nKingP1 = new Piece(kingP1);
-        plateau.getEchiquier().get(7).get(3).setPieceOnCase(nKingP1);
+        plateau.getEchiquier().get(7).get(4).setPieceOnCase(nKingP1);
         j.get(0).getPawnList().add(nKingP1);
 
         if (j.size() > 1) {
             Piece nKingP2 = new Piece(kingP2);
-            plateau.getEchiquier().get(0).get(4).setPieceOnCase(nKingP2);
+            plateau.getEchiquier().get(0).get(3).setPieceOnCase(nKingP2);
             j.get(0).getPawnList().add(nKingP2);
         }
     }
