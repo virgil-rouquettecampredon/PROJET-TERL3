@@ -48,7 +48,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
     public final void testBlocJoueurVide_testMauvais() {
         Jeton j = Jeton.JOUEUR;
         assertFalse(j.estReconnu(""));
-        assertEquals("Syntaxe du joueur incorrecte",j.getMessageErreur());
+        assertEquals("Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",j.getMessageErreur());
     }
     @Test
     public final void testBlocJoueur_testMauvais() {
@@ -62,7 +62,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("J"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe du joueur incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif) au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -71,7 +71,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("JA"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe du joueur (numero) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe du joueur (numero) incorrecte, un entier positif est requis au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -80,7 +80,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("JAL"));
             fail("Exception non détectée");
         } catch (MauvaiseDefinitionRegleException m) {
-            assertEquals("Syntaxe du joueur (numero) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe du joueur (numero) incorrecte, un entier positif est requis au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -89,7 +89,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("JAaa"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe du joueur (JA + mauvais carac) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -224,7 +224,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
     public final void testBlocPieceVide_testMauvais() {
         Jeton j = Jeton.PIECE;
         assertFalse(j.estReconnu(""));
-        assertEquals("Syntaxe de piece incorrecte",j.getMessageErreur());
+        assertEquals("Syntaxe de piece incorrecte (syntaxe de la forme PALL ou PN où N est un entier positif)",j.getMessageErreur());
     }
     @Test
     public final void testBlocPiece_testMauvais() {
@@ -238,7 +238,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de piece incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de piece incorrecte (syntaxe de la forme PALL ou PN où N est un entier positif) au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -247,7 +247,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PA"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de piece (numero) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de piece (numero) incorrecte, un entier positif est requis au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -256,7 +256,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PAL"));
             fail("Exception non détectée");
         } catch (MauvaiseDefinitionRegleException m) {
-            assertEquals("Syntaxe de piece (numero) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de piece (numero) incorrecte, un entier positif est requis au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -338,7 +338,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("P#_"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe de piece incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe de piece incorrecte (syntaxe de la forme PALL ou PN où N est un entier positif)] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -353,7 +353,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PA#_"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe de piece (numero) incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe de piece (numero) incorrecte, un entier positif est requis] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -416,7 +416,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#J"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif)] au bloc de regle numero : [0]",m.getMessage());
         }
     }
 
@@ -426,7 +426,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#JA"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (numero) incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (numero) incorrecte, un entier positif est requis] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -444,7 +444,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#JAaa"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (JA + mauvais carac) incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test

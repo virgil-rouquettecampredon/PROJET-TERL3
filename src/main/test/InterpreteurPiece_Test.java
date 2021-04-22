@@ -33,7 +33,7 @@ public class InterpreteurPiece_Test {
         allpieces.add(new Piece("chien", null, 10, -1, null, null, null));
         allpieces.add(new Piece("sans", null, 10, -1, null, null, null));
 
-        this.ord = new OrdonnanceurDeJeu(null, allpieces, null);
+        //this.ord = new OrdonnanceurDeJeu(null, allpieces, null);
     }
 
 }

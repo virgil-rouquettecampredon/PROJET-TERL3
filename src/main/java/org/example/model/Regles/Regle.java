@@ -1,5 +1,6 @@
 package org.example.model.Regles;
 
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Arbre.ArbreException;
 import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
 import org.example.model.Regles.Structure.Arbre.Arbre_Formule;
@@ -68,7 +69,7 @@ public class Regle {
         }
         if (arbre_conditions.evaluer()) {
             for (Consequence cons : consequences) {
-                cons.comportement();
+                cons.comportement(ord);
             }
         }
     }

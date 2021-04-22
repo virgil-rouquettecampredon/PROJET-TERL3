@@ -797,19 +797,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                 switch(regleString.get(indRegleSyntaxe-1)){
                                                     case "<" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_inferieur_a));
                                                     }
                                                     case "=" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_egal_a));
                                                     }
                                                     case ">" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_superieur_a));
                                                     }
@@ -853,19 +853,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                 switch(regleString.get(indRegleSyntaxe-1)){
                                                     case "<" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_inferieur_a));
                                                     }
                                                     case "=" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_egal_a));
                                                     }
                                                     case ">" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
-                                                                new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
+                                                                new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_superieur_a));
                                                     }

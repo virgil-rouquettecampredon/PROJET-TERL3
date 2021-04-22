@@ -1,6 +1,8 @@
 package org.example.model.Regles;
 
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujet;
+import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,6 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
     }
 
     public boolean evaluer(){
-        return comportement.apply(this.interpreteurSujet.recupererTout());
+        return comportement.apply(sujets);
     }
 }

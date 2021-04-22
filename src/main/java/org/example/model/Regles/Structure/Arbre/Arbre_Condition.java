@@ -1,6 +1,8 @@
 package org.example.model.Regles.Structure.Arbre;
 
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.*;
+import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 
 import java.util.List;
 

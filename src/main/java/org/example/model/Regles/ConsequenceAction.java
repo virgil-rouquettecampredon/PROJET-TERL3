@@ -2,6 +2,7 @@
 
 package org.example.model.Regles;
 
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujet;
 import org.example.model.Regles.Structure.Interpreteur.Interpreteur_Objet_Regle;
 import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;

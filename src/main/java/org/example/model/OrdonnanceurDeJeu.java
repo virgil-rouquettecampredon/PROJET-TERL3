@@ -25,9 +25,8 @@ public class OrdonnanceurDeJeu {
 
     public List<Joueur> getJoueurs() { return this.joueurs; }
 
-    public Joueur getJoueur(int i) {
-        try { return this.joueurs.get(i); }
-        catch (ArrayIndexOutOfBoundsException aioobe){ return null; }
+    public Joueur getJoueur(int i) throws ArrayIndexOutOfBoundsException{
+        return this.joueurs.get(i);
     }
 
     public Plateau getPlateau() { return this.plateau; }

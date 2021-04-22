@@ -1,5 +1,6 @@
 package org.example.model.Regles.Structure.Arbre;
 
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.EstEvaluable;
 
 public abstract class Arbre_Formule<A extends EstEvaluable> implements EstEvaluable{

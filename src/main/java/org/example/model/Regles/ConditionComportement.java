@@ -2,6 +2,10 @@
 
 package org.example.model.Regles;
 
+import org.example.model.OrdonnanceurDeJeu;
+import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -27,6 +31,7 @@ public class ConditionComportement<A extends SujetDeRegle> extends Condition{
     }
 
     public boolean evaluer(){
-        return comportement.apply(this.listSujet,this.valeur);
+        //return comportement.apply(this.listSujet,this.valeur);
+        return false;//PCQ TU PU LA MERDE
     }
 }

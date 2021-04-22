@@ -1,3 +1,4 @@
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.*;
 import org.example.model.Regles.Structure.Arbre.ArbreException;
 import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
@@ -20,6 +21,7 @@ public class ArbreTest {
     private Condition condVrai;
     private Condition condFaux;
 
+
     @BeforeEach
     public void initialiser_Auto(){
         condVrai = new Condition() {
@@ -32,6 +34,9 @@ public class ArbreTest {
             }
         };
         condFaux = new Condition() {
+            @Override
+            public void verifierElements(OrdonnanceurDeJeu ord){}
+
             @Override
             public boolean evaluer(){
                 return false;

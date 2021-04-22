@@ -1,7 +1,10 @@
 package org.example.model.Regles;
 
+import org.example.model.Case;
+import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujet;
 import org.example.model.Regles.Structure.Interpreteur.Interpreteur_Objet_Regle;
+import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,8 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
         cibles = interpretCible.recupererTout(ord);
     }
 
+    @Override
     public boolean evaluer(){
-        return comportement.apply(interpretSujet.recupererTout(), interpretCible.recupererTout()); //a changer par cible
+        return comportement.apply(sujets, cibles); //a changer par cible
     }
 }

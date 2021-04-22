@@ -4,6 +4,8 @@ package org.example.model.Regles.Structure.Interpreteur;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.MissingFormatArgumentException;
+
 import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
@@ -25,42 +27,61 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
     // JN#PN
     /**
      * @param ord : toutes les pieces présentes sur le plateau de jeu*/
-    public List<Piece> recupererTout(OrdonnanceurDeJeu ord) {
+    @Override
+    public List<Piece> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         List<Piece> lret;
+        String erreurPiece = "'" + this.str_source + "': ";
         if (this.str_source.contains("#")){
-            lret = new ArrayList<>();
+            try {
+                erreurPiece = "Piece + Joueur: " + erreurPiece;
+                lret = new ArrayList<>();
 
-            String[] str_proprio_type = this.str_source.split("#");
-            List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
+                String[] str_proprio_type = this.str_source.split("#");
+                List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
 
-            InterpreteurSujetJoueur sujj = new InterpreteurSujetJoueur(str_proprio_type[1]);
-            List<Joueur> proprios = sujj.recupererTout(ord);
+                InterpreteurSujetJoueur sujj = new InterpreteurSujetJoueur(str_proprio_type[1]);
+                List<Joueur> proprios = sujj.recupererTout(ord);
 
-            for (Piece p: paflitrer){
-                if (proprios.contains(p.getJoueur())){ lret.add(p); }
+                for (Piece p : paflitrer) {
+                    if (proprios.contains(p.getJoueur())) {
+                        lret.add(p);
+                    }
+                }
+                return lret;
+            } catch (MauvaiseInterpretationObjetRegleException m){
+                throw new MauvaiseInterpretationObjetRegleException(erreurPiece + m.getMessage());
             }
-            return lret;
 
         } else {
             lret = convertPiece(this.str_source, ord);
-            return lret;    //peut retourner null !
+            return lret;
         }
     }
 
-    public List<Piece> convertPiece(String str, OrdonnanceurDeJeu ord){
-        List<Piece> lret = new ArrayList<>();
+    public List<Piece> convertPiece(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
+        /*List<Piece> lret = new ArrayList<>();
+        String erreurPiece = "Piece: ";
         if (this.str_source.charAt(0) == 'P' && this.str_source.length() >= 2) {
             if (this.str_source.equals("PALL")) {
-                lret.addAll(ord.getPieces());
+                lret.addAll(ord.getPlateau().getPieces());
                 return lret;
             } else {
-                String nompiece = ord.getTypePiece(Integer.parseInt(this.str_source.substring(1)));
-                for (Piece p: ord.getPieces()){
-                    if (p.getName().equals(nompiece)){ lret.add(p); }
+                try {
+                    String nompiece = ord.getTypePiece(Integer.parseInt(this.str_source.substring(1)));
+                    for (Piece p : ord.getPieces()) {
+                        if (p.getName().equals(nompiece)) {
+                            lret.add(p);
+                        }
+                    }
+                    return lret;
+                } catch (NumberFormatException ne) {
+                    throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Entier imparsable (NumberFormatException)");
+                } catch (ArrayIndexOutOfBoundsException ie) {
+                    throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "numéro piece inconnu");
                 }
-                return lret;
             }
         }
+        throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Format incorrect (syntaxe de la forme PALL ou PN où N est un entier positif)");*/
         return null;
     }
 
