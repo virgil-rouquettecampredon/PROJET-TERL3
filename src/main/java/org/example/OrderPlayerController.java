@@ -10,6 +10,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.model.Joueur;
+import org.example.model.OrdreDesJoueurs;
+import org.example.model.OrdreDesJoueursException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,16 +45,20 @@ public class OrderPlayerController extends Controller{
         teamOrderColumn.setCellValueFactory(cellData -> cellData.getValue().teamProperty().asObject());
 
         playerData = FXCollections.observableArrayList();
-        for (Joueur p:
-                getApp().varianteManager.getCurrent().getJoueurs()) {
-            playerData.add(new PlayerTableRow(p));
+        ArrayList<Joueur> joueurs = getApp().varianteManager.getCurrent().getJoueurs();
+        for (int i = 0; i < joueurs.size(); i++) {
+            Joueur p = joueurs.get(i);
+            playerData.add(new PlayerTableRow(p, i));
         }
 
         orderedPlayerData = FXCollections.observableArrayList();
         ArrayList<Joueur> list = getApp().varianteManager.getCurrent().getOrdreJoueurs();
+
         //for i pour être sûr de l'ordre
         for (int i = 0; i < list.size(); i ++) {
-            orderedPlayerData.add(new PlayerTableRow(list.get(i)));
+            int indice = getApp().varianteManager.getCurrent().getJoueurs().indexOf(list.get(i));
+
+            orderedPlayerData.add(new PlayerTableRow(list.get(i), indice));
         }
 
         ContextMenu contextMenu = new ContextMenu();
@@ -75,6 +81,18 @@ public class OrderPlayerController extends Controller{
         getApp().soundManager.playSound("button-click");
 
         //todo VERIFICATION SUR playerData
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <  orderedPlayerData.size(); i++) {
+            sb.append("J");
+            sb.append(orderedPlayerData.get(i).getId()+1);
+        }
+        System.out.println(sb.toString());
+        try {
+            OrdreDesJoueurs.verifierOrdre(sb.toString(), getApp().varianteManager.getCurrent().getJoueurs().size());
+        } catch (OrdreDesJoueursException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : "+e.getMessage());
+            return;
+        }
 
         List<Joueur> list = getApp().varianteManager.getCurrent().getOrdreJoueurs();
         list.clear();
@@ -107,7 +125,7 @@ public class OrderPlayerController extends Controller{
     public void addSelectedToOrder() {
         PlayerTableRow p = tablePlayer.getSelectionModel().getSelectedItem();
         if (p != null) {
-            orderedPlayerData.add(new PlayerTableRow(p.getJoueur()));
+            orderedPlayerData.add(new PlayerTableRow(p.getJoueur(), p.getId()));
         }
         else {
             showAlert(Alert.AlertType.ERROR, "Erreur : Pas de joueur selectionne!");

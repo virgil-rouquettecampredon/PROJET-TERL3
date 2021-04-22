@@ -9,6 +9,7 @@ import javafx.util.converter.IntegerStringConverter;
 import org.example.model.Joueur;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerController extends Controller {
@@ -55,9 +56,10 @@ public class PlayerController extends Controller {
 
 
         data = FXCollections.observableArrayList();
-        for (Joueur p:
-             getApp().varianteManager.getCurrent().getJoueurs()) {
-            data.add(new PlayerTableRow(p));
+        ArrayList<Joueur> joueurs = getApp().varianteManager.getCurrent().getJoueurs();
+        for (int i = 0; i < joueurs.size(); i++) {
+            Joueur p = joueurs.get(i);
+            data.add(new PlayerTableRow(p, i));
         }
 
         ContextMenu contextMenu = new ContextMenu();
@@ -97,7 +99,7 @@ public class PlayerController extends Controller {
         }
         if (data.size() < v) {
             for (int i = data.size(); i < v; i++) {
-                data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size()+1)%2));
+                data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size()+1)%2, (data.size()+1)));
             }
         }
         else if (data.size() > v && v >= 0){
@@ -113,7 +115,7 @@ public class PlayerController extends Controller {
 
     @FXML
     public void incrementNbPlayer() {
-        data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size())%2));
+        data.add(new PlayerTableRow("Joueur"+(data.size()+1), (data.size())%2, (data.size()+1)));
         updateInput();
     }
 
