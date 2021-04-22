@@ -10,9 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.example.model.CanvasManager;
-import org.example.model.Case;
-import org.example.model.Variante;
+import org.example.model.*;
+import org.example.model.Regles.Jeton;
 
 import java.io.IOException;
 import java.util.Random;

@@ -5,6 +5,7 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
@@ -25,14 +26,31 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.timer = -1;
     }
 
-    public void movePawn(Piece pawn, Position position){
-        // A completer
+    public void movePawn(Piece pawn, Case casePlateau){
 
     }
 
     public void revive(Piece pawn, Case emplacement){
         // A completer
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Joueur joueur = (Joueur) o;
+        return equipe == joueur.equipe && name.equals(joueur.name) && graveyard.equals(joueur.graveyard) && pawnList.equals(joueur.pawnList) && typePawnList.equals(joueur.typePawnList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, equipe, graveyard, pawnList, typePawnList);
+    }
+
+    @Override
+    public String toString() {
+        return name+" ("+equipe+")";
     }
 
     /*DEBUT GETTER SETTER*/

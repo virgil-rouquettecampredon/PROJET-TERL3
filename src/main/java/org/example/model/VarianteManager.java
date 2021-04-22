@@ -95,7 +95,7 @@ public class VarianteManager {
 
         Piece kingP2 = null;
         if (j.size() > 1) {
-            kingP2 = new Piece("King", "file:" + kingBlackFile.getAbsolutePath(), j2);
+            kingP2 = new Piece("Roi", "file:" + kingBlackFile.getAbsolutePath(), j2);
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));

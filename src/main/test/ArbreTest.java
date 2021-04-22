@@ -23,6 +23,9 @@ public class ArbreTest {
     public void initialiser_Automate() {
         condVrai = new Condition() {
             @Override
+            public void verifierElements(OrdonnanceurDeJeu ord){ }
+
+            @Override
             public boolean evaluer(){
                 return true;
             }

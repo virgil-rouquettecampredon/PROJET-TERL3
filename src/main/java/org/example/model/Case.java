@@ -29,6 +29,10 @@ public class Case implements CibleDeRegle, Serializable {
         return accessible;
     }
 
+    public void setAccessible(boolean value){
+        this.accessible = value;
+    }
+
     public void switchClickable() {
         accessible = !accessible;
     }

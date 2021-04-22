@@ -25,6 +25,21 @@ public class Plateau implements Serializable {
         updateSize();
     }
 
+    public Plateau(Plateau plateauACopie){
+        this.heightY = plateauACopie.heightY;
+        this.witdhX = plateauACopie.witdhX;
+        updateSize();
+
+        for (int i = 0; i < this.heightY; i++) {
+            for (int j = 0; j < this.witdhX; j++){
+                Case casePlateau = this.echiquier.get(i).get(j);
+                Case caseACopie = plateauACopie.getEchiquier().get(i).get(j);
+                casePlateau.setPieceOnCase(caseACopie.getPieceOnCase());
+                casePlateau.setAccessible(caseACopie.isAccessible());
+            }
+        }
+    }
+
     public void afficherPlateau(){
         // A completer
 

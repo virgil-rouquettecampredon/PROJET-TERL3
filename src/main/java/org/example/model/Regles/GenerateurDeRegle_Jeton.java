@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton>{
+public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements Serializable {
 
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){
         super(jetons,auto);

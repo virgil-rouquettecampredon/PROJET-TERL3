@@ -19,7 +19,13 @@ public class ConsequenceAction<A extends SujetDeRegle,B extends CibleDeRegle> ex
         this.comportement = comportement;
     }
 
-    public void comportement(){
-        comportement.apply(this.interpreteurSujet.recupererTout(), this.interpreteurCible.recupererTout());
+    @Override
+    public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        sujets = interpreteurSujet.recupererTout(ord);
+        cibles = interpreteurCible.recupererTout(ord);
+    }
+
+    public void comportement(OrdonnanceurDeJeu ord){
+        comportement.apply(sujets, cibles);
     }
 }
