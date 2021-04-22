@@ -110,22 +110,26 @@ public class VarianteManager {
 
 
         for (int i = 0; i < 8; i++) {
-            Piece nPawnP1 = new Piece(pawnP1);
-            plateau.getEchiquier().get(6).get(i).setPieceOnCase(nPawnP1);
-            j.get(0).getPawnList().add(nPawnP1);
+            if (plateau.getEchiquier().get(6).get(i).isAccessible()) {
+                Piece nPawnP1 = new Piece(pawnP1);
+                plateau.getEchiquier().get(6).get(i).setPieceOnCase(nPawnP1);
+                j.get(0).getPawnList().add(nPawnP1);
+            }
 
-            if (j.size() > 1) {
+            if (j.size() > 1 && plateau.getEchiquier().get(1).get(i).isAccessible()) {
                 Piece nPawnP2 = new Piece(pawnP2);
                 plateau.getEchiquier().get(1).get(i).setPieceOnCase(nPawnP2);
                 j2.getPawnList().add(nPawnP2);
             }
         }
 
-        Piece nKingP1 = new Piece(kingP1);
-        plateau.getEchiquier().get(7).get(4).setPieceOnCase(nKingP1);
-        j.get(0).getPawnList().add(nKingP1);
+        if (plateau.getEchiquier().get(7).get(4).isAccessible()) {
+            Piece nKingP1 = new Piece(kingP1);
+            plateau.getEchiquier().get(7).get(4).setPieceOnCase(nKingP1);
+            j.get(0).getPawnList().add(nKingP1);
+        }
 
-        if (j.size() > 1) {
+        if (j.size() > 1 && plateau.getEchiquier().get(0).get(3).isAccessible()) {
             Piece nKingP2 = new Piece(kingP2);
             plateau.getEchiquier().get(0).get(3).setPieceOnCase(nKingP2);
             j.get(0).getPawnList().add(nKingP2);
