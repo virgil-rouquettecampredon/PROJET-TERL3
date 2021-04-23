@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
-public abstract class Variante<A extends EstToken> implements Serializable {
+public abstract class Variante<A extends EstToken> {
     private String name;                                // Nom de la variante
     private Plateau plateau;                            // Le plateau correspondant à cette variantes
     private ArrayList<Joueur> joueurs;                  // La liste des joueurs de cette variantes
@@ -31,6 +31,19 @@ public abstract class Variante<A extends EstToken> implements Serializable {
         this.ordreJoueurs = ordreJoueurs;
         this.regles = regles;
         this.listGroupCases = listGroupCases;
+    }
+
+    public Variante(Variante variante) {
+        name = variante.name;
+        plateau = new Plateau(variante.plateau);
+        joueurs = new ArrayList<>(variante.joueurs);
+        ordreJoueurs = new ArrayList<>(variante.ordreJoueurs);
+        regles = new ArrayList<>(variante.regles);
+        listGroupCases = new ArrayList<>(variante.listGroupCases);
+
+        for (Joueur j : joueurs) {
+            j.setGraveyard(new ArrayList<>());
+        }
     }
 
     /**Méthode permettant d'initialiser correctement une variante d'après les paramètres qu'elle a recu à la construction**/

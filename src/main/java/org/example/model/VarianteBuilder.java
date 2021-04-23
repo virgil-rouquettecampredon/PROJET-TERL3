@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class VarianteBuilder {
+public class VarianteBuilder implements Serializable{
     private String name;
     private Plateau plateau;
     private ArrayList<Joueur> joueurs;

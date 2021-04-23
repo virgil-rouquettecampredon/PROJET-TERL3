@@ -80,6 +80,7 @@ public class BoardController extends Controller {
         }
         catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, xInput.getText()+" ou "+yInput.getText()+" n'est pas un entier > 0.");
+            e.printStackTrace();
             return;
         }
 

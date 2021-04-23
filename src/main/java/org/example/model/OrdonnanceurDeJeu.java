@@ -288,42 +288,33 @@ public class OrdonnanceurDeJeu {
                 .collect(Collectors.toList());
         System.out.println("equipeAdverse : "+equipeAdverse);
 
-        pieceConditionVictoire = new LinkedHashSet<>();
+        Set<Piece> pieceConditionVictoire = new LinkedHashSet<>();
         for (Joueur j : equipeAdverse) {
             pieceConditionVictoire.addAll(j.getPawnList().stream().filter(Piece::estConditionDeVictoire).collect(Collectors.toList()));
         }
+
         System.out.println("pieceConditionVictoire : "+pieceConditionVictoire);
 
-        Piece pieceMitEnEchec = null;
-        do {
-            pieceMitEnEchec = verifierEchec(pieceConditionVictoire, copie, joueur.getEquipe());
-            if (pieceMitEnEchec != null) {
-                pieceMitEnEchec.setNbLife(piece.getNbLife() - 1);
-                pieceConditionVictoire.remove(pieceMitEnEchec);
-                System.out.println("Piece en echec : "+pieceMitEnEchec);
-            }
-            System.out.println("pieceConditionVictoire : "+pieceConditionVictoire);
-        } while (pieceMitEnEchec != null);
-
-        // Modifier les états de la piece (déplacé, promu, etc)
-        piece.setDeplaceCeTour(true);
-        piece.setNbMovement(piece.getNbMovement()+1);
-
-        c = plateau.getCase(origine.getPosition());
-        p = c.getPieceOnCase();
-        c.setPieceOnCase(null);
-        plateau.getCase(destination.getPosition()).setPieceOnCase(p);
+        Set<Case> caseOuPiecesMitEnEchec = verifierEchec(pieceConditionVictoire, copie, joueur.getEquipe(), true);
+        System.out.println("caseouPiecesMitEnEchec : " + caseOuPiecesMitEnEchec);
+        for (Case caseVictime: caseOuPiecesMitEnEchec) {
+            Piece victime = caseVictime.getPieceOnCase();
+            victime.setNbLife(victime.getNbLife()-1);
+        }
 
         //todo Appliquer les règles après coup
         //regles.appliquer();
     }
+
+
 
     /**
      * Verifie si, dans le plateau, une des pieces condition de victoire est en echec
      * @param pieceConditionVictoire Liste des pieces condition de victoire
      * @param p Le plateau
      * @param equipe L'equipe alliée aux piece condition de victoire
-     * @return La première piece trouvé qui est en echec parmit les pieces condition de victoire. null si il y en as pas.
+     * @param nonEquipe Boolean vrai ssi les pieces menacantes sont de la même equipe l'equipe
+     * @return Toutes les case où les pieces de condition de victoire sont en echec.
      */
     private Set<Case> verifierEchec(Set<Piece> pieceConditionVictoire, Plateau p, int equipe, boolean nonEquipe) {
         // Verifier que le déplacement ne mets pas en échec une pièce condition de victoire allié
@@ -336,7 +327,16 @@ public class OrdonnanceurDeJeu {
                     Piece piece = c.getPieceOnCase();
                     System.out.println("piece : "+piece);
 
-                    if (piece.getJoueur().getEquipe() != equipe) {
+                    boolean condition;
+                    if (nonEquipe) {
+                        //la piece est de mon equipe
+                        condition = piece.getJoueur().getEquipe() == equipe;
+                    }
+                    else {
+                        //la piece n'est pas de mon equipe
+                        condition = piece.getJoueur().getEquipe() != equipe;
+                    }
+                    if (condition) {
                         System.out.println("POSITION");
                         for (PositionDeDeplacement pos : piece.getPosDeplacements()) {
                             Case caseVictime = verifierEquDeplacementMetEquec(pos, c, p, pieceConditionVictoire);
@@ -355,7 +355,7 @@ public class OrdonnanceurDeJeu {
                 }
             }
         }
-        return null;
+        return caseDesPieceMenaces;
     }
 
     /**
@@ -364,13 +364,14 @@ public class OrdonnanceurDeJeu {
      * @param origine La case d'origine
      * @param p Le plateau
      * @param pieceConditionVictoire Ensemble des pieces condition de victoire
-     * @return vrai ssi l'equation met en echec une piece condition de victoire
+     * @return La case où la piece de condition de victoire est en echec pour cette equation. null sinon
      */
-    private boolean verifierEquDeplacementMetEquec(EquationDeDeplacement equ, Case origine, Plateau p, Set<Piece> pieceConditionVictoire) {
-        //Déplacement uniquement ne peux pas mettre en echec
+    private Case verifierEquDeplacementMetEquec(EquationDeDeplacement equ, Case origine, Plateau p, Set<Piece> pieceConditionVictoire) {
         equ.setEvaluable(true);
+
+        //Déplacement uniquement ne peux pas mettre en echec
         if (equ.getTypeDeplacement() == EquationDeDeplacement.TypeDeplacement.DEPLACER) {
-            return false;
+            return null;
         }
         System.out.println(equ.getTypeDeplacement());
 
@@ -381,13 +382,13 @@ public class OrdonnanceurDeJeu {
 
             //Si non-accessible ou hors-Plateau -> false
             if (curseur.getX() >= p.getWitdhX() || curseur.getY() >= p.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
-                return false;
+                return null;
             }
             System.out.println("\t est dans le plateau");
 
             Case c = p.getCase(curseur);
             if (!c.isAccessible()) {
-                return false;
+                return null;
             }
             System.out.println("\t est accessible");
 
@@ -398,14 +399,14 @@ public class OrdonnanceurDeJeu {
                 System.out.println("\t a une piece : "+pCurrent);
                 //Si la piece n'est pas condition de victoire -> false
                 if (!pieceConditionVictoire.contains(pCurrent)) {
-                    return false;
+                    return null;
                 }
                 System.out.println("\t\t qui est condition de victoire :)");
                 //Sinon -> true
-                return true;
+                return c;
             }
         }
-        return false;
+        return null;
     }
 
     /**

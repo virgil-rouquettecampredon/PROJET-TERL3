@@ -23,7 +23,7 @@
             <Label styleClass="label-header" text="Creer : 1/4" />
             <BorderPane prefHeight="100.0">
                <center>
-                  <TextField fx:id="input" prefHeight="10.0" BorderPane.alignment="CENTER" />
+                  <TextField fx:id="input" onAction="#continueButton" prefHeight="10.0" BorderPane.alignment="CENTER" />
                </center>
                <left>
                   <Label alignment="CENTER" styleClass="label-input" text="Nom" BorderPane.alignment="CENTER" />

@@ -65,6 +65,12 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.pawnList = pawnList;
     }
 
+    public void setTypePawnList(ArrayList<Piece> typePawnList) {
+        LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
+        tmp.addAll(typePawnList);
+        this.typePawnList.addAll(tmp);
+    }
+
     public void setEquipe(int equipe) {
         this.equipe = equipe;
     }

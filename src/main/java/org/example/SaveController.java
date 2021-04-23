@@ -47,6 +47,7 @@ public class SaveController extends Controller {
             Optional<ButtonType> result = showAlert(Alert.AlertType.CONFIRMATION, "Attention! Vous n'avez pas sauvegarder! Quitter quand même ?");
             result.ifPresent(response -> {if (response == ButtonType.OK) {
                 try {
+                    getApp().varianteManager.applyCurrent();
                     getApp().setRoot("home");
                 } catch (IOException e) {
                     e.printStackTrace();

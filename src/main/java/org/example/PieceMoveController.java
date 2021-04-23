@@ -158,6 +158,7 @@ public class PieceMoveController extends Controller {
             showAlert(Alert.AlertType.ERROR, "Erreur : nom invalide");
             return;
         }
+
         //Joueur vide
         if (joueurBox.getSelectionModel().getSelectedItem() == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur : joueur non selectionné");
@@ -198,6 +199,8 @@ public class PieceMoveController extends Controller {
         }
         else {
             p = new Piece(nomInput.getText(), "file:" + file, joueurBox.getSelectionModel().getSelectedItem().getJoueur());
+            p.setPosDeplacements(posDeplacements);
+            p.setVecDeplacements(vecDeplacements);
         }
         p.setEstPromouvable(promouvableBox.isSelected());
         p.setEstConditionDeVictoire(victoireBox.isSelected());

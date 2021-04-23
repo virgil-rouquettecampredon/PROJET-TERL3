@@ -7,15 +7,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VarianteJeton extends Variante<Jeton> implements Serializable {
-        /*Classe modélisant une Variante telle qu'implémentéée dans l'interface*/
+public class VarianteJeton extends Variante<Jeton> {
+    /*Classe modélisant une Variante telle qu'implémentéée dans l'interface*/
 
-        public VarianteJeton(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
-            super(name, plateau, joueurs, ordreJoueurs, regles, listGroupCases);
-            setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
-        }
+    public VarianteJeton(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
+        super(name, plateau, joueurs, ordreJoueurs, regles, listGroupCases);
+        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
+    }
 
-        public void initialiser() throws VarianteException{
+    public VarianteJeton(Variante variante) {
+        super(variante);
+        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
+    }
+
+    public void initialiser() throws VarianteException{
         for(RegleInterface ri : getRegles()){
             //Récupération de la liste des éléments composants une Regle sur l'interface
             ArrayList<ElementRegle> regleSousFormeElemRegle = ri.getRegle();

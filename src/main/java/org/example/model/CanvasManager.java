@@ -10,6 +10,7 @@ import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class CanvasManager {
     private Canvas canvas;              // Le canvas graphique
@@ -299,11 +300,26 @@ public class CanvasManager {
 
     public void drawCase(Position position) {
         if ((position.getX()+position.getY())%2==0) {
-            context.setFill(lightMoveColor);
+            context.setFill(lightTakeColor);
         }
         else {
-            context.setFill(darkMoveColor);
+            context.setFill(darkTakeColor);
         }
         context.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+    }
+
+    public double getRectSize() {return rectSize;}
+
+    public void drawCoupPossibles(Set<Case> coupPossibles) {
+        for (Case c: coupPossibles) {
+            Position position = c.getPosition();
+            if ((position.getX()+position.getY())%2==0) {
+                context.setFill(lightMoveColor);
+            }
+            else {
+                context.setFill(darkMoveColor);
+            }
+            context.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+        }
     }
 }

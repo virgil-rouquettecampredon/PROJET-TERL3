@@ -282,7 +282,7 @@ public class VarianteManager {
      *  Genère une variante classique
      * @return  La variante classique
      */
-    private Variante<Jeton> createVarianteClassique() {
+    public Variante<Jeton> createVarianteClassique() {
         Plateau plateau = new Plateau(8, 8);
 
         Joueur j1 = new Joueur("Blanc", 0);
@@ -332,10 +332,9 @@ public class VarianteManager {
      * @throws IOException Si le chemin n'est pas valide
      */
     public void saveCurrent(String path) throws IOException{
-        Variante<Jeton> vrToSave = applyCurrent();
         FileOutputStream fos = new FileOutputStream(path);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(vrToSave);
+        oos.writeObject(current);
         oos.close();
     }
 
@@ -349,8 +348,9 @@ public class VarianteManager {
         try {
             FileInputStream fin = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fin);
-            Variante<Jeton> vr = (Variante<Jeton>) ois.readObject();
+            VarianteBuilder vb = (VarianteBuilder) ois.readObject();
             ois.close();
+            Variante<Jeton> vr = vb.createVariante();
 
             variantes.add(vr);
             return vr;

@@ -73,6 +73,13 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         deplacementsSpecialRegles.add(p);
     }
 
+    public boolean equalsRegle(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Piece piece = (Piece) o;
+        return name.equals(piece.name) && posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements) && Arrays.equals(comportementPiece, piece.comportementPiece);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,6 +168,17 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
 
     public Joueur getJoueur() {
         return joueur;
+    }
+
+    public void setPosDeplacements(ArrayList<PositionDeDeplacement> posDeplacements) {
+        this.posDeplacements = posDeplacements;
+    }
+    public void setVecDeplacements(ArrayList<VecteurDeDeplacement> vecDeplacements) {
+        this.vecDeplacements = vecDeplacements;
+    }
+
+    public List<Position> getDeplacementsSpecialRegles(){
+        return deplacementsSpecialRegles;
     }
 
     public boolean aEtePromu() {
