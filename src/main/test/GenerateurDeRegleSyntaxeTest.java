@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class GenerateurDeRegleSyntaxeTest {
@@ -26,6 +27,7 @@ public class GenerateurDeRegleSyntaxeTest {
         Jeton.CASE.setBorne(20, 0);
         Jeton.JOUEUR.setBorne(20, 0);
     }
+
     /**==================================================
      * ================TESTS BONS Joueur=================
      * ==================================================*/
@@ -152,7 +154,7 @@ public class GenerateurDeRegleSyntaxeTest {
                 "=", "<", ">",                                                                               /*comparaisons*/
                 "tous-piece", "tous-joueur", "tous-typecase",                                                /*tokens nimporte*/
                 "victoire", "defaite", "pat", "prendre", "placer", "promouvoir", "deplacer",                    /*consequences*/
-                "as"
+                "as","testAlias"
         };
 
         Jeton[] tabJetonAxiome = {Jeton.ACTION, Jeton.ACTION, Jeton.ETAT, Jeton.ACTION, Jeton.ACTION, Jeton.COMPTEUR, Jeton.ACTION, Jeton.COMPTEUR,
@@ -204,6 +206,16 @@ public class GenerateurDeRegleSyntaxeTest {
         regle.add("NNNalors");
         regle.add("victoire");
 
+        ArrayList<String> regleFinale = new ArrayList<>();
+        regleFinale.add("P0#J0");
+        regleFinale.add("sedeplace");
+        regleFinale.add("CALL");
+        regleFinale.add("NON");
+        regleFinale.add("NON");
+        regleFinale.add("NON");
+        regleFinale.add("alors");
+        regleFinale.add("victoire");
+
         ArrayList<Jeton> regleJeton = new ArrayList<>();
         regleJeton.add(Jeton.PIECETOKEN);
         regleJeton.add(Jeton.ACTION);
@@ -218,6 +230,12 @@ public class GenerateurDeRegleSyntaxeTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(jetons.get(i), regleJeton.get(i));
+            }
+
+            assertEquals(regleFinale.size(),regle.size());
+
+            for (int j = 0; j<regle.size();j++) {
+                assertEquals(regleFinale.get(j),regle.get(j));
             }
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
@@ -272,6 +290,18 @@ public class GenerateurDeRegleSyntaxeTest {
         regle.add("33");
         regle.add("victoire");
 
+        ArrayList<String> regleFinale = new ArrayList<>();
+        regleFinale.add("P0#J0");
+        regleFinale.add("sedeplace");
+        regleFinale.add("C2");
+        regleFinale.add("ET");
+        regleFinale.add("J3");
+        regleFinale.add("timer");
+        regleFinale.add("NON");
+        regleFinale.add("=");
+        regleFinale.add("33");
+        regleFinale.add("victoire");
+
         ArrayList<Jeton> regleJeton = new ArrayList<>();
         regleJeton.add(Jeton.PIECETOKEN);
         regleJeton.add(Jeton.ACTION);
@@ -288,6 +318,12 @@ public class GenerateurDeRegleSyntaxeTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(regle);
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(regleJeton.get(i),jetons.get(i));
+            }
+
+            assertEquals(regleFinale.size(),regle.size());
+
+            for (int j = 0; j<regle.size();j++) {
+                assertEquals(regleFinale.get(j),regle.get(j));
             }
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
@@ -308,6 +344,21 @@ public class GenerateurDeRegleSyntaxeTest {
         regle.add("ET");
         regle.add("N102");
 
+        ArrayList<String> regleFinale = new ArrayList<>();
+        regleFinale.add("P0#J0");
+        regleFinale.add("sedeplace");
+        regleFinale.add("C2");
+        regleFinale.add("ET");
+        regleFinale.add("NON");
+        regleFinale.add("NON");
+        regleFinale.add("C10");
+        regleFinale.add("masupercase");
+        regleFinale.add("alors");
+        regleFinale.add("pat");
+        regleFinale.add("ET");
+        regleFinale.add("NON");
+        regleFinale.add("102");
+
         ArrayList<Jeton> regleJeton = new ArrayList<>();
         regleJeton.add(Jeton.PIECETOKEN);
         regleJeton.add(Jeton.ACTION);
@@ -316,6 +367,7 @@ public class GenerateurDeRegleSyntaxeTest {
         regleJeton.add(Jeton.NON);
         regleJeton.add(Jeton.NON);
         regleJeton.add(Jeton.CASE);
+        regleJeton.add(Jeton.ALIAS);
         regleJeton.add(Jeton.ALORS);
         regleJeton.add(Jeton.CONSEQUENCETERMINALE);
         regleJeton.add(Jeton.ET);
@@ -327,9 +379,87 @@ public class GenerateurDeRegleSyntaxeTest {
             for (int i = 0; i < jetons.size(); i++) {
                 assertEquals(regleJeton.get(i),jetons.get(i));
             }
-            Map<String,Jeton> alias = generateur.getListeAlias();
-            assertEquals(1,alias.size());
-            assertEquals(Jeton.CASE,alias.get("masupercase"));
+
+            assertEquals("{ masupercase -> CASE }",generateur.toStringAlias());
+
+
+            assertEquals(regleFinale.size(),regle.size());
+            for (int j = 0; j<regle.size();j++) {
+                assertEquals(regleFinale.get(j),regle.get(j));
+            }
+        }catch (MauvaiseDefinitionRegleException m){
+            fail("Exception Levée : " + m.getMessage());
+        }
+    }
+
+    @Test
+    public final void testScenario5_testBon() {
+        ArrayList<String> regle = new ArrayList<>();
+        regle.add("NNP0#J0");
+        regle.add("Nestpromu");
+        regle.add("as");
+        regle.add("nonAliasTest");
+        regle.add("Nnon");
+        regle.add("Nas");
+        regle.add("NnonAliasTest");
+        regle.add("N10");
+        regle.add("=");
+        regle.add("NET");
+        regle.add("timer");
+        regle.add("NnonAliasTest");
+
+        ArrayList<String> regleFinale = new ArrayList<>();
+        regleFinale.add("NON");
+        regleFinale.add("NON");
+        regleFinale.add("P0#J0");
+        regleFinale.add("NON");
+        regleFinale.add("estpromu");
+        regleFinale.add("nonAliasTest");
+        regleFinale.add("NON");
+        regleFinale.add("non");
+        regleFinale.add("NON");
+        regleFinale.add("NnonAliasTest");
+        regleFinale.add("NON");
+        regleFinale.add("10");
+        regleFinale.add("=");
+        regleFinale.add("NON");
+        regleFinale.add("ET");
+        regleFinale.add("timer");
+        regleFinale.add("NON");
+        regleFinale.add("nonAliasTest");
+
+        ArrayList<Jeton> regleJeton = new ArrayList<>();
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.PIECETOKEN);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.ETAT);
+        regleJeton.add(Jeton.ALIAS);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.ALIAS);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.NOMBRE);
+        regleJeton.add(Jeton.COMPARAISON);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.ET);
+        regleJeton.add(Jeton.COMPTEUR);
+        regleJeton.add(Jeton.NON);
+        regleJeton.add(Jeton.ETAT);
+
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(regle);
+            for (int i = 0; i < jetons.size(); i++){
+                assertEquals(regleJeton.get(i),jetons.get(i));
+            }
+
+            assertEquals("{ nonAliasTest -> ETAT | NnonAliasTest -> NON }",generateur.toStringAlias());
+
+            assertEquals(regleFinale.size(),regle.size());
+            for (int j = 0; j<regle.size();j++) {
+                assertEquals(regleFinale.get(j),regle.get(j));
+            }
         }catch (MauvaiseDefinitionRegleException m){
             fail("Exception Levée : " + m.getMessage());
         }

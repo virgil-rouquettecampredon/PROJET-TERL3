@@ -3,13 +3,9 @@
 package org.example.model.Regles.Structure.Automate;
 
 import org.example.EditRuleController;
-import org.example.model.Regles.ElementRegle;
-import org.example.model.Regles.EstToken;
-import org.example.model.Regles.MauvaiseDefinitionRegleException;
+import org.example.model.Regles.*;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public abstract class Automate_Interface<A extends EstToken> extends Automate<A> {
     //Indice renseignant le jeton courant dans lequel on se trouve à un instant t du parcours de l'automate
@@ -20,11 +16,14 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
     protected Deque<Integer> etatsParcourus;
     protected Deque<A> jetonsReconnus;
 
+    protected Map<String, Jeton_Interface> alias;
+
     public Automate_Interface(int nbEtat,int etatDeDepart){
         super(nbEtat,etatDeDepart);
         curEtat = 0;
         etatsParcourus = new ArrayDeque<>();
         jetonsReconnus = new ArrayDeque<>();
+        alias = new HashMap<>();
     }
 
     public Automate_Interface(int nbEtat,int etatDeDepart, List<String> valEtat){
@@ -32,6 +31,16 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
         curEtat = 0;
         etatsParcourus = new ArrayDeque<>();
         jetonsReconnus = new ArrayDeque<>();
+        alias = new HashMap<>();
+    }
+
+    /*Getter et Setter*/
+    public void setAlias(Map<String, Jeton_Interface> alias){
+        this.alias = alias;
+    }
+
+    public Map<String, Jeton_Interface> getAlias(){
+        return this.alias;
     }
 
     public int getCurEtat(){
@@ -44,6 +53,18 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
 
     /**Méthode permettante de revenir en arrière dans l'automate (backtrack)**/
     public abstract void revenirEnArriere();
+
+    /**Méthode permettant d'indiquer si une chaine de caractère peut être renseignée sans risque d'être interprété par le système ensuite
+     * @param s : chaine de caractère dont on veut déterminer si elle est renseignable ou non.**/
+    public boolean peutEtreRenseigne(String s){
+        Jeton[] jetons = Jeton.values();
+        for (Jeton j: jetons) {
+            if(j.estReconnu(s)){
+                return false;
+            }
+        }
+        return true;
+    }
 
     /** Méthode abstraite permettant de générer les éléments sélectionnables depuis l'interface.
      * @return une liste d'ElementRegle représentant les éléments sélectionnables depuis l'interface, et leur sémantique de jeton et de valeur associée.**/

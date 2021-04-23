@@ -510,6 +510,9 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
         }
     }
 
+    /**==================================================
+     * ===========TESTS Mauvais NON RECONNU==============
+     * ==================================================*/
     @Test
     public final void testBlocJoueurPasReconnus_testMauvais() {
         generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
@@ -544,11 +547,42 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
     public final void testBlocJoueurEquipePasReconnus_testMauvais() {
         generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
         try{
-            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("E12"));
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("EALL"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
             assertEquals("Impossible de reconnaire une Equipe au bloc de regle numero : [0]",m.getMessage());
         }
     }
 
+    /**==================================================
+     * ==============TESTS Mauvais ALIAS=================
+     * ==================================================*/
+    @Test
+    public final void testBlocAliasImpossible_testMauvais() {
+        Jeton.JOUEUR.setBorne(10,1);
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("E0","as"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Création d'ALIAS impossible au bloc de regle numero : [1]",m.getMessage());
+        }
+    }
+    @Test
+    public final void testBlocAliasImpossible_bis_testMauvais() {
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("as","testAlias"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Création d'ALIAS impossible au bloc de regle numero : [0]",m.getMessage());
+        }
+    }
+    @Test
+    public final void testBlocAliasMap_testMauvais() {
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL","as","testAlias","as","testAlias"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Création d'ALIAS impossible au bloc de regle numero : [1]",m.getMessage());
+        }
+    }
 }

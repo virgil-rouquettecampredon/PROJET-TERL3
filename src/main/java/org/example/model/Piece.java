@@ -25,6 +25,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     private Piece pieceMange = null;                                // Retourne la pièce qui vient d'être mangé, sinon retourne null
     private Piece pieceMenace = null;                               // Retourne la pièce qu'il menace
 
+    private List<Position> deplacementsSpecialRegles;               //Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
+
     public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements) {
         this.name = name;
         this.sprite = sprite;
@@ -44,6 +46,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         for (int i = 0; i < 42; i++) {
             this.etatPiece[i] = false;
         }
+
+        deplacementsSpecialRegles = new ArrayList<>();
     }
 
     public Piece(String name, String sprite, Joueur joueur) {
@@ -64,10 +68,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         System.arraycopy(piece.comportementPiece, 0, comportementPiece, 0, 3);
     }
 
-    public Position[] deplacementTheoriques(){
-        // A completer
-
-        return null;
+    public void ajouterDeplacementsSpecialRegles(Position p){
+        deplacementsSpecialRegles.add(p);
     }
 
     @Override

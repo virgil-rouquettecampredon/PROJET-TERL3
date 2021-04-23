@@ -26,7 +26,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
     private int nbParenthese;
 
     public Automate_Interface_Condition(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
-        super(19, 0);
+        super(27, 0);
         this.pieces = pieces;
         this.cases = cases;
         this.joueurs = joueurs;
@@ -41,6 +41,44 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUnEtatTerminal(14,300);
         this.ajouterUnEtatTerminal(12,300);
         this.ajouterUnEtatTerminal(15,300);
+        this.ajouterUnEtatTerminal(22,301);
+        this.ajouterUnEtatTerminal(23,301);
+        this.ajouterUnEtatTerminal(24,301);
+        this.ajouterUnEtatTerminal(26,301);
+
+        //GESTION DES ALIAS
+        this.ajouterUneTransition(1,Jeton_Interface.ALIAS,19);
+        this.ajouterUneTransition(19,Jeton_Interface.COMPTEUR_TEMPSRESTANT,4);
+
+        this.ajouterUneTransition(2,Jeton_Interface.ALIAS,20);
+        this.ajouterUneTransition(20,Jeton_Interface.COMPTEUR_DEPLACEMENT,4);
+        this.ajouterUneTransition(20,Jeton_Interface.PROMU,5);
+        this.ajouterUneTransition(20,Jeton_Interface.ESTMENACE,6);
+        this.ajouterUneTransition(20,Jeton_Interface.PREND,7);
+        this.ajouterUneTransition(20,Jeton_Interface.DEPLACE,8);
+        this.ajouterUneTransition(20,Jeton_Interface.PLACE,9);
+        this.ajouterUneTransition(20,Jeton_Interface.EST,10);
+
+        this.ajouterUneTransition(3,Jeton_Interface.ALIAS,21);
+        this.ajouterUneTransition(21,Jeton_Interface.COMPTEUR_DEPLACEMENT,4);
+        this.ajouterUneTransition(21,Jeton_Interface.PROMU,5);
+        this.ajouterUneTransition(21,Jeton_Interface.ESTMENACE,6);
+        this.ajouterUneTransition(21,Jeton_Interface.PREND,7);
+        this.ajouterUneTransition(21,Jeton_Interface.DEPLACE,8);
+        this.ajouterUneTransition(21,Jeton_Interface.PLACE,9);
+        this.ajouterUneTransition(21,Jeton_Interface.EST,10);
+
+        this.ajouterUneTransition(12,Jeton_Interface.ALIAS,23);
+        this.ajouterUneTransition(23,Jeton_Interface.PARENTHESE_FERMANTE,17);
+
+        this.ajouterUneTransition(14,Jeton_Interface.ALIAS,22);
+        this.ajouterUneTransition(22,Jeton_Interface.PARENTHESE_FERMANTE,17);
+
+        this.ajouterUneTransition(15,Jeton_Interface.ALIAS,24);
+        this.ajouterUneTransition(24,Jeton_Interface.PARENTHESE_FERMANTE,17);
+
+        this.ajouterUneTransition(25,Jeton_Interface.ALIAS,26);
+        this.ajouterUneTransition(26,Jeton_Interface.PARENTHESE_FERMANTE,17);
 
         //ETAT INITIAL
         this.ajouterUneTransition(0,Jeton_Interface.PARENTHESE_OUVRANTE,0);
@@ -86,15 +124,19 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUneTransition(7,Jeton_Interface.PIECE,12);
         this.ajouterUneTransition(7,Jeton_Interface.PIECETOKEN,14);
         this.ajouterUneTransition(7,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(7,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 8
         this.ajouterUneTransition(8,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(8,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 9
         this.ajouterUneTransition(9,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(9,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 10
         this.ajouterUneTransition(10,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(10,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 11
         this.ajouterUneTransition(11,Jeton_Interface.COMPARATEUR,13);
@@ -111,6 +153,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
 
         //ETAT 15
         this.ajouterUneTransition(15,Jeton_Interface.PARENTHESE_FERMANTE,17);
+        this.ajouterUneTransition(15,Jeton_Interface.CASE,25);
 
         //ETAT 16
         this.ajouterUneTransition(16,Jeton_Interface.PARENTHESE_FERMANTE,17);
@@ -120,20 +163,23 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
 
         //ETAT 18
         this.ajouterUneTransition(18,Jeton_Interface.PARENTHESE_OUVRANTE,0);
+
+        //ETAT 25
+        this.ajouterUneTransition(25,Jeton_Interface.PARENTHESE_FERMANTE,17);
     }
 
-    public void revenirEnArriere(){
-        if(etatsParcourus.size()>0){
+    public void revenirEnArriere() {
+        if (etatsParcourus.size() > 0) {
             curEtat = etatsParcourus.removeLast();
             Jeton_Interface j = jetonsReconnus.removeLast();
             //Si on rejette une parenthèse fermante ou ouvrante, on doit MAJ nbParenthèse
-            if(j == Jeton_Interface.PARENTHESE_FERMANTE){
+            if (j == Jeton_Interface.PARENTHESE_FERMANTE) {
                 ++nbParenthese;
             }
-            if(j == Jeton_Interface.PARENTHESE_OUVRANTE){
+            if (j == Jeton_Interface.PARENTHESE_OUVRANTE) {
                 --nbParenthese;
             }
-        }else{
+        } else {
             //Si on ne peut pas revenir en arrière, on recommence au début
             curEtat = 0;
         }
@@ -202,6 +248,18 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                 throw new MauvaiseDefinitionRegleException("Impossible d'appliquer une parenthèse fermante ici");
             }
             --nbParenthese;
+        }
+
+        //Gestion des alias
+        if(elR.getJetonAssocie() == Jeton_Interface.ALIAS){
+            switch (curEtat){
+                case 1 -> alias.put(elR.getNomInterface(),Jeton_Interface.JOUEUR);
+                case 2 , 23 -> alias.put(elR.getNomInterface(),Jeton_Interface.PIECE);
+                case 3 , 22 -> alias.put(elR.getNomInterface(),Jeton_Interface.PIECETOKEN);
+                case 24 -> alias.put(elR.getNomInterface(),Jeton_Interface.CASE);
+                case 26 -> alias.put(elR.getNomInterface(), Jeton_Interface.CASEPARAM);
+                default -> throw new MauvaiseDefinitionRegleException("Impossible d'appliquer un ALIAS ici");
+            }
         }
 
         //On récupère l'état suivant en fonction du choix donné en paramètre
@@ -324,6 +382,41 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                         continue;
                     }
                 }else{
+                    int etat = auto.curEtat;
+                    Etat et = auto.recupererEtat(etat);
+                    if(et != null){
+                        if(et.estTerminal() && et.getCodeDeRetour() == 301){
+                            boolean bon = false;
+                            String mes = "Veuillez entrer un nom d'alias ("+ COLOR_RED + "#P" +COLOR_RESET+ " pour revenir en arrière) :";
+                            while(!bon) {
+                                System.out.println(mes);
+                                String rep = scan.next();
+                                //Si on veut revenir en arrière
+                                if (rep.equals("#P") && regleChoix.size() > 0) {
+                                    int etatEnleve = auto.getCurEtat();
+                                    auto.revenirEnArriere();
+                                    ElementRegle elemSup = regleChoix.remove(regleChoix.size() - 1);
+                                    //Gestion chaine de caractère regle
+                                    regle = regle.substring(0, regle.lastIndexOf("]"));
+                                    regle = regle.substring(0, regle.lastIndexOf("]") + 1);
+                                    System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface() + CYAN_BRIGHT + " (" + etatEnleve + ")" + COLOR_RESET);
+                                    break;
+                                }
+                                if (auto.peutEtreRenseigne(rep)) {
+                                    bon = true;
+                                    choix = elem.get(0);
+                                    choix.setNomInterface(rep);
+                                }
+                                mes = "Nom interdit : " + COLOR_RED + rep + COLOR_RESET;
+                            }
+                            //Si on revient en arrière
+                            if(!bon){
+                                System.out.println("Regle : " + regle + "\n");
+                                continue;
+                            }
+                        }
+                    }
+
                     //Affichage des choix possibles
                     if(regleChoix.size() > 0){
                         System.out.println("Elements possibles (sélectionner "+COLOR_GREEN+"indice" +COLOR_RESET+" ou " + COLOR_RED + "#P " +COLOR_RESET+ "pour revenir en arrière) : ");

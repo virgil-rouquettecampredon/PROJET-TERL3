@@ -173,42 +173,6 @@ public enum Jeton implements Serializable, EstToken {
         }
     },
 
-    /*EQUIPE("equipe"){
-        @Override
-        public boolean estReconnu(String equipe) {
-            if (equipe.length() > 1) {
-                if (equipe.charAt(0) == 'E') {
-                    try {
-                        int nb = Integer.parseInt(equipe.substring(1));
-                        if (nb < EQUIPE.borne) {
-                            if (nb >= 0) {
-                                return true;
-                            } else {
-                                JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop petit) incorrecte";
-                            }
-                        } else {
-                            JOUEUR.messageErreur = "Syntaxe de l'équipe (numero trop grand) incorrecte";
-                        }
-                        return false;
-
-                    } catch (NumberFormatException e) {
-                        JOUEUR.messageErreur = "Syntaxe de l'équipe (numero) incorrecte, un entier positif est requis";
-                        return false;
-                    }
-
-                } else {
-                    JOUEUR.messageErreur = "Syntaxe de l'équipe incorrecte (doit commencer par E)";
-                }
-            } else {
-                JOUEUR.messageErreur = "Syntaxe de l'équipe incorrecte (syntaxe de la forme EN où N est un entier positif)";
-            }
-            return false;
-        }
-    },*/
-
-    //@TODO : Rajouter cas case relative
-
-
     PIECETOKEN("piece token") {
         @Override
         public boolean estReconnu(String piece) {
@@ -226,6 +190,27 @@ public enum Jeton implements Serializable, EstToken {
                 }
             } else {
                 PIECETOKEN.messageErreur = ((sousPiece.length>2)? "Trop" : "Pas assez")+ " de parametre de définition d'une pieceToken";
+            }
+            return false;
+        }
+    },
+    CASEPARAM("case param") {
+        @Override
+        public boolean estReconnu(String piece) {
+            String[] sousPiece = piece.split("#");
+            if (sousPiece.length == 2) {
+                boolean p = CASE.estReconnu(sousPiece[0]);
+                if (p) {
+                    boolean j = CASE.estReconnu(sousPiece[1]);
+                    if (j) {
+                        return true;
+                    }
+                    CASEPARAM.messageErreur = "Syntaxe de case paramétré incorrecte (2) [" + CASE.messageErreur + "]";
+                } else {
+                    CASEPARAM.messageErreur = "Syntaxe de pieceToken incorrecte (1) [" + CASE.messageErreur + "]";
+                }
+            } else {
+                CASEPARAM.messageErreur = ((sousPiece.length>2)? "Trop" : "Pas assez")+ " de parametre de définition d'une case paramétré";
             }
             return false;
         }

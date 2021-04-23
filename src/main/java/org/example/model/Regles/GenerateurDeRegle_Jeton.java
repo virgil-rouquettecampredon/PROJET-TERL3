@@ -7,6 +7,8 @@ import java.util.*;
 
 public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements Serializable {
 
+    //Map pour la gestion des alias d'une Regle
+    //"nomDAlias" -> Jeton correspondant
     Map<String,Jeton> listeAlias;
 
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){
@@ -36,6 +38,8 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
     public List<Jeton> analyseSyntaxique(List<String> regle) throws MauvaiseSyntaxeRegleException{
         //Liste de jetons à retourner à la fin du traitement
         ArrayList<Jeton> regleSousFormeJeton = new ArrayList<>();
+        //On remet la liste d'alias à zéro car elle n'est pas partagée entre les différentes règles
+        listeAlias.clear();
 
         //Pour chacun des mots composant la règle
         for (int i = 0; i<regle.size();i++){
@@ -47,6 +51,9 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 while(curRegle.length()>0 && estReconnu(curRegle.charAt(0) + "").equals(Jeton.NON)){
                     regleSousFormeJeton.add(Jeton.NON);
                     curRegle = curRegle.substring(1);
+                    regle.set(i,curRegle);
+                    regle.add(i,"NON");
+                    i++;
                 }
                 switch ((curRegle.length() > 0)? curRegle.charAt(0) : ' ') {
                     /*CAS PIECE*/
@@ -136,11 +143,11 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                                     //On ne garde ainsi que la valeur pour laquelle le jeton est associé
                                     regle.remove(i);
                                     //On va ensuite renseigner notre alias dans la table des alias
-                                    listeAlias.put(regle.remove(i - 1), regleSousFormeJeton.get(i - 1));
-                                    //Puis on passe à l'instruction d'après, on ne veut pas le renseigner dans la suite de notre traitement (on l'a déjà sauvegardé)
-                                    continue;
+                                    listeAlias.put(regle.get(i), regleSousFormeJeton.get(regleSousFormeJeton.size()-1));
                                 }catch (IndexOutOfBoundsException e){
                                     throw new MauvaiseSyntaxeRegleException("Impossible d'appliquer un ALIAS");
+                                }catch(UnsupportedOperationException ue){
+                                    throw new MauvaiseSyntaxeRegleException("Création d'ALIAS impossible");
                                 }
                             }
                             //Si c'est un jeton tous de reconnus, alors on le remplace par sa valeur correspondante
@@ -164,13 +171,28 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                                 }
                             }
                         }else{
-                            throw new MauvaiseSyntaxeRegleException("Axiome inconnu");
+                            //Si aucun jeton n'arrive à reconnaitre un des termes de la Regle
+                            boolean ctrl = false;
+                            //Alors c'est qu'il s'agit peut être d'un alias
+                            for (Map.Entry<String, Jeton> entry : listeAlias.entrySet()) {
+                                //Si un des noms d'alias correspond à la valeur de notre terme courant
+                                if(entry.getKey().equals(curRegle)){
+                                    //Alors on récupère son Jeton associé on recommence
+                                    ctrl = true;
+                                    curJeton = entry.getValue();
+                                    break;
+                                }
+                            }
+                            if(!ctrl){
+                                throw new MauvaiseSyntaxeRegleException("Axiome inconnu");
+                            }
                         }
                     }
                 }
             }catch (MauvaiseSyntaxeRegleException e){
                 throw new MauvaiseSyntaxeRegleException(e.getMessage() + " au bloc de regle numero : [" + i + "]");
             }
+
             regleSousFormeJeton.add(curJeton);
         }
         return regleSousFormeJeton;
@@ -217,4 +239,15 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
     public Map<String,Jeton> getListeAlias(){
         return listeAlias;
     }
+
+    /*toString pour les alias*/
+    public String toStringAlias(){
+        String s = "{";
+        for (Map.Entry<String, Jeton> entry : listeAlias.entrySet()) {
+            s += " " + entry.getKey() + " -> " + entry.getValue() + " |";
+        }
+        s = s.substring(0,s.length()-1);
+        return s + "}";
+    }
+
 }

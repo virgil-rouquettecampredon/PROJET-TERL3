@@ -7,13 +7,11 @@ import org.example.model.Joueur;
 import org.example.model.Piece;
 import org.example.model.Plateau;
 import org.example.model.Regles.ElementRegle;
+import org.example.model.Regles.Jeton;
 import org.example.model.Regles.Jeton_Interface;
 import org.example.model.Regles.MauvaiseDefinitionRegleException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Interface> {
 
@@ -99,6 +97,11 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         }
     }
 
+    @Override
+    public boolean peutEtreRenseigne(String s){
+        return false;
+    }
+
     public List<ElementRegle> elementSelectionnables() throws MauvaiseDefinitionRegleException {
         List<ElementRegle> elements = new ArrayList<>();
         Etat e = this.recupererEtat(curEtat);
@@ -139,6 +142,12 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
                     for (String s : t.getEtiquetteArete().getElementsReconnaissables()) {
                         elements.add(new ElementRegle(t.getEtiquetteArete(),s, s));
                     }
+                }
+            }
+            //Gestion des alias
+            for (Map.Entry<String, Jeton_Interface> entry : getAlias().entrySet()){
+                if(entry.getValue() == t.getEtiquetteArete()){
+                    elements.add(new ElementRegle(entry.getValue(), entry.getKey(), entry.getKey()));
                 }
             }
         }
