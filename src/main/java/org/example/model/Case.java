@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.model.Regles.CibleDeRegle;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Case implements CibleDeRegle, Serializable {
     private Position position;                          // Position sur le plateau
@@ -50,4 +51,25 @@ public class Case implements CibleDeRegle, Serializable {
     }
     /*FIN GETTER SETTER*/
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Case aCase = (Case) o;
+        return accessible == aCase.accessible && position.equals(aCase.position) && Objects.equals(pieceOnCase, aCase.pieceOnCase);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, pieceOnCase, accessible);
+    }
+
+    @Override
+    public String toString() {
+        return "Case : [" +
+                "position=" + position +
+                ", pieceOnCase=" + pieceOnCase +
+                ", accessible=" + accessible +
+                ']';
+    }
 }

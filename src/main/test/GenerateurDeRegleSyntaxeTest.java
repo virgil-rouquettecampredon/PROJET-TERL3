@@ -29,7 +29,7 @@ public class GenerateurDeRegleSyntaxeTest {
     }
 
     /**==================================================
-     * ================TESTS BONS Joueur=================
+     * ===============|TESTS BONS Joueur|================
      * ==================================================*/
     @Test
     public final void testBlocJoueurALL_testBon() {
@@ -53,7 +53,7 @@ public class GenerateurDeRegleSyntaxeTest {
     }
 
     /**==================================================
-     * =================TESTS BONS Case==================
+     * ================|TESTS BONS Case|=================
      * ==================================================*/
     @Test
     public final void testBlocCaseALL_testBon() {
@@ -77,7 +77,7 @@ public class GenerateurDeRegleSyntaxeTest {
     }
 
     /**==================================================
-     * =================TESTS BONS Piece=================
+     * ================|TESTS BONS Piece|================
      * ==================================================*/
     @Test
     public final void testBlocPieceALL_testBon() {
@@ -101,7 +101,7 @@ public class GenerateurDeRegleSyntaxeTest {
     }
 
     /**==================================================
-     * ==============TESTS BONS PieceToken===============
+     * =============|TESTS BONS PieceToken|==============
      * ==================================================*/
     @Test
     public final void testBlocPieceToken_ALL_ALL_testBon() {
@@ -145,7 +145,7 @@ public class GenerateurDeRegleSyntaxeTest {
     }
 
     /**==================================================
-     * =================TEST BON Axiome==================
+     * ================|TEST BON Axiome|=================
      * ==================================================*/
     @Test
     public final void testBlocAxiomes_testBon() {

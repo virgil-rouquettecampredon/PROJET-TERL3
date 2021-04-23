@@ -260,65 +260,28 @@ public class OrdonnanceurDeJeu {
      * @param destination La destination du coup
      * @throws Exception Si le coup n'est pas valide. Le message permet d'avoir plus d'information
      */
-    public void deplacerPiece(Case origine, Joueur joueur, Case destination) throws Exception {  //todo créer l'exception
+    public void deplacerPiece(Case origine, Joueur joueur, Case destination) throws DeplacementException {  //todo créer l'exception
         //Appliquer les règles avant coup
 
-        //VERIFIER
-        //Verifier qu'il y a une piece et que c'est le bon joueur
-        Piece piece = origine.getPieceOnCase();
-        if (piece==null || !(piece.getJoueur().equals(joueur))){
-            throw new Exception("Pas le bon joueur");
-        }
-
-        // Verifier qu'il peut déplacer la piece:
-        boolean valide = false;
-        System.out.println("Position :");
-        for (PositionDeDeplacement pos: piece.getPosDeplacements()) {
-            System.out.println(pos.toString());
-            valide = verifierEquDeplacement(origine, destination, pos);
-            if (valide) break;
-        }
-        if (!valide) {
-            System.out.println("Vecteur :");
-            for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
-                System.out.println(vec.toString());
-                valide = verifierEquDeplacement(origine, destination, vec);
-                if (valide) break;
-            }
-        }
-
-        if (!valide) {
-            throw new Exception("Deplacement inexistant");
-        }
-
-        // Verifier que le déplacement ne mets pas en échec une pièce condition de victoire allié
-        // generer plateau et verifier echec
-        System.out.println("Copie tableau");
-        Plateau copie = new Plateau(plateau);
-
-        System.out.println("Deplacement de la piece de "+origine+" à "+destination);
-        Case c = copie.getCase(origine.getPosition());
-        Piece p = c.getPieceOnCase();
-        c.setPieceOnCase(null);
-        copie.getCase(destination.getPosition()).setPieceOnCase(p);
-
-        List<Joueur> monEquipe = joueurs.stream().filter(j -> j.getEquipe() == joueur.getEquipe())
-                .collect(Collectors.toList());
-        System.out.println("Mon equipe : "+monEquipe);
-
-        Set<Piece> pieceConditionVictoire = new LinkedHashSet<>();
-        for (Joueur j : monEquipe) {
-            pieceConditionVictoire.addAll(j.getPawnList().stream().filter(Piece::estConditionDeVictoire).collect(Collectors.toList()));
-        }
-
-        System.out.println("pieceConditionVictoire : "+pieceConditionVictoire);
-        valide = verifierEchec(pieceConditionVictoire, copie, joueur.getEquipe()) == null;
-        if (!valide) {
-            throw new Exception("Mit en echec");
-        }
+        Plateau copie = verifierDeplacement(origine, joueur, destination);
 
         System.out.println("APPLIQUER");
         //APPLIQUER
+
+        Piece pDeplace = origine.getPieceOnCase();
+        // Modifier les états de la piece (déplacé, promu, etc)
+        pDeplace.setDeplaceCeTour(true);
+        pDeplace.setNbMovement(pDeplace.getNbMovement()+1);
+
+        origine.setPieceOnCase(null);
+
+        Piece pMange = destination.getPieceOnCase();
+        destination.setPieceOnCase(pDeplace);
+
+        if (pMange != null) {
+            pMange.getJoueur().getPawnList().remove(pMange);
+            pMange.getJoueur().getGraveyard().add(pMange);
+        }
 
         // Si le déplacement met en échec un joueur en face alors décrémenter vie de la pièce concernée
         List<Joueur> equipeAdverse = joueurs.stream().filter(j -> j.getEquipe() != joueur.getEquipe())
@@ -356,15 +319,15 @@ public class OrdonnanceurDeJeu {
     }
 
     /**
-     * Verifie si, dans le plateau, une des peces condition de victoire est en echec
+     * Verifie si, dans le plateau, une des pieces condition de victoire est en echec
      * @param pieceConditionVictoire Liste des pieces condition de victoire
      * @param p Le plateau
      * @param equipe L'equipe alliée aux piece condition de victoire
      * @return La première piece trouvé qui est en echec parmit les pieces condition de victoire. null si il y en as pas.
      */
-    private Piece verifierEchec(Set<Piece> pieceConditionVictoire, Plateau p, int equipe) {
+    private Set<Case> verifierEchec(Set<Piece> pieceConditionVictoire, Plateau p, int equipe, boolean nonEquipe) {
         // Verifier que le déplacement ne mets pas en échec une pièce condition de victoire allié
-
+        Set<Case> caseDesPieceMenaces = new LinkedHashSet<>();
         //Parcour du plateau
         for (ArrayList<Case> ligne: p.getEchiquier()) {
             for (Case c : ligne) {
@@ -376,13 +339,16 @@ public class OrdonnanceurDeJeu {
                     if (piece.getJoueur().getEquipe() != equipe) {
                         System.out.println("POSITION");
                         for (PositionDeDeplacement pos : piece.getPosDeplacements()) {
-                            if (verifierEquDeplacementMetEquec(pos, c, p, pieceConditionVictoire)) {
-                                return piece;
+                            Case caseVictime = verifierEquDeplacementMetEquec(pos, c, p, pieceConditionVictoire);
+                            if (caseVictime != null) {
+                                caseDesPieceMenaces.add(caseVictime);
                             }
                         }
                         for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
-                            if (verifierEquDeplacementMetEquec(vec, c, p, pieceConditionVictoire)) {
-                                return piece;
+                            System.out.println("VECTEUR");
+                            Case caseVictime = verifierEquDeplacementMetEquec(vec, c, p, pieceConditionVictoire);
+                            if (caseVictime != null) {
+                                caseDesPieceMenaces.add(caseVictime);
                             }
                         }
                     }
