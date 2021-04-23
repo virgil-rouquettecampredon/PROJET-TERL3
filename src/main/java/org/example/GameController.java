@@ -132,6 +132,7 @@ public class GameController extends Controller {
         //System.out.println(mouseEvent);
 
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+        //System.out.println("Case : "+c+"\n mouseEvent : "+mouseEvent+"\n caseOrigine:"+caseOrigine);
 
         switch (mouseEvent.getButton()) {
             case PRIMARY -> {

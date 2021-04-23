@@ -105,6 +105,7 @@ public class PieceMoveController extends Controller {
             nomInput.setText("Pawn");
             posDeplacements = new ArrayList<>();
             vecDeplacements = new ArrayList<>();
+            file = new File("src/main/resources/org/example/images/pawn.png").getAbsolutePath();
         }
 
         // On "lie" le fait que l'entrèe pour mettre la vie soit visible avec

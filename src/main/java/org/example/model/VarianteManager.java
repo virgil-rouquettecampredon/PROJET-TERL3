@@ -356,7 +356,7 @@ public class VarianteManager {
             return vr;
         }
         catch (IOException | ClassNotFoundException e) {
-            throw new IOException();
+            throw new IOException(e);
         }
     }
 }
