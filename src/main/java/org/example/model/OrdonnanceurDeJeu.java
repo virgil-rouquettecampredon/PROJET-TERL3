@@ -15,12 +15,19 @@ public class OrdonnanceurDeJeu {
     //private int nbJoueur;
     private List<Joueur> joueurs;
     //private List<List<Joueur>> equipes;
+    private List<Piece> listTypesPieces;
 
     private Plateau plateau;
 
     public OrdonnanceurDeJeu(List<Joueur> joueurs, Plateau plateau){
         this.joueurs = joueurs;
         this.plateau = plateau;
+        this.listTypesPieces = new ArrayList<>();
+        LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
+        for (int i = 0; i < joueurs.size(); i++) {
+            tmp.addAll(joueurs.get(i).getTypePawnList());
+        }
+        this.listTypesPieces.addAll(tmp);
     }
 
     public List<Joueur> getJoueurs() { return this.joueurs; }
@@ -30,6 +37,221 @@ public class OrdonnanceurDeJeu {
     }
 
     public Plateau getPlateau() { return this.plateau; }
+
+    public List<Piece> getListTypesPieces() { return this.listTypesPieces; }
+
+    /**
+     * Parcour les equation d'une case et retourne une liste de case de déplacement possibles
+     * @param origine case d'origine
+     * @return Ensemble de cases disponnibles
+     */
+    public Set<Case> deplacementsValide(Case origine, Joueur j) {
+        Set<Case> cases = new LinkedHashSet<>();
+        Piece piece = origine.getPieceOnCase();
+        if (piece == null) {
+            return cases;
+        }
+
+
+        for (PositionDeDeplacement pos : piece.getPosDeplacements()) {
+            cases.addAll(equDeplacementsValide(pos, origine, j));
+        }
+        for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
+            cases.addAll(equDeplacementsValide(vec, origine, j));
+        }
+        return cases;
+    }
+
+    /**
+     * Donne les cases disponnibles d'une équation
+     * @param equ L'equation
+     * @param origine la case d'origine
+     * @return L'ensemble de cases deplacement possible
+     */
+    private Set<Case> equDeplacementsValide(EquationDeDeplacement equ, Case origine, Joueur j) {
+        Set<Case> cases = new LinkedHashSet<>();
+        equ.setEvaluable(true);
+        Piece pieceorigine = origine.getPieceOnCase();
+        switch (equ.getTypeDeplacement()) {
+            case DEPLACER -> {
+                Position curseur = origine.getPosition();
+                while (equ.canEvaluate()) {
+                    curseur = equ.evaluate(curseur);
+
+                    //System.out.println("Curseur : "+curseur);
+
+                    //Si piece ou non-accessible ou hors-Plateau -> false
+                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                        return cases;
+                    }
+                    //System.out.println("\t est dans le plateau");
+
+                    Case c = plateau.getCase(curseur);
+                    if (c.getPieceOnCase() != null || !c.isAccessible()) {
+                        return cases;
+                    }
+                    //System.out.println("\t est accessible et pas de piece");
+
+                    //Sinon -> true
+                    try {
+                        Case destination = plateau.getCase(curseur);
+                        System.out.println(origine+" to "+destination);
+
+                        verifierDeplacement(origine, j, destination);
+                        cases.add(destination);
+                    } catch (DeplacementException e) {
+                        System.out.println("Invalide! "+e.getMessage());
+                    }
+                }
+            }
+            case PRENDRE -> {
+                Position curseur = origine.getPosition();
+                while (equ.canEvaluate()) {
+                    curseur = equ.evaluate(curseur);
+                    //System.out.println("Curseur : "+curseur);
+
+                    //Si non-accessible ou hors-Plateau -> false
+                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                        return cases;
+                    }
+                    //System.out.println("\t est dans le plateau");
+
+                    Case c = plateau.getCase(curseur);
+                    if (!c.isAccessible()) {
+                        return cases;
+                    }
+                    //System.out.println("\t est accessible");
+
+
+                    //A l'arrivée
+                    //System.out.println("\t est la destination");
+                    //Si pas de piece -> false
+
+                    Piece victime = c.getPieceOnCase();
+                    //Si victime est allièe et je ne suis pas traitre -> false
+                    if (victime != null && victime.getJoueur().getEquipe() == pieceorigine.getJoueur().getEquipe()
+                            && !pieceorigine.estTraitre()) {
+                        return cases;
+                    }
+                    //System.out.println("\t\t qui n'est pas alliès, ou je serait traite :)");
+                    if (victime != null) {
+                        try {
+                            Case destination = plateau.getCase(curseur);
+                            System.out.println(origine+" to "+destination);
+
+                            verifierDeplacement(origine, j, destination);
+                            cases.add(destination);
+                        } catch (DeplacementException e) {
+                            System.out.println("Invalide! "+e.getMessage());
+                        }
+                    }
+                }
+            }
+            case BOTH -> {
+                Position curseur = origine.getPosition();
+                while (equ.canEvaluate()) {
+                    curseur = equ.evaluate(curseur);
+                    //System.out.println("Curseur : "+curseur);
+
+                    //Si non-accessible ou hors-Plateau -> false
+                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                        return cases;
+                    }
+                    //System.out.println("\t est dans le plateau");
+
+                    Case c = plateau.getCase(curseur);
+                    if (!c.isAccessible()) {
+                        return cases;
+                    }
+                    //System.out.println("\t est accessible");
+
+                    //A l'arrivée
+                    //System.out.println("\t est la destination");
+                    Piece victime = c.getPieceOnCase();
+                    //Si piece victime existe et est allièe et je ne suis pas traitre -> false
+                    if (victime != null && victime.getJoueur().getEquipe() == pieceorigine.getJoueur().getEquipe()
+                            && !pieceorigine.estTraitre()) {
+                        return cases;
+                    }
+                    //System.out.println("\t\t qui n'est pas alliès, ou je serait traite :)");
+                    try {
+                        Case destination = plateau.getCase(curseur);
+                        System.out.println(origine+" to "+destination);
+
+                        verifierDeplacement(origine, j, destination);
+                        cases.add(destination);
+                    } catch (DeplacementException e) {
+                        System.out.println("Invalide! "+e.getMessage());
+                    }
+                }
+            }
+        }
+        return cases;
+    }
+
+    /**
+     * Effectue les vérification du déplacement
+     * @param origine La Case d'origine du coup
+     * @param joueur Le joueur qui fait le coup
+     * @param destination La destination du coup
+     * @throws Exception Si le coup n'est pas valide. Le message permet d'avoir plus d'information
+     */
+    public Plateau verifierDeplacement(Case origine, Joueur joueur, Case destination) throws DeplacementException {
+        //VERIFIER
+        //Verifier qu'il y a une piece et que c'est le bon joueur
+        Piece piece = origine.getPieceOnCase();
+        if (piece==null || !(piece.getJoueur().equals(joueur))){
+            throw new DeplacementException("Pas le bon joueur");
+        }
+
+        // Verifier qu'il peut déplacer la piece:
+        boolean valide = false;
+        System.out.println("Position :");
+        for (PositionDeDeplacement pos: piece.getPosDeplacements()) {
+            System.out.println(pos.toString());
+            valide = verifierEquDeplacement(origine, destination, pos);
+            if (valide) break;
+        }
+        if (!valide) {
+            System.out.println("Vecteur :");
+            for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
+                System.out.println(vec.toString());
+                valide = verifierEquDeplacement(origine, destination, vec);
+                if (valide) break;
+            }
+        }
+
+        if (!valide) {
+            throw new DeplacementException("Deplacement inexistant");
+        }
+
+        // Verifier que le déplacement ne mets pas en échec une pièce condition de victoire allié
+        // generer plateau et verifier echec
+        System.out.println("Copie tableau");
+        Plateau copie = new Plateau(plateau);
+
+        System.out.println("Deplacement de la piece de "+origine+" à "+destination);
+        Case c = copie.getCase(origine.getPosition());
+        Piece p = c.getPieceOnCase();
+        c.setPieceOnCase(null);
+        copie.getCase(destination.getPosition()).setPieceOnCase(p);
+
+        List<Joueur> monEquipe = joueurs.stream().filter(j -> j.getEquipe() == joueur.getEquipe())
+                .collect(Collectors.toList());
+        System.out.println("Mon equipe : "+monEquipe);
+
+        Set<Piece> pieceConditionVictoire = new LinkedHashSet<>();
+        for (Joueur j : monEquipe) {
+            pieceConditionVictoire.addAll(j.getPawnList().stream().filter(Piece::estConditionDeVictoire).collect(Collectors.toList()));
+        }
+
+        System.out.println("pieceConditionVictoire : "+pieceConditionVictoire);
+        valide = verifierEchec(pieceConditionVictoire, copie, joueur.getEquipe(), false).isEmpty();
+        if (!valide) {
+            throw new DeplacementException("Mit en echec");
+        }
+        return copie;
+    }
 
     /**
      * Effectue les vérification et déplace la piece si le déplacement est valide

@@ -5,7 +5,7 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.util.List;
 
-public abstract class InterpreteurSujet<T extends SujetDeRegle> implements Interpreteur_Objet_Regle {
+public abstract class InterpreteurSujet<T extends SujetDeRegle> implements Interpreteur_Objet_Regle<T> {
 
     @Override
     public List<T> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {

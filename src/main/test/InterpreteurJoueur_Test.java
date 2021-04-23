@@ -64,7 +64,7 @@ public class InterpreteurJoueur_Test{
      * ===============| TESTS MAUVAIS |==================
      * ==================================================*/
 
-    /*JOUEUR
+    /*JOUEUR*/
     @Test
     public final void testStringInvalideX_testMauvais() {
         interpretj = new InterpreteurSujetJoueur("X");
@@ -72,7 +72,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("'X': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",m.getMessage());
+            assertEquals("Interpreteur objet de regle: 'X': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",m.getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("'J': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",m.getMessage());
+            assertEquals("Interpreteur objet de regle: 'J': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",m.getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Joueur: 'JA': Entier imparsable (NumberFormatException)",m.getMessage());
+            assertEquals("Interpreteur objet de regle: Joueur: 'JA': Entier imparsable (NumberFormatException)",m.getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Joueur: 'JAL': Entier imparsable (NumberFormatException)",m.getMessage());
+            assertEquals("Interpreteur objet de regle: Joueur: 'JAL': Entier imparsable (NumberFormatException)",m.getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Joueur: 'J20': numéro joueur inconnu",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Joueur: 'J20': numéro joueur inconnu",e.getMessage());
         }
 
     }
@@ -128,7 +128,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Joueur: 'J14abc': Entier imparsable (NumberFormatException)",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Joueur: 'J14abc': Entier imparsable (NumberFormatException)",e.getMessage());
         }
 
     }
@@ -140,26 +140,12 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Joueur: 'J-6': numéro joueur inconnu)",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Joueur: 'J-6': numéro joueur inconnu", e.getMessage());
         }
-
-    }
-
-    /*@Test
-    public final void testJoueurNumNonDécrit_testMauvais() {
-        Jeton.JOUEUR.setBorne(21, 0);
-        interpretj = new InterpreteurSujetJoueur("J20");
-        try {
-            interpretj.recupererTout(ord);
-            fail("Exception non détectée");
-        } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Joueur: 'J20': numéro joueur inconnu)",e.getMessage());
-        }
-
     }
 
 
-    /*EQUIPE
+    /*EQUIPE*/
     @Test
     public final void testStringInvalideE_testMauvais() {
         interpretj = new InterpreteurSujetJoueur("E");
@@ -167,7 +153,7 @@ public class InterpreteurJoueur_Test{
             interpretj.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("'E': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",e.getMessage());
+            assertEquals("Interpreteur objet de regle: 'E': Format incorrect (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",e.getMessage());
         }
 
     }
@@ -179,7 +165,7 @@ public class InterpreteurJoueur_Test{
             assertEquals(null, interpretj.recupererTout(ord));
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Equipe: 'E': Entier imparsable (NumberFormatException)",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Equipe: 'EA': Entier imparsable (NumberFormatException)",e.getMessage());
         }
 
     }
@@ -191,7 +177,7 @@ public class InterpreteurJoueur_Test{
             assertEquals(null, interpretj.recupererTout(ord));
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Equipe: 'E8': numéro équipe inconnu",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Equipe: 'E8': numéro équipe inconnu",e.getMessage());
         }
 
     }
@@ -203,35 +189,25 @@ public class InterpreteurJoueur_Test{
             assertEquals(null, interpretj.recupererTout(ord));
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Equipe: 'E-2': numéro équipe inconnu",e.getMessage());
+            assertEquals("Interpreteur objet de regle: Equipe: 'E-2': numéro équipe inconnu",e.getMessage());
         }
 
     }
 
-    /*@Test
-    public final void testEquipeNumNonDécrit_testMauvais() {
-        Jeton.JOUEUR.setBorne(10, 1);
-        interpretj = new InterpreteurSujetJoueur("E9");
-        try {
-            assertEquals(0, interpretj.recupererTout(ord).size());
-            fail("Exception non détectée");
-        } catch (MauvaiseInterpretationObjetRegleException e) {
-            assertEquals("Equipe: 'E9': numéro équipe inconnu",e.getMessage());
-        }
-    }*/
+
 
     /**==================================================
      * =================| TESTS BONS |===================
      * ==================================================
 
-    /*JOUEUR
-    /*@Test
+    /*JOUEUR*/
+    @Test
     public final void testJALL_testBon() {
         interpretj = new InterpreteurSujetJoueur("JALL");
         try {
             assertTrue(interpretj.recupererTout(ord).equals(alljoueurs));
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            e.printStackTrace();
+            fail("Exception détectée: " + e.getMessage());
         }
     }
 
@@ -242,40 +218,78 @@ public class InterpreteurJoueur_Test{
             assertTrue((interpretj.recupererTout(ord).size()==1)
                     && interpretj.recupererTout(ord).get(0).getName().equals("stinky"));
         } catch (MauvaiseInterpretationObjetRegleException e) {
-            e.printStackTrace();
+            fail("Exception détectée: " + e.getMessage());
         }
     }
 
     @Test
     public final void testJ19_testBon() {
         interpretj = new InterpreteurSujetJoueur("J19");
-        assertTrue((interpretj.recupererTout(ord).size()==1)
-                && interpretj.recupererTout(ord).get(0).getName().equals("Sans"));
+        try {
+            assertTrue((interpretj.recupererTout(ord).size()==1)
+                    && interpretj.recupererTout(ord).get(0).getName().equals("Sans"));
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
     }
 
     @Test
     public final void testJ16_testBon() {
         interpretj = new InterpreteurSujetJoueur("J16");
-        assertTrue((interpretj.recupererTout(ord).size()==1)
-                && interpretj.recupererTout(ord).get(0).getName().equals("Virgil croquette"));
-    }*/
-
-
-    /*EQUIPE
-    /*@Test
-    public final void testE3_testBon() {
-        interpretj = new InterpreteurSujetJoueur("E3");
-        assertTrue((interpretj.recupererTout(ord).size()==2)
-                && interpretj.recupererTout(ord).get(0).getName().equals("Meynard")
-                && interpretj.recupererTout(ord).get(1).getName().equals("Yumi"));
+        try {
+            assertTrue((interpretj.recupererTout(ord).size()==1)
+                    && interpretj.recupererTout(ord).get(0).getName().equals("Virgil croquette"));
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
     }
 
     @Test
-    public final void testE6NonDecritListeVide_testBon() {
+    public final void testJ20NumNonDécritListeVide_testBon() {
+        Jeton.JOUEUR.setBorne(21, 0);
+        interpretj = new InterpreteurSujetJoueur("J20");
+        try {
+            assertTrue(interpretj.recupererTout(ord).size()==0);
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
+    }
+
+
+    /*EQUIPE*/
+    @Test
+    public final void testE3_testBon() {
+        interpretj = new InterpreteurSujetJoueur("E3");
+        try {
+            assertTrue((interpretj.recupererTout(ord).size()==2)
+                    && interpretj.recupererTout(ord).get(0).getName().equals("Meynard")
+                    && interpretj.recupererTout(ord).get(1).getName().equals("Yumi"));
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testE8NonDecritListeVide_testBon() {
         Jeton.JOUEUR.setBorne(10, 1);
         interpretj = new InterpreteurSujetJoueur("E8");
-        assertTrue(interpretj.recupererTout(ord).size()==0);
+        try {
+            assertTrue(interpretj.recupererTout(ord).size()==0);
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
     }
-*/
+
+    @Test
+    public final void testE0NonDecritListeVide_testBon() {
+        interpretj = new InterpreteurSujetJoueur("E0");
+        try {
+            assertTrue(interpretj.recupererTout(ord).size()==0);
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            fail("Exception détectée: " + e.getMessage());
+        }
+    }
+
+
 }
 

@@ -41,7 +41,6 @@ public class InterpreteurCibleCase extends InterpreteurCible<Case> {
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Entier imparsable (NumberFormatException)");
                 }
-
             }
         }
         throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");

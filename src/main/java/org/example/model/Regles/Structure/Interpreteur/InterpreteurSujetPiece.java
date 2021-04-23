@@ -19,8 +19,8 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
         this.str_source = str_source;
     }
 
-    public InterpreteurSujetPiece(String str_joueur, String str_type) {
-        this.str_source = str_joueur + "#" + str_type;
+    public InterpreteurSujetPiece(String str_type, String str_joueur) {
+        this.str_source = str_type + "#" + str_joueur;
     }
 
     // PN / PALL
@@ -37,6 +37,7 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
                 lret = new ArrayList<>();
 
                 String[] str_proprio_type = this.str_source.split("#");
+                if (str_proprio_type.length < 2) { throw new MauvaiseInterpretationObjetRegleException("Format Piece + Joueur: '#' vide"); }
                 List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
 
                 InterpreteurSujetJoueur sujj = new InterpreteurSujetJoueur(str_proprio_type[1]);
@@ -48,7 +49,7 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
                     }
                 }
                 return lret;
-            } catch (MauvaiseInterpretationObjetRegleException m){
+            } catch (MauvaiseInterpretationObjetRegleException m) {
                 throw new MauvaiseInterpretationObjetRegleException(erreurPiece + m.getMessage());
             }
 
@@ -59,30 +60,30 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
     }
 
     public List<Piece> convertPiece(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
-        /*List<Piece> lret = new ArrayList<>();
-        String erreurPiece = "Piece: ";
-        if (this.str_source.charAt(0) == 'P' && this.str_source.length() >= 2) {
-            if (this.str_source.equals("PALL")) {
-                lret.addAll(ord.getPlateau().getPieces());
-                return lret;
+        List<Piece> allpieces = new ArrayList<>();
+        String erreurPiece = "Piece: " + "'" + str + "': ";
+        if (this.str_source.charAt(0) == 'P' && str.length() >= 2) {
+            for(Joueur j: ord.getJoueurs()) { allpieces.addAll(j.getPawnList()); }
+
+            if (str.equals("PALL")) {
+                return allpieces;
             } else {
                 try {
-                    String nompiece = ord.getTypePiece(Integer.parseInt(this.str_source.substring(1)));
-                    for (Piece p : ord.getPieces()) {
-                        if (p.getName().equals(nompiece)) {
-                            lret.add(p);
-                        }
+                    List<Piece> lret = new ArrayList<>();
+                    Piece piece_reference = ord.getListTypesPieces().get(Integer.parseInt(str.substring(1)));
+                    for(Piece p: allpieces){
+                        if(p.equals(piece_reference)) { lret.add(p); }
                     }
                     return lret;
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Entier imparsable (NumberFormatException)");
-                } catch (ArrayIndexOutOfBoundsException ie) {
+                } catch (IndexOutOfBoundsException ie) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "numéro piece inconnu");
                 }
             }
         }
-        throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Format incorrect (syntaxe de la forme PALL ou PN où N est un entier positif)");*/
-        return null;
+        throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Format incorrect (syntaxe de la forme PALL ou PN où N est un entier positif)");
+        //return null;
     }
 
 }

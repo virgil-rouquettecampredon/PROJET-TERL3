@@ -5,6 +5,8 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 
 public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
@@ -13,7 +15,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
     private int equipe;                         // Équipe du joueur
     private ArrayList<Piece> graveyard;         // Liste des pièce dans la défausse du joueur
     private ArrayList<Piece> pawnList;          // Liste de toutes les pièces du joueur (le nombre de pièces total du joueur)
-    private ArrayList<Piece> typePawnList;      // Liste de tous les types de pièces du joueur
+    private List<Piece> typePawnList;      // Liste de tous les types de pièces du joueur
     private int timer;                          // Temps du joueur utilisé depuis le début de la partie
 
 
@@ -91,7 +93,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         return pawnList;
     }
 
-    public ArrayList<Piece> getTypePawnList() {
+    public List<Piece> getTypePawnList() {
         return typePawnList;
     }
 

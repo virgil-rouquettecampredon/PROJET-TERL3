@@ -9,10 +9,7 @@ import org.example.model.Piece;
 import org.example.model.Case;
 import org.example.model.Joueur;
 import org.example.model.Regles.*;
-import org.example.model.Regles.Structure.Interpreteur.InterpreteurCible;
-import org.example.model.Regles.Structure.Interpreteur.InterpreteurCibleCase;
-import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetJoueur;
-import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetPiece;
+import org.example.model.Regles.Structure.Interpreteur.*;
 
 
 /** Automate_Regle_Semantique verifie la sémantique d'une règle à l'aide d'un Automate_Règle.
@@ -757,19 +754,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                 case "<" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
                                                             new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
-                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.timer_inferieur_a));
                                                 }
                                                 case "=" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
                                                             new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
-                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.timer_egal_a));
                                                 }
                                                 case ">" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Joueur, IntegerRegle>(
                                                             new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-3)),
-                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.timer_superieur_a));
                                                 }
                                             }
@@ -798,19 +795,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                     case "<" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_inferieur_a));
                                                     }
                                                     case "=" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_egal_a));
                                                     }
                                                     case ">" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_superieur_a));
                                                     }
                                                 }
@@ -826,19 +823,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                     case "<" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_inferieur_a));
                                                     }
                                                     case "=" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_egal_a));
                                                     }
                                                     case ">" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_superieur_a));
                                                     }
                                                 }
@@ -854,19 +851,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                     case "<" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_inferieur_a));
                                                     }
                                                     case "=" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_egal_a));
                                                     }
                                                     case ">" -> {
                                                         conditionsDeLaRegle.add(new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
-                                                                new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                                new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
                                                                 Fonctions_Comportements.deplacement_superieur_a));
                                                     }
                                                 }
@@ -1179,14 +1176,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                 case "prendre" -> {
                                                     consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
                                                     consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
@@ -1201,14 +1198,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                                 case "prendre" -> {
                                                     consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
                                                     consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }

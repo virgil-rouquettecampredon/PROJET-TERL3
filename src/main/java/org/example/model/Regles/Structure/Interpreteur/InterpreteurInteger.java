@@ -6,7 +6,7 @@ import org.example.model.Regles.IntegerRegle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterpreteurInteger implements Interpreteur_Objet_Regle {
+public class InterpreteurInteger implements Interpreteur_Objet_Regle<IntegerRegle> {
 
     private String str_int;
     private IntegerRegle int_regle;
@@ -16,7 +16,7 @@ public class InterpreteurInteger implements Interpreteur_Objet_Regle {
     }
 
     @Override
-    public List<IntegerRegle> recupererTout(OrdonnanceurDeJeu ord) /*throws MauvaiseInterpretationObjetRegleException*/ {
+    public List<IntegerRegle> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         try {
             int val = Integer.parseInt(this.str_int);
             this.int_regle = new IntegerRegle(val);
@@ -24,8 +24,8 @@ public class InterpreteurInteger implements Interpreteur_Objet_Regle {
             lir.add(this.int_regle);
             return lir;
         } catch (NumberFormatException nfe) {
-            return null;
-            //throw new MauvaiseInterpretationObjetRegleException("'" + this.str_int + "': Entier imparsable (NumberFormatException)");
+            //return null;
+            throw new MauvaiseInterpretationObjetRegleException("Entier: '" + this.str_int + "': Entier imparsable (NumberFormatException)");
         }
     }
 }

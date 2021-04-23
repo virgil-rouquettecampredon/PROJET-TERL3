@@ -77,7 +77,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Piece piece = (Piece) o;
-        return  name.equals(piece.name) && sprite.equals(piece.sprite) &&  posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements) && Arrays.equals(comportementPiece, piece.comportementPiece);
+        return name.equals(piece.name) && sprite.equals(piece.sprite) && posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements) && Arrays.equals(comportementPiece, piece.comportementPiece);
     }
 
     @Override

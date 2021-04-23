@@ -32,11 +32,11 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
                     if (numjoueur < Jeton.JOUEUR.getBorne(0) && numjoueur >= 0) {
                         lret.add(ord.getJoueur(numjoueur));
                         return lret;
+                    } else {
+                        throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "numéro joueur inconnu");
                     }
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "Entier imparsable (NumberFormatException)");
-                } catch (ArrayIndexOutOfBoundsException ae) {
-                    throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "numéro joueur inconnu");
                 }
             }
         } else if (this.str_source.charAt(0) == 'E' && this.str_source.length() >= 2) {
