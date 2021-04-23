@@ -61,7 +61,6 @@ public enum Jeton implements Serializable, EstToken {
             return false;
         }
     },
-
     JOUEUR("joueur") {
         @Override
         public boolean estReconnu(String joueur) {
@@ -79,7 +78,7 @@ public enum Jeton implements Serializable, EstToken {
                                 JOUEUR.messageErreur = "Syntaxe du joueur (JAL + mauvais carac) incorrecte";
                             }
                         } else {
-                            JOUEUR.messageErreur = "Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte";
+                            JOUEUR.messageErreur = "Syntaxe du joueur (JA + mauvais carac) incorrecte";
                         }
                     } else {
                         try {
@@ -115,12 +114,12 @@ public enum Jeton implements Serializable, EstToken {
                         return false;
 
                     } catch (NumberFormatException e) {
-                        JOUEUR.messageErreur = "Syntaxe de l'équipe (numero) incorrecte, un entier positif est requis";
+                        JOUEUR.messageErreur = "Syntaxe de l'équipe (numero) incorrecte, un entier positif ou nul est requis";
                         return false;
                     }
 
                 } else {
-                    JOUEUR.messageErreur = "Syntaxe du joueur incorrecte (doit commencer par J)";
+                    JOUEUR.messageErreur = "Syntaxe du joueur incorrecte (doit commencer par J ou E)";
                 }
             } else {
                 JOUEUR.messageErreur = "Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif)";
@@ -128,7 +127,6 @@ public enum Jeton implements Serializable, EstToken {
             return false;
         }
     },
-
     CASE("case") {
         @Override
         public boolean estReconnu(String cases) {

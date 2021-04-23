@@ -99,6 +99,20 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                             }
                         }
                     }
+                    /*CAS EQUIPE*/
+                    case 'E' -> {
+                        //Si rien n'est reconnu
+                        if((curJeton = estReconnu(curRegle)).equals(Jeton.AUCUN)){
+                            //Alors on va essayer de savoir pourquoi
+                            Jeton jetonJ;
+                            if((jetonJ = getToken(Jeton.JOUEUR)).equals(Jeton.AUCUN)){
+                                //Si notre système ne reconnait pas de JOUEUR, et donc pas d'équipes
+                                throw new MauvaiseSyntaxeRegleException("Impossible de reconnaire une Equipe");
+                            }else{
+                                throw new MauvaiseSyntaxeRegleException(jetonJ.getMessageErreur());
+                            }
+                        }
+                    }
                     /*CAS CASE*/
                     case 'C' -> {
                         //Si rien n'est reconnu

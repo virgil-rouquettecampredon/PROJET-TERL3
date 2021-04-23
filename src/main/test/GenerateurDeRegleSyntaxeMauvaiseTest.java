@@ -54,7 +54,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
     public final void testBlocJoueur_testMauvais() {
         Jeton j = Jeton.JOUEUR;
         assertFalse(j.estReconnu("ffrf"));
-        assertEquals("Syntaxe du joueur incorrecte (doit commencer par J)",j.getMessageErreur());
+        assertEquals("Syntaxe du joueur incorrecte (doit commencer par J ou E)",j.getMessageErreur());
     }
     @Test
     public final void testBlocJoueurJ_testMauvais() {
@@ -89,7 +89,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("JAaa"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe du joueur (JA + mauvais carac) incorrecte au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -127,6 +127,32 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
         }catch (MauvaiseDefinitionRegleException m){
             assertEquals("Syntaxe du joueur (numero trop grand) incorrecte au bloc de regle numero : [0]",m.getMessage());
         }
+    }
+
+    /*Test Equipe*/
+    @Test
+    public final void testBlocJoueurEquipeE_testMauvais() {
+        Jeton j = Jeton.JOUEUR;
+        assertFalse(j.estReconnu("E"));
+        assertEquals("Syntaxe du joueur incorrecte (syntaxe de la forme JALL, JN ou EN où N est un entier positif)",j.getMessageErreur());
+    }
+    @Test
+    public final void testBlocJoueurEquipeE_NaN_testMauvais() {
+        Jeton j = Jeton.JOUEUR;
+        assertFalse(j.estReconnu("Etest"));
+        assertEquals("Syntaxe de l'équipe (numero) incorrecte, un entier positif ou nul est requis",j.getMessageErreur());
+    }
+    @Test
+    public final void testBlocJoueurEquipeE_NumeroTropPetit_testMauvais() {
+        Jeton j = Jeton.JOUEUR;
+        assertFalse(j.estReconnu("E-1"));
+        assertEquals("Syntaxe de l'équipe (numero trop petit) incorrecte",j.getMessageErreur());
+    }
+    @Test
+    public final void testBlocJoueurEquipeE_NumeroTropGrand_testMauvais() {
+        Jeton j = Jeton.JOUEUR;
+        assertFalse(j.estReconnu("E10"));
+        assertEquals("Syntaxe de l'équipe (numero trop grand) incorrecte",j.getMessageErreur());
     }
 
     /**==================================================
@@ -435,7 +461,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#AALL"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur incorrecte (doit commencer par J)] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur incorrecte (doit commencer par J ou E)] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -444,7 +470,7 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("PALL#JAaa"));
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
-            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (JA ou EA + mauvais carac) incorrecte] au bloc de regle numero : [0]",m.getMessage());
+            assertEquals("Syntaxe de pieceToken incorrecte [Syntaxe du joueur (JA + mauvais carac) incorrecte] au bloc de regle numero : [0]",m.getMessage());
         }
     }
     @Test
@@ -512,6 +538,16 @@ public class GenerateurDeRegleSyntaxeMauvaiseTest {
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException m){
             assertEquals("Impossible de reconnaire une Case au bloc de regle numero : [0]",m.getMessage());
+        }
+    }
+    @Test
+    public final void testBlocJoueurEquipePasReconnus_testMauvais() {
+        generateur = new GenerateurDeRegle_Jeton(auto,new ArrayList<>());
+        try{
+            List<Jeton> jetons = generateur.analyseSyntaxique(Arrays.asList("E12"));
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException m){
+            assertEquals("Impossible de reconnaire une Equipe au bloc de regle numero : [0]",m.getMessage());
         }
     }
 
