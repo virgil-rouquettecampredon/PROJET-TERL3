@@ -240,6 +240,10 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         return listeAlias;
     }
 
+    public void setListeAlias(List<String> listeAlias) {
+        this.listeAlias = listeAlias;
+    }
+
     /*toString pour les alias*/
     public String toStringAlias(){
         String s = "{";

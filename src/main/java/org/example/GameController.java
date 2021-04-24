@@ -16,6 +16,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 import org.example.model.*;
 import org.example.model.Regles.Jeton;
 import org.junit.runner.manipulation.Ordering;
@@ -279,4 +281,6 @@ public class GameController extends Controller {
     public void infoButton() {
         showAlert(Alert.AlertType.INFORMATION, "Clic gauche et clic droit et give up shrek"); //todo texte edition regle
     }
+
+
 }

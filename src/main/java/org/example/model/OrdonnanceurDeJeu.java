@@ -368,6 +368,12 @@ public class OrdonnanceurDeJeu {
         for (Case caseVictime: caseOuPiecesMitEnEchec) {
             Piece victime = caseVictime.getPieceOnCase();
             victime.setNbLife(victime.getNbLife()-1);
+
+            //System.out.println(victime.getJoueur().getPawnList().stream().filter(p -> p.equals(victime)).findAny().get());
+                    //System.out.println("===================================================================================\n");
+            //System.out.println("Victime : "+victime+" nbVie : " + victime.getNbLife());
+            //assert victime == victime.getJoueur().getPawnList().stream().filter(p -> p.equals(victime)).findAny().get();
+            //System.out.println("===================================================================================\n");
         }
 
         //todo Appliquer les règles après coup

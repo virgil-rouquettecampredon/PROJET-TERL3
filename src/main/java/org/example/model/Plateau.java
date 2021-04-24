@@ -40,11 +40,6 @@ public class Plateau implements Serializable {
         }
     }
 
-    public void afficherPlateau(){
-        // A completer
-
-    }
-
     /**
      * Vide le plateau de toutes ses pièces
      */
