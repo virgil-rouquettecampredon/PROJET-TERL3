@@ -75,6 +75,14 @@ public class Regle {
     }
 
     /*Getter et Setter*/
+    public Arbre_Condition getArbreCondition(){
+        return arbre_conditions;
+    }
+
+    public List<Consequence> getConsequences(){
+        return consequences;
+    }
+
     public void setArbreCondition(Arbre_Condition cond) {
         this.arbre_conditions = cond;
     }

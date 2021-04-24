@@ -63,7 +63,7 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
                 return false;
             }
         }
-        return true;
+        return alias.get(s) == null;
     }
 
     /** Méthode abstraite permettant de générer les éléments sélectionnables depuis l'interface.

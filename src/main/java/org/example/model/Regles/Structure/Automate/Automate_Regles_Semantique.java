@@ -1,9 +1,7 @@
 package org.example.model.Regles.Structure.Automate;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.example.model.Piece;
 import org.example.model.Case;
@@ -16,30 +14,51 @@ import org.example.model.Regles.Structure.Interpreteur.*;
  * Si la règle est correct, analyserUneRegle retourne l'objet Regle correspondant,
  * Sinon, la méthode retourne une MauvaiseSemantiqueRegleException avec le message adequat.
  * */
-public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
+public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
+
+    private Map<String,Jeton> aliasRegle;       //Liste des alias de la Regle
 
     public Automate_Regles_Semantique(){
-        super(26,0);
+        super(35,0);
+        aliasRegle = new HashMap<>();
     }
 
     public Automate_Regles_Semantique(List<String> nomEtat){
-        super(27,0, nomEtat);
+        super(35,0, nomEtat);
+        aliasRegle = new HashMap<>();
+    }
+
+    /**Méthode permettant d'ajouter un Alias dans la liste des Alias
+     * @param nomAlias : nom de l'alias à ajouter à la table des alias
+     * @param parcours : parcours de l'automate jusqu'à la rencontre d'une définition d'alias**/
+    public void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException{
+        switch (parcours){
+            case "02" , "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,Jeton.PIECE);
+            case "023" , "03" , "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" -> aliasRegle.put(nomAlias,Jeton.PIECETOKEN);
+            case "01"-> aliasRegle.put(nomAlias,Jeton.JOUEUR);
+            case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,Jeton.CASE);
+            case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,Jeton.CASEPARAM);
+            default -> throw new MauvaiseDefinitionRegleException("Impossible de définir un alias ici");
+        }
+    }
+
+    /**Méthode permettant de récupérer un Alias de la liste des Alias
+     * @param nomAlias : Nom de l'alias à récupérer
+     * @return le jeton correspondant au nom de l'alias, erreur sinon**/
+    public Jeton recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
+        Jeton jeton = aliasRegle.get(nomAlias);
+        if(jeton == null){
+            throw new MauvaiseDefinitionRegleException("Alias inconnu");
+        }
+        return jeton;
     }
 
     public void initialiserAutomate(){
         //GESTIONS ETATS TERMINAUX
-        List<Integer> etatTer = new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23));
+        List<Integer> etatTer = new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23,27,31,32,33,34));
         for (Integer i:etatTer) {
             this.ajouterUnEtatTerminal(i,300+i);
         }
-
-        //GESTION DES ALIAS
-        this.ajouterUneTransition(1,Jeton.ALIAS,1);
-        this.ajouterUneTransition(2,Jeton.ALIAS,2);
-        this.ajouterUneTransition(3,Jeton.ALIAS,3);
-        this.ajouterUneTransition(9,Jeton.ALIAS,9);
-        this.ajouterUneTransition(10,Jeton.ALIAS,10);
-        this.ajouterUneTransition(11,Jeton.ALIAS,11);
 
         //GESTION DES NEGATIONS
         this.ajouterUneTransition(4,Jeton.NON,4);
@@ -72,11 +91,68 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         this.ajouterUneTransition(10,Jeton.PARENTHESEFERMANTE,25);
         this.ajouterUneTransition(11,Jeton.PARENTHESEFERMANTE,25);
         this.ajouterUneTransition(14,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(6,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(27,Jeton.PARENTHESEFERMANTE,25);
         this.ajouterUneTransition(25,Jeton.PARENTHESEFERMANTE,25);
 
         this.ajouterUneTransition(25,Jeton.ET,0);
         this.ajouterUneTransition(25,Jeton.OU,0);
         this.ajouterUneTransition(25,Jeton.ALORS,15);
+
+        //GESTION DES ALIAS
+        //Permet de ne pas renseigner la traversée de cet état dans le parcours de l'automate
+        //Les alias ne change pas le traitement sémantique d'un bloc de regle
+        this.setValeurEtat(28,"");
+        this.setValeurEtat(29,"");
+        this.setValeurEtat(30,"");
+        this.setValeurEtat(31,"");
+        this.setValeurEtat(32,"");
+        this.setValeurEtat(33,"");
+        this.setValeurEtat(34,"");
+
+        this.ajouterUneTransition(1,Jeton.ALIAS,28);
+        this.ajouterUneTransition(2,Jeton.ALIAS,29);
+        this.ajouterUneTransition(3,Jeton.ALIAS,30);
+        this.ajouterUneTransition(9,Jeton.ALIAS,31);
+        this.ajouterUneTransition(10,Jeton.ALIAS,32);
+        this.ajouterUneTransition(11,Jeton.ALIAS,33);
+        this.ajouterUneTransition(27,Jeton.ALIAS,34);
+
+        //Meme transition que 1
+        this.ajouterUneTransition(28,Jeton.COMPTEUR,4);
+
+        //Meme transition que 2
+        this.ajouterUneTransition(29,Jeton.ACTION,5);
+        this.ajouterUneTransition(29,Jeton.ETAT,6);
+        this.ajouterUneTransition(29,Jeton.COMPTEUR,7);
+        this.ajouterUneTransition(29,Jeton.JOUEUR,3);
+
+        //Meme transition que 3
+        this.ajouterUneTransition(30,Jeton.ACTION,5);
+        this.ajouterUneTransition(30,Jeton.ETAT,6);
+        this.ajouterUneTransition(30,Jeton.COMPTEUR,7);
+
+        //Meme transition que 9
+        this.ajouterUneTransition(31,Jeton.JOUEUR,10);
+        this.ajouterUneTransition(31,Jeton.ET,0);
+        this.ajouterUneTransition(31,Jeton.OU,0);
+        this.ajouterUneTransition(31,Jeton.ALORS,15);
+
+        //Meme transition que 10
+        this.ajouterUneTransition(32,Jeton.ET,0);
+        this.ajouterUneTransition(32,Jeton.OU,0);
+        this.ajouterUneTransition(32,Jeton.ALORS,15);
+
+        //Meme transition que 11
+        this.ajouterUneTransition(33,Jeton.ET,0);
+        this.ajouterUneTransition(33,Jeton.OU,0);
+        this.ajouterUneTransition(33,Jeton.ALORS,15);
+        this.ajouterUneTransition(33,Jeton.CASE,27);
+
+        //Meme transition que 27
+        this.ajouterUneTransition(34,Jeton.ET,0);
+        this.ajouterUneTransition(34,Jeton.OU,0);
+        this.ajouterUneTransition(34,Jeton.ALORS,15);
 
         //=========== CONDITIONS ===========
         //ETAT INITIAL
@@ -110,6 +186,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         this.ajouterUneTransition(5,Jeton.PIECE,9);
         this.ajouterUneTransition(5,Jeton.PIECETOKEN,10);
         this.ajouterUneTransition(5,Jeton.CASE,11);
+        this.ajouterUneTransition(5,Jeton.CASEPARAM,27);
 
         //ETAT 6
         //this.setValeurEtat(6,"6");
@@ -143,6 +220,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         this.ajouterUneTransition(11,Jeton.ET,0);
         this.ajouterUneTransition(11,Jeton.OU,0);
         this.ajouterUneTransition(11,Jeton.ALORS,15);
+        this.ajouterUneTransition(11,Jeton.CASE,27);
 
         //ETAT 12
         //this.setValeurEtat(12,"12");
@@ -204,6 +282,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         this.ajouterUneTransition(23,Jeton.ET,20);
         this.ajouterUneTransition(23,Jeton.PIECETOKEN,22);
         this.ajouterUneTransition(23,Jeton.PIECE,21);
+
+        //ETAT 27
+        this.ajouterUneTransition(27,Jeton.ET,0);
+        this.ajouterUneTransition(27,Jeton.OU,0);
+        this.ajouterUneTransition(27,Jeton.ALORS,15);
     }
 
     private boolean peutAvancer(int indice, List<Jeton> regleSyntaxe){
@@ -240,20 +323,27 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         if(dep == null){
             throw new MauvaiseDefinitionRegleException("Impossible de commencer une analyse en partant de l'état de départ : " + getEtatDeDepart());
         }
+
         String parcours = dep.getValeur();
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
 
+        aliasRegle.clear();
 
+        //Compteurs permettant de reconnaitre une Regle bien formée
         int nbConditions = 0;
         int nbConsequence = 0;
 
+        //Booléen permettant de connaitre dans quel endroit du traitement de la Regle on se trouve
         boolean traitementCondition = true;
 
+
+        //Listes utiles pour la création de la Regle ensuite
         List<Jeton> jetonsarborescence = new ArrayList<>();
         List<Condition> conditionsDeLaRegle = new ArrayList<>();
         List<Consequence> consequencesDeLaRegle = new ArrayList<>();
 
+        //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
 
         for (Jeton j: regleSyntaxe) {
@@ -272,9 +362,17 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                     }
                 }
                 //Gestion des connecteurs (Pour l'arbre des conditions)
-                case ET,OU,NON -> {
+                case ET,OU -> {
                     if (traitementCondition) {
                         jetonsarborescence.add(j);
+                    }
+                }
+                //Gestion de la négation
+                case NON -> {
+                    if (traitementCondition) {
+                        if(!(parcours.equals("014") || parcours.equals("027") || parcours.equals("0237") || parcours.equals("037"))){
+                            jetonsarborescence.add(j);
+                        }
                     }
                 }
                 //Gestion du ALORS (fin du traitement des conditions)
@@ -288,13 +386,25 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                         throw new MauvaiseSemantiqueRegleException("Double alors [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                     }
                 }
+                //Gestion des Alias dans la Regle (définition)
+                case ALIAS -> {
+                    //Si on rencontre une définition d'Alias dans les conséquences
+                    if(!traitementCondition){
+                        //Alors il s'agit d'un problème
+                        throw new MauvaiseDefinitionRegleException("Imposible de définir un Alias dans les Consequences de Regle");
+                    }else{
+                        //Sinon, on doit la définir dans notre flot d'alias
+                        ajouterAlias(regleString.get(indRegleSyntaxe),parcours);
+                    }
+                }
+                //Gestion des Alias dans la Regle (utilisation)
+                case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe));
             }
+
             //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
-
             //Récupération de l'indice du prochain état d'après la transition donnée
             curEtat = this.etatSuivant(curEtat, j);
-
             //Récupération de l'état correspondant à l'indice curEtat
             Etat etat = this.recupererEtat(curEtat);
 
@@ -369,7 +479,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
                             }
 
-                            case 309 -> {
+                            case 309 , 331 -> {
                                 //SUJET-ACTION-PIECE
                                 if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
@@ -454,7 +564,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                 }
                             }
 
-                            case 310 -> {
+                            case 310 , 332 -> {
                                 //SUJET-ACTION-PIECETOKEN   OU  SUJET-ACTION-PIECE-JOUEUR
                                 if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
@@ -611,7 +721,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                 }
                             }
 
-                            case 311 -> {
+                            case 311 , 333 -> {
                                 //SUJET-ACTION-CASE
                                 if (indRegleSyntaxe >= 2) {
                                     switch (parcours) {
@@ -785,7 +895,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
 
                             case 314 -> {
                                 //SUJET-COMPTEUR-COMPARAISON-NOMBRE
-
                                 if (indRegleSyntaxe >= 3) {
                                     switch (parcours) {
                                         case "0271214" -> {
@@ -879,6 +988,9 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                                 } else {
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
+                            }
+
+                            case 327 , 334 -> {//SUJET-ACTION-CASEPARAM
                             }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/
@@ -1227,8 +1339,9 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
                         }
                         parcours = "";  //on a gagné !
 
-                    } // sinon on ne fait rien car on est terminal, on peut encore avancer et on est pas un connecteur adequat
-                    //connecteur non adequat gérer au niveaux de transition automate  !!
+                    }
+                    //Sinon on ne fait rien car on est terminal, on peut encore avancer et on est pas un connecteur adequat
+                    //connecteur non adequat gérer au niveaux de transition automate
 
                 } else {  //sinon état non terminal, continuer à l'état suivant
                     if (!peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)) {
@@ -1257,4 +1370,5 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton> {
         regle.genererArbreCondition(conditionsDeLaRegle,jetonsarborescence);
         return regle;
     }
+
 }

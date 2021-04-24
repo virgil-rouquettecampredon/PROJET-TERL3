@@ -37,4 +37,9 @@ public class ConsequenceAction<A extends SujetDeRegle,B extends CibleDeRegle> ex
     public void comportement(OrdonnanceurDeJeu ord){
         comportement.apply(sujets, cibles);
     }
+
+    @Override
+    public String toString(){
+        return "CONSEQUENCE " + sujets.getClass() + " ACTION " + cibles.getClass();
+    }
 }

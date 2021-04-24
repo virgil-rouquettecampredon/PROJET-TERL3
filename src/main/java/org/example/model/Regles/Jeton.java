@@ -238,7 +238,7 @@ public enum Jeton implements Serializable, EstToken {
     },
 
     //Jeton connecteur
-    ET("et","ET"),
+    ET("et","et"),
     OU("ou","OU"),
     NON("non","non","NON","N"){
         @Override
@@ -259,7 +259,14 @@ public enum Jeton implements Serializable, EstToken {
     CONSEQUENCETERMINALE("consequence terminale","victoire", "defaite", "pat"),
     CONSEQUENCEACTION("consequence action","prendre", "placer", "promouvoir", "deplacer"),
 
+    //Jetons pour la gestion das Alias
     ALIAS("alias","as"),
+    ALIASREUTILISATION("reutilisation alias"){
+        @Override
+        public boolean estReconnu(String s) {
+            return false;
+        }
+    },
 
     PARENTHESEOUVRANTE("parenthèse ouvrante","("),
     PARENTHESEFERMANTE("parenthèse fermante",")"),

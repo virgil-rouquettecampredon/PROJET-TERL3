@@ -33,7 +33,7 @@ public abstract class Variante<A extends EstToken> {
         this.listGroupCases = listGroupCases;
     }
 
-    public Variante(Variante variante) {
+    public Variante(Variante<A> variante) {
         name = variante.name;
         plateau = new Plateau(variante.plateau);
         joueurs = new ArrayList<>();

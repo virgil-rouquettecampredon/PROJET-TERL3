@@ -32,4 +32,9 @@ public class ConsequenceTerminale<A extends SujetDeRegle> extends Consequence{
     public void comportement(OrdonnanceurDeJeu ord){
         comportement.apply(sujets);
     }
+
+    @Override
+    public String toString(){
+        return "CONSEQUENCE " + sujets.getClass() + " TERMINALE";
+    }
 }

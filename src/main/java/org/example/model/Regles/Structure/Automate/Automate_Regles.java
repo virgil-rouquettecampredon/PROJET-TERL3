@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /** Automate_Regles est un type d'Automate particulier à la création de règles,
- * Cela permet de pouvoir créée notre système de règle et d'en créer d'autre si besoin
+ * Cela permet de pouvoir créer notre système de règle et d'en créer d'autre si besoin
  * */
 public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
 
