@@ -15,13 +15,13 @@ import java.util.*;
 
 public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Interface> {
 
-    private List<Piece> pieces;
-    private List<GroupCases> cases;
-    private List<Joueur> joueurs;
+    private List<Piece> pieces;             //Liste des Pieces réutilisables dans les règles
+    private List<GroupCases> cases;         //Liste des Groupes de cases réutilisables dans les règles
+    private List<Joueur> joueurs;           //Liste des Joueurs réutilisables dans les règles
 
 
     public Automate_Interface_Consequence(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
-        super(14, 0);
+        super(15, 0);
 
         this.pieces = pieces;
         this.cases = cases;
@@ -34,6 +34,7 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUnEtatTerminal(11,300);
         this.ajouterUnEtatTerminal(12,300);
         this.ajouterUnEtatTerminal(13,300);
+        this.ajouterUnEtatTerminal(14,300);
 
         //ETAT 0
         this.ajouterUneTransition(0,Jeton_Interface.JOUEUR,1);
@@ -65,19 +66,24 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUneTransition(6,Jeton_Interface.PIECETOKEN,11);
         this.ajouterUneTransition(6,Jeton_Interface.PIECE,12);
         this.ajouterUneTransition(6,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(6,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 7
         this.ajouterUneTransition(7,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(7,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 8
         this.ajouterUneTransition(8,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(8,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 9
         this.ajouterUneTransition(9,Jeton_Interface.JOUEUR,10);
         this.ajouterUneTransition(9,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(9,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 10
         this.ajouterUneTransition(10,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(10,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 11
 
@@ -85,6 +91,8 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUneTransition(12,Jeton_Interface.JOUEUR,11);
 
         //ETAT 13
+        this.ajouterUneTransition(13,Jeton_Interface.CASE,14);
+
     }
 
     public void revenirEnArriere(){
@@ -227,8 +235,17 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         pieces.add(new Piece("Fou",""));
         pieces.add(new Piece("Cavalier",""));
 
+        //Liste des alias pouvant composer notre règle
+        Map<String,Jeton_Interface> alias = new HashMap<>();
+        alias.put("alias_Joueur",Jeton_Interface.JOUEUR);
+        alias.put("alias_CaseParam",Jeton_Interface.CASEPARAM);
+        alias.put("alias_Piece",Jeton_Interface.PIECE);
+
+        //Création et initialisation
         Automate_Interface<Jeton_Interface> auto = new Automate_Interface_Consequence(pieces,cases,joueurs);
         auto.initialiserAutomate();
+        auto.setAlias(alias);
+
         Scanner scan = new Scanner(System.in);
         String regle = "";
 
@@ -302,6 +319,12 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
                         }
                     }
                 }
+            }
+
+            //AFFICHAGE AXIOMES
+            System.out.println("\nAXIOMES UTILISABLES : ");
+            for (Map.Entry<String, Jeton_Interface> entry : auto.getAlias().entrySet()) {
+                System.out.println(COLOR_BLUE + entry.getKey() + COLOR_RESET + "->" + COLOR_GREEN + entry.getValue() + COLOR_RESET);
             }
 
         }catch(MauvaiseDefinitionRegleException ex){
