@@ -1,6 +1,7 @@
 package org.example.model;
 
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
 import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
@@ -279,6 +280,36 @@ public class VarianteManager {
     }
 
     /**
+     * Ajoute les groupe des cases classique dans le groupe de case
+     * @param listGroupCases Liste des groupe de case où mettre les groupes
+     */
+    public void addClassiqueGroupeCases(ArrayList<GroupCases> listGroupCases, Plateau plateau) {
+        GroupCases gc = new GroupCases("Toutes les cases", plateau);
+        for (ArrayList<Case> ligne : plateau.getEchiquier()) {
+            for (Case c : ligne) {
+                gc.getCasesAbsolue().add(c);
+            }
+        }
+        listGroupCases.add(gc);
+
+        if (plateau.getHeightY() > 0) {
+            gc = new GroupCases("Promotion Blanc", plateau);
+            for (int i = 0; i < plateau.getWitdhX(); i++) {
+                gc.getCasesAbsolue().add(plateau.getEchiquier().get(0).get(i));
+            }
+            listGroupCases.add(gc);
+        }
+
+        if (plateau.getHeightY() >= 8) {
+            gc = new GroupCases("Promotion Noir", plateau);
+            for (int i = 0; i < plateau.getWitdhX(); i++) {
+                gc.getCasesAbsolue().add(plateau.getEchiquier().get(7).get(i));
+            }
+            listGroupCases.add(gc);
+        }
+    }
+
+    /**
      *  Genère une variante classique
      * @return  La variante classique
      */
@@ -301,7 +332,10 @@ public class VarianteManager {
         ArrayList<RegleInterface> regles = new ArrayList<>();
         addClassiqueRules(regles, joueurs);
 
-        return new VarianteJeton("Classique", plateau, joueurs, ordreJoueur, regles, new ArrayList<>());
+        ArrayList<GroupCases> listGroupCases = new ArrayList<>();
+        addClassiqueGroupeCases(listGroupCases, plateau);
+
+        return new VarianteJeton("Classique", plateau, joueurs, ordreJoueur, regles, listGroupCases);
     }
 
     public void setCurrent(VarianteBuilder current) {
@@ -350,10 +384,7 @@ public class VarianteManager {
             ObjectInputStream ois = new ObjectInputStream(fin);
             VarianteBuilder vb = (VarianteBuilder) ois.readObject();
             ois.close();
-            Variante<Jeton> vr = vb.createVariante();
-
-            variantes.add(vr);
-            return vr;
+            return applyCurrent();
         }
         catch (IOException | ClassNotFoundException e) {
             throw new IOException(e);

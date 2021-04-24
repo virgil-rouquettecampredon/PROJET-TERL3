@@ -36,7 +36,10 @@ public abstract class Variante<A extends EstToken> {
     public Variante(Variante variante) {
         name = variante.name;
         plateau = new Plateau(variante.plateau);
-        joueurs = new ArrayList<>(variante.joueurs);
+        joueurs = new ArrayList<>();
+        for (Joueur j: variante.getJoueurs()) {
+            joueurs.add(new Joueur(j));
+        }
         ordreJoueurs = new ArrayList<>(variante.ordreJoueurs);
         regles = new ArrayList<>(variante.regles);
         listGroupCases = new ArrayList<>(variante.listGroupCases);

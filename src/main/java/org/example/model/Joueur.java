@@ -28,6 +28,12 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.timer = -1;
     }
 
+    public Joueur(Joueur joueur) {
+        this(joueur.name, joueur.equipe);
+        pawnList.addAll(joueur.pawnList);
+        typePawnList.addAll(joueur.typePawnList);
+    }
+
     public void movePawn(Piece pawn, Case casePlateau){
 
     }

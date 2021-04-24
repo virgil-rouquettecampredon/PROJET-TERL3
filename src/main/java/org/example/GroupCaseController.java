@@ -36,7 +36,6 @@ public class GroupCaseController extends Controller {
 
     @Override
     public void initialise() {
-
         modeCase = ModeCase.ABSOLU;
 
         nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());

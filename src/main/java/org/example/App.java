@@ -8,8 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.example.model.EndGameData;
+import org.example.model.Regles.Jeton;
+import org.example.model.Variante;
 import org.example.model.VarianteManager;
 
 import java.io.IOException;
@@ -17,6 +22,7 @@ import java.io.IOException;
 public class App extends Application {
 
     public Scene scene;                         // Scene principale de l'application
+    public Scene popup;                         // Scene popup
 
     public SoundManager soundManager;           // Gestionnaire du son
     public VarianteManager varianteManager;     // Gestionnaire des variantes
@@ -62,10 +68,10 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml, var));
     }
 
-    private Parent loadFXML(String fxml, Object var) throws IOException {
+    public Parent loadFXML(String fxml, Object var) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
 
-        Pane layout = fxmlLoader.load();
+        Parent layout = fxmlLoader.load();
 
         Controller controller = fxmlLoader.getController();
         controller.setApp(this);

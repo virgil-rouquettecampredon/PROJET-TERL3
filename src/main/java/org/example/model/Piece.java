@@ -60,7 +60,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     }
 
 
-    /**@param piece: La pèce utilisé afin de la dupliqué.
+    /**@param piece: La pèce utilisé afin de la dupliquer.
      * La fonction duplique une pièce */
     public Piece(Piece piece) {
         this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements);

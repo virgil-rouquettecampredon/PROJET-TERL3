@@ -2,6 +2,8 @@ package org.example;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -10,12 +12,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import org.example.model.*;
 import org.example.model.Regles.Jeton;
 import org.junit.runner.manipulation.Ordering;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +39,8 @@ public class GameController extends Controller {
     public ScrollPane scroll;
     @FXML
     public Canvas graveyardCanvas;
+    @FXML
+    public AnchorPane popupPane;
 
     private GraphicsContext graveyardContext;
     private CanvasManager canvasManager;
@@ -163,7 +170,7 @@ public class GameController extends Controller {
         return gameVariante.getOrdrejoueur().get(indiceJoueur);
     }
 
-    private void jouerCoup() {
+    private void jouerCoup() throws IOException{
         try {
             String name = caseOrigine.getPieceOnCase().getName();
             System.out.println(joueurQuiJoue().getName() + " : " + name + " to " + caseDestination.getPosition());
@@ -179,6 +186,25 @@ public class GameController extends Controller {
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
+
+        String s = "";
+        Joueur j = joueurQuiJoue();
+        if (ordonnanceurDeJeu.echecEtMat(j)) {
+            s += "\nECHEC ET MAT!!!!";
+        }
+        else if (ordonnanceurDeJeu.pat(j)) {
+            s += "\nPAT";
+        }
+        if (ordonnanceurDeJeu.zeroPiece(j)) {
+            s += "\nPLUS DE PIECE";
+        }
+        if (ordonnanceurDeJeu.conditionVictoireZeroVie(j)) {
+            s += "\nPLUS DE VIE";
+        }
+
+        if (!s.isEmpty()) {
+            giveUpButton(s);
+        }
     }
 
     private void incrementerIndiceJoueur() {
@@ -197,8 +223,7 @@ public class GameController extends Controller {
         scroll.setVvalue(2);
     }
 
-    @FXML
-    public void giveUpButton() throws IOException{
+    public void giveUpButton(String message) throws IOException{
         //todo passer le gagnant/perdant
         fairePerdreJoueurCourant();
         if (indiceJoueur >= gameVariante.getOrdrejoueur().size()) {
@@ -215,11 +240,31 @@ public class GameController extends Controller {
                     perdants.add(j.getEquipe());
                 }
             }
-            getApp().setRoot("gameOver", new EndGameData((Variante<Jeton>) userVar, perdants));
+
+            popupWindow("gameOver", new EndGameData((Variante<Jeton>) userVar, perdants, message, this));
         }
         else {
             updateCanvas();
         }
+    }
+
+
+
+    public void popupWindow(String fxml, Object var) throws IOException {
+        Parent layout = getApp().loadFXML(fxml, var);
+
+        popupPane.getChildren().add(layout);
+        popupPane.setMouseTransparent(false);
+    }
+
+    public void destroyPopup() {
+        popupPane.getChildren().clear();
+        popupPane.setMouseTransparent(true);
+    }
+
+    @FXML
+    public void giveUpButton() throws IOException{
+        giveUpButton("\nABANDON");
     }
 
     private void fairePerdreJoueurCourant() {

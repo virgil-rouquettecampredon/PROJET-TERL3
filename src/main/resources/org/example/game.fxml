@@ -16,80 +16,85 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="1024.0" stylesheets="@theme.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.GameController">
     <children>
-        <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@images/chess.png" />
-            </image>
-        </ImageView>
-        <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label fx:id="varLabel" styleClass="label-header" text="Jeu" />
-                <SplitPane dividerPositions="0.29797979797979796" prefHeight="350.0" prefWidth="200.0" style="-fx-background-color: #0000;">
-                    <items>
-                        <AnchorPane maxWidth="300.0" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
-                            <children>
-                                <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <top>
-                                        <Label styleClass="label-input" text="Coups" BorderPane.alignment="CENTER" />
-                                    </top>
-                                    <center>
-                                        <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="414.0" vbarPolicy="ALWAYS" vvalue="1.0" BorderPane.alignment="CENTER">
-                                            <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="261.0" styleClass="background">
-                                                    <children>
-                                                        <VBox fx:id="coupsBox" alignment="TOP_CENTER" layoutY="125.0" minHeight="70.0" prefWidth="270.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
-                                                    </children>
-                                                    <padding>
-                                                        <Insets bottom="120.0" />
-                                                    </padding>
-                                                </AnchorPane>
-                                            </content>
-                                            <BorderPane.margin>
-                                                <Insets />
-                                            </BorderPane.margin>
-                                        </ScrollPane>
-                                    </center>
-                                </BorderPane>
-                            </children>
-                        </AnchorPane>
-                        <AnchorPane maxWidth="640.0" minHeight="0.0" minWidth="640.0" prefHeight="160.0" prefWidth="100.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-                                    <children>
-                                        <Canvas fx:id="canvas" height="300.0" onMouseClicked="#play" width="300.0" />
-                                        <VBox alignment="CENTER_LEFT" prefHeight="200.0">
-                                            <children>
-                                                <Label fx:id="playerLabel" styleClass="label-header" text="Joueur"  textAlignment="CENTER" wrapText="true"/>
-                                                <Canvas fx:id="graveyardCanvas" height="200.0" width="300.0" />
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </HBox>
-                            </children>
-                        </AnchorPane>
-                    </items>
-                    <VBox.margin>
-                        <Insets left="50.0" right="50.0" />
-                    </VBox.margin>
-                </SplitPane>
-                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                <ImageView fitHeight="640.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/chess.png" />
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#giveUpButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="ABANDONNER">
-                            <font>
-                                <Font name="Candara" size="36.0" />
-                            </font>
-                        </Button>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#infoButton" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@images/msg.png" />
-                            </image>
-                        </ImageView>
+                        <Label fx:id="varLabel" styleClass="label-header" text="Jeu" />
+                        <SplitPane dividerPositions="0.29797979797979796" prefHeight="350.0" prefWidth="200.0" style="-fx-background-color: #0000;">
+                            <items>
+                                <AnchorPane maxWidth="300.0" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
+                                    <children>
+                                        <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <top>
+                                                <Label styleClass="label-input" text="Coups" BorderPane.alignment="CENTER" />
+                                            </top>
+                                            <center>
+                                                <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="414.0" vbarPolicy="ALWAYS" vvalue="1.0" BorderPane.alignment="CENTER">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="261.0" styleClass="background">
+                                                            <children>
+                                                                <VBox fx:id="coupsBox" alignment="TOP_CENTER" layoutY="125.0" minHeight="70.0" prefWidth="270.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="120.0" />
+                                                            </padding>
+                                                        </AnchorPane>
+                                                    </content>
+                                                    <BorderPane.margin>
+                                                        <Insets />
+                                                    </BorderPane.margin>
+                                                </ScrollPane>
+                                            </center>
+                                        </BorderPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane maxWidth="640.0" minHeight="0.0" minWidth="640.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                                            <children>
+                                                <Canvas fx:id="canvas" height="300.0" onMouseClicked="#play" width="300.0" />
+                                                <VBox alignment="CENTER_LEFT" prefHeight="200.0">
+                                                    <children>
+                                                        <Label fx:id="playerLabel" styleClass="label-header" text="Joueur" textAlignment="CENTER" wrapText="true" />
+                                                        <Canvas fx:id="graveyardCanvas" height="200.0" width="300.0" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                            <VBox.margin>
+                                <Insets left="50.0" right="50.0" />
+                            </VBox.margin>
+                        </SplitPane>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#giveUpButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="ABANDONNER">
+                                    <font>
+                                        <Font name="Candara" size="36.0" />
+                                    </font>
+                                </Button>
+                                <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#infoButton" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@images/msg.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                            <padding>
+                                <Insets left="362.0" />
+                            </padding>
+                        </HBox>
                     </children>
-                    <padding>
-                        <Insets left="362.0" />
-                    </padding>
-                </HBox>
+                </VBox>
             </children>
-        </VBox>
+        </AnchorPane>
+        <AnchorPane fx:id="popupPane" mouseTransparent="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     </children>
 </AnchorPane>

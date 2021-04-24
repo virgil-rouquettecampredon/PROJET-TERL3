@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import org.example.model.Regles.*;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.example.model.Regles.*;
 
 public class OrdonnanceurDeJeuTest {
     public OrdonnanceurDeJeu ordonnanceurDeJeu;
@@ -21,20 +20,151 @@ public class OrdonnanceurDeJeuTest {
         ordonnanceurDeJeu = new OrdonnanceurDeJeu(varianteTest.getJoueurs(), varianteTest.getPlateau());
     }
 
+    private void deplacer(Position p1, int idJoueur, Position p2) throws DeplacementException{
+        Case origine = varianteTest.getPlateau().getCase(p1);
+        Joueur j = varianteTest.getOrdrejoueur().get(idJoueur);
+        Case destination = varianteTest.getPlateau().getCase(p2);
+        ordonnanceurDeJeu.deplacerPiece(origine, j, destination);
+    }
+
     /**==================================================
      * ================| TESTS MAUVAIS |=================
      * ==================================================*/
     @Test
     public void test_deplacer_pas_bon_joueur(){
         try{
-            Case origine = varianteTest.getPlateau().getCase(new Position(0, 1));
-            Joueur j = varianteTest.getOrdrejoueur().get(0);
-            Case destination = varianteTest.getPlateau().getCase(new Position(0, 2));
-            ordonnanceurDeJeu.deplacerPiece(origine, j, destination);
-            fail("Exception non reconnue");
+            deplacer(new Position(0, 1), 0, new Position(0, 2));
+            Assertions.fail("Exception non reconnue");
         }catch (DeplacementException e){
-            assertEquals("Pas le bon joueur",e.getMessage());
+            Assertions.assertEquals("Pas le bon joueur",e.getMessage());
         }
     }
+
+    @Test
+    public void test_deplacer_deplacement_inexistant(){
+        try{
+            deplacer(new Position(0, 6), 0, new Position(1, 5));
+            Assertions.fail("Exception non reconnue");
+        }catch (DeplacementException e){
+            Assertions.assertEquals("Deplacement inexistant",e.getMessage());
+        }
+    }
+
+    @Test
+    public void test_deplacer_met_en_echec() {
+        try {
+            deplacer(new Position(4, 6), 0, new Position(4, 5));
+            deplacer(new Position(4, 1), 1, new Position(4, 2));
+            deplacer(new Position(3, 7), 0, new Position(6, 4));
+            deplacer(new Position(4, 0), 1, new Position(4, 1));
+            deplacer(new Position(6, 4), 0, new Position(6, 3));
+        } catch(DeplacementException e) {
+            Assertions.fail("Exception trop tôt");
+        }
+        try {
+            deplacer(new Position(4, 2), 1, new Position(4, 3));
+            Assertions.fail("Exception non reconnue");
+        }catch (DeplacementException e){
+            Assertions.assertEquals("Mit en echec",e.getMessage());
+        }
+    }
+
+    /**==================================================
+     * ================| TESTS CONDITIONS |==============
+     * ==================================================*/
+    @Test
+    public void test_deplacer_met_en_echec_et_mat(){
+        try{
+            deplacer(new Position(4, 6), 0, new Position(4, 5));
+            deplacer(new Position(0, 1), 1, new Position(0, 2));
+            deplacer(new Position(3, 7), 0, new Position(5, 5));
+            deplacer(new Position(0, 2), 1, new Position(0, 3));
+            deplacer(new Position(5, 7), 0, new Position(2, 4));
+            deplacer(new Position(7, 1), 1, new Position(7, 2));
+            deplacer(new Position(5, 5), 0, new Position(5, 1));
+            Assertions.assertTrue(ordonnanceurDeJeu.echecEtMat(varianteTest.getOrdrejoueur().get(1)));
+        }catch (DeplacementException e){
+            Assertions.fail("Exception levée"+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void viderPlateau() {
+        for (List<Case> ligne: varianteTest.getPlateau().getEchiquier()) {
+            for (Case c : ligne) {
+                c.setPieceOnCase(null);
+            }
+        }
+        for (Joueur j : varianteTest.getJoueurs()) {
+            j.getPawnList().clear();
+        }
+    }
+
+    @Test
+    public void test_met_pat(){
+        try{
+            viderPlateau();
+            Piece king = varianteTest.getJoueurs().get(1).getTypePawnList().stream().filter(p -> p.getName().equals("Roi")).findAny().get();
+            Piece nKing = new Piece(king);
+            varianteTest.getPlateau().getEchiquier().get(0).get(0).setPieceOnCase(nKing);
+            varianteTest.getJoueurs().get(1).getPawnList().add(nKing);
+
+            Piece tour = varianteTest.getJoueurs().get(0).getTypePawnList().stream().filter(p -> p.getName().equals("Tour")).findAny().get();
+            Piece nTour = new Piece(tour);
+            varianteTest.getPlateau().getEchiquier().get(1).get(7).setPieceOnCase(nTour);
+            varianteTest.getJoueurs().get(0).getPawnList().add(nTour);
+            nTour = new Piece(tour);
+            varianteTest.getPlateau().getEchiquier().get(7).get(1).setPieceOnCase(nTour);
+            varianteTest.getJoueurs().get(0).getPawnList().add(nTour);
+
+            Assertions.assertTrue(ordonnanceurDeJeu.pat(varianteTest.getOrdrejoueur().get(1)));
+        } catch (DeplacementException e){
+            Assertions.fail("Exception levée"+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_zero_pieces(){
+        try{
+            viderPlateau();
+
+            Piece king = varianteTest.getJoueurs().get(1).getTypePawnList().stream().filter(p -> p.getName().equals("Roi")).findAny().get();
+            Piece nKing = new Piece(king);
+            varianteTest.getPlateau().getEchiquier().get(0).get(0).setPieceOnCase(nKing);
+            varianteTest.getJoueurs().get(1).getPawnList().add(nKing);
+
+            Assertions.assertTrue(ordonnanceurDeJeu.zeroPiece(varianteTest.getOrdrejoueur().get(0)));
+        } catch (DeplacementException e){
+            Assertions.fail("Exception levée"+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_zero_vie(){
+        try{
+            viderPlateau();
+
+            Piece king = varianteTest.getJoueurs().get(1).getTypePawnList().stream().filter(p -> p.getName().equals("Roi")).findAny().get();
+            king.setNbLife(1);
+            Piece nKing = new Piece(king);
+            varianteTest.getPlateau().getEchiquier().get(0).get(0).setPieceOnCase(nKing);
+            varianteTest.getJoueurs().get(1).getPawnList().add(nKing);
+
+            Piece tour = varianteTest.getJoueurs().get(0).getTypePawnList().stream().filter(p -> p.getName().equals("Tour")).findAny().get();
+            Piece nTour = new Piece(tour);
+            varianteTest.getPlateau().getEchiquier().get(1).get(7).setPieceOnCase(nTour);
+            varianteTest.getJoueurs().get(0).getPawnList().add(nTour);
+
+            deplacer(new Position(7, 1), 0, new Position(7, 0));
+
+            Assertions.assertTrue(ordonnanceurDeJeu.conditionVictoireZeroVie(varianteTest.getOrdrejoueur().get(1)));
+        } catch (DeplacementException e){
+            Assertions.fail("Exception levée : "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
 }
