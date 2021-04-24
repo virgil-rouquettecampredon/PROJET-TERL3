@@ -1,14 +1,12 @@
+import org.example.model.*;
 import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
-import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Interpreteur.*;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetPiece;
 import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.example.model.Regles.*;
-import org.example.model.Joueur;
-import org.example.model.Piece;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -22,7 +20,8 @@ import static org.junit.Assert.fail;
 
 public class InterpreteurPiece_Test {
 
-    private List<Joueur> alljoueurs;
+    private ArrayList<Joueur> alljoueurs;
+    private Variante<Jeton> variante;
     private InterpreteurSujetPiece interpretp;
     private OrdonnanceurDeJeu ord;
 
@@ -77,7 +76,9 @@ public class InterpreteurPiece_Test {
         alljoueurs.add(faritas);
         alljoueurs.add(chapeau_pointu);
 
-        this.ord = new OrdonnanceurDeJeu(alljoueurs, null);
+        VarianteBuilder vb = new VarianteBuilder();
+        vb.setJoueurs(alljoueurs);
+        this.ord = new OrdonnanceurDeJeu(vb.createVariante());
     }
 
     /**==================================================
@@ -141,6 +142,17 @@ public class InterpreteurPiece_Test {
     }
 
     @Test
+    public final void testP7_testMauvais(){
+        interpretp = new InterpreteurSujetPiece("P7");
+        try {
+            interpretp.recupererTout(ord);
+            fail("Exception non détectée");
+        } catch (MauvaiseInterpretationObjetRegleException m) {
+            assertEquals("Interpreteur objet de regle: Piece: 'P7': numéro piece inconnu",m.getMessage());
+        }
+    }
+
+    @Test
     public final void testPMoins4_testMauvais(){
         interpretp = new InterpreteurSujetPiece("P-4");
         try {
@@ -161,6 +173,8 @@ public class InterpreteurPiece_Test {
             assertEquals("Interpreteur objet de regle: Piece: 'P1abc': Entier imparsable (NumberFormatException)",m.getMessage());
         }
     }
+
+
 
 
     /*----------PIECE + JOUEUR----------*/

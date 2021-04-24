@@ -1,9 +1,11 @@
 package org.example.model;
 
+import org.example.model.Regles.CibleDeRegle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GroupCases implements Serializable {
+public class GroupCases implements CibleDeRegle, Serializable {
     /*Classe permettant de modéliser un regroupement de cases*/
     private String name;                                // Nom du groupe
     private ArrayList<Case> casesAbsolue;               // Liste des case en position Absolue
@@ -42,6 +44,8 @@ public class GroupCases implements Serializable {
         this.positionsRelatives = positionsRelatives;
     }
 
+    public Plateau getPlateau(){ return this.plateau; }
+
 
     /**Méthode qui retourne l'ensemble des cases du groupe
      * @param posX : indice X de la position servant au calculs des cases en position relative.
@@ -77,4 +81,10 @@ public class GroupCases implements Serializable {
         }
         return casesRelatives;
     }
+    /**
+     * ------
+     * ------
+     * --aa--
+     * ------
+     * */
 }

@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.example.model.Piece;
 import org.example.model.Case;
+import org.example.model.GroupCases;
 import org.example.model.Joueur;
 import org.example.model.Regles.*;
 import org.example.model.Regles.Structure.Interpreteur.*;
@@ -729,7 +730,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             //Cas Piece+Action+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_Sur));
@@ -737,7 +738,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prend_Par_Case));
@@ -745,7 +746,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.se_deplace));
@@ -753,7 +754,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_place));
@@ -769,7 +770,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             //Cas PieceToken+Action+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_Sur));
@@ -777,7 +778,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prend_Par_Case));
@@ -785,7 +786,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.se_deplace));
@@ -793,7 +794,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_place));
@@ -809,7 +810,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             //Cas Piece+Joueur+Action+Case
                                             switch (regleString.get(indRegleSyntaxe-1)) {
                                                 case "estsur" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_Sur));
@@ -817,7 +818,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "prend" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prend_Par_Case));
@@ -825,7 +826,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "sedeplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.se_deplace));
@@ -833,7 +834,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 case "estplace" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Case>(
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_place));
@@ -1086,7 +1087,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             // Joueur+Consequence+Case+Piece
                                             if (regleString.get(indRegleSyntaxe - 2).equals("placer")) {
                                                 //EN TRAVAUX RIGHT NOW (signé hugo le boss)
-                                                new ConsequenceAction<Piece, Case>(
+                                                new ConsequenceAction<Piece, GroupCases>(
                                                         new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe - 3), regleString.get(indRegleSyntaxe)),
                                                         new InterpreteurCibleCase(regleString.get(indRegleSyntaxe - 1)),
                                                         Fonctions_Comportements.placer);
@@ -1264,14 +1265,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             // Piece+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));
@@ -1286,14 +1287,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             // Piece+Joueur+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));
@@ -1308,14 +1309,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                             // PieceToken+ConsequenceAction+Case
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prendre" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.prendre_par_case));
                                                     nbConsequence++;
                                                 }
                                                 case "promouvoir" -> {
-                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, Case>(
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));

@@ -1,9 +1,6 @@
 package org.example.model.Regles;
 
-import org.example.model.Joueur;
-import org.example.model.OrdonnanceurDeJeu;
-import org.example.model.Piece;
-import org.example.model.Case;
+import org.example.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,25 +45,32 @@ public class Fonctions_Comportements {
      * @param listCases des pièces attaquante possible
      * @param listPiecesVictime : liste des pièces victime possible
      * @return vrai si au moins une pièces dans la liste des pièces attaquante à pris une pièce situé sur la case dans la liste des case*/
-    public static final BiFunction<List<Piece>, List<Case>, Boolean> prend_Par_Case = (listPiecesAttaquante, listCases) -> {
-        ArrayList<Piece> listPieceSurCases = new ArrayList<>();
-        for (Case c : listCases) {
-            if (c.getPieceOnCase() != null) {
-                listPieceSurCases.add(c.getPieceOnCase());
+    //TODO: appliquer les cases relatives quand les alias seront terminé
+    public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> prend_Par_Case = (listPiecesAttaquantes, listGroupCases) -> {
+        for (GroupCases g: listGroupCases) {
+            ArrayList<Piece> listPieceSurCases = new ArrayList<>();
+            for (Case c : g.getCasesAbsolue()) {
+                if (c.getPieceOnCase() != null) {
+                    listPieceSurCases.add(c.getPieceOnCase());
+                }
+            }
+            if (prend_Par_Piece.apply(listPiecesAttaquantes, listPieceSurCases)){
+                return true;
             }
         }
-        return prend_Par_Piece.apply(listPiecesAttaquante, listPieceSurCases);
+        return false;
     };
 
     /** Condition : PIECE+ESTSUR+CASE
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste pieces est sur une case inclu dans la liste cases*/
-    public static final BiFunction<List<Piece>, List<Case>, Boolean> est_Sur = (pieces, cases) -> {
-        for (Case casePlateau: cases) {
-            for (Piece piece: pieces) {
-                if(piece.equals(casePlateau.getPieceOnCase())){
-                    return true;
+    //TODO: appliquer les cases relatives quand les alias seront terminé
+    public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_Sur = (pieces, groupescases) -> {
+        for (GroupCases g: groupescases){
+            for (Piece p: pieces) {
+                for (Case c : g.getCasesAbsolue()) {
+                    if (p.equals(c.getPieceOnCase())) return true;
                 }
             }
         }
@@ -90,14 +94,15 @@ public class Fonctions_Comportements {
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste des pièces se deplace sur une case dans la liste des cases*/
-    public static final BiFunction<List<Piece>, List<Case>, Boolean> se_deplace = (pieces, cases) -> {
-            for (Piece p : pieces) {
-                for (Case casePlateau: cases) {
-                    if (casePlateau.getPieceOnCase().equals(p) && p.getDeplaceCeTour()) {
-                        return true;
-                    }
+    //TODO: appliquer les cases relatives quand les alias seront terminé
+    public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> se_deplace = (pieces, groupcases) -> {
+        for (GroupCases g: groupcases){
+            for (Piece p: pieces) {
+                for (Case c : g.getCasesAbsolue()) {
+                    if (p.equals(c.getPieceOnCase()) && p.getDeplaceCeTour()) return true;
                 }
             }
+        }
         return false;
     };
 
@@ -105,11 +110,14 @@ public class Fonctions_Comportements {
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste des pièces est placé sur une case dans la liste des cases ce tour-ci*/
-    public static final BiFunction<List<Piece>, List<Case>, Boolean> est_place = (pieces, cases) -> {
-        for (Piece piece: pieces) {
-            for (Case casePlateau: cases) {
-                if (casePlateau.getPieceOnCase().equals(piece)){
-                    return true;
+    //TODO: appliquer les cases relatives quand les alias seront terminé
+    public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_place = (pieces, groupcases) -> {
+        for (GroupCases g: groupcases){
+            for (Piece p: pieces) {
+                for (Case c: g.getCasesAbsolue()) {
+                    if (c.getPieceOnCase().equals(p)){
+                        return true;
+                    }
                 }
             }
         }
@@ -245,21 +253,21 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases victimes possible
      * @fn le joueur choisi la pièce attaquante parmis la liste pièces_a et choisi la pièce que celle-ci va prendre
      * parmis la liste des pièces se trouvant sur les cases dans cases */
-    public static final BiFunction<List<Piece>, List<Case>, Void> prendre_par_case = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> prendre_par_case = (pieces, cases) -> { return null; };
 
     /** Consequence : PIECE + SE_PROMET_EN + PIECE
      * @param pieces : liste des pieces promouvable
      * @param cases : liste des cases sur lequel les pièces peuvent être promu
      * @fn si au moins une pièce dans la liste des pices est sur une case dans la liste des cases,
      * le joueur choisi parmis ces pièces à promouvoir*/
-    public static final BiFunction<List<Piece>, List<Case>, Void> promouvoir = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> promouvoir = (pieces, cases) -> { return null; };
 
     /** Consequence : JOUEUR + PLACE + PIECE
      * @param pieces : liste des pieces plaçable
      * @param cases : liste des cases sur lequel les pièces peuvent être placé
      * @fn si au moins une pièce dans la liste des pièces est dans la defausse,
      * le joueur choisi parmis une de ces pièces pour la placer sur le terrain*/
-    public static final BiFunction<List<Piece>, List<Case>, Void> placer = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> placer = (pieces, cases) -> { return null; };
 
 
 

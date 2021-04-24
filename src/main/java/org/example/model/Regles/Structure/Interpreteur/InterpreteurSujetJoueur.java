@@ -28,6 +28,7 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
                 return lret;
             } else {
                 try {
+                    //System.out.println("Borne Joueur: " + Jeton.JOUEUR.getBorne(0));
                     int numjoueur = Integer.parseInt(this.str_source.substring(1));
                     if (numjoueur < Jeton.JOUEUR.getBorne(0) && numjoueur >= 0) {
                         lret.add(ord.getJoueur(numjoueur));
@@ -37,6 +38,8 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
                     }
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "Entier imparsable (NumberFormatException)");
+                } catch (IndexOutOfBoundsException ie) {
+                    throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "numéro joueur inconnu (IndexOutOfBoundsException)");
                 }
             }
         } else if (this.str_source.charAt(0) == 'E' && this.str_source.length() >= 2) {

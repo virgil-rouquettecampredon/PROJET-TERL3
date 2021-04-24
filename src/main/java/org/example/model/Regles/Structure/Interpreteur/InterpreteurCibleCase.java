@@ -1,13 +1,21 @@
 package org.example.model.Regles.Structure.Interpreteur;
 
 import org.example.model.Case;
+import org.example.model.GroupCases;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Plateau;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterpreteurCibleCase extends InterpreteurCible<Case> {
+
+/**
+ * Le rôle de la Classe InterpreteurCibleCase est de retourner grâce à la fonction recupererTout selon la chaine de
+ * caractère donné à l'initialisation la liste des Cases qui correspondent selon le contexte de jeu
+ * Exemple
+ * */
+
+public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
 
     private String str_source;
 
@@ -16,16 +24,19 @@ public class InterpreteurCibleCase extends InterpreteurCible<Case> {
     }
 
     @Override
-    public List<Case> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
-        List<Case> lret = new ArrayList<>();
+    public List<GroupCases> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        List<GroupCases> lret = new ArrayList<>();
         Plateau p = ord.getPlateau();
-        String erreurCase = "Case: '" + this.str_source + "': ";
+        /*String erreurCase = "Case: '" + this.str_source + "': ";
         if (this.str_source.charAt(0) == 'C' && this.str_source.length() >= 2) {
             if (this.str_source.equals("CALL")) {
-                for (List<Case> listec: p.getEchiquier() ){
-                    lret.addAll(listec);
+                try {
+                    lret.add(ord.getVariante().getListGroupCases().get(0));
+                    return lret;
+                } catch (IndexOutOfBoundsException ie) {
+
+
                 }
-                return lret;
             } else {
                 int indc;
                 try {
@@ -43,8 +54,8 @@ public class InterpreteurCibleCase extends InterpreteurCible<Case> {
                 }
             }
         }
-        throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");
-        //return null;
+        throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");*/
+        return null;
     }
 
 }

@@ -76,7 +76,7 @@ public class GameController extends Controller {
             playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());
             indiceJoueur = 0;
 
-            ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante.getJoueurs(), gameVariante.getPlateau());
+            ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante);
 
             canvasManager = new CanvasManager(canvas, gameVariante.getPlateau());
             graveyardContext = graveyardCanvas.getGraphicsContext2D();

@@ -17,7 +17,7 @@ public class OrdonnanceurDeJeuTest {
     public void initializeTest() {
         VarianteManager vm = new VarianteManager();
         varianteTest = vm.createVarianteClassique();
-        ordonnanceurDeJeu = new OrdonnanceurDeJeu(varianteTest.getJoueurs(), varianteTest.getPlateau());
+        ordonnanceurDeJeu = new OrdonnanceurDeJeu(varianteTest);
     }
 
     private void deplacer(Position p1, int idJoueur, Position p2) throws DeplacementException{

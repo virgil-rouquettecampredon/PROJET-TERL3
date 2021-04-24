@@ -31,6 +31,7 @@ public abstract class Variante<A extends EstToken> {
         this.ordreJoueurs = ordreJoueurs;
         this.regles = regles;
         this.listGroupCases = listGroupCases;
+        this.listGroupCases.add(createGroupCaseCALL());
     }
 
     public Variante(Variante<A> variante) {
@@ -114,5 +115,15 @@ public abstract class Variante<A extends EstToken> {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    private GroupCases createGroupCaseCALL(){
+        GroupCases g = new GroupCases("Toutes les cases", this.plateau);
+        ArrayList<Case> allcases = new ArrayList<>();
+        for (List<Case> lc: this.plateau.getEchiquier()){
+            allcases.addAll(lc);
+        }
+        g.setCasesAbsolue(allcases);
+        return g;
     }
 }

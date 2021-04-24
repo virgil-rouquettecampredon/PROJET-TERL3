@@ -16,16 +16,18 @@ public class OrdonnanceurDeJeu {
     private List<Joueur> joueurs;
     //private List<List<Joueur>> equipes;
     private List<Piece> listTypesPieces;
+    private Variante variante;
 
     private Plateau plateau;
 
-    public OrdonnanceurDeJeu(List<Joueur> joueurs, Plateau plateau){
-        this.joueurs = joueurs;
-        this.plateau = plateau;
+    public OrdonnanceurDeJeu(Variante variante){
+        this.variante = variante;
+        this.joueurs = variante.getJoueurs();
+        this.plateau = variante.getPlateau();
         this.listTypesPieces = new ArrayList<>();
         LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
-        for (int i = 0; i < joueurs.size(); i++) {
-            tmp.addAll(joueurs.get(i).getTypePawnList());
+        for (int i = 0; i < this.joueurs.size(); i++) {
+            tmp.addAll(this.joueurs.get(i).getTypePawnList());
         }
         this.listTypesPieces.addAll(tmp);
     }
@@ -37,6 +39,8 @@ public class OrdonnanceurDeJeu {
     }
 
     public Plateau getPlateau() { return this.plateau; }
+
+    public Variante getVariante() { return this.variante; }
 
     public List<Piece> getListTypesPieces() { return this.listTypesPieces; }
 

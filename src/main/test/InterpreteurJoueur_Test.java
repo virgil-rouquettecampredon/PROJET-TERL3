@@ -2,6 +2,7 @@ import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Automate.Automate_Interface_Condition;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurSujetJoueur;
 import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
+import org.example.model.VarianteBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.example.model.Regles.*;
@@ -18,7 +19,7 @@ import static org.junit.Assert.fail;
 
 public class InterpreteurJoueur_Test{
 
-    private List<Joueur> alljoueurs;
+    private ArrayList<Joueur> alljoueurs;
     private InterpreteurSujetJoueur interpretj;
     private OrdonnanceurDeJeu ord;
 
@@ -56,8 +57,9 @@ public class InterpreteurJoueur_Test{
 
         alljoueurs.add(new Joueur("Sans", 6));
 
-
-        this.ord = new OrdonnanceurDeJeu(alljoueurs, null);
+        VarianteBuilder vb = new VarianteBuilder();
+        vb.setJoueurs(alljoueurs);
+        this.ord = new OrdonnanceurDeJeu(vb.createVariante());
     }
 
     /**==================================================
@@ -141,6 +143,19 @@ public class InterpreteurJoueur_Test{
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException e) {
             assertEquals("Interpreteur objet de regle: Joueur: 'J-6': numéro joueur inconnu", e.getMessage());
+        }
+    }
+
+    @Test
+    public final void testJ20NumNonDécritListeVide_testBon() {
+        //java.lang.IndexOutOfBoundsException: Index 20 out of bounds for length 20
+        Jeton.JOUEUR.setBorne(21, 0);
+        interpretj = new InterpreteurSujetJoueur("J20");
+        try {
+            interpretj.recupererTout(ord);
+            fail("Exception non détectée");
+        } catch (MauvaiseInterpretationObjetRegleException e) {
+            assertEquals("Interpreteur objet de regle: Joueur: 'J20': numéro joueur inconnu (IndexOutOfBoundsException)", e.getMessage());
         }
     }
 
@@ -239,17 +254,6 @@ public class InterpreteurJoueur_Test{
         try {
             assertTrue((interpretj.recupererTout(ord).size()==1)
                     && interpretj.recupererTout(ord).get(0).getName().equals("Virgil croquette"));
-        } catch (MauvaiseInterpretationObjetRegleException e) {
-            fail("Exception détectée: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public final void testJ20NumNonDécritListeVide_testBon() {
-        Jeton.JOUEUR.setBorne(21, 0);
-        interpretj = new InterpreteurSujetJoueur("J20");
-        try {
-            assertTrue(interpretj.recupererTout(ord).size()==0);
         } catch (MauvaiseInterpretationObjetRegleException e) {
             fail("Exception détectée: " + e.getMessage());
         }

@@ -90,4 +90,20 @@ public class Plateau implements Serializable {
     }
 
     /*FIN GETTER SETTER*/
+
+
+    public Position getPiecePosition(Piece p){
+        Position pos;
+        for (List<Case> listCase: echiquier) {
+            for (Case c: listCase){
+                Piece piece;
+                if((piece = c.getPieceOnCase()) != null){
+                    if (piece == p){
+                        return c.getPosition();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }
