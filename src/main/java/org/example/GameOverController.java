@@ -25,6 +25,8 @@ public class GameOverController extends Controller {
     public void initialise() {
         data = (EndGameData) userVar;
         while (!data.getJoueursClasse().isEmpty()) {
+            messageLabel.setText(data.getMessage());
+
             StringBuilder sb = new StringBuilder("Equipe ");
             int equipe = data.getJoueursClasse().removeLast();
             sb.append(equipe);
