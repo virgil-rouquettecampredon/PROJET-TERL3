@@ -19,12 +19,12 @@ public abstract class Variante<A extends EstToken> {
     private Plateau plateau;                            // Le plateau correspondant à cette variantes
     private ArrayList<Joueur> joueurs;                  // La liste des joueurs de cette variantes
     private ArrayList<Joueur> ordreJoueurs;             // La liste des joueurs dans l'ordre des tour (avec duplication, etc)
-    private ArrayList<RegleInterface> regles;           // Les listes de Regles
+
     private ArrayList<GroupCases> listGroupCases;       // La liste de toutes les groupes de cases définies dans cette variante
 
     private GenerateurDeRegle<A> generateurDeRegle;     // Objet permettant de générer des Regle à partir de Token A quelconques
 
-    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
+    public Variante(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<GroupCases> listGroupCases) {
         this.name = name;
         this.plateau = plateau;
         this.joueurs = joueurs;
@@ -42,7 +42,7 @@ public abstract class Variante<A extends EstToken> {
             joueurs.add(new Joueur(j));
         }
         ordreJoueurs = new ArrayList<>(variante.ordreJoueurs);
-        regles = new ArrayList<>(variante.regles);
+
         listGroupCases = new ArrayList<>(variante.listGroupCases);
 
         for (Joueur j : joueurs) {
@@ -70,15 +70,7 @@ public abstract class Variante<A extends EstToken> {
         this.joueurs = joueurs;
     }
 
-    public ArrayList<RegleInterface> getRegles() {
-        return regles;
-    }
-
     public ArrayList<Joueur> getOrdrejoueur() { return ordreJoueurs;}
-
-    public void setRegles(ArrayList<RegleInterface> generateurDeRegle) {
-        this.regles = generateurDeRegle;
-    }
 
     public String getName() {
         return name;

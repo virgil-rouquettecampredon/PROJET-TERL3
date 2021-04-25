@@ -8,12 +8,15 @@ import org.example.model.Regles.Regle;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 
 /** Automate_Regles est un type d'Automate particulier à la création de règles,
  * Cela permet de pouvoir créer notre système de règle et d'en créer d'autre si besoin
  * */
 public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
+
+    protected Map<String,Jeton> aliasRegle;       //Liste des alias de la Regle
 
     public Automate_Regles(int nbEtat, int etatDeDepart){
         super(nbEtat,etatDeDepart);
@@ -28,4 +31,19 @@ public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
      * @param regleString : Regle sous forme de liste de mots
      * @param regleSyntaxe : Regle sous forme de Jeton, issue de l'analyse syntaxique.**/
     public abstract Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException;
+
+    /**Méthode permettant d'ajouter un Alias dans la liste des Alias
+     * @param nomAlias : nom de l'alias à ajouter à la table des alias
+     * @param parcours : parcours de l'automate jusqu'à la rencontre d'une définition d'alias**/
+    public abstract void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException;
+
+    /**Méthode permettant de récupérer un Alias de la liste des Alias
+     * @param nomAlias : Nom de l'alias à récupérer
+     * @return le jeton correspondant au nom de l'alias, erreur sinon**/
+    public abstract Jeton recupererAlias(String nomAlias) throws MauvaiseDefinitionRegleException;
+
+    /*Getter et Setter*/
+    public Map<String,Jeton> getAliasRegle(){
+        return aliasRegle;
+    }
 }

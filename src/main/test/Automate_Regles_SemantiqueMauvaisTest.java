@@ -1001,7 +1001,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     //----------------------------------------Tests Autres------------------------------------------
     //----------------------------------------------------------------------------------------------
     @Test
-    public final void testCase_EstPasTerminal(){
+    public final void test_EstPasTerminal(){
         List<String> reS = Arrays.asList("P1","estpromu","alors", "J1", "placer");
         List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCEACTION);
 
@@ -1014,7 +1014,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_EstInconnu(){
+    public final void test_EstInconnu(){
         List<String> reS = Arrays.asList("J1","estpromu");
         List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.ETAT);
 
@@ -1027,7 +1027,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_DoubleAlors(){
+    public final void test_DoubleAlors(){
         List<String> reS = Arrays.asList("P1","estpromu", "alors", "J1", "gagner", "alors", "J2", "gagner");
         List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ALORS,Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE,Jeton.ALORS, Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE);
 
@@ -1040,7 +1040,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_DoubleConditionSansAlors(){
+    public final void test_DoubleConditionSansAlors(){
         List<String> reS = Arrays.asList("P1","estpromu","et","P2#J1","estpromu");
         List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ETAT,Jeton.ET,Jeton.PIECETOKEN,Jeton.ETAT);
 
@@ -1053,7 +1053,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_PasDeCondition(){
+    public final void test_PasDeCondition(){
         List<String> reS = Arrays.asList("J15","victoire");
         List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.CONSEQUENCETERMINALE);
 
@@ -1067,7 +1067,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_ManqueParenthese_Fermante(){
+    public final void test_ManqueParenthese_Fermante(){
         List<String> reS = Arrays.asList("(","P2","estpromu","et","P2#J1","estpromu","alors");
         List<Jeton> reJ = Arrays.asList(Jeton.PARENTHESEOUVRANTE, Jeton.PIECE, Jeton.ETAT, Jeton.ET, Jeton.PIECETOKEN, Jeton.ETAT, Jeton.ALORS);
 
@@ -1080,7 +1080,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_ManqueParenthese_Ouvrante(){
+    public final void test_ManqueParenthese_Ouvrante(){
         List<String> reS = Arrays.asList("P2","estpromu","et","P2#J1","estpromu",")");
         List<Jeton> reJ = Arrays.asList(Jeton.PIECE, Jeton.ETAT, Jeton.ET, Jeton.PIECETOKEN, Jeton.ETAT, Jeton.PARENTHESEFERMANTE);
 
@@ -1093,7 +1093,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
     }
 
     @Test
-    public final void testCase_EtatDeDepartInvalide(){
+    public final void test_EtatDeDepartInvalide(){
         List<String> reS = Arrays.asList("test");
         List<Jeton> reJ = Arrays.asList(Jeton.PIECE);
 
@@ -1103,6 +1103,290 @@ public class Automate_Regles_SemantiqueMauvaisTest {
             fail("Aucune Exception détectée");
         } catch (MauvaiseDefinitionRegleException e){
             assertEquals("Impossible de commencer une analyse en partant de l'état de départ : 200",e.getMessage());
+        }
+    }
+
+    //---------------------------------------------------------------------------
+    //-------------------------------Tests Alias---------------------------------
+    //---------------------------------------------------------------------------
+
+    @Test
+    public final void test_DefAliasDansCondition_Erreur(){
+        List<String> reS = Arrays.asList("JALL","timer","<","10","alors","JALL","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.NOMBRE,Jeton.ALORS,Jeton.PIECE,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Imposible de définir un Alias dans les Consequences de Regle : 6",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_DefAlias_JCOMPTEUR_Erreur(){
+        List<String> reS = Arrays.asList("JALL","timer","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_JCOMPTEUR_COMPARAISON_Erreur(){
+        List<String> reS = Arrays.asList("JALL","timer","=","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_JCOMPTEUR_COMPARAISON_NOMBRE_Erreur(){
+        List<String> reS = Arrays.asList("JALL","timer","=","4","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.NOMBRE,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (4)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PACTION_prend_Erreur(){
+        List<String> reS = Arrays.asList("PALL","prend","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PACTION_sedeplace_Erreur(){
+        List<String> reS = Arrays.asList("PALL","sedeplace","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PACTION_estplace_Erreur(){
+        List<String> reS = Arrays.asList("PALL","estplace","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PACTION_estsur_Erreur(){
+        List<String> reS = Arrays.asList("PALL","estsur","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PACTION_estechec_Erreur(){
+        List<String> reS = Arrays.asList("PALL","estechec","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PCOMPTEUR_Erreur(){
+        List<String> reS = Arrays.asList("PALL","nb_deplacement","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.COMPTEUR,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (2)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PCOMPTEUR_COMPARAISON_Erreur(){
+        List<String> reS = Arrays.asList("PALL","nb_deplacement","=","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PCOMPTEUR_COMPARAISON_NOMBRE_Erreur(){
+        List<String> reS = Arrays.asList("PALL","nb_deplacement","=","8","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.NOMBRE,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (4)",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_DefAlias_PJACTION_prend_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","prend","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJACTION_sedeplace_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","sedeplace","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJACTION_estplace_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","estplace","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJACTION_estsur_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","estsur","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJACTION_estechec_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","estechec","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.ACTION,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJCOMPTEUR_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","nb_deplacement","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (3)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJCOMPTEUR_COMPARAISON_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","nb_deplacement","=","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (4)",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_DefAlias_PJCOMPTEUR_COMPARAISON_NOMBRE_Erreur(){
+        List<String> reS = Arrays.asList("PALL","JALL","nb_deplacement","=","8","test");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.JOUEUR,Jeton.COMPTEUR,Jeton.COMPARAISON,Jeton.NOMBRE,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Impossible de définir l'alias test (5)",e.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_RecuperationAlias_Erreur(){
+        List<String> reS = Arrays.asList("monAlias");
+        List<Jeton> reJ = Arrays.asList(Jeton.ALIASREUTILISATION);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Alias inconnu : monAlias",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_RecuperationAlias_DefApres_Erreur(){
+        List<String> reS = Arrays.asList("monAlias","PALL","monAlias");
+        List<Jeton> reJ = Arrays.asList(Jeton.ALIASREUTILISATION,Jeton.PIECE,Jeton.ALIAS);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Alias inconnu : monAlias",e.getMessage());
+        }
+    }
+    @Test
+    public final void test_RecuperationAlias_CourDeRegle_Erreur(){
+        List<String> reS = Arrays.asList("PALL","test","monAlias");
+        List<Jeton> reJ = Arrays.asList(Jeton.PIECE,Jeton.ALIAS,Jeton.ALIASREUTILISATION);
+
+        try {
+            regle = automate.analyserUneRegle(reJ,reS);
+            fail("Aucune Exception détectée");
+        } catch (MauvaiseDefinitionRegleException e){
+            assertEquals("Alias inconnu : monAlias",e.getMessage());
         }
     }
 }

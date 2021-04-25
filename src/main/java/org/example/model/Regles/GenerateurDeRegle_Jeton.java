@@ -8,16 +8,14 @@ import javafx.util.Pair;
 
 public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements Serializable {
 
-    List<String> listeAlias;            //Liste pour la gestion des alias d'une Regle
+
 
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){
         super(jetons,auto);
-        listeAlias = new ArrayList<>();
     }
 
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto){
         super(Arrays.asList(Jeton.values()),auto);
-        listeAlias = new ArrayList<>();
     }
 
     @Override
@@ -239,23 +237,8 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
     }
 
     /*Getter et Setter*/
-
     public List<String> getListeAlias(){
         return listeAlias;
-    }
-
-    public void setListeAlias(List<String> listeAlias) {
-        this.listeAlias = listeAlias;
-    }
-
-    /*toString pour les alias*/
-    public String toStringAlias(){
-        String s = "{";
-        for (String alias: listeAlias) {
-            s += " nom : " + alias + " |";
-        }
-        s = s.substring(0,s.length()-1);
-        return s + "}";
     }
 
     /*Méthode main permettant de tester au niveau du terminal le bon fonctionnement de la création des Regles*/
@@ -435,6 +418,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 if (!reponse.equals(arret)) {
                     boolean bon = false;
                     int indRep = 0;
+                    //Tant que l'indice n'est pas bon ou que ce n'est pas arret
                     while (!bon) {
                         try {
                             indRep = Integer.parseInt(reponse);
@@ -459,7 +443,16 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                     if (reponse.equals(arret)) {
                         break;
                     }
+
                     Pair<String, String> choix = propositions.get(indRep);
+                    //S'il veut renseigner un nom
+                    if(indRep == 6){
+                        //Alors on le prend en compte
+                        System.out.print("Veuillez renseigner un " + COLOR_BLUE + "nom" + COLOR_RESET + " : ");
+                        String nom = scan.next();
+                        choix = new Pair<String,String>("nom",nom);
+                    }
+
                     regleEnFormation.add(choix);
                     //Affichage et traitement du choix
                     System.out.println("Choix : " + COLOR_YELLOW + choix.getKey() + COLOR_RESET);
@@ -488,6 +481,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             }
             regleEnFormation.clear();
             System.out.print(COLOR_RESET + "\n");
+
             generateur.addRegleSousFormeDeChaine(regleSousFormeListe);
 
             //Une fois que l'on possède la Règle sous forme de liste de termes, on peut l'analyser
@@ -496,6 +490,12 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 generateur.genererRegles();
                 regleAvantCoup.addAll(generateur.getRegleAvantCoup());
                 regleApresCoup.addAll(generateur.getRegleApresCoup());
+
+                System.out.println("ALIAS RECONNUS : \n" + COLOR_BLUE + generateur.toStringAlias() + COLOR_RESET);
+                for(Map.Entry<String, Jeton> entry : automate.getAliasRegle().entrySet()){
+                    System.out.println(COLOR_CYAN + entry.getKey() +COLOR_RESET+ " -> " +COLOR_YELLOW+entry.getValue()+COLOR_RESET);
+                }
+
                 System.out.print("ETAT : "+COLOR_GREEN + "SUCCES" + COLOR_RESET + "\n");
             } catch (MauvaiseDefinitionRegleException e) {
                 System.out.print("ETAT : " + COLOR_RED + "ECHEC" + COLOR_RESET + " (" + e.getMessage() + ")\n");
@@ -508,7 +508,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             System.out.println(PURPLE_BRIGHT + "TERMINER ? (O/N)" + COLOR_RESET);
             terminer = scan.next();
             while (!(terminer.equals("O") || terminer.equals("N"))){
-                System.out.println(RED_BRIGHT + "OUI" +COLOR_RESET +  " OU " +  RED_BRIGHT + "NON" + COLOR_RESET + " (c'est pas compliqué merde)");
+                System.out.println(RED_BRIGHT + "OUI" +COLOR_RESET +  " OU " +  RED_BRIGHT + "NON" + COLOR_RESET + " (c'est pas compliqué)");
                 terminer = scan.next();
             }
 

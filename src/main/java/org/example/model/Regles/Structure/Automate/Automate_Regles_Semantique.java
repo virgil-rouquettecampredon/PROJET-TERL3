@@ -3,10 +3,7 @@ package org.example.model.Regles.Structure.Automate;
 
 import java.util.*;
 
-import org.example.model.Piece;
-import org.example.model.Case;
-import org.example.model.GroupCases;
-import org.example.model.Joueur;
+import org.example.model.*;
 import org.example.model.Regles.*;
 import org.example.model.Regles.Structure.Interpreteur.*;
 
@@ -16,8 +13,6 @@ import org.example.model.Regles.Structure.Interpreteur.*;
  * Sinon, la méthode retourne une MauvaiseSemantiqueRegleException avec le message adequat.
  * */
 public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
-
-    private Map<String,Jeton> aliasRegle;       //Liste des alias de la Regle
 
     public Automate_Regles_Semantique(){
         super(35,0);
@@ -29,9 +24,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         aliasRegle = new HashMap<>();
     }
 
-    /**Méthode permettant d'ajouter un Alias dans la liste des Alias
-     * @param nomAlias : nom de l'alias à ajouter à la table des alias
-     * @param parcours : parcours de l'automate jusqu'à la rencontre d'une définition d'alias**/
     public void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException{
         switch (parcours){
             case "02" , "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,Jeton.PIECE);
@@ -39,17 +31,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
             case "01"-> aliasRegle.put(nomAlias,Jeton.JOUEUR);
             case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,Jeton.CASE);
             case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,Jeton.CASEPARAM);
-            default -> throw new MauvaiseDefinitionRegleException("Impossible de définir un alias ici");
+            default -> throw new MauvaiseDefinitionRegleException("Impossible de définir l'alias " + nomAlias);
         }
     }
 
-    /**Méthode permettant de récupérer un Alias de la liste des Alias
-     * @param nomAlias : Nom de l'alias à récupérer
-     * @return le jeton correspondant au nom de l'alias, erreur sinon**/
     public Jeton recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
         Jeton jeton = aliasRegle.get(nomAlias);
         if(jeton == null){
-            throw new MauvaiseDefinitionRegleException("Alias inconnu");
+            throw new MauvaiseDefinitionRegleException("Alias inconnu : " + nomAlias);
         }
         return jeton;
     }
@@ -324,26 +313,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         if(dep == null){
             throw new MauvaiseDefinitionRegleException("Impossible de commencer une analyse en partant de l'état de départ : " + getEtatDeDepart());
         }
-
         String parcours = dep.getValeur();
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
-
         aliasRegle.clear();
-
         //Compteurs permettant de reconnaitre une Regle bien formée
         int nbConditions = 0;
         int nbConsequence = 0;
-
         //Booléen permettant de connaitre dans quel endroit du traitement de la Regle on se trouve
         boolean traitementCondition = true;
-
-
         //Listes utiles pour la création de la Regle ensuite
         List<Jeton> jetonsarborescence = new ArrayList<>();
         List<Condition> conditionsDeLaRegle = new ArrayList<>();
         List<Consequence> consequencesDeLaRegle = new ArrayList<>();
-
         //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
 
@@ -392,16 +374,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     //Si on rencontre une définition d'Alias dans les conséquences
                     if(!traitementCondition){
                         //Alors il s'agit d'un problème
-                        throw new MauvaiseDefinitionRegleException("Imposible de définir un Alias dans les Consequences de Regle");
+                        throw new MauvaiseDefinitionRegleException("Imposible de définir un Alias dans les Consequences de Regle : " + indRegleSyntaxe);
                     }else{
                         //Sinon, on doit la définir dans notre flot d'alias
-                        ajouterAlias(regleString.get(indRegleSyntaxe),parcours);
+                        try {
+                            ajouterAlias(regleString.get(indRegleSyntaxe), parcours);
+                        }catch (MauvaiseDefinitionRegleException e){
+                            throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
+                        }
                     }
                 }
                 //Gestion des Alias dans la Regle (utilisation)
                 case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe));
             }
-
             //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
             //Récupération de l'indice du prochain état d'après la transition donnée
@@ -991,7 +976,21 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                 }
                             }
 
-                            case 327 , 334 -> {//SUJET-ACTION-CASEPARAM
+                            case 327 , 334 -> {
+                                //SUJET-ACTION-CASEPARAM
+                                //A supprimer : pour les tests
+                                conditionsDeLaRegle.add(new Condition() {
+                                                            @Override
+                                                            public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+
+                                                            }
+
+                                                            @Override
+                                                            public boolean evaluer() {
+                                                                return false;
+                                                            }
+                                                        });
+                                        nbConditions++;
                             }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/
@@ -1356,20 +1355,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
             }
             indRegleSyntaxe++;
         }
-
         // Si sort de la boucle sans encombre, alors on a pu tout définir d'après le liste des Jetons et des String
         // Il faut désormais vérifier si notre règle comporte au moins un bloc condition et au moins un bloc conséquence
         if(nbConditions == 0){
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une condition pour créer une règle");
         }
-
         if(nbConsequence == 0){
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une consequence pour créer une règle");
         }
-
         //Ensuite, on essaye de générer l'arbre de conditions de notre règle
         regle.genererArbreCondition(conditionsDeLaRegle,jetonsarborescence);
+        for (Consequence c: consequencesDeLaRegle) {
+            regle.ajouterUneConsequence(c);
+        }
         return regle;
     }
-
 }

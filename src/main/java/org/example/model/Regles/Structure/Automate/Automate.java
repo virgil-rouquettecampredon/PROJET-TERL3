@@ -8,13 +8,14 @@ import java.util.List;
 
 //public abstract class Automate<A extends Comparable,B>
 public abstract class Automate<A extends EstToken>{
-    /**Classes utiles pour l'analyse sémantique
+    /**Classes utiles pour l'analyse sémantique et la proposition des choix dans l'interface
      * Permets une modélisation simple d'un automate reconnaissant des Token**/
 
     // ===== Modélisation d'une transition sortante d'un état de l'automate
     class TransitionSortante{
         private A etiquetteArete;
         private int etatArrive;
+
         public TransitionSortante(A etiquette,int arrive){
             this.etiquetteArete = etiquette;
             this.etatArrive = arrive;
@@ -30,15 +31,15 @@ public abstract class Automate<A extends EstToken>{
         //Numéro de l'état (~numéro d'identification)
         private int num;
         //Liste des transitions sortantes d'un Etat
-        //Ici, un automate est vu comme une liste d'Etat qui possèdent des transitions sortantes (~Graphe orienté valué aux arêtes par des Token)
+        //Ici, un automate est vu comme une liste d'Etats possédant des transitions sortantes (~Graphe orienté valué aux arêtes par des Token)
         private List<TransitionSortante> transitions;
         //bool permettant de savoir si on se trouve dans un état terminal ou non
         //( -> utile ensuite pour le backtracking côté analyse sémantique)
         private boolean estTerminal;
         //Code de retour utile pour identifier l'état terminal dans lequel on se trouve
-        //Peut permettre des traitements différents pour un même état terminal
+        //Si même  code, peut permettre des traitements différents pour un même état terminal
         private int codeDeRetour;
-        //Valeur d'un état terminal, utilisé pour construire des chaines de parcour dans l'automate par exemple
+        //Valeur d'un état terminal, utilisé pour construire des chaines de parcours dans l'automate par exemple
         private String valeur;
 
         public Etat(int num){
@@ -122,7 +123,7 @@ public abstract class Automate<A extends EstToken>{
     /**Méthode permettant d'ajouter un état terminal à l'automate.
      * Va modifier un état de l'automate afin de le rendre terminal.
      * @param etat : numéro d'identification de l'état à rendre terminal.
-     * @param codeDeRetour : entier rensiegnant le code de retour à retourner par l'Etat si terminal.**/
+     * @param codeDeRetour : entier renseignant le code de retour à retourner par l'Etat si terminal.**/
     protected void ajouterUnEtatTerminal(int etat, int codeDeRetour){
         Etat et =  recupererEtat(etat);
         if(et != null){
@@ -134,8 +135,8 @@ public abstract class Automate<A extends EstToken>{
 
     /**Méthode permettant d'ajouter une transition à l'automate.
      * @param dep : numéro d'identifiaction de l'Etat de départ de la transition.
-     * @param val : Token à reconnaitre depuis l'Etat dep pour aller ver l'Etat arrive.
-     * @param arrive : numéro d'identifiaction de l'Etat d'arrivé de la transition.**/
+     * @param val : Token à reconnaitre depuis l'Etat dep pour aller vers l'Etat arrive.
+     * @param arrive : numéro d'identification de l'Etat d'arrivée de la transition.**/
     protected void ajouterUneTransition(int dep, A val, int arrive){
         for (Etat e: etatsTr) {
             if(e.num == dep){
@@ -151,9 +152,9 @@ public abstract class Automate<A extends EstToken>{
         }
     }
 
-    /**Méthode permettant de récupérer le numéro d'identification de l'état d'arrivée
-     * atteint depuis l'état de numéro d'identification etat par la transition valuée par val.
-     * @param etat : numéro d'identifiaction de l'Etat de départ de la transition val à évaluer.
+    /**Méthode permettant de récupérer le numéro d'identification de l'Etat d'arrivée
+     * atteint depuis l'Etat de numéro d'identification etat par la transition valuée par val.
+     * @param etat : numéro d'identification de l'Etat de départ de la transition val à évaluer.
      * @param val : Token à évaluer pour savoir s'il fait partie d'une des transitions sortantes de l'Etat dont le numéro d'identification est etat.
      * @return : Le numéro d'identification de l'Etat atteint depuis l'Etat dont le numéro d'identification est etat par la transition valuée par le Token val, -1 sinon.**/
     public int etatSuivant(int etat,A val){
@@ -181,7 +182,7 @@ public abstract class Automate<A extends EstToken>{
          }return null;
     }
 
-    /**Méthode permettant d'initialiser la valeur d'un Etat numéro d'identification etat.
+    /**Méthode permettant d'initialiser la valeur d'un Etat de numéro d'identification etat.
      * @param etat : numéro d'identification de l'Etat dont il faut initialiser sa valeur.
      * @param valeur : valeur d'initialisation.**/
     protected void setValeurEtat(int etat, String valeur){

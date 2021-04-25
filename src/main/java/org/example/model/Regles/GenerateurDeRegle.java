@@ -15,6 +15,8 @@ public abstract class GenerateurDeRegle<A extends EstToken>{
     //Automate utilisé pour l'analyse semantique
     protected Automate_Regles<A> automate;
 
+    protected List<String> listeAlias;            //Liste pour la gestion des alias d'une Regle
+
     //Listes de Regle
     private List<Regle> regleAvantCoup;
     private List<Regle> regleApresCoup;
@@ -26,6 +28,22 @@ public abstract class GenerateurDeRegle<A extends EstToken>{
         this.regleAvantCoup = new ArrayList<>();
         this.regleApresCoup = new ArrayList<>();
         reglesSousFormeDeChaine = new ArrayList<>();
+        listeAlias = new ArrayList<>();
+    }
+
+    /*Setter pour les alias*/
+    public void setListeAlias(List<String> listeAlias) {
+        this.listeAlias = listeAlias;
+    }
+
+    /*toString pour les alias*/
+    public String toStringAlias(){
+        String s = "{";
+        for (String alias: listeAlias) {
+            s += " nom : " + alias + " |";
+        }
+        s = s.substring(0,s.length()-1);
+        return s + "}";
     }
 
     public List<Regle> getRegleAvantCoup() {

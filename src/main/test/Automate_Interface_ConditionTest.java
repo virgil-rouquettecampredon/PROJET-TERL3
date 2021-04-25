@@ -279,10 +279,10 @@ public class Automate_Interface_ConditionTest {
             auto.selectionnerElement(e2);
             auto.selectionnerElement(e3);
             auto.selectionnerElement(e4);
-            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e2);
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException ex){
-            assertEquals("Transition inconnue : 15 --CASE-> ?",ex.getMessage());
+            assertEquals("Transition inconnue : 15 --JOUEUR-> ?",ex.getMessage());
         }
     }
 
@@ -578,6 +578,799 @@ public class Automate_Interface_ConditionTest {
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException ex){
             assertEquals("Impossible de terminer les conséquences, il manque encore 2 parenthèses fermantes",ex.getMessage());
+        }
+    }
+
+    //TEST ALIAS
+    @Test
+    public final void test_AliasParentheseOuvrante_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PARENTHESE_OUVRANTE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 0",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasNON_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 18",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasNON_ParentheseOuvrante_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PARENTHESE_OUVRANTE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 0",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 4",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteurNON_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 11",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteurComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteurNONComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteurComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasJoueurCompteurNONComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_AliasPieceCompteurDeplacement_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 4",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceCompteurDeplacementNON_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 11",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceCompteurDeplacementComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceCompteurDeplacementNONComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceCompteurDeplacementComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceCompteurDeplacementNONComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPiecePromu_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PROMU,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 5",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceEstMenace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ESTMENACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 6",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPiecePrend_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PREND,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 7",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceDeplace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.DEPLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 8",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPiecePlace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 9",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceEst_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.EST,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 10",ex.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacement_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 4",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacementNON_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 11",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacementComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacementNONComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacementComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurCompteurDeplacementNONComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e7 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e7);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurPromu_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PROMU,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 5",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurEstMenace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ESTMENACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 6",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurPrend_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PREND,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 7",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurDeplace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.DEPLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 8",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurPlace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 9",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceJoueurEst_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECE,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.JOUEUR,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.EST,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 10",ex.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacement_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 4",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacementNON_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 11",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacementComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacementNONComparateur_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 13",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacementComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenCompteurDeplacementNONComparateurNombre_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.COMPTEUR_DEPLACEMENT,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.NON,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.COMPARATEUR,"test","test");
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.NOMBRE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 16",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenPromu_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PROMU,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 5",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenEstMenace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.ESTMENACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 6",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenPrend_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PREND,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 7",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenDeplace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.DEPLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 8",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenPlace_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.PLACE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 9",ex.getMessage());
+        }
+    }
+    @Test
+    public final void test_AliasPieceTokenEst_Mauvais(){
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.EST,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 10",ex.getMessage());
+        }
+    }
+
+    @Test
+    public final void test_AliasSujetActionCibleParentheseFermante_Mauvais(){
+        ElementRegle e6 = new ElementRegle(Jeton_Interface.PARENTHESE_OUVRANTE,"test","test");
+        ElementRegle e1 = new ElementRegle(Jeton_Interface.PIECETOKEN,"test","test");
+        ElementRegle e2 = new ElementRegle(Jeton_Interface.EST,"test","test");
+        ElementRegle e3 = new ElementRegle(Jeton_Interface.CASE,"test","test");
+        ElementRegle e4 = new ElementRegle(Jeton_Interface.PARENTHESE_FERMANTE,"test","test");
+        ElementRegle e5 = new ElementRegle(Jeton_Interface.ALIAS,"as","test");
+
+        try {
+            auto.selectionnerElement(e6);
+            auto.selectionnerElement(e1);
+            auto.selectionnerElement(e2);
+            auto.selectionnerElement(e3);
+            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e5);
+            fail("Exception non détectée");
+        }catch (MauvaiseDefinitionRegleException ex){
+            assertEquals("Impossible d'appliquer un ALIAS ici : 17",ex.getMessage());
         }
     }
 }

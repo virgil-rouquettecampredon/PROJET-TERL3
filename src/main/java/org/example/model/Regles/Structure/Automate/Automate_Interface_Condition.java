@@ -199,9 +199,10 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         if(e == null){
             throw new MauvaiseDefinitionRegleException("Etat courant inconnu : " + curEtat);
         }
+        //Si un etat est terminal dans une définition de Condition
         if (e.estTerminal()) {
             elements.add(new ElementRegle(Jeton_Interface.OU,"OU", "OU"));
-            elements.add(new ElementRegle(Jeton_Interface.ET,"ET", "ET"));
+            elements.add(new ElementRegle(Jeton_Interface.ET,"ET", "et"));
             if(nbParenthese <= 0){
                 elements.add(new ElementRegle(Jeton_Interface.ALORS,"ALORS", "alors"));
             }
@@ -210,7 +211,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             int ind = 0;
             switch (t.getEtiquetteArete()) {
                 case CASE -> {
-                    elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les cases", "tous-typecase"));
+                    elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les groupes de cases", "tous-typecase"));
                     for (GroupCases gc : cases) {
                         elements.add(new ElementRegle(Jeton_Interface.CASE,gc.getName(), "C" + ind));
                         ind++;
@@ -236,6 +237,12 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                             elements.add(new ElementRegle(t.getEtiquetteArete(),s, s));
                         }
                     }
+                }
+            }
+            //Gestion des alias
+            for (Map.Entry<String, Jeton_Interface> entry : getAlias().entrySet()){
+                if(entry.getValue() == t.getEtiquetteArete()){
+                    elements.add(new ElementRegle(entry.getValue(), entry.getKey(), entry.getKey()));
                 }
             }
         }
@@ -510,7 +517,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             }
 
             //AFFICHAGE AXIOMES
-            System.out.println("\nAXIOMES : ");
+            System.out.println("\nALIAS : ");
             for (Map.Entry<String, Jeton_Interface> entry : auto.getAlias().entrySet()) {
                 System.out.println(COLOR_BLUE + entry.getKey() + COLOR_RESET + "->" + COLOR_GREEN + entry.getValue() + COLOR_RESET);
             }

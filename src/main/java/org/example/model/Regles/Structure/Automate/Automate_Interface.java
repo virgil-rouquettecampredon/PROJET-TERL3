@@ -51,10 +51,10 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
         this.curEtat = curEtat;
     }
 
-    /**Méthode permettante de revenir en arrière dans l'automate (backtrack)**/
+    /**Méthode permettant de revenir en arrière dans l'automate (backtrack)**/
     public abstract void revenirEnArriere();
 
-    /**Méthode permettant d'indiquer si une chaine de caractère peut être renseignée sans risque d'être interprété par le système ensuite
+    /**Méthode permettant d'indiquer si une chaine de caractère peut être renseignée sans risque d'être interprétée par le système ensuite
      * @param s : chaine de caractère dont on veut déterminer si elle est renseignable ou non.**/
     public boolean peutEtreRenseigne(String s){
         Jeton[] jetons = Jeton.values();

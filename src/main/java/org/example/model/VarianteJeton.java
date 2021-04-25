@@ -10,13 +10,17 @@ import java.util.List;
 public class VarianteJeton extends Variante<Jeton> {
     /*Classe modélisant une Variante telle qu'implémentéée dans l'interface*/
 
+    private ArrayList<RegleInterface> regles;           // La liste de Regles sous forme de RegleInterface
+
     public VarianteJeton(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
-        super(name, plateau, joueurs, ordreJoueurs, regles, listGroupCases);
+        super(name, plateau, joueurs, ordreJoueurs, listGroupCases);
+        this.regles = regles;
         setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
     }
 
-    public VarianteJeton(Variante variante) {
+    public VarianteJeton(Variante<Jeton> variante) {
         super(variante);
+        this.regles = new ArrayList<>();
         setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
     }
 
@@ -34,7 +38,12 @@ public class VarianteJeton extends Variante<Jeton> {
 
             for(ElementRegle elRe : regleSousFormeElemRegle){
                 if(elRe.getJetonAssocie() != Jeton_Interface.FIN){
-                    regleSousFormeMots.add(elRe.getNomRegle());
+                    if(elRe.getJetonAssocie() != Jeton_Interface.ALIAS){
+                        regleSousFormeMots.add(elRe.getNomRegle());
+                    }else{
+                        regleSousFormeMots.add(elRe.getNomInterface());
+                        regleSousFormeMots.add(elRe.getNomRegle());
+                    }
                 }
             }
 
@@ -47,5 +56,14 @@ public class VarianteJeton extends Variante<Jeton> {
         }catch (MauvaiseDefinitionRegleException e){
             throw new VarianteException("Erreur création variante (REGLE) : " + e.getMessage());
         }
+    }
+
+    /*Getter et Setter*/
+    public ArrayList<RegleInterface> getRegles() {
+        return regles;
+    }
+
+    public void setRegles(ArrayList<RegleInterface> generateurDeRegle) {
+        this.regles = generateurDeRegle;
     }
 }
