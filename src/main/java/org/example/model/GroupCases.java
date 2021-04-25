@@ -99,4 +99,13 @@ public class GroupCases implements CibleDeRegle, Serializable {
      * --aa--
      * ------
      * */
+
+    @Override
+    public String toString() {
+        return "GroupCases{" +
+                "name='" + name + '\'' +
+                ", casesAbsolue=" + casesAbsolue +
+                ", positionsRelatives=" + positionsRelatives +
+                '}';
+    }
 }

@@ -317,6 +317,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
 
         propositions.add(new Pair<String, String>("alias", "as"));
         propositions.add(new Pair<String, String>("nombre", "0"));
+        propositions.add(new Pair<String, String>("nom", ""));
 
         propositions.add(new Pair<String, String>("PREND", "prend"));
         propositions.add(new Pair<String, String>("SE DEPLACE", "sedeplace"));

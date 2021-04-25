@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.model.Regles.ElementRegle;
+import org.example.model.Regles.Jeton_Interface;
 
 import java.io.Serializable;
 import java.util.ArrayList;
