@@ -65,7 +65,7 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
         List<Piece> allpieces = new ArrayList<>();
         String erreurPiece = "Piece: " + "'" + str + "': ";
         if (this.str_source.charAt(0) == 'P' && str.length() >= 2) {
-            for(Joueur j: ord.getJoueurs()) { allpieces.addAll(j.getPawnList()); }
+            for(Joueur j: ord.getVariante().getJoueurs()) { allpieces.addAll(j.getPawnList()); }
 
             if (str.equals("PALL")) {
                 return allpieces;

@@ -63,6 +63,7 @@ public class GameOverController extends Controller {
 
     @FXML
     public void lookButton() {
+        getApp().soundManager.playSound("button-confirm");
         if (hidden) {
             hidden = false;
             pane.setOpacity(100);

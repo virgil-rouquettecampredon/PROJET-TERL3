@@ -18,7 +18,7 @@
                 <Image url="@images/chess.png" />
             </image>
         </ImageView>
-        <VBox alignment="CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox alignment="CENTER" spacing="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Label styleClass="label-header" text="Modifier règle" />
                 <ScrollPane prefHeight="180.0" prefWidth="200.0" vbarPolicy="ALWAYS">
@@ -33,7 +33,7 @@
                         <Insets left="10.0" right="10.0" />
                     </VBox.margin>
                 </ScrollPane>
-                <Label styleClass="label-input" text="Alors" />
+                <Label prefWidth="90.0" styleClass="label-input" text="Alors" />
                 <ScrollPane prefHeight="180.0" prefWidth="200.0" vbarPolicy="ALWAYS">
                     <content>
                         <AnchorPane minHeight="200.0" minWidth="989.0" styleClass="background">
@@ -46,8 +46,13 @@
                         <Insets left="10.0" right="10.0" />
                     </VBox.margin>
                 </ScrollPane>
-                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                     <children>
+                        <Button mnemonicParsing="false" onAction="#backButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="ANNULER">
+                            <font>
+                                <Font name="Candara" size="36.0" />
+                            </font>
+                        </Button>
                         <Button mnemonicParsing="false" onAction="#validateButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" text="VALIDER">
                             <font>
                                 <Font name="Candara" size="36.0" />
@@ -59,9 +64,9 @@
                             </image>
                         </ImageView>
                     </children>
-                    <padding>
-                        <Insets left="362.0" />
-                    </padding>
+                    <VBox.margin>
+                        <Insets left="100.0" />
+                    </VBox.margin>
                 </HBox>
             </children>
         </VBox>

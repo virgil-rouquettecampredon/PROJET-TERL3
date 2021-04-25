@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.example.model.Regles.*;
 
@@ -166,5 +168,35 @@ public class OrdonnanceurDeJeuTest {
         }
     }
 
+    /**==================================================
+     * ================| TESTS BONS |====================
+     * ==================================================*/
+    @Test
+    public void test_ensembles_deplacement(){
+        try{
+            Set<Case> oracleCase = new LinkedHashSet<>();
+            oracleCase.add(varianteTest.getPlateau().getCase(new Position(3, 5)));
+            Assertions.assertEquals(oracleCase.toString(), ordonnanceurDeJeu.deplacementsValide(varianteTest.getPlateau().getCase(new Position(3, 6)), varianteTest.getJoueurs().get(0)).toString());
+        }catch (DeplacementException e){
+            Assertions.fail("Exception levée : "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    @Test
+    public void test_deplacer_deplace_la_piece(){
+        try{
+            deplacer(new Position(1, 7), 0, new Position(3, 5));
+            Assertions.assertNull(varianteTest.getPlateau().getCase(new Position(1, 7)));
+            Assertions.assertNotNull(varianteTest.getPlateau().getCase(new Position(3, 5)));
+        }catch (DeplacementException e){
+            Assertions.fail("Exception levée : "+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /*==================================================
+     * ================| TESTS REGLES |==================
+     * ==================================================*/
+    //todo tests regles
 }

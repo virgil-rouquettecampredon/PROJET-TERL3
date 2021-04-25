@@ -14,30 +14,20 @@ import java.util.stream.Collectors;
 public class OrdonnanceurDeJeu {
 
     //private int nbJoueur;
-    private List<Joueur> joueurs;
     //private List<List<Joueur>> equipes;
     private List<Piece> listTypesPieces;
     private Variante<Jeton> variantej;
 
-    private Plateau plateau;
 
     public OrdonnanceurDeJeu(Variante<Jeton> variantej){
         this.variantej = variantej;
         this.listTypesPieces = new ArrayList<>();
         LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
-        for (int i = 0; i < this.joueurs.size(); i++) {
-            tmp.addAll(this.joueurs.get(i).getTypePawnList());
+        for (int i = 0; i < this.variantej.getJoueurs().size(); i++) {
+            tmp.addAll(this.variantej.getJoueurs().get(i).getTypePawnList());
         }
         this.listTypesPieces.addAll(tmp);
     }
-
-    public List<Joueur> getJoueurs() { return this.joueurs; }
-
-    public Joueur getJoueur(int i) throws ArrayIndexOutOfBoundsException{
-        return this.joueurs.get(i);
-    }
-
-    public Plateau getPlateau() { return this.plateau; }
 
     public Variante<Jeton> getVariante() { return this.variantej; }
 
@@ -60,7 +50,7 @@ public class OrdonnanceurDeJeu {
         //regarde si aucun déplacement n'est valide
         List<Piece> pieceConditionDeVicoire = j.getPieceConditionDeVictoire();
         if ((!j.getPawnList().isEmpty()) && !(pieceConditionDeVicoire.isEmpty())){
-            if(!verifierEchec(pieceConditionDeVicoire, plateau, j.getEquipe(), false).isEmpty()) {
+            if(!verifierEchec(pieceConditionDeVicoire, variantej.getPlateau(), j.getEquipe(), false).isEmpty()) {
                 return pat(j);
             }
         }
@@ -73,7 +63,7 @@ public class OrdonnanceurDeJeu {
      */
     public boolean pat(Joueur j) {
         Set<Case> cases = new LinkedHashSet<>();
-        for (ArrayList<Case> ligne: plateau.getEchiquier()) {
+        for (ArrayList<Case> ligne: variantej.getPlateau().getEchiquier()) {
             for (Case c : ligne) {
                 Piece p = c.getPieceOnCase();
                 if (p != null && p.getJoueur() == j) {
@@ -91,7 +81,7 @@ public class OrdonnanceurDeJeu {
 
     /**
      * @param j le joueur
-     * @return Retourne vrai si le joueur n'a plus de piece sur le plateau
+     * @return Retourne vrai si le joueur n'a plus de piece sur le variantej.getPlateau()
      */
     public boolean zeroPiece(Joueur j){
         return j.getPawnList().isEmpty();
@@ -151,13 +141,13 @@ public class OrdonnanceurDeJeu {
 
                     ////System.out.println("Curseur : "+curseur);
 
-                    //Si piece ou non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    //Si piece ou non-accessible ou hors-variantej.getPlateau() -> false
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return cases;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (c.getPieceOnCase() != null || !c.isAccessible()) {
                         return cases;
                     }
@@ -165,7 +155,7 @@ public class OrdonnanceurDeJeu {
 
                     //Sinon -> true
                     try {
-                        Case destination = plateau.getCase(curseur);
+                        Case destination = variantej.getPlateau().getCase(curseur);
                         //System.out.println(origine+" to "+destination);
 
                         verifierDeplacement(origine, j, destination);
@@ -181,13 +171,13 @@ public class OrdonnanceurDeJeu {
                     curseur = equ.evaluate(curseur);
                     //System.out.println("Curseur : "+curseur);
 
-                    //Si non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    //Si non-accessible ou hors-variantej.getPlateau() -> false
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return cases;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (!c.isAccessible()) {
                         return cases;
                     }
@@ -207,7 +197,7 @@ public class OrdonnanceurDeJeu {
                     //System.out.println("\t\t qui n'est pas alliès, ou je serait traite :)");
                     if (victime != null) {
                         try {
-                            Case destination = plateau.getCase(curseur);
+                            Case destination = variantej.getPlateau().getCase(curseur);
                             //System.out.println(origine+" to "+destination);
 
                             verifierDeplacement(origine, j, destination);
@@ -225,12 +215,12 @@ public class OrdonnanceurDeJeu {
                     //System.out.println("Curseur : "+curseur);
 
                     //Si non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return cases;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (!c.isAccessible()) {
                         return cases;
                     }
@@ -246,7 +236,7 @@ public class OrdonnanceurDeJeu {
                     }
                     //System.out.println("\t\t qui n'est pas alliès, ou je serait traite :)");
                     try {
-                        Case destination = plateau.getCase(curseur);
+                        Case destination = variantej.getPlateau().getCase(curseur);
                         //System.out.println(origine+" to "+destination);
 
                         verifierDeplacement(origine, j, destination);
@@ -299,7 +289,7 @@ public class OrdonnanceurDeJeu {
         // Verifier que le déplacement ne mets pas en échec une pièce condition de victoire allié
         // generer plateau et verifier echec
         //System.out.println("Copie tableau");
-        Plateau copie = new Plateau(plateau);
+        Plateau copie = new Plateau(variantej.getPlateau());
 
         //System.out.println("Deplacement de la piece de "+origine+" à "+destination);
         Case c = copie.getCase(origine.getPosition());
@@ -307,7 +297,7 @@ public class OrdonnanceurDeJeu {
         c.setPieceOnCase(null);
         copie.getCase(destination.getPosition()).setPieceOnCase(p);
 
-        List<Joueur> monEquipe = joueurs.stream().filter(j -> j.getEquipe() == joueur.getEquipe())
+        List<Joueur> monEquipe = variantej.getJoueurs().stream().filter(j -> j.getEquipe() == joueur.getEquipe())
                 .collect(Collectors.toList());
         //System.out.println("Mon equipe : "+monEquipe);
 
@@ -355,7 +345,7 @@ public class OrdonnanceurDeJeu {
         }
 
         // Si le déplacement met en échec un joueur en face alors décrémenter vie de la pièce concernée
-        List<Joueur> equipeAdverse = joueurs.stream().filter(j -> j.getEquipe() != joueur.getEquipe())
+        List<Joueur> equipeAdverse = variantej.getJoueurs().stream().filter(j -> j.getEquipe() != joueur.getEquipe())
                 .collect(Collectors.toList());
         //System.out.println("equipeAdverse : "+equipeAdverse);
 
@@ -510,12 +500,12 @@ public class OrdonnanceurDeJeu {
                     //System.out.println("Curseur : "+curseur);
 
                     //Si piece ou non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return false;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (c.getPieceOnCase() != null || !c.isAccessible()) {
                         return false;
                     }
@@ -535,12 +525,12 @@ public class OrdonnanceurDeJeu {
                     //System.out.println("Curseur : "+curseur);
 
                     //Si non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return false;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (!c.isAccessible()) {
                         return false;
                     }
@@ -585,12 +575,12 @@ public class OrdonnanceurDeJeu {
                     //System.out.println("Curseur : "+curseur);
 
                     //Si non-accessible ou hors-Plateau -> false
-                    if (curseur.getX() >= plateau.getWitdhX() || curseur.getY() >= plateau.getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
+                    if (curseur.getX() >= variantej.getPlateau().getWitdhX() || curseur.getY() >= variantej.getPlateau().getHeightY() || curseur.getX() < 0 || curseur.getY() < 0) {
                         return false;
                     }
                     //System.out.println("\t est dans le plateau");
 
-                    Case c = plateau.getCase(curseur);
+                    Case c = variantej.getPlateau().getCase(curseur);
                     if (!c.isAccessible()) {
                         return false;
                     }

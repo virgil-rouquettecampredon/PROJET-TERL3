@@ -25,14 +25,14 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
         if (this.str_source.charAt(0) == 'J' && this.str_source.length() >= 2) {
             erreurJoueur = "Joueur: " + erreurJoueur;
             if (this.str_source.equals("JALL")) {
-                lret.addAll(ord.getJoueurs());
+                lret.addAll(ord.getVariante().getJoueurs());
                 return lret;
             } else {
                 try {
                     //System.out.println("Borne Joueur: " + Jeton.JOUEUR.getBorne(0));
                     int numjoueur = Integer.parseInt(this.str_source.substring(1));
                     if (numjoueur < Jeton.JOUEUR.getBorne(0) && numjoueur >= 0) {
-                        lret.add(ord.getJoueur(numjoueur));
+                        lret.add(ord.getVariante().getJoueurs().get(numjoueur));
                         return lret;
                     } else {
                         throw new MauvaiseInterpretationObjetRegleException(erreurJoueur + "numéro joueur inconnu");
@@ -48,7 +48,7 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
                 erreurJoueur = "Equipe: " + erreurJoueur;
                 int numequipe = Integer.parseInt(this.str_source.substring(1));
                 if (numequipe < Jeton.JOUEUR.getBorne(1) && numequipe >= 0) {
-                    for (Joueur j : ord.getJoueurs()) {
+                    for (Joueur j : ord.getVariante().getJoueurs()) {
                         if (j.getEquipe() == numequipe) lret.add(j);
                     }
                     return lret;

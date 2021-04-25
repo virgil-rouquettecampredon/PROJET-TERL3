@@ -243,6 +243,7 @@ public class GameController extends Controller {
                 }
             }
 
+            getApp().soundManager.playSound("win");
             popupWindow("gameOver", new EndGameData((Variante<Jeton>) userVar, perdants, message, this));
         }
         else {

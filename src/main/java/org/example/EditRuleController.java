@@ -2,9 +2,11 @@ package org.example;
 
 import javafx.beans.Observable;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -20,10 +22,7 @@ import org.example.model.Regles.MauvaiseDefinitionRegleException;
 
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class EditRuleController extends Controller {
     @FXML
@@ -50,21 +49,36 @@ public class EditRuleController extends Controller {
         getApp().soundManager.playSound("button-click");
 
         RegleInterface regle = new RegleInterface();
-        for (ControlElement condition : conditionBoxes) {
-            if (condition.getComboBox() != null ) {
-                regle.getRegle().add(condition.getComboBox().getValue().getElementRegle());
-            }
-            else {
-                regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, condition.getField().getText(), condition.getField().getText()));
-            }
+        if (automateCondition.getCurEtat() != -1) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : la condition n'est pas finie!");
+            return;
         }
-        for (ControlElement consequence : consequenceBoxes) {
-            if (consequence.getComboBox() != null ) {
-                regle.getRegle().add(consequence.getComboBox().getValue().getElementRegle());
+        if (automateConsequence.getCurEtat() != -1) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : la consequence n'est pas finie!");
+            return;
+        }
+        try {
+            for (ControlElement condition : conditionBoxes) {
+                if (condition.getComboBox() != null) {
+                    regle.getRegle().add(condition.getComboBox().getValue().getElementRegle());
+                } else if (condition.isNumber()) {
+                    regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, condition.getField().getText(), condition.getField().getText()));
+                } else {
+                    regle.getRegle().add(new ElementRegle(Jeton_Interface.ALIAS, "as", condition.getField().getText()));
+                }
             }
-            else {
-                regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, consequence.getField().getText(), consequence.getField().getText()));
+            for (ControlElement consequence : consequenceBoxes) {
+                if (consequence.getComboBox() != null) {
+
+                    regle.getRegle().add(consequence.getComboBox().getValue().getElementRegle());
+                } else {
+                    //pas besoin car pas de textField dans les consequences mais si il y en avait : pareil que condition
+                    regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, consequence.getField().getText(), consequence.getField().getText()));
+                }
             }
+        } catch (NullPointerException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : il y a des boites non remplies!");
+            return;
         }
         getApp().varianteManager.getCurrent().getRegles().add(regle);
         getApp().setRoot("rules");
@@ -106,9 +120,12 @@ public class EditRuleController extends Controller {
             boolean beforeAlors = true;
             for (ElementRegle element : regle.getRegle()) {
                 if (beforeAlors) {
-                    appearNext(generateNewConditionComboBox(element), conditionBoxes, conditionHBoxes, conditionVBox);
+                    ControlElement ce = generateNewConditionComboBox(element);
+                    appearNext(ce, conditionBoxes, conditionHBoxes, conditionVBox);
                     try {
-                        automateCondition.selectionnerElement(element);
+                        if (ce.getField() == null || ce.isNumber()) {
+                            automateCondition.selectionnerElement(element);
+                        }
                     } catch (MauvaiseDefinitionRegleException e) {
                         showAlert(Alert.AlertType.ERROR, "Erreur critique : "+e.getMessage());
                     }
@@ -139,7 +156,12 @@ public class EditRuleController extends Controller {
             control.getComboBox().getSelectionModel().select(new ComboBoxItem(e));
         }
         else {
-            control.getField().setText(""+e.getNomInterface());
+            if (control.isNumber()) {
+                control.getField().setText("" + e.getNomInterface());
+            }
+            else {
+                control.getField().setText("" + e.getNomRegle());
+            }
             control.getField().setDisable(true);
         }
         return control;
@@ -173,12 +195,22 @@ public class EditRuleController extends Controller {
         int index = conditionBoxes.size();
         ControlElement control;
 
-        if(prochains.size() == 1 && prochains.get(0).getJetonAssocie() == Jeton_Interface.NOMBRE){
+        //if(prochains.size() == 1 && prochains.get(0).getJetonAssocie() == Jeton_Interface.NOMBRE){
+        if(conditionBoxes.size() > 0 && conditionBoxes.getLast().getComboBox() != null &&
+                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.COMPARATEUR){
             TextField field = new TextField();
             field.setPromptText("Nombre");
 
-            field.setOnAction(e -> conditionInputAction(index));
-            control = new ControlElement(field);
+            field.setOnAction(e -> conditionNombreInputAction(index));
+            control = new ControlElement(field, true);
+        }
+        else if(conditionBoxes.size() > 0 && conditionBoxes.getLast().getComboBox() != null &&
+                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.ALIAS){
+            TextField field = new TextField();
+            field.setPromptText("Alias");
+
+            field.setOnAction(e -> conditionAliasInputAction(index));
+            control = new ControlElement(field, false);
         }
         else {
             ComboBox<ComboBoxItem> box = new ComboBox<>();
@@ -275,33 +307,33 @@ public class EditRuleController extends Controller {
     }
 
     private void deleteLastAutomateCondition() {
-        if ((conditionBoxes.getLast().getField() != null && conditionBoxes.getLast().getField().isDisabled())
+        if ((conditionBoxes.getLast().getField() != null && conditionBoxes.getLast().getField().isDisabled() && conditionBoxes.getLast().isNumber())
                 || (conditionBoxes.getLast().getComboBox() != null && conditionBoxes.getLast().getComboBox().getValue() != null)) {
-            System.out.println("Automate Condition depilé");
+            //System.out.println("Automate Condition depilé");
             automateCondition.revenirEnArriere();
         }
     }
 
     private void deleteLastConditionBox() {
-        System.out.println("Interface Condition depilé");
+        //System.out.println("Interface Condition depilé");
         deleteLastBox(conditionBoxes, conditionHBoxes, conditionVBox);
     }
 
     private void deleteLastAutomateConsequence() {
-        if ((consequenceBoxes.getLast().getField() != null && consequenceBoxes.getLast().getField().isDisabled())
+        if ((consequenceBoxes.getLast().getField() != null && consequenceBoxes.getLast().getField().isDisabled() && conditionBoxes.getLast().isNumber())
                 || (consequenceBoxes.getLast().getComboBox() != null && consequenceBoxes.getLast().getComboBox().getValue() != null)) {
-            System.out.println("Automate Consequence depilé");
+            //System.out.println("Automate Consequence depilé");
             automateConsequence.revenirEnArriere();
         }
     }
 
     private void deleteLastConsequenceBox() {
-        System.out.println("Interface Consequence depilé");
+        //System.out.println("Interface Consequence depilé");
         deleteLastBox(consequenceBoxes, consequenceHBoxes, consequenceVBox);
     }
 
     private void conditionBoxAction(int index) {
-        System.out.println("ACTION id="+index + " size="+conditionBoxes.size());
+        //System.out.println("ACTION id="+index + " size="+conditionBoxes.size());
         //SUPPRIMER LES CHOIX APRES
         int size = conditionBoxes.size() - 1;
         for (int i = index; i < size; i++) {
@@ -319,10 +351,12 @@ public class EditRuleController extends Controller {
         if (c.getComboBox() != null) {
             if (c.getComboBox().getValue() != null) {
                 ElementRegle choix = c.getComboBox().getValue().getElementRegle();
-                try {
-                    automateCondition.selectionnerElement(choix);
-                } catch (MauvaiseDefinitionRegleException e) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur Critique (CHOIX) : " + e.getMessage());
+                if (choix.getJetonAssocie() != Jeton_Interface.ALIAS) {
+                    try {
+                        automateCondition.selectionnerElement(choix);
+                    } catch (MauvaiseDefinitionRegleException e) {
+                        showAlert(Alert.AlertType.ERROR, "Erreur Critique (CHOIX) : " + e.getMessage());
+                    }
                 }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur : choix vide");
@@ -333,8 +367,8 @@ public class EditRuleController extends Controller {
         appearNextCondition();
     }
 
-    private void conditionInputAction(int index) {
-        System.out.println("ACTION DEMANDEE id="+index);
+    private void conditionNombreInputAction(int index) {
+        //System.out.println("ACTION DEMANDEE id="+index);
         ControlElement c = conditionBoxes.getLast();
         if(c.getField() != null) {
             try {
@@ -348,6 +382,31 @@ public class EditRuleController extends Controller {
                 showAlert(Alert.AlertType.ERROR, "Erreur : " + c.getField().getText() + " n'est pas un nombre.");
             } catch (MauvaiseDefinitionRegleException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur critique (CHOIX) : " + e.getMessage());
+            }
+        }
+
+    }
+
+    private void conditionAliasInputAction(int index) {
+        //System.out.println("ACTION DEMANDEE id="+index);
+        ControlElement c = conditionBoxes.getLast();
+        if(c.getField() != null) {
+            String alias = c.getField().getText();
+            if (automateCondition.peutEtreRenseigne(alias)) {
+                try {
+                    //conditionBoxes.getLast().getComboBox().getValue().getElementRegle().setNomRegle(alias);
+                    automateCondition.selectionnerElement(new ElementRegle(Jeton_Interface.ALIAS, "as", alias));
+
+                    c.getField().setDisable(true);
+
+                    conditionBoxAction(index);
+                }
+                catch (MauvaiseDefinitionRegleException e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur critique (CHOIX) : " + e.getMessage());
+                }
+            }
+            else {
+                showAlert(Alert.AlertType.ERROR, "Erreur : nom d'alias impossible ("+alias+")");
             }
         }
     }
@@ -443,19 +502,35 @@ public class EditRuleController extends Controller {
         showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte edition regle
     }
 
+    @FXML
+    public void backButton() {
+        getApp().soundManager.playSound("button-cancel");
+        Optional<ButtonType> result =
+                showAlert(Alert.AlertType.CONFIRMATION, "Attention !\nSi vous annulez, la règle serat supprimée. \nÊtes vous sûr d'annuler ?");
+        result.ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    getApp().setRoot("rules");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public static class ControlElement {
         private ComboBox<ComboBoxItem> comboBox;
         private TextField field;
-        private boolean isComboBox;
+        private boolean isNumberField;
 
         public ControlElement(ComboBox<ComboBoxItem> comboBox) {
             this.comboBox = comboBox;
-            isComboBox = true;
+            isNumberField = false;
         }
 
-        public ControlElement(TextField field) {
+        public ControlElement(TextField field, boolean isNumber) {
             this.field = field;
-            isComboBox = false;
+            isNumberField = isNumber;
         }
 
         public ComboBox<ComboBoxItem> getComboBox() {
@@ -465,6 +540,8 @@ public class EditRuleController extends Controller {
         public TextField getField() {
             return field;
         }
+
+        public boolean isNumber() {return isNumberField;}
     }
 
     public static class ComboBoxItem {

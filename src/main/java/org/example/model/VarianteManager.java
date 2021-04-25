@@ -23,6 +23,7 @@ public class VarianteManager {
         variantes = new ArrayList<>();
         current = new VarianteBuilder();
         variantes.add(createVarianteClassique());
+        variantes.add(FactoryVariante960.createVariante());
     }
 
     /**
@@ -284,14 +285,7 @@ public class VarianteManager {
      * @param listGroupCases Liste des groupe de case où mettre les groupes
      */
     public void addClassiqueGroupeCases(ArrayList<GroupCases> listGroupCases, Plateau plateau) {
-        GroupCases gc = new GroupCases("Toutes les cases", plateau);
-        for (ArrayList<Case> ligne : plateau.getEchiquier()) {
-            for (Case c : ligne) {
-                gc.getCasesAbsolue().add(c);
-            }
-        }
-        listGroupCases.add(gc);
-
+        GroupCases gc;
         if (plateau.getHeightY() > 0) {
             gc = new GroupCases("Promotion Blanc", plateau);
             for (int i = 0; i < plateau.getWitdhX(); i++) {
@@ -307,6 +301,14 @@ public class VarianteManager {
             }
             listGroupCases.add(gc);
         }
+
+        gc = new GroupCases("Deplacement Pion Blanc", plateau);
+        gc.getPositionsRelatives().add(new Position(0, -2));
+        listGroupCases.add(gc);
+
+        gc = new GroupCases("Deplacement Pion Noir", plateau);
+        gc.getPositionsRelatives().add(new Position(0, 2));
+        listGroupCases.add(gc);
     }
 
     /**

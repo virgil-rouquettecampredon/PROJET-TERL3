@@ -18,7 +18,12 @@ public class RegleInterface implements Serializable {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (ElementRegle element : regle) {
-            s.append(element.getNomInterface());
+            if (element.getJetonAssocie() == Jeton_Interface.ALIAS) {
+                s.append(element.getNomRegle());
+            }
+            else {
+                s.append(element.getNomInterface());
+            }
             s.append(" ");
         }
         return s.toString();
