@@ -167,10 +167,10 @@ public class Automate_Interface_ConsequenceTest {
             auto.selectionnerElement(e2);
             auto.selectionnerElement(e3);
             auto.selectionnerElement(e4);
-            auto.selectionnerElement(e4);
+            auto.selectionnerElement(e3);
             fail("Exception non détectée");
         }catch (MauvaiseDefinitionRegleException ex){
-            assertEquals("Transition inconnue : 13 --CASE-> ?",ex.getMessage());
+            assertEquals("Transition inconnue : 13 --PIECETOKEN-> ?",ex.getMessage());
         }
     }
 

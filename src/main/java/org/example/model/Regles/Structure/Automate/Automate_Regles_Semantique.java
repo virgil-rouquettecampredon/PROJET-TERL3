@@ -1352,7 +1352,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
             } else {
                 //Erreur Etat Inconnu
-                throw new MauvaiseSemantiqueRegleException("Transition inconnu (etat == null) : " + j.getValeur() + " à l'état: "+ predEtat + "(" + indRegleSyntaxe + ")");
+                throw new MauvaiseSemantiqueRegleException("Transition inconnue (etat == null) : " + j.getValeur() + " à l'état: "+ predEtat + "(" + indRegleSyntaxe + ")");
             }
             indRegleSyntaxe++;
         }

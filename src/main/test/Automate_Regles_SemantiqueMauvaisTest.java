@@ -1022,7 +1022,7 @@ public class Automate_Regles_SemantiqueMauvaisTest {
             regle = automate.analyserUneRegle(reJ,reS);
             fail("Aucune Exception détectée");
         } catch (MauvaiseDefinitionRegleException e){
-            assertEquals("Transition inconnu (etat == null) : etat à l'état: 1(1)",e.getMessage());
+            assertEquals("Transition inconnue (etat == null) : etat à l'état: 1(1)",e.getMessage());
         }
     }
 

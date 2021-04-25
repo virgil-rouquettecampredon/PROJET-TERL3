@@ -33,7 +33,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
     }
 
     /**Méthode permettant d'analyser syntaxiquement une regle sous forme de liste de termes.
-     * Permet d'étiqueter les différents termes de la ragle pour une analyse sémantique ensuite.
+     * Permet d'étiqueter les différents termes de la règle pour une analyse sémantique ensuite.
      * @param regle : règle à analyser sous forme de liste de termes (String)**/
     public List<Jeton> analyseSyntaxique(List<String> regle) throws MauvaiseSyntaxeRegleException{
         //Liste de jetons à retourner à la fin du traitement
@@ -207,6 +207,8 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             if(regleSousFormeDeChaine.size() >= 1){
                 String premier = regleSousFormeDeChaine.remove(0);
 
+                System.out.println(regleSousFormeDeChaine);
+
                 //Va permettre de déterminer à quel type de règle on a à faire
                 // 0 : Regle avant le coup d'un joueur
                 // 1 : Regle après le coup d'un joueur
@@ -215,6 +217,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                         //Analyse syntaxique de la règle
                         //(que des termes connus du système composant la règle)
                         regleSousFormeDejetons = analyseSyntaxique(regleSousFormeDeChaine);
+                        System.out.println(regleSousFormeDejetons);
                         //Analyse sémantique de la règle
                         //(bon agancement de termes connus du système)
                         Regle r = this.automate.analyserUneRegle(regleSousFormeDejetons,regleSousFormeDeChaine);
@@ -283,13 +286,14 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
 
         /*=============== Initialisation ===============*/
         Automate_Regles<Jeton> automate = new Automate_Regles_Semantique();
+        automate.initialiserAutomate();
         GenerateurDeRegle<Jeton> generateur = new GenerateurDeRegle_Jeton(automate);
 
         //=======Liste des Joueurs
         List<String> joueurs = new ArrayList<>();
         //Initialisation des joueurs
         System.out.println(PURPLE_BRIGHT + "INITIALISATION : " +  COLOR_RESET + "Joueurs");
-        System.out.println("Veuillez entrer" +COLOR_BLUE+"le nom des Joueurs"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
+        System.out.println("Veuillez entrer " +COLOR_BLUE+"le nom des Joueurs"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
         System.out.println(messageArret);
         String repJoueur = scan.next();
         while(!repJoueur.equals(arret)){
@@ -301,7 +305,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         List<String> groupCases = new ArrayList<>();
         //Initialisation des Groupes de Cases
         System.out.println(PURPLE_BRIGHT + "INITIALISATION : " +  COLOR_RESET + "Groupe de Cases");
-        System.out.println("Veuillez entrer" +COLOR_BLUE+"le nom des groupes de cases"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
+        System.out.println("Veuillez entrer " +COLOR_BLUE+"le nom des groupes de cases"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
         System.out.println(messageArret);
         String repGroupeCase = scan.next();
         while(!repGroupeCase.equals(arret)){
@@ -313,7 +317,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         List<String> typePiece = new ArrayList<>();
         //Initialisation des Groupes de Cases
         System.out.println(PURPLE_BRIGHT + "INITIALISATION : " +  COLOR_RESET + "Type de Pieces");
-        System.out.println("Veuillez entrer" +COLOR_BLUE+"le nom des types de pièces"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
+        System.out.println("Veuillez entrer " +COLOR_BLUE+"le nom des types de pièces"+COLOR_RESET+" que vous voulez renseigner dans vos "+COLOR_BLUE+"Regles"+COLOR_RESET);
         System.out.println(messageArret);
         String repTypePiece = scan.next();
         while(!repTypePiece.equals(arret)){
@@ -329,7 +333,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         propositions.add(new Pair<String, String>("alors", "alors"));
 
         propositions.add(new Pair<String, String>("alias", "as"));
-        propositions.add(new Pair<String, String>("nombre", ""));
+        propositions.add(new Pair<String, String>("nombre", "0"));
 
         propositions.add(new Pair<String, String>("PREND", "prend"));
         propositions.add(new Pair<String, String>("SE DEPLACE", "sedeplace"));
@@ -384,7 +388,14 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         //Liste renseignant les choix de l'utilisateur
         List<Pair<String, String>> regleEnFormation = new ArrayList<>();
 
+        //Liste renseignant les Regles créées
+        List<Regle> regleAvantCoup = new ArrayList<>();
+        List<Regle> regleApresCoup = new ArrayList<>();
+
         int indMAx = propositions.size();
+        Jeton.JOUEUR.setBorne(joueurs.size());
+        Jeton.CASE.setBorne(groupCases.size());
+        Jeton.PIECE.setBorne(typePiece.size());
 
         String terminer = "";
         do {
@@ -394,6 +405,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             String reponsePositionRegle = scan.next();
             while (!(reponsePositionRegle.equals("0") || reponsePositionRegle.equals("1"))) {
                 System.out.println("Veuillez renseigner une " + COLOR_RED + "position valide" + COLOR_RESET + "(" + COLOR_GREEN + "0" + COLOR_RESET + " ou " + COLOR_GREEN + "1" + COLOR_RESET + ")");
+                reponsePositionRegle = scan.next();
             }
 
             if (reponsePositionRegle.equals("0")) {
@@ -405,11 +417,13 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             }
 
             //Affichage des choix possibles
-            System.out.println(messageArret);
+
             System.out.println("CHOIX POSSIBLES (choisir un " + COLOR_GREEN + "indice" + COLOR_RESET + ") : ");
+            System.out.println(messageArret);
             int indice = 1;
             for (Pair<String, String> valeurs : propositions) {
                 System.out.println(COLOR_GREEN + indice + COLOR_RESET + ") " + COLOR_YELLOW + valeurs.getKey() + COLOR_RESET + "->" + COLOR_CYAN + valeurs.getValue() + COLOR_RESET);
+                indice++;
             }
 
             //Affichage et traitement du choix
@@ -431,13 +445,19 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                             bon = true;
                         } catch (NumberFormatException e) {
                             if (e.getMessage().equals("chiffre valide")) {
-                                System.out.print("Veuillez renseigner un " + COLOR_RED + "chiffre valide" + COLOR_RESET + " (entre " + COLOR_GREEN + "0" + COLOR_RESET + " et " + COLOR_GREEN + indMAx + COLOR_RESET + ") : " + COLOR_GREEN);
+                                System.out.print("Veuillez renseigner un " + COLOR_RED + "chiffre valide" + COLOR_RESET + " (entre " + COLOR_GREEN + "1" + COLOR_RESET + " et " + COLOR_GREEN + indMAx + COLOR_RESET + ") : " + COLOR_GREEN);
                             } else {
                                 System.out.print("Veuillez renseigner un " + COLOR_RED + "chiffre" + COLOR_RESET + " : " + COLOR_GREEN);
                             }
                             reponse = scan.next();
                             System.out.print(COLOR_RESET);
+                            if (reponse.equals(arret)) {
+                                break;
+                            }
                         }
+                    }
+                    if (reponse.equals(arret)) {
+                        break;
                     }
                     Pair<String, String> choix = propositions.get(indRep);
                     regleEnFormation.add(choix);
@@ -446,39 +466,52 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
 
                     //Affichage des choix possibles
                     System.out.println("CHOIX POSSIBLES (choisir un " + COLOR_GREEN + "indice" + COLOR_RESET + ") : ");
+                    System.out.println(messageArret);
                     indice = 1;
                     for (Pair<String, String> valeurs : propositions) {
                         System.out.println(COLOR_GREEN + indice + COLOR_RESET + ") " + COLOR_YELLOW + valeurs.getKey() + COLOR_RESET + "->" + COLOR_CYAN + valeurs.getValue() + COLOR_RESET);
+                        indice++;
                     }
 
                     //Affichage et traitement du choix suivant
                     System.out.print("Choix : " + COLOR_GREEN);
                     reponse = scan.next();
                     System.out.print(COLOR_RESET);
-                } else {
-                    System.out.print(PURPLE_BRIGHT + "FIN DU TRAITEMENT : " + COLOR_RESET);
-                    for (Pair<String, String> pairRe : regleEnFormation) {
-                        System.out.print("[" + CYAN_BRIGHT + pairRe.getValue() + COLOR_RESET + "] ");
-                    }
-                    System.out.print(COLOR_RESET + "\n");
                 }
-            } while (reponse.equals(arret));
+            } while (!reponse.equals(arret));
+
+            List<String> regleSousFormeListe = new ArrayList<>();
+            System.out.print(PURPLE_BRIGHT + "FIN DU TRAITEMENT : " + COLOR_RESET);
+            for (Pair<String, String> pairRe : regleEnFormation) {
+                System.out.print("[" + CYAN_BRIGHT + pairRe.getValue() + COLOR_RESET + "] ");
+                regleSousFormeListe.add(pairRe.getValue());
+            }
+            regleEnFormation.clear();
+            System.out.print(COLOR_RESET + "\n");
+            generateur.addRegleSousFormeDeChaine(regleSousFormeListe);
 
             //Une fois que l'on possède la Règle sous forme de liste de termes, on peut l'analyser
             System.out.println(PURPLE_BRIGHT + "CREATION REGLE" + COLOR_RESET);
             try {
-                System.out.print("ETAT : ");
                 generateur.genererRegles();
-                System.out.print(COLOR_GREEN + "SUCCES" + COLOR_RESET + "\n");
+                regleAvantCoup.addAll(generateur.getRegleAvantCoup());
+                regleApresCoup.addAll(generateur.getRegleApresCoup());
+                System.out.print("ETAT : "+COLOR_GREEN + "SUCCES" + COLOR_RESET + "\n");
             } catch (MauvaiseDefinitionRegleException e) {
-                System.out.print(COLOR_RED + "ECHEC" + COLOR_RESET + " (" + e.getMessage() + ")\n");
+                System.out.print("ETAT : " + COLOR_RED + "ECHEC" + COLOR_RESET + " (" + e.getMessage() + ")\n");
             }
+
+            generateur = new GenerateurDeRegle_Jeton(automate);
+            automate.setEtatDeDepart(0);
+
+            //Gestion fin de traitement
             System.out.println(PURPLE_BRIGHT + "TERMINER ? (O/N)" + COLOR_RESET);
             terminer = scan.next();
             while (!(terminer.equals("O") || terminer.equals("N"))){
-                System.out.println(RED_BRIGHT + "OUI" +COLOR_RESET +  "OU" +  RED_BRIGHT + "NON" + COLOR_RESET + " (c'est pas compliqué merde)");
+                System.out.println(RED_BRIGHT + "OUI" +COLOR_RESET +  " OU " +  RED_BRIGHT + "NON" + COLOR_RESET + " (c'est pas compliqué merde)");
                 terminer = scan.next();
             }
+
         }while (terminer.equals("N"));
 
 
@@ -488,23 +521,23 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         // ================= JOUEURS =================
         System.out.println("=======|" + COLOR_PURPLE + "JOUEURS"+COLOR_RESET+"|=======");
         for (String joueur: joueurs) {
-            System.out.println(YELLOW_BRIGHT + joueur + COLOR_RESET);
+            System.out.println(COLOR_BLUE + "=>\t" + YELLOW_BRIGHT + joueur + COLOR_RESET);
         }
         // ============== GROUPES CASES ==============
         System.out.println("====|"+ COLOR_PURPLE + "GROUPES CASES"+COLOR_RESET + "|====");
         for (String cases: groupCases) {
-            System.out.println(YELLOW_BRIGHT + cases + COLOR_RESET);
+            System.out.println(COLOR_BLUE + "=>\t" + YELLOW_BRIGHT + cases + COLOR_RESET);
         }
         // =============== TYPE PIECES ===============
         System.out.println("=====|" +COLOR_PURPLE + "TYPE PIECES"+COLOR_RESET+"|=====");
         for (String piece: typePiece) {
-            System.out.println(YELLOW_BRIGHT + piece + COLOR_RESET);
+            System.out.println(COLOR_BLUE + "=>\t" + YELLOW_BRIGHT + piece + COLOR_RESET);
         }
 
         // ================== REGLES =================
-        System.out.println("===============|" +COLOR_PURPLE + "REGLES"+COLOR_RESET+"|===============");
+        System.out.println("===============|" +PURPLE_BRIGHT + "REGLES"+COLOR_RESET+"|===============");
         System.out.println("========|" +COLOR_PURPLE + "AVANT COUP"+COLOR_RESET+"|========");
-        for (Regle regleAvant: generateur.getRegleAvantCoup()) {
+        for (Regle regleAvant: regleAvantCoup) {
             System.out.println(BLUE_BRIGHT+"Arbre Condition : "+ COLOR_RESET + regleAvant.getArbreCondition());
             System.out.println(BLUE_BRIGHT+"Consequences : " + COLOR_RESET);
             for (Consequence cons:regleAvant.getConsequences()) {
@@ -512,7 +545,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
             }
         }
         System.out.println("========|" +COLOR_PURPLE + "APRES COUP"+COLOR_RESET+"|========");
-        for (Regle regleApres: generateur.getRegleApresCoup()) {
+        for (Regle regleApres: regleApresCoup) {
             System.out.println(BLUE_BRIGHT+"Arbre Condition : "+ COLOR_RESET + regleApres.getArbreCondition());
             System.out.println(BLUE_BRIGHT+"Consequences : " + COLOR_RESET);
             for (Consequence cons:regleApres.getConsequences()) {
