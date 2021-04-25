@@ -1,5 +1,6 @@
 package org.example.model.Regles.Structure.Interpreteur;
 
+import org.example.model.GroupCases;
 import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Jeton;
@@ -63,5 +64,6 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
         //catch (NumberFormatException | IndexOutOfBoundsException e) {return null;}
         //return null;
     }
+
 
 }

@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
 import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
+import org.example.model.Regles.Jeton;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -16,14 +17,12 @@ public class OrdonnanceurDeJeu {
     private List<Joueur> joueurs;
     //private List<List<Joueur>> equipes;
     private List<Piece> listTypesPieces;
-    private Variante variante;
+    private Variante<Jeton> variantej;
 
     private Plateau plateau;
 
-    public OrdonnanceurDeJeu(Variante variante){
-        this.variante = variante;
-        this.joueurs = variante.getJoueurs();
-        this.plateau = variante.getPlateau();
+    public OrdonnanceurDeJeu(Variante<Jeton> variantej){
+        this.variantej = variantej;
         this.listTypesPieces = new ArrayList<>();
         LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
         for (int i = 0; i < this.joueurs.size(); i++) {
@@ -40,7 +39,7 @@ public class OrdonnanceurDeJeu {
 
     public Plateau getPlateau() { return this.plateau; }
 
-    public Variante getVariante() { return this.variante; }
+    public Variante<Jeton> getVariante() { return this.variantej; }
 
     public List<Piece> getListTypesPieces() { return this.listTypesPieces; }
 

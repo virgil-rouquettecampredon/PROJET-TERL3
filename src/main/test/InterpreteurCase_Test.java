@@ -1,16 +1,14 @@
-import org.example.model.OrdonnanceurDeJeu;
-import org.example.model.Plateau;
+import org.example.model.*;
 import org.example.model.Regles.Structure.Interpreteur.InterpreteurCibleCase;
 import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.example.model.Regles.*;
-import org.example.model.Joueur;
-import org.example.model.Piece;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,17 +17,50 @@ public class InterpreteurCase_Test {
 
     private InterpreteurCibleCase interpretc;
     private OrdonnanceurDeJeu ord;
+    private Plateau p;
+
+    @BeforeEach
+    public final void init_allgroupescases() {
+        p = new Plateau(2, 3);
+        ArrayList<GroupCases> lg = new ArrayList<>();
+        Jeton.CASE.setBorne(5);
+
+        ArrayList<Case> lc = new ArrayList<>();
+        lc.add(p.getCase(new Position(0,1)));
+        lc.add(p.getCase(new Position(1,1)));
+        lc.add(p.getCase(new Position(2,1)));
+        GroupCases g1 = new GroupCases("Cases du bas", p);
+        g1.setCasesAbsolue(lc);
+        lg.add(g1);
+
+        ArrayList<Case> lc2 = new ArrayList<>();
+        lc2.add(p.getCase(new Position(0,0)));
+        lc2.add(p.getCase(new Position(1,0)));
+        lc2.add(p.getCase(new Position(2,0)));
+        GroupCases g2 = new GroupCases("Cases du haut", p);
+        g2.setCasesAbsolue(lc2);
+        lg.add(g2);
+
+        ArrayList<Case> lc3 = new ArrayList<>();
+        lc3.add(p.getCase(new Position(1, 0)));
+        GroupCases g3 = new GroupCases("Case n1", p);
+        g3.setCasesAbsolue(lc3);
+        lg.add(g3);
 
 
-    /*@BeforeEach
-    public final void init_allcases() {
-        Plateau p = new Plateau(2, 3);
-        Joueur virgil = new Joueur("croquette", 0);
-        Joueur chapeau_pointu = new Joueur("chapeau_pointu_le_mysterieux", 3);
-        ord = new OrdonnanceurDeJeu(Arrays.asList(virgil, chapeau_pointu), p);
-        //java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "joueurs" is null
-    }*/
+        VarianteBuilder vb = new VarianteBuilder();
+        vb.setListGroupCases(lg);
+        vb.setPlateau(p);
+        ord = new OrdonnanceurDeJeu(vb.createVariante());
+    }
 
+    public final void init_groupecases_vide(){
+        VarianteBuilder vb = new VarianteBuilder();
+        vb.setPlateau(p);
+        ord = null;
+        ord = new OrdonnanceurDeJeu(vb.createVariante());
+        Jeton.CASE.setBorne(5);
+    }
 
     /**
      * ==================================================
@@ -37,7 +68,7 @@ public class InterpreteurCase_Test {
      * ==================================================
      */
 
-    /*@Test
+    @Test
     public final void testX_testMauvais() {
         //Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)
         interpretc = new InterpreteurCibleCase("X");
@@ -45,7 +76,7 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'X': Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'X': Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)", m.getMessage());
         }
     }
 
@@ -57,7 +88,7 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'C': Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'C': Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)", m.getMessage());
         }
     }
 
@@ -69,7 +100,7 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'CA': Entier imparsable (NumberFormatException)", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'CA': Entier imparsable (NumberFormatException)", m.getMessage());
         }
     }
 
@@ -81,19 +112,19 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'CALLL': Entier imparsable (NumberFormatException)", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'CALLL': Entier imparsable (NumberFormatException)", m.getMessage());
         }
     }
 
     @Test
-    public final void testC10_testMauvais() {
+    public final void testC4_testMauvais() {
         //numéro case inconnu
-        interpretc = new InterpreteurCibleCase("C10");
+        interpretc = new InterpreteurCibleCase("C4");
         try {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'C10': numéro case inconnu", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'C4': numéro case inconnu (IndexOutOfBoundsException)", m.getMessage());
         }
     }
 
@@ -105,7 +136,7 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'C-2': numéro case inconnu", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'C-2': numéro case inconnu", m.getMessage());
         }
     }
 
@@ -117,7 +148,7 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'C6': numéro case inconnu", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'C6': numéro case inconnu", m.getMessage());
         }
     }
 
@@ -129,9 +160,9 @@ public class InterpreteurCase_Test {
             interpretc.recupererTout(ord);
             fail("Exception non détectée");
         } catch (MauvaiseInterpretationObjetRegleException m) {
-            assertEquals("Interpreteur objet de regle: Case: 'C2abc': Entier imparsable (NumberFormatException)", m.getMessage());
+            assertEquals("Interpreteur objet de regle: GroupCases: 'C2abc': Entier imparsable (NumberFormatException)", m.getMessage());
         }
-    }*/
+    }//hahaha le nul
 
     /**
      * ==================================================
@@ -139,17 +170,15 @@ public class InterpreteurCase_Test {
      * ==================================================
      */
 
-    /*@Test
+    @Test
     public final void testCALL_testBon() {
         interpretc = new InterpreteurCibleCase("CALL");
         try {
-            assertTrue(interpretc.recupererTout(ord).size() == 6);
-            assertEquals(0, interpretc.recupererTout(ord).get(0).getPosition().getX()); assertEquals(0, interpretc.recupererTout(ord).get(0).getPosition().getY());
-            assertEquals(1, interpretc.recupererTout(ord).get(1).getPosition().getX()); assertEquals(0, interpretc.recupererTout(ord).get(1).getPosition().getY());
-            assertEquals(2, interpretc.recupererTout(ord).get(2).getPosition().getX()); assertEquals(0, interpretc.recupererTout(ord).get(2).getPosition().getY());
-            //assertEquals(1, interpretc.recupererTout(ord).get(3).getPosition().getX()); assertEquals(1, interpretc.recupererTout(ord).get(3).getPosition().getY());
-            //assertEquals(0, interpretc.recupererTout(ord).get(4).getPosition().getX()); assertEquals(2, interpretc.recupererTout(ord).get(4).getPosition().getY());
-            //assertEquals(1, interpretc.recupererTout(ord).get(5).getPosition().getX()); assertEquals(2, interpretc.recupererTout(ord).get(5).getPosition().getY());
+            assertEquals(4, interpretc.recupererTout(ord).size());
+            assertTrue(interpretc.recupererTout(ord).get(0).getName().equals("Toutes les cases"));
+            assertTrue(interpretc.recupererTout(ord).get(1).getName().equals("Cases du bas"));
+            assertTrue(interpretc.recupererTout(ord).get(2).getName().equals("Cases du haut"));
+            assertTrue(interpretc.recupererTout(ord).get(3).getName().equals("Case n1"));
 
         } catch (MauvaiseInterpretationObjetRegleException m) {
             fail("Exception détectée: " + m.getMessage());
@@ -160,9 +189,33 @@ public class InterpreteurCase_Test {
     public final void testC0_testBon() {
         interpretc = new InterpreteurCibleCase("C0");
         try {
-            assertTrue(interpretc.recupererTout(ord).size() == 1);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getX() == 0);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getY() == 0);
+            assertEquals(1, interpretc.recupererTout(ord).size());
+            assertEquals(6, interpretc.recupererTout(ord).get(0).getCasesAbsolue().size());
+            //assertEquals(7, interpretc.recupererTout(ord).get(0).getCasesAbsolue().size());
+            System.out.println(interpretc.recupererTout(ord));
+
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(0).getPosition().equals(new Position(0,0)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(1).getPosition().equals(new Position(1,0)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(2).getPosition().equals(new Position(2,0)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(3).getPosition().equals(new Position(0,1)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(4).getPosition().equals(new Position(1,1)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(5).getPosition().equals(new Position(2,1)));
+
+        } catch (MauvaiseInterpretationObjetRegleException m) {
+            fail("Exception détectée: " + m.getMessage());
+        }
+    }
+
+    @Test
+    public final void testC1_testBon() {
+        interpretc = new InterpreteurCibleCase("C1");
+        try {
+            assertEquals(1, interpretc.recupererTout(ord).size());
+            assertEquals(3, interpretc.recupererTout(ord).get(0).getCasesAbsolue().size());
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(0).getPosition().equals(new Position(0,1)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(1).getPosition().equals(new Position(1,1)));
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(2).getPosition().equals(new Position(2,1)));
+
         } catch (MauvaiseInterpretationObjetRegleException m) {
             fail("Exception détectée: " + m.getMessage());
         }
@@ -172,24 +225,27 @@ public class InterpreteurCase_Test {
     public final void testC3_testBon() {
         interpretc = new InterpreteurCibleCase("C3");
         try {
-            assertTrue(interpretc.recupererTout(ord).size() == 1);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getX() == 1);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getY() == 1);
+            assertEquals(1, interpretc.recupererTout(ord).size());
+            assertEquals(1, interpretc.recupererTout(ord).get(0).getCasesAbsolue().size());
+            assertTrue(interpretc.recupererTout(ord).get(0).getCasesAbsolue().get(0).getPosition().equals(new Position(1,0)));
+
         } catch (MauvaiseInterpretationObjetRegleException m) {
             fail("Exception détectée: " + m.getMessage());
         }
     }
 
     @Test
-    public final void testC5_testBon() {
-        interpretc = new InterpreteurCibleCase("C5");
+    public final void testInitGroupesCasesVide_testC0_testBon() {
+        init_groupecases_vide();
+        interpretc = new InterpreteurCibleCase("C0");
         try {
-            assertTrue(interpretc.recupererTout(ord).size() == 1);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getX() == 1);
-            assertTrue(interpretc.recupererTout(ord).get(0).getPosition().getY() == 2);
+            assertEquals(1, interpretc.recupererTout(ord).size());
+            assertEquals(6, interpretc.recupererTout(ord).get(0).getCasesAbsolue().size());
+            assertTrue(interpretc.recupererTout(ord).get(0).getName().equals("Toutes les cases"));
+
         } catch (MauvaiseInterpretationObjetRegleException m) {
             fail("Exception détectée: " + m.getMessage());
         }
-    }*/
+    }
 
 }

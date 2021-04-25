@@ -10,4 +10,5 @@ import java.util.List;
 public interface Interpreteur_Objet_Regle<T extends ObjetsDeRegle> {
 
     List<T> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException;
+    //<T> recupererTout(List<T> l);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.MissingFormatArgumentException;
 
+import org.example.model.GroupCases;
 import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Piece;
@@ -38,7 +39,7 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
 
                 String[] str_proprio_type = this.str_source.split("#");
                 if (str_proprio_type.length < 2) { throw new MauvaiseInterpretationObjetRegleException("Format Piece + Joueur: '#' vide"); }
-                List<Piece> paflitrer = convertPiece(str_proprio_type[0], ord);
+                List<Piece> paflitrer = interpreterPiece(str_proprio_type[0], ord);
 
                 InterpreteurSujetJoueur sujj = new InterpreteurSujetJoueur(str_proprio_type[1]);
                 List<Joueur> proprios = sujj.recupererTout(ord);
@@ -54,12 +55,13 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
             }
 
         } else {
-            lret = convertPiece(this.str_source, ord);
+            lret = interpreterPiece(this.str_source, ord);
             return lret;
         }
     }
 
-    public List<Piece> convertPiece(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
+
+    public List<Piece> interpreterPiece(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
         List<Piece> allpieces = new ArrayList<>();
         String erreurPiece = "Piece: " + "'" + str + "': ";
         if (this.str_source.charAt(0) == 'P' && str.length() >= 2) {

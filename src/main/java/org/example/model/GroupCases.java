@@ -81,6 +81,18 @@ public class GroupCases implements CibleDeRegle, Serializable {
         }
         return casesRelatives;
     }
+
+    public ArrayList<Case> getCasesRelatives(Position pos) {
+        ArrayList<Case> casesRelatives = new ArrayList<>();
+        for (Position p : positionsRelatives) {
+            if (p.getY() + pos.getY() < plateau.getHeightY() && p.getX() + pos.getX() < plateau.getWitdhX()) {
+                casesRelatives.add(plateau.getEchiquier().get(p.getY() + pos.getY()).get(p.getX() + pos.getX()));
+            }
+        }
+        return casesRelatives;
+    }
+
+
     /**
      * ------
      * ------

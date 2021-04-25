@@ -1,11 +1,10 @@
 package org.example.model.Regles.Structure.Interpreteur;
 
-import org.example.model.Case;
-import org.example.model.GroupCases;
-import org.example.model.OrdonnanceurDeJeu;
-import org.example.model.Plateau;
+import org.example.model.*;
+import org.example.model.Regles.Jeton;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 
@@ -23,39 +22,76 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
         this.str_source = str_source;
     }
 
+    /**
+     * */
     @Override
     public List<GroupCases> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
-        List<GroupCases> lret = new ArrayList<>();
-        Plateau p = ord.getPlateau();
-        /*String erreurCase = "Case: '" + this.str_source + "': ";
-        if (this.str_source.charAt(0) == 'C' && this.str_source.length() >= 2) {
-            if (this.str_source.equals("CALL")) {
-                try {
-                    lret.add(ord.getVariante().getListGroupCases().get(0));
-                    return lret;
-                } catch (IndexOutOfBoundsException ie) {
+        List<GroupCases> lret;
+        String erreurPiece = "'" + this.str_source + "': ";
+        if (this.str_source.contains("#")){
+            try {
+                erreurPiece = "Cases absolu + Cases relatives: " + erreurPiece;
+                lret = new ArrayList<>();
 
+                String[] str_proprio_type = this.str_source.split("#");
+                if (str_proprio_type.length < 2) { throw new MauvaiseInterpretationObjetRegleException("Format: '#' vide"); }
 
+                List<GroupCases> gcases_absolu = interpreterGroupCases(str_proprio_type[0], ord);
+                List<GroupCases> gcases_relatif = interpreterGroupCases(str_proprio_type[1], ord);
+
+                LinkedHashSet<Case> ensemble_casesabsolufinales = new LinkedHashSet<>();
+                for(Case c: gcases_absolu.get(0).getCasesAbsolue()){
+                    ensemble_casesabsolufinales.addAll(gcases_relatif.get(0).getCasesRelatives(c.getPosition()));
                 }
+
+                GroupCases newg = new GroupCases("[" + gcases_absolu.get(0).getName() + "]" + " absolu avec ["
+                        + gcases_relatif.get(0).getName() + "] relatif",
+                        ord.getVariante().getPlateau());
+
+                ArrayList<Case> tmp = new ArrayList<>();
+                tmp.addAll(ensemble_casesabsolufinales);
+                newg.setCasesAbsolue(tmp);
+
+                lret.add(newg);
+                return lret;
+            } catch (MauvaiseInterpretationObjetRegleException m) {
+                throw new MauvaiseInterpretationObjetRegleException(erreurPiece + m.getMessage());
+            }
+
+        } else {
+            lret = interpreterGroupCases(this.str_source, ord);
+            return lret;
+        }
+    }
+
+
+    public List<GroupCases> interpreterGroupCases(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        ArrayList<GroupCases> lret = new ArrayList<>();
+        String erreurCase = "GroupCases: '" + this.str_source + "': ";
+        if (str.charAt(0) == 'C' && str.length() >= 2) {
+            if (str.equals("CALL")) {
+                lret.addAll(ord.getVariante().getListGroupCases());
+                return lret;
             } else {
-                int indc;
+                int indgc;
                 try {
-                    indc = Integer.parseInt(this.str_source.substring(1));
-                    if (indc >= 0 && indc < p.getHeightY()*p.getWitdhX()){
-                        int yc = indc%(p.getHeightY());
-                        int xc = indc/(p.getWitdhX());
-                        lret.add(p.getEchiquier().get(xc).get(yc));
+                    indgc = Integer.parseInt(str.substring(1));
+                    if (indgc >= 0 && indgc < Jeton.CASE.getBorne()){
+                        lret.add(ord.getVariante().getListGroupCases().get(indgc));
                         return lret;
                     } else {
                         throw new MauvaiseInterpretationObjetRegleException(erreurCase + "numéro case inconnu");
                     }
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Entier imparsable (NumberFormatException)");
+                } catch (IndexOutOfBoundsException ie) {
+                    throw new MauvaiseInterpretationObjetRegleException(erreurCase + "numéro case inconnu (IndexOutOfBoundsException)");
                 }
             }
         }
-        throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");*/
-        return null;
+        throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");
+        //return null;
     }
+
 
 }
