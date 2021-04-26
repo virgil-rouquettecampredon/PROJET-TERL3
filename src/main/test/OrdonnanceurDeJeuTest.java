@@ -1,3 +1,5 @@
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Label;
 import org.example.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -5,9 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 import org.example.model.Regles.*;
 
@@ -193,6 +194,26 @@ public class OrdonnanceurDeJeuTest {
             Assertions.fail("Exception levée : "+e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test_map_lol_xd() {
+        Map<Joueur, Label> map = new HashMap<>();
+        Label l = new Label("test");
+        Label l2 = new Label("test2");
+        Joueur j1 = varianteTest.getJoueurs().get(0);
+        map.put(j1, l);
+        map.put(varianteTest.getJoueurs().get(1), l2);
+        Assertions.assertEquals(l2, map.get(varianteTest.getOrdrejoueur().get(1)));
+        Assertions.assertEquals(l, map.get(varianteTest.getOrdrejoueur().get(0)));
+
+        System.out.println(j1 + " iugykafehgbuyilk "+ varianteTest.getOrdrejoueur().get(0));
+        j1.setName("BITE");
+        System.out.println(j1 + " iugykafehgbuyilk "+ varianteTest.getOrdrejoueur().get(0));
+        System.out.println(map);
+
+        Assertions.assertEquals(l, map.get(varianteTest.getOrdrejoueur().get(0)));
+        Assertions.assertEquals(l2, map.get(varianteTest.getOrdrejoueur().get(1)));
     }
 
     /*==================================================

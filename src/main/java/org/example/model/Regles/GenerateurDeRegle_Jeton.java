@@ -1,5 +1,6 @@
 package org.example.model.Regles;
 
+import org.example.model.Regles.Structure.Alias;
 import org.example.model.Regles.Structure.Automate.*;
 
 import java.io.Serializable;
@@ -493,8 +494,8 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 regleApresCoup.addAll(generateur.getRegleApresCoup());
 
                 System.out.println("ALIAS RECONNUS : \n" + COLOR_BLUE + generateur.toStringAlias() + COLOR_RESET);
-                for(Map.Entry<String, Jeton> entry : automate.getAliasRegle().entrySet()){
-                    System.out.println(COLOR_CYAN + entry.getKey() +COLOR_RESET+ " -> " +COLOR_YELLOW+entry.getValue()+COLOR_RESET);
+                for(Map.Entry<String, Alias<Jeton>> entry : automate.getAliasRegle().entrySet()){
+                    System.out.println(COLOR_CYAN + entry.getKey() +COLOR_RESET+ " -> " +COLOR_YELLOW+entry.getValue().getJetonAssocie()+COLOR_RESET);
                 }
 
                 System.out.print("ETAT : "+COLOR_GREEN + "SUCCES" + COLOR_RESET + "\n");

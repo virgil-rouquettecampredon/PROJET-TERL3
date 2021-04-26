@@ -617,4 +617,8 @@ public class OrdonnanceurDeJeu {
         //System.out.println("Aucun chemin trouvé");
         return false;
     }
+
+    public boolean fautPromouvoir() {
+        return false;
+    }
 }

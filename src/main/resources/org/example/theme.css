@@ -236,3 +236,10 @@
     -fx-border-radius: 0px;
 }
 
+.transparent {
+    -fx-background-color:transparent;
+}
+
+.transparent .viewport {
+    -fx-background-color: transparent;
+}

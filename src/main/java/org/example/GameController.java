@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -48,6 +51,8 @@ public class GameController extends Controller {
     public Canvas graveyardCanvas;
     @FXML
     public AnchorPane popupPane;
+    @FXML
+    public HBox timersHBox;
 
     private GraphicsContext graveyardContext;
     private CanvasManager canvasManager;
@@ -65,6 +70,11 @@ public class GameController extends Controller {
 
     private Deque<Integer> perdants = new ArrayDeque<>();
 
+    private Timer timerCourant;
+
+    private ArrayList<Object> labelTimers;
+    private Label labelCourant;
+
     @Override
     public void initialise(){
         if (userVar == null) {
@@ -79,6 +89,14 @@ public class GameController extends Controller {
             gameVariante = new VarianteJeton((Variante) userVar);
             varLabel.setText(gameVariante.getName());
             playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());
+
+            labelTimers = new ArrayList<>();
+            for (Joueur j : gameVariante.getJoueurs() ) {
+                Label timerLabel = createNewTimer(j);
+                labelTimers.add(j);
+                labelTimers.add(timerLabel);
+            }
+
             indiceJoueur = 0;
 
             ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante);
@@ -141,7 +159,8 @@ public class GameController extends Controller {
 
     @FXML
     public void play(MouseEvent mouseEvent) throws IOException {
-        //todo bien sur
+        System.out.println(joueurQuiJoue().getTimer());
+
         getApp().soundManager.playSound("button-hover");
         //System.out.println(mouseEvent);
 
@@ -187,10 +206,22 @@ public class GameController extends Controller {
 
             addLabelCoup(joueurQuiJoue().getName() + " : " + name + " to " + caseDestination.getPosition());
             incrementerIndiceJoueur();
+
+            if (timerCourant != null) {
+                pauseTimer(timerCourant);
+            }
+
+            if (ordonnanceurDeJeu.fautPromouvoir()) {
+                fairePromouvoir(caseDestination);
+            }
+            else {
+                timerCourant = playTimer(joueurQuiJoue());
+            }
         } catch (DeplacementException e) {
             //showAlert(Alert.AlertType.ERROR, "PAS CONTENT !: "+e.getMessage());
             System.out.println(e.getMessage());
         }
+
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
@@ -255,6 +286,47 @@ public class GameController extends Controller {
         else {
             updateCanvas();
         }
+    }
+
+    public void fairePromouvoir(Case casePromotion) throws IOException{
+        popupWindow("promotion", new PromotionController.PromotionData(casePromotion, this));
+    }
+
+    public void promote(Case casePromotion, Piece typePiece) {
+        System.out.println("PROMOTION EN "+typePiece);
+
+        Piece p = new Piece(typePiece);
+        Joueur j = typePiece.getJoueur();
+        p.setJoueur(j);
+        j.getPawnList().add(p);
+        p.setAEtePromu(true);
+        Piece p2 = new Piece(casePromotion.getPieceOnCase());
+
+        casePromotion.setPieceOnCase(p);
+        destroyPopup();
+
+        updateCanvas();
+        addLabelCoup(j + " : " + p2.getName() + " promu en " + p.getName());
+
+
+        timerCourant = playTimer(joueurQuiJoue());
+    }
+
+    private Label createNewTimer(Joueur joueurConcerne) {
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+        Label playerLabel = new Label(joueurConcerne.getName());
+        playerLabel.getStyleClass().add("label-bright");
+        vbox.getChildren().add(playerLabel);
+
+        Label timerLabel = new Label(""+joueurConcerne.getTimer());
+        timerLabel.getStyleClass().add("label-bright");
+        vbox.getChildren().add(timerLabel);
+
+        timersHBox.getChildren().add(vbox);
+        return timerLabel;
     }
 
     public Timer playTimer(Joueur joueur) {
@@ -329,6 +401,4 @@ public class GameController extends Controller {
     public void infoButton() {
         showAlert(Alert.AlertType.INFORMATION, "Clic gauche et clic droit et give up shrek"); //todo texte edition regle
     }
-
-
 }

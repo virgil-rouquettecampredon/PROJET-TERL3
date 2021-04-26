@@ -13,7 +13,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
     private ArrayList<Piece> graveyard;         // Liste des pièce dans la défausse du joueur
     private ArrayList<Piece> pawnList;          // Liste des pieces sur le plateau
     private List<Piece> typePawnList;           // Liste de tous les types de pièces du joueur
-    private int timer;                          // Temps du joueur utilisé depuis le début de la partie
+    private Integer timer;                          // Temps du joueur utilisé depuis le début de la partie
 
 
     public Joueur(String name, int equipe) {
@@ -55,7 +55,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
     @Override
     public String toString() {
-        return name+" ("+equipe+")";
+        return name+" ("+equipe+")" +this.hashCode();
     }
 
     /*DEBUT GETTER SETTER*/
@@ -106,7 +106,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         return typePawnList;
     }
 
-    public int getTimer() {
+    public Integer getTimer() {
         return timer;
     }
 

@@ -120,9 +120,7 @@ public class EditRuleController extends Controller {
                     ControlElement ce = generateNewConditionComboBox(element);
                     appearNext(ce, conditionBoxes, conditionHBoxes, conditionVBox);
                     try {
-                        if (ce.getField() == null || ce.isNumber()) {
-                            automateCondition.selectionnerElement(element);
-                        }
+                        automateCondition.selectionnerElement(element);
                     } catch (MauvaiseDefinitionRegleException e) {
                         showAlert(Alert.AlertType.ERROR, "Erreur critique : "+e.getMessage());
                     }
@@ -320,7 +318,7 @@ public class EditRuleController extends Controller {
     }
 
     private void deleteLastAutomateConsequence() {
-        if ((consequenceBoxes.getLast().getField() != null && consequenceBoxes.getLast().getField().isDisabled() && conditionBoxes.getLast().isNumber())
+        if ((consequenceBoxes.getLast().getField() != null && consequenceBoxes.getLast().getField().isDisabled())
                 || (consequenceBoxes.getLast().getComboBox() != null && consequenceBoxes.getLast().getComboBox().getValue() != null)) {
             //System.out.println("Automate Consequence depilé");
             automateConsequence.revenirEnArriere();
@@ -351,13 +349,13 @@ public class EditRuleController extends Controller {
         if (c.getComboBox() != null) {
             if (c.getComboBox().getValue() != null) {
                 ElementRegle choix = c.getComboBox().getValue().getElementRegle();
-                if (choix.getJetonAssocie() != Jeton_Interface.ALIAS) {
-                    try {
-                        automateCondition.selectionnerElement(choix);
-                    } catch (MauvaiseDefinitionRegleException e) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur Critique (CHOIX) : " + e.getMessage());
-                    }
+                try {
+                    System.out.println("On empile dans l'automate : "+choix);
+                    automateCondition.selectionnerElement(choix);
+                } catch (MauvaiseDefinitionRegleException e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur Critique (CHOIX) : " + e.getMessage());
                 }
+
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur : choix vide");
             }
@@ -373,6 +371,7 @@ public class EditRuleController extends Controller {
         if(c.getField() != null) {
             try {
                 int value = Integer.parseInt(c.getField().getText());
+                System.out.println("On empile dans l'automate le nombre "+value);
                 automateCondition.selectionnerElement(new ElementRegle(Jeton_Interface.NOMBRE,""+value,""+value));
 
                 c.getField().setDisable(true);
@@ -395,6 +394,7 @@ public class EditRuleController extends Controller {
             if (automateCondition.peutEtreRenseigne(alias)) {
                 try {
                     //conditionBoxes.getLast().getComboBox().getValue().getElementRegle().setNomRegle(alias);
+                    System.out.println("On empile dans l'automate l'alias "+alias);
                     automateCondition.selectionnerElement(new ElementRegle(Jeton_Interface.ALIAS, "as", alias));
 
                     c.getField().setDisable(true);
@@ -542,6 +542,25 @@ public class EditRuleController extends Controller {
         }
 
         public boolean isNumber() {return isNumberField;}
+
+        @Override
+        public String toString() {
+            if (comboBox != null) {
+                if (comboBox.getValue() != null) {
+                    return comboBox.getValue().toString();
+                }
+                else {
+                    return comboBox.toString();
+                }
+            }
+            else if (field != null && isNumber()) {
+                return "Number "+field.toString();
+            }
+            else if (field != null) {
+                return "Alias "+field.toString();
+            }
+            return "indéfinie";
+        }
     }
 
     public static class ComboBoxItem {

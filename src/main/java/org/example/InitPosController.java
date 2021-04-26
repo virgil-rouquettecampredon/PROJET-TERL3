@@ -123,43 +123,4 @@ public class InitPosController extends Controller {
         showAlert(Alert.AlertType.INFORMATION, "Pour poser une pièce d'un joueur sur le plateau, il suffit de sélectionner le joueur en question sur le déroulant en haut du tableau de gauche, puis de sélectionner une pièce et de faire un clique droit sur la case voulu afin de placer la pièce.\n\nSi vous voulez enlevez une pièce du plateau, il suffit de faire un clique droit sur cette pièce positionné sur le plateau.\n\nFaites attention, vous ne pouvez pas poser de pièce sur une case grisée, car elle est inaccessible.");
     }
 
-    private static class PieceRow {
-        private final SimpleObjectProperty<ImageView> img;
-        private final SimpleStringProperty name;
-        private final Piece piece;
-
-        public PieceRow(ImageView img, Piece piece) {
-            this.img = new SimpleObjectProperty<>(img);
-            this.name = new SimpleStringProperty(piece.getName());
-            this.piece = piece;
-        }
-
-        public ImageView getImg() {
-            return img.get();
-        }
-
-        public SimpleObjectProperty<ImageView> imgProperty() {
-            return img;
-        }
-
-        public void setImg(ImageView img) {
-            this.img.set(img);
-        }
-
-        public String getName() {
-            return name.get();
-        }
-
-        public SimpleStringProperty nameProperty() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name.set(name);
-        }
-
-        public Piece getPiece() {
-            return piece;
-        }
-    }
 }
