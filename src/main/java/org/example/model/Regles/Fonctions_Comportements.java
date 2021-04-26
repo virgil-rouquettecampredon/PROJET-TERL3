@@ -34,8 +34,12 @@ public class Fonctions_Comportements {
      * @return vrai si au moins une pièces dans la liste des pièces attaquante à pris une pièce dans la liste des pièces victime*/
     public static final BiFunction<List<Piece>,List<Piece>,Boolean> prend_Par_Piece = (pieces_a, pieces_v) -> {
         for (Piece piece_a : pieces_a) {
-            if (pieces_v.contains(piece_a.getPieceMange())) {
-                return true;
+            for (Piece piece_v: pieces_v){
+                if (piece_v.equals(piece_a.getPieceMange())) {
+                    sujetDeLaConditionVrai.add(piece_a);
+                    cibleDeLaConditionVrai.add(piece_v);
+                    valeurDeRetour = true;
+                }
             }
         }
         return false;
@@ -50,8 +54,9 @@ public class Fonctions_Comportements {
         for (GroupCases g: listGroupCases) {
             ArrayList<Piece> listPieceSurCases = new ArrayList<>();
             for (Case c : g.getCasesAbsolue()) {
-                if (c.getPieceOnCase() != null) {
-                    listPieceSurCases.add(c.getPieceOnCase());
+                //if (c.getPieceOnCase() != null && c.getPieceOnCase().getPieceMange() != null && listPiecesAttaquantes.contains(c.getPieceOnCase())) { return true; }
+                for (Piece p: listPiecesAttaquantes) {
+
                 }
             }
             if (prend_Par_Piece.apply(listPiecesAttaquantes, listPieceSurCases)){

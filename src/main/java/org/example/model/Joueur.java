@@ -4,10 +4,7 @@ import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.SujetDeRegle;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
@@ -25,7 +22,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.graveyard = new ArrayList<Piece>();
         this.pawnList = new ArrayList<Piece>();
         this.typePawnList = new ArrayList<Piece>();
-        this.timer = -1;
+        this.timer = 10;
     }
 
     public Joueur(Joueur joueur) {
@@ -121,6 +118,16 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
             }
         }
         return pieces;
+    }
+
+    public List<Piece> getListPromotion() {
+        List<Piece> promouvables = new ArrayList<>();
+        for (Piece piece: this.getTypePawnList()) {
+            if ((!piece.estConditionDeVictoire()) && (!piece.estPromouvable())){
+                promouvables.add(piece);
+            }
+        }
+        return promouvables;
     }
 
     /*FIN GETTER SETTER*/

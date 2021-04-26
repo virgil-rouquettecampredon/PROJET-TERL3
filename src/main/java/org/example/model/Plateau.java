@@ -106,4 +106,15 @@ public class Plateau implements Serializable {
         }
         return null;
     }
+
+    public void reinitialiserComportementLieAunTour(Joueur j){
+        for (List<Case> listCase: echiquier) {
+            for (Case casePlateau: listCase) {
+                if (casePlateau.getPieceOnCase() != null && casePlateau.getPieceOnCase().getJoueur() != j){
+                    casePlateau.getPieceOnCase().setPieceMange(null);
+                    casePlateau.getPieceOnCase().setDeplaceCeTour(false);
+                }
+            }
+        }
+    }
 }

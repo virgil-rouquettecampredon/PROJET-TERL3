@@ -977,20 +977,255 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             }
 
                             case 327 , 334 -> {
-                                //SUJET-ACTION-CASEPARAM
-                                //A supprimer : pour les tests
-                                conditionsDeLaRegle.add(new Condition() {
-                                                            @Override
-                                                            public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+                                if (indRegleSyntaxe >= 1){
+                                    switch (parcours){
+                                        case "02527" -> {
+                                            //PIECE + ACTION + CASEPARAM
+                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "023527" -> {
+                                            //PIECE + JOUEUR + ACTION + CASEPARAM
+                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "03527" -> {
+                                            //PIECETOKEN + ACTION + CASEPARAM
+                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
 
-                                                            }
+                                        case "0251127" -> {
+                                            //PIECE + ACTION + CASE + CASE
+                                           switch (regleString.get(indRegleSyntaxe-2)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02351127" -> {
+                                            //PIECE + JOUEUR + ACTION + CASE + CASE
+                                            switch (regleString.get(indRegleSyntaxe-2)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                                    Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                                    Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                                    Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0351127" -> {
+                                            //PIECETOKEN + ACTION + CASE + CASE
+                                            switch (regleString.get(indRegleSyntaxe-2)) {
+                                                case "estsur" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Sur));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "prend" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Case));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "sedeplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.se_deplace));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                case "estplace" -> {
+                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_place));
+                                                    nbConditions++;
+                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        default -> {
+                                            throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                        }
+                                    }
+                                }
 
-                                                            @Override
-                                                            public boolean evaluer() {
-                                                                return false;
-                                                            }
-                                                        });
-                                        nbConditions++;
                             }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/

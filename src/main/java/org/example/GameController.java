@@ -1,5 +1,9 @@
 package org.example;
 
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
+import javafx.util.converter.NumberStringConverter;
 import org.example.model.*;
 import org.example.model.Regles.Jeton;
 import org.junit.runner.manipulation.Ordering;
@@ -174,6 +179,7 @@ public class GameController extends Controller {
 
     private void jouerCoup() throws IOException{
         try {
+            gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
             String name = caseOrigine.getPieceOnCase().getName();
             System.out.println(joueurQuiJoue().getName() + " : " + name + " to " + caseDestination.getPosition());
 
@@ -251,7 +257,48 @@ public class GameController extends Controller {
         }
     }
 
+    public Timer playTimer(Joueur joueur) {
+        Timer timer = new Timer();
+        System.out.println(labelTimers);
 
+        labelCourant = null;
+        for (int i = 0; i < labelTimers.size(); i+=2) {
+            Joueur j = (Joueur) labelTimers.get(i);
+            if (j.equals(joueur)) {
+                labelCourant = (Label) labelTimers.get(i+1);
+                break;
+            }
+        }
+        System.out.println(joueur + " : " + labelCourant);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                if (joueur.getTimer() > 0) {
+                    joueur.setTimer(joueur.getTimer() - 1);
+                    Platform.runLater(() -> labelCourant.setText(""+joueur.getTimer()));
+                } else {
+                    timer.cancel();
+                    Platform.runLater(() -> {
+                                String s = "Plus de temps pour " + joueur.getName() + "!";
+                                //showAlert(Alert.AlertType.ERROR, "T'as perdu looser de " + joueur.getName() + " Aussi talentueux que Hugo !");
+                                try {
+                                    giveUpButton(s);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    showAlert(Alert.AlertType.ERROR, "WOW! un bug t'as empeché de perde!!");
+                                }
+                            }
+                        );
+                }
+            }
+        }, 1000,1000);
+
+        return timer;
+    }
+
+    public void pauseTimer(Timer timer){
+        timer.cancel();
+    }
 
     public void popupWindow(String fxml, Object var) throws IOException {
         Parent layout = getApp().loadFXML(fxml, var);

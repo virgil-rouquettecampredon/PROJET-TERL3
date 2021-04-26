@@ -59,4 +59,13 @@ public class ElementRegle implements Serializable {
     public int hashCode() {
         return Objects.hash(nomInterface, nomRegle, jetonAssocie);
     }
+
+    @Override
+    public String toString() {
+        return "ElementRegle{" +
+                "nomInterface='" + nomInterface + '\'' +
+                ", nomRegle='" + nomRegle + '\'' +
+                ", jetonAssocie=" + jetonAssocie +
+                '}';
+    }
 }

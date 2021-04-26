@@ -342,6 +342,7 @@ public class OrdonnanceurDeJeu {
         if (pMange != null) {
             pMange.getJoueur().getPawnList().remove(pMange);
             pMange.getJoueur().getGraveyard().add(pMange);
+            pDeplace.setPieceMange(pMange);
         }
 
         // Si le déplacement met en échec un joueur en face alors décrémenter vie de la pièce concernée

@@ -12,13 +12,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import org.example.model.*;
-import org.example.model.Regles.ElementRegle;
-import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.*;
 import org.example.model.Regles.Structure.Automate.Automate_Interface;
 import org.example.model.Regles.Structure.Automate.Automate_Interface_Condition;
 import org.example.model.Regles.Structure.Automate.Automate_Interface_Consequence;
-import org.example.model.Regles.Regle;
-import org.example.model.Regles.MauvaiseDefinitionRegleException;
 
 
 import java.io.IOException;
@@ -307,9 +304,12 @@ public class EditRuleController extends Controller {
     }
 
     private void deleteLastAutomateCondition() {
-        if ((conditionBoxes.getLast().getField() != null && conditionBoxes.getLast().getField().isDisabled() && conditionBoxes.getLast().isNumber())
+        //On dépile si:
+        //   On est une boite validé
+        //ou on est un nombre ou un input alias validé
+        if ((conditionBoxes.getLast().getField() != null && conditionBoxes.getLast().getField().isDisabled())
                 || (conditionBoxes.getLast().getComboBox() != null && conditionBoxes.getLast().getComboBox().getValue() != null)) {
-            //System.out.println("Automate Condition depilé");
+            System.out.println("Automate Condition depilé : "+conditionBoxes.getLast());
             automateCondition.revenirEnArriere();
         }
     }
