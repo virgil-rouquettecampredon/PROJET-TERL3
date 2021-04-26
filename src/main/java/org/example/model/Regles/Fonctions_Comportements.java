@@ -52,7 +52,7 @@ public class Fonctions_Comportements {
     //TODO: appliquer les cases relatives quand les alias seront terminé
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> prend_Par_Case = (listPiecesAttaquantes, listGroupCases) -> {
         for (GroupCases g: listGroupCases) {
-            ArrayList<Piece> listPieceSurCases = new ArrayList<>();
+            ArrayList<Case> listCases_return = new ArrayList<>();
             for (Case c : g.getCasesAbsolue()) {
                 //if (c.getPieceOnCase() != null && c.getPieceOnCase().getPieceMange() != null && listPiecesAttaquantes.contains(c.getPieceOnCase())) { return true; }
                 for (Piece p: listPiecesAttaquantes) {
@@ -273,6 +273,13 @@ public class Fonctions_Comportements {
      * @fn si au moins une pièce dans la liste des pièces est dans la defausse,
      * le joueur choisi parmis une de ces pièces pour la placer sur le terrain*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Void> placer = (pieces, cases) -> { return null; };
+
+    /** Consequence : PIECE + DEPLACE + CASE
+     * @param pieces : liste des pieces plaçable
+     * @param groupcases : liste des cases sur lequel les pièces peuvent être placé
+     * @fn Le joueur effectue un choix de déplacement selon les cases proposé par groupcases pour chacune des pièces.
+     * Le groupe de case peut comporter des cases absolu du plateau comme des cases relatives qui seront lu en fonction de la position de la pièce*/
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> { return null; };
 
 
 

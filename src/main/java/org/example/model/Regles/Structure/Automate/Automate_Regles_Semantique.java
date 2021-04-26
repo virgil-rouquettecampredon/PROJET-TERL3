@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.example.model.*;
 import org.example.model.Regles.*;
+import org.example.model.Regles.Structure.*;
 import org.example.model.Regles.Structure.Interpreteur.*;
 
 
@@ -306,26 +307,36 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
     @SuppressWarnings("Duplicates")
     public Regle analyserUneRegle(List<Jeton> regleSyntaxe, List<String> regleString) throws MauvaiseDefinitionRegleException {
         int curEtat = this.getEtatDeDepart();
+
         //Regle à retourner après le traitement
         Regle regle = new Regle();
+
         //Chaine de caractere fourni par le passage dans les états
         Etat dep = this.recupererEtat(this.getEtatDeDepart());
         if(dep == null){
             throw new MauvaiseDefinitionRegleException("Impossible de commencer une analyse en partant de l'état de départ : " + getEtatDeDepart());
         }
         String parcours = dep.getValeur();
+
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
         aliasRegle.clear();
+
         //Compteurs permettant de reconnaitre une Regle bien formée
         int nbConditions = 0;
         int nbConsequence = 0;
+
         //Booléen permettant de connaitre dans quel endroit du traitement de la Regle on se trouve
         boolean traitementCondition = true;
+
         //Listes utiles pour la création de la Regle ensuite
         List<Jeton> jetonsarborescence = new ArrayList<>();
         List<Condition> conditionsDeLaRegle = new ArrayList<>();
         List<Consequence> consequencesDeLaRegle = new ArrayList<>();
+
+        //Liste d'Alias correspondant à ceux présents dans la Regle
+        List<Alias<Jeton>> liste_alias = new ArrayList<>();
+
         //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
 
@@ -387,10 +398,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 //Gestion des Alias dans la Regle (utilisation)
                 case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe));
             }
+
             //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
+
             //Récupération de l'indice du prochain état d'après la transition donnée
             curEtat = this.etatSuivant(curEtat, j);
+
             //Récupération de l'état correspondant à l'indice curEtat
             Etat etat = this.recupererEtat(curEtat);
 
@@ -1512,6 +1526,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
+                                                case "deplacer" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.deplacer));
+                                                    nbConsequence++;
+                                                }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
@@ -1534,6 +1555,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             Fonctions_Comportements.promouvoir));
                                                     nbConsequence++;
                                                 }
+                                                case "deplacer" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.deplacer));
+                                                    nbConsequence++;
+                                                }
+
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-ConsequenceAction-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
@@ -1554,6 +1583,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.promouvoir));
+                                                    nbConsequence++;
+                                                }
+                                                case "deplacer" -> {
+                                                    consequencesDeLaRegle.add(new ConsequenceAction<Piece, GroupCases>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.deplacer));
                                                     nbConsequence++;
                                                 }
                                                 default -> {

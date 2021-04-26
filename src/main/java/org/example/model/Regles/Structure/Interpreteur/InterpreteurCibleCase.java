@@ -22,6 +22,10 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
         this.str_source = str_source;
     }
 
+    public InterpreteurCibleCase(String str_c1, String str_c2) {
+        this.str_source = str_c1 + "#" + str_c2;
+    }
+
     /**
      * */
     @Override

@@ -194,6 +194,7 @@ public enum Jeton implements Serializable, EstToken {
             return false;
         }
     },
+
     CASEPARAM("case param") {
         @Override
         public boolean estReconnu(String piece) {
