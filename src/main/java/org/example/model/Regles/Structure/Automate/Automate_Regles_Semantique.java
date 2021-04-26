@@ -27,21 +27,23 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
     public void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException{
         switch (parcours){
-            case "02" , "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,Jeton.PIECE);
-            case "023" , "03" , "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" -> aliasRegle.put(nomAlias,Jeton.PIECETOKEN);
-            case "01"-> aliasRegle.put(nomAlias,Jeton.JOUEUR);
-            case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,Jeton.CASE);
-            case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,Jeton.CASEPARAM);
+            case "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.PIECE));
+            case "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.PIECETOKEN));
+            case "01"-> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.JOUEUR));
+            case "02" -> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.PIECE));
+            case "023" , "03" -> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.PIECETOKEN));
+            case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.CASE));
+            case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.CASEPARAM));
             default -> throw new MauvaiseDefinitionRegleException("Impossible de définir l'alias " + nomAlias);
         }
     }
 
-    public Jeton recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
-        Jeton jeton = aliasRegle.get(nomAlias);
-        if(jeton == null){
+    public Alias<Jeton> recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
+        Alias<Jeton> alias = aliasRegle.get(nomAlias);
+        if(alias == null){
             throw new MauvaiseDefinitionRegleException("Alias inconnu : " + nomAlias);
         }
-        return jeton;
+        return alias;
     }
 
     public void initialiserAutomate(){
@@ -116,7 +118,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(29,Jeton.ACTION,5);
         this.ajouterUneTransition(29,Jeton.ETAT,6);
         this.ajouterUneTransition(29,Jeton.COMPTEUR,7);
-        this.ajouterUneTransition(29,Jeton.JOUEUR,3);
+        //this.ajouterUneTransition(29,Jeton.JOUEUR,3);
 
         //Meme transition que 3
         this.ajouterUneTransition(30,Jeton.ACTION,5);
@@ -124,7 +126,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(30,Jeton.COMPTEUR,7);
 
         //Meme transition que 9
-        this.ajouterUneTransition(31,Jeton.JOUEUR,10);
+        //this.ajouterUneTransition(31,Jeton.JOUEUR,10);
         this.ajouterUneTransition(31,Jeton.ET,0);
         this.ajouterUneTransition(31,Jeton.OU,0);
         this.ajouterUneTransition(31,Jeton.ALORS,15);
@@ -138,7 +140,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(33,Jeton.ET,0);
         this.ajouterUneTransition(33,Jeton.OU,0);
         this.ajouterUneTransition(33,Jeton.ALORS,15);
-        this.ajouterUneTransition(33,Jeton.CASE,27);
+        //this.ajouterUneTransition(33,Jeton.CASE,27);
 
         //Meme transition que 27
         this.ajouterUneTransition(34,Jeton.ET,0);
@@ -396,7 +398,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     }
                 }
                 //Gestion des Alias dans la Regle (utilisation)
-                case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe));
+                case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe)).getJetonAssocie();
             }
 
             //Récupération de l'état précédent (messages d'erreur)

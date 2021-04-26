@@ -12,4 +12,5 @@ module org.example {
     exports org.example.model.Regles.Structure.Arbre;
     exports org.example.model.Regles.Structure.Automate;
     exports org.example.model.Regles.Structure.Interpreteur;
+    exports org.example.model.Regles.Structure;
 }

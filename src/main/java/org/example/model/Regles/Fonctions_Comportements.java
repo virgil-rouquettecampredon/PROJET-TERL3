@@ -9,6 +9,9 @@ import java.util.function.Function;
 import java.util.function.BiFunction;
 
 public class Fonctions_Comportements {
+    
+    public static List<SujetDeRegle> sujetDeLaConditionVrai = new ArrayList<>();            //Liste des SujetDeRegle rendant une Condition vrai (Alias)
+    public static List<CibleDeRegle> cibleDeLaConditionVrai = new ArrayList<>();            //Liste des CibleDeRegle rendant une Condition vrai (Alias)
 
 /*------------------------------------------------------------------------------------------------
  * ---------------------------------------CONDITION-----------------------------------------------
@@ -19,12 +22,17 @@ public class Fonctions_Comportements {
      * @param listPieces : liste des pieces possibles
      * @return vrai si au moins une pièces dans la liste est promu ce tour*/
     public static final Function<List<Piece>,Boolean> estPromu = (listPieces) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         for (Piece piece: listPieces) {
             if (piece.aEtePromu()) {
-                return true;
+                sujetDeLaConditionVrai.add(piece);
+                valeurDeRetour = true;
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
     /*-----------------------------CONDITION ACTION CIBLE-------------------------*/
@@ -33,6 +41,10 @@ public class Fonctions_Comportements {
      * @param pieces_v : liste des pièces victime possible
      * @return vrai si au moins une pièces dans la liste des pièces attaquante à pris une pièce dans la liste des pièces victime*/
     public static final BiFunction<List<Piece>,List<Piece>,Boolean> prend_Par_Piece = (pieces_a, pieces_v) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         for (Piece piece_a : pieces_a) {
             for (Piece piece_v: pieces_v){
                 if (piece_v.equals(piece_a.getPieceMange())) {
@@ -42,15 +54,17 @@ public class Fonctions_Comportements {
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+PREND+CASE
      * @param listCases des pièces attaquante possible
      * @param listPiecesVictime : liste des pièces victime possible
      * @return vrai si au moins une pièces dans la liste des pièces attaquante à pris une pièce situé sur la case dans la liste des case*/
-    //TODO: appliquer les cases relatives quand les alias seront terminé
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> prend_Par_Case = (listPiecesAttaquantes, listGroupCases) -> {
+        sujetDeLaConditionVrai.clear(); //piece
+        cibleDeLaConditionVrai.clear(); //case
+
         for (GroupCases g: listGroupCases) {
             ArrayList<Case> listCases_return = new ArrayList<>();
             for (Case c : g.getCasesAbsolue()) {
@@ -59,10 +73,8 @@ public class Fonctions_Comportements {
 
                 }
             }
-            if (prend_Par_Piece.apply(listPiecesAttaquantes, listPieceSurCases)){
-                return true;
-            }
         }
+
         return false;
     };
 
@@ -70,16 +82,31 @@ public class Fonctions_Comportements {
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste pieces est sur une case inclu dans la liste cases*/
-    //TODO: appliquer les cases relatives quand les alias seront terminé
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_Sur = (pieces, groupescases) -> {
-        for (GroupCases g: groupescases){
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        GroupCases groupe = new GroupCases("groupeAliasEstSur",null);
+        boolean valeurDeRetour = false;
+        Plateau plateau = null;
+
+        for (GroupCases g: groupescases) {
             for (Piece p: pieces) {
                 for (Case c : g.getCasesAbsolue()) {
-                    if (p.equals(c.getPieceOnCase())) return true;
+                    if (p.equals(c.getPieceOnCase())) {
+                        plateau = g.getPlateau();
+                        sujetDeLaConditionVrai.add(p);
+                        groupe.addCasesAbsolue(c);
+                        valeurDeRetour = true;
+                    }
                 }
             }
         }
-        return false;
+        if(valeurDeRetour){
+            groupe.setPlateau(plateau);
+            cibleDeLaConditionVrai.add(groupe);
+        }
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+ESTMENACE+PIECE
@@ -87,46 +114,83 @@ public class Fonctions_Comportements {
      * @param pieces_v : liste des pièces victimes possible
      * @return vrai si au moins une pièce dans la liste des pièces menacante menace au moins une pièce dans la liste des pièces victime*/
     public static final BiFunction<List<Piece>, List<Piece>, Boolean> est_Menace = (pieces_m, pieces_v ) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
+
         for (Piece piece_m : pieces_m) {
-            if (pieces_v.contains(piece_m.getPieceMenace())) {
-                return true;
+            for (Piece piece_v: pieces_v){
+                if (piece_m.equals(piece_v.getPieceMenace())) {
+                    sujetDeLaConditionVrai.add(piece_m);
+                    cibleDeLaConditionVrai.add(piece_m);
+                    valeurDeRetour = true;
+                }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+DEPLACE+CASE
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste des pièces se deplace sur une case dans la liste des cases*/
-    //TODO: appliquer les cases relatives quand les alias seront terminé
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> se_deplace = (pieces, groupcases) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        GroupCases groupe = new GroupCases("groupeAliasSeDeplace",null);
+        boolean valeurDeRetour = false;
+        Plateau plateau = null;
+
         for (GroupCases g: groupcases){
             for (Piece p: pieces) {
                 for (Case c : g.getCasesAbsolue()) {
-                    if (p.equals(c.getPieceOnCase()) && p.getDeplaceCeTour()) return true;
+                    if (p.equals(c.getPieceOnCase()) && p.getDeplaceCeTour()){
+                        plateau = g.getPlateau();
+                        sujetDeLaConditionVrai.add(p);
+                        groupe.addCasesAbsolue(c);
+                        valeurDeRetour = true;
+                    }
                 }
             }
         }
-        return false;
+        if(valeurDeRetour){
+            groupe.setPlateau(plateau);
+            cibleDeLaConditionVrai.add(groupe);
+        }
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+ESTPLACE+CASE
      * @param pieces : liste des pièces possible
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste des pièces est placé sur une case dans la liste des cases ce tour-ci*/
-    //TODO: appliquer les cases relatives quand les alias seront terminé
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_place = (pieces, groupcases) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        GroupCases groupe = new GroupCases("groupeAliasSeDeplace",null);
+        boolean valeurDeRetour = false;
+        Plateau plateau = null;
+
         for (GroupCases g: groupcases){
             for (Piece p: pieces) {
                 for (Case c: g.getCasesAbsolue()) {
                     if (c.getPieceOnCase().equals(p)){
-                        return true;
+                        plateau = g.getPlateau();
+                        sujetDeLaConditionVrai.add(p);
+                        groupe.addCasesAbsolue(c);
+                        valeurDeRetour = true;
                     }
                 }
             }
         }
-        return false;
+        if(valeurDeRetour){
+            groupe.setPlateau(plateau);
+            cibleDeLaConditionVrai.add(groupe);
+        }
+        return valeurDeRetour;
     };
 
 
@@ -138,14 +202,19 @@ public class Fonctions_Comportements {
      * @param valeur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement inferieur valeur*/
     public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_inferieur_a = (pieces, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Piece piece : pieces) {
                 if (piece.getNbMovement() < lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(piece);
+                    valeurDeRetour = true;
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+DEPEGAL+INTEGER
@@ -153,14 +222,19 @@ public class Fonctions_Comportements {
      * @param valeur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement egal valeur*/
     public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_egal_a = (pieces, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Piece piece : pieces) {
                 if (piece.getNbMovement() == lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(piece);
+                    valeurDeRetour = true;
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
     /** Condition : PIECE+DEPSUP+INTEGER
@@ -168,62 +242,82 @@ public class Fonctions_Comportements {
      * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement superieur valeur*/
     public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_superieur_a = (pieces, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Piece piece : pieces) {
                 if (piece.getNbMovement() > lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(piece);
+                    valeurDeRetour = true;
                 }
             }
         }
-            return false;
+        return valeurDeRetour;
     };
 
 
     /*-----TIMER-----*/
 
-    /** Condition : PIECE+DEPSUP+INTEGER
+    /** Condition : JOUEUR+DEPSUP+INTEGER
      * @param joueurs : liste des joueurs possible
      * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins un joueur a un timer inférieur valeur*/
     public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_inferieur_a = (joueurs, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
                 if (joueur.getTimer() < lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(joueur);
+                    valeurDeRetour = true;
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
-    /** Condition : PIECE+DEPSUP+INTEGER
+    /** Condition : JOUEUR+DEPSUP+INTEGER
      * @param joueurs : liste des joueurs possible
      * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins un joueur a un timer égal valeur*/
     public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_egal_a = (joueurs, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
                 if (joueur.getTimer() == lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(joueur);
+                    valeurDeRetour = true;
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 
-    /** Condition : PIECE+DEPSUP+INTEGER
+    /** Condition : JOUEUR+DEPSUP+INTEGER
      * @param joueurs : liste des joueurs possible
      * @param lvaleur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins un joueur a un timer supérieur valeur*/
     public static final BiFunction<List<Joueur>, List<IntegerRegle>, Boolean> timer_superieur_a = (joueurs, lvaleur) -> {
+        sujetDeLaConditionVrai.clear();
+        cibleDeLaConditionVrai.clear();
+
+        boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
                 if (joueur.getTimer() > lvaleur.get(0).getVal()) {
-                    return true;
+                    sujetDeLaConditionVrai.add(joueur);
+                    valeurDeRetour = true;
                 }
             }
         }
-        return false;
+        return valeurDeRetour;
     };
 /* --------------------------------------------------------------------------------------------------
  * -------------------------------------------CONSEQUENCE--------------------------------------------

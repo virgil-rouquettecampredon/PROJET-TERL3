@@ -23,6 +23,11 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
     }
 
     @Override
+    public List<A> getSujets(){
+        return sujets;
+    }
+
+    @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         sujets = interpreteurSujet.recupererTout(ord);
     }

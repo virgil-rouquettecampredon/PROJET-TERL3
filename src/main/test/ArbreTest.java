@@ -29,6 +29,11 @@ public class ArbreTest {
             public void verifierElements(OrdonnanceurDeJeu ord){ }
 
             @Override
+            public List getSujets(){
+                return null;
+            }
+
+            @Override
             public boolean evaluer(){
                 return true;
             }
@@ -36,6 +41,11 @@ public class ArbreTest {
         condFaux = new Condition() {
             @Override
             public void verifierElements(OrdonnanceurDeJeu ord){}
+
+            @Override
+            public List<?> getSujets(){
+                return null;
+            }
 
             @Override
             public boolean evaluer(){

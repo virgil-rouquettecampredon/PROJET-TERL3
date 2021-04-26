@@ -3,6 +3,8 @@ package org.example.model.Regles;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Interpreteur.*;
 
+import java.util.List;
+
 public interface BlocDeRegle {
     /**Méthode permettant à un BlocDeRegle de vérifier s'il PEUT récupérer les éléments dont il a besoin pour fonctionner
      * Théoriquement, l'interpreteur de règle ne sera jamais incorrect car une analyse syntaxique et sémantique est appliqué

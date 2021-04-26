@@ -1,28 +1,35 @@
 package org.example.model.Regles;
 
+import org.example.model.Joueur;
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.Structure.Arbre.ArbreException;
 import org.example.model.Regles.Structure.Arbre.Arbre_Condition;
 import org.example.model.Regles.Structure.Arbre.Arbre_Formule;
 import org.example.model.Regles.Structure.Interpreteur.MauvaiseInterpretationObjetRegleException;
+import org.example.model.Regles.Structure.Alias;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Regle {
     /*Classe permettant de modéliser une Regle de jeu*/
     private Arbre_Condition arbre_conditions;               //Arbre représentant la formule formée par la définition des condtions de la Regle
     private List<Consequence> consequences;                 //Liste des conséquences à exécuter si les conditions précédement définies sont respectées
 
+    private  List<Alias<Jeton>> listeAlias;                 //Liste des alias définis dans la Regle
+
     public Regle() {
         arbre_conditions = null;
         consequences = new ArrayList<>();
+        listeAlias = new ArrayList<>();
     }
 
     public Regle(List<Consequence> consequences) throws MauvaiseDefinitionRegleException {
         arbre_conditions = null;
         this.consequences = consequences;
+        listeAlias = new ArrayList<>();
     }
 
     public Regle(List<Consequence> consequences, List<Condition> conditions, List<Jeton> jetons) throws MauvaiseDefinitionRegleException {
@@ -33,6 +40,21 @@ public class Regle {
             throw new MauvaiseDefinitionRegleException("Regle : Impossible de générer l'arbre de Condition : " + e.getMessage());
         }
         this.consequences = consequences;
+        listeAlias = new ArrayList<>();
+    }
+
+    /**Méthode permettant d'ajouter un Alias supplémentaire à une Regle
+     * @param alias : Aliaas à ajouter à notre Regle**/
+    public void ajouterUnAlias(Alias<Jeton> alias) {
+        listeAlias.add(alias);
+    }
+
+    /**Méthode permettant d'éditer les liens pour les Alias
+     * Cela va permettre de mettre à jour les informations importantes pour pouvoir les réutiliser après.**/
+    public void editerLesLiens(){
+        for (Alias<Jeton> alias: listeAlias) {
+            alias.editionDesLiens();
+        }
     }
 
     /**Méthode permettant d'ajouter une conséquence supplémentaire à une Regle
@@ -67,6 +89,7 @@ public class Regle {
                 throw new MauvaiseDefinitionRegleException("Impossible d'interpréter le ou les élément(s) de la condition" + i + ": " + e.getMessage());
             }
         }
+        //Si l'évaluation de l'arbre condition est positive, on peut exécuter les Consequences
         if (arbre_conditions.evaluer()) {
             for (Consequence cons : consequences) {
                 cons.comportement(ord);

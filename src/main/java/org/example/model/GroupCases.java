@@ -46,6 +46,8 @@ public class GroupCases implements CibleDeRegle, Serializable {
 
     public Plateau getPlateau(){ return this.plateau; }
 
+    public void setPlateau(Plateau p){ this.plateau = p; }
+
 
     /**Méthode qui retourne l'ensemble des cases du groupe
      * @param posX : indice X de la position servant au calculs des cases en position relative.
@@ -92,13 +94,11 @@ public class GroupCases implements CibleDeRegle, Serializable {
         return casesRelatives;
     }
 
-
-    /**
-     * ------
-     * ------
-     * --aa--
-     * ------
-     * */
+    /**Méthode permettant d'ajouter une CaseAbsolue au groupe
+     * @param c : case à ajouter aux cases absolues d'un groupe.**/
+    public void addCasesAbsolue(Case c){
+        casesAbsolue.add(c);
+    }
 
     @Override
     public String toString() {

@@ -29,6 +29,16 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
     }
 
     @Override
+    public List<A> getSujets(){
+        return sujets;
+    }
+
+    @Override
+    public List<B> getCibles(){
+        return cibles;
+    }
+
+    @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
         sujets = interpretSujet.recupererTout(ord);
         cibles = interpretCible.recupererTout(ord);
@@ -36,6 +46,6 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
 
     @Override
     public boolean evaluer(){
-        return comportement.apply(sujets, cibles); //a changer par cible
+        return comportement.apply(sujets, cibles);
     }
 }

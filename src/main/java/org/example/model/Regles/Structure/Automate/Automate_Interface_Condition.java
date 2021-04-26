@@ -25,7 +25,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
     private int nbParenthese;               //Nombre de parenthèses de la règle
 
     public Automate_Interface_Condition(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
-        super(27, 0);
+        super(34, 0);
         this.pieces = pieces;
         this.cases = cases;
         this.joueurs = joueurs;
@@ -50,10 +50,12 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUnEtatTerminal(25,301);
 
         //GESTION DES ALIAS
-        this.ajouterUneTransition(1,Jeton_Interface.ALIAS,19);
+        this.ajouterUneTransition(1,Jeton_Interface.ALIASDEF,27);
+        this.ajouterUneTransition(27,Jeton_Interface.ALIAS,19);
         this.ajouterUneTransition(19,Jeton_Interface.COMPTEUR_TEMPSRESTANT,4);
 
-        this.ajouterUneTransition(2,Jeton_Interface.ALIAS,20);
+        this.ajouterUneTransition(2,Jeton_Interface.ALIASDEF,28);
+        this.ajouterUneTransition(28,Jeton_Interface.ALIAS,20);
         this.ajouterUneTransition(20,Jeton_Interface.COMPTEUR_DEPLACEMENT,4);
         this.ajouterUneTransition(20,Jeton_Interface.PROMU,5);
         this.ajouterUneTransition(20,Jeton_Interface.ESTMENACE,6);
@@ -62,7 +64,8 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUneTransition(20,Jeton_Interface.PLACE,9);
         this.ajouterUneTransition(20,Jeton_Interface.EST,10);
 
-        this.ajouterUneTransition(3,Jeton_Interface.ALIAS,21);
+        this.ajouterUneTransition(3,Jeton_Interface.ALIASDEF,29);
+        this.ajouterUneTransition(29,Jeton_Interface.ALIAS,21);
         this.ajouterUneTransition(21,Jeton_Interface.COMPTEUR_DEPLACEMENT,4);
         this.ajouterUneTransition(21,Jeton_Interface.PROMU,5);
         this.ajouterUneTransition(21,Jeton_Interface.ESTMENACE,6);
@@ -71,16 +74,20 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUneTransition(21,Jeton_Interface.PLACE,9);
         this.ajouterUneTransition(21,Jeton_Interface.EST,10);
 
-        this.ajouterUneTransition(12,Jeton_Interface.ALIAS,23);
+        this.ajouterUneTransition(12,Jeton_Interface.ALIASDEF,31);
+        this.ajouterUneTransition(31,Jeton_Interface.ALIAS,23);
         this.ajouterUneTransition(23,Jeton_Interface.PARENTHESE_FERMANTE,17);
 
-        this.ajouterUneTransition(14,Jeton_Interface.ALIAS,22);
+        this.ajouterUneTransition(14,Jeton_Interface.ALIASDEF,30);
+        this.ajouterUneTransition(30,Jeton_Interface.ALIAS,22);
         this.ajouterUneTransition(22,Jeton_Interface.PARENTHESE_FERMANTE,17);
 
-        this.ajouterUneTransition(15,Jeton_Interface.ALIAS,24);
+        this.ajouterUneTransition(15,Jeton_Interface.ALIASDEF,32);
+        this.ajouterUneTransition(32,Jeton_Interface.ALIAS,24);
         this.ajouterUneTransition(24,Jeton_Interface.PARENTHESE_FERMANTE,17);
 
-        this.ajouterUneTransition(25,Jeton_Interface.ALIAS,26);
+        this.ajouterUneTransition(25,Jeton_Interface.ALIASDEF,33);
+        this.ajouterUneTransition(33,Jeton_Interface.ALIAS,26);
         this.ajouterUneTransition(26,Jeton_Interface.PARENTHESE_FERMANTE,17);
 
         //ETAT INITIAL
