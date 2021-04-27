@@ -90,6 +90,13 @@ public class GameController extends Controller {
                 gameVariante = ((Variante<Jeton>) userVar).clone();
             } catch ( CloneNotSupportedException e ) {
                 e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur lors du clonage de la variante");
+            }
+            try {
+                gameVariante.initialiser();
+            } catch ( VarianteException e ) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, e.getMessage());
             }
             varLabel.setText(gameVariante.getName());
             playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());

@@ -22,7 +22,6 @@ import java.io.IOException;
 public class App extends Application {
 
     public Scene scene;                         // Scene principale de l'application
-    public Scene popup;                         // Scene popup
 
     public SoundManager soundManager;           // Gestionnaire du son
     public VarianteManager varianteManager;     // Gestionnaire des variantes

@@ -19,6 +19,12 @@ public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
         this.plateau = plateau;
     }
 
+    /**
+     * Clone le groupe de case en récuppérant les cases du plateau
+     * @param p le plateau qui appartient au nouveau groupe de case
+     * @return un clone de groupe de case
+     * @throws CloneNotSupportedException
+     */
     public GroupCases clone(Plateau p) throws CloneNotSupportedException {
         GroupCases gc = (GroupCases)super.clone();
         gc.plateau = p;

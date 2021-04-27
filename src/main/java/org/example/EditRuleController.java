@@ -58,9 +58,9 @@ public class EditRuleController extends Controller {
             for (ControlElement condition : conditionBoxes) {
                 if (condition.getComboBox() != null) {
                     regle.getRegle().add(condition.getComboBox().getValue().getElementRegle());
-                } else if (condition.isNumber()) {
+                } else if (condition.getField() != null && condition.isNumber()) {
                     regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, condition.getField().getText(), condition.getField().getText()));
-                } else {
+                } else if (condition.getField() != null){
                     regle.getRegle().add(new ElementRegle(Jeton_Interface.ALIAS, "as", condition.getField().getText()));
                 }
             }
@@ -68,13 +68,14 @@ public class EditRuleController extends Controller {
                 if (consequence.getComboBox() != null) {
 
                     regle.getRegle().add(consequence.getComboBox().getValue().getElementRegle());
-                } else {
+                } else if (consequence.getField() != null){
                     //pas besoin car pas de textField dans les consequences mais si il y en avait : pareil que condition
                     regle.getRegle().add(new ElementRegle(Jeton_Interface.NOMBRE, consequence.getField().getText(), consequence.getField().getText()));
                 }
             }
         } catch (NullPointerException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur : il y a des boites non remplies!");
+            e.printStackTrace();
             return;
         }
         getApp().varianteManager.getCurrent().getRegles().add(regle);
@@ -135,8 +136,10 @@ public class EditRuleController extends Controller {
                 }
                 if (element.getJetonAssocie() == Jeton_Interface.ALORS) {
                     beforeAlors = false;
+                    conditionBoxes.add(new ControlElement());
                 }
             }
+            consequenceBoxes.add(new ControlElement());
         }
         else {
             appearNextCondition();
@@ -489,8 +492,6 @@ public class EditRuleController extends Controller {
             }
             hBoxList.add(conditionHBox);
             vBox.getChildren().add(conditionHBox);
-
-            comboList.add(box);
         }
         else {
             if (box.getComboBox() != null) {
@@ -500,8 +501,8 @@ public class EditRuleController extends Controller {
                 hBoxList.getLast().getChildren().add(box.getField());
             }
 
-            comboList.add(box);
         }
+        comboList.add(box);
     }
 
     private void appearNextCondition() {
@@ -599,7 +600,7 @@ public class EditRuleController extends Controller {
     }
 
     public static class ComboBoxItem {
-        private ElementRegle elementregle;
+        private final ElementRegle elementregle;
 
         public ComboBoxItem(ElementRegle elementregle) {
             this.elementregle = elementregle;

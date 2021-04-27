@@ -35,6 +35,11 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
         typePawnList.addAll(joueur.typePawnList);
     }
 
+    /**
+     * Clone le joueur en profondeur sauf pour la liste des pieces du plateau qui est laissée vide
+     * @return un nouveau joueur Clone de this mais sans les pieces du plateau
+     * @throws CloneNotSupportedException
+     */
     public Joueur clone() throws CloneNotSupportedException {
         Joueur j = (Joueur)super.clone();
         j.graveyard = new ArrayList<>();

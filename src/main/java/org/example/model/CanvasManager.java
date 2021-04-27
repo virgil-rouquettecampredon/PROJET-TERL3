@@ -163,24 +163,6 @@ public class CanvasManager {
             double ceY =  (bEY+.5) * rectSize;
             context.strokeLine(cPosX, cPosY, ceX, ceY);
 
-            /*
-            double angle = Math.atan(e.getY()/((double)(e.getX())));
-            if (e.getX() < 0) {
-                angle = Math.PI - angle;
-            }
-
-            System.out.println(e.getX()+ "x" + e.getY() + " : " + angle);
-
-            double cos = Math.cos(angle);
-            double sin = Math.sin(angle);
-            double p1X = bEX + (cos*(-1) - sin*(-1));
-            double p1Y = bEY + (sin*(-1) + cos*(-1));
-            double p2X = bEX + (cos*(-1) - sin*(1));
-            double p2Y = bEY + (sin*(-1) + cos*(1));
-
-            context.strokeLine(ceX, ceY, p1X * rectSize, p1Y * rectSize); //TODO Faire des vrai fleches 1/2
-            context.strokeLine(ceX, ceY, p2X * rectSize, p2Y * rectSize); //TODO Faire des vrai fleches 2/2
-            */
             context.strokeOval(ceX-(rectSize/4), ceY-(rectSize/4), (rectSize/2), (rectSize/2));
         }
         context.setStroke(strokeColor);

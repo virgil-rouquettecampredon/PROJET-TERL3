@@ -25,6 +25,11 @@ public class Case implements Serializable, Cloneable {
 
     }
 
+    /**
+     * Clone la case en profondeur
+     * @return une case clone de this
+     * @throws CloneNotSupportedException
+     */
     public Case clone() throws CloneNotSupportedException {
         Case c = (Case) super.clone();
         c.position = new Position(position.getX(), position.getY());

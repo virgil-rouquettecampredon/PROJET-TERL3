@@ -69,6 +69,11 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
         System.arraycopy(piece.comportementPiece, 0, comportementPiece, 0, 3);
     }
 
+    /**
+     * Clone une piece en profondeur sauf pour le joueur de la piece qui est laissé à null
+     * @return une nouvelle piece clone de this sans le joueur
+     * @throws CloneNotSupportedException
+     */
     public Piece clone() throws CloneNotSupportedException {
         Piece p = (Piece)super.clone();
         p.joueur = null;

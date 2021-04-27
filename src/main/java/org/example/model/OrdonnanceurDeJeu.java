@@ -4,6 +4,8 @@ import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
 import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import org.example.model.Regles.Jeton;
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
+import org.example.model.Regles.Regle;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

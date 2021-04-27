@@ -51,16 +51,25 @@ public class Plateau implements Serializable, Cloneable{
         }
     }
 
+    /**
+     * Clone le plateau en profondeur et met à jour les pieces avec le joueur correspondant
+     * @param joueurs la lise des joueurs à mettre dans les pièces
+     * @return un plateau clone de this
+     * @throws CloneNotSupportedException
+     */
     public Plateau clone(ArrayList<Joueur> joueurs) throws CloneNotSupportedException {
         Plateau p = (Plateau)super.clone();
         p.echiquier = new ArrayList<>();
+        //Pour toutes les cases :
         for (ArrayList<Case> ligne : echiquier) {
             ArrayList<Case> ligneP = new ArrayList<>();
             for (Case c : ligne) {
+                //On reconstruit le plateau avec les clones de cases
                 Case nc = c.clone();
                 ligneP.add(nc);
-                Case myCase = getCase(c.getPosition());
 
+                //On met le joueur correspondant dans la piece de la nouvelle case
+                Case myCase = getCase(c.getPosition());
                 if (myCase.getPieceOnCase() != null) {
                     Joueur monJoueur = myCase.getPieceOnCase().getJoueur();
                     Joueur jCorrespondant = null;
