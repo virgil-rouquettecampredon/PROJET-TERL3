@@ -271,7 +271,8 @@ public class Fonctions_Comportements {
         boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
-                if (joueur.getMinute() < lvaleur.get(0).getVal()) { //TODO VOIR AVEC HUGO
+                int secondeTotal = 60 * joueur.getMinute() + joueur.getSeconde();
+                if (secondeTotal < lvaleur.get(0).getVal()) { //TODO VOIR AVEC HUGO
                     sujetDeLaConditionVrai.add(joueur);
                     valeurDeRetour = true;
                 }
@@ -291,7 +292,8 @@ public class Fonctions_Comportements {
         boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
-                if (joueur.getMinute() == lvaleur.get(0).getVal()) {
+                int secondeTotal = 60 * joueur.getMinute() + joueur.getSeconde();
+                if (secondeTotal == lvaleur.get(0).getVal()) {
                     sujetDeLaConditionVrai.add(joueur);
                     valeurDeRetour = true;
                 }
@@ -311,7 +313,8 @@ public class Fonctions_Comportements {
         boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
-                if (joueur.getMinute() > lvaleur.get(0).getVal()) {
+                int secondeTotal = 60 * joueur.getMinute() + joueur.getSeconde();
+                if (secondeTotal > lvaleur.get(0).getVal()) {
                     sujetDeLaConditionVrai.add(joueur);
                     valeurDeRetour = true;
                 }
