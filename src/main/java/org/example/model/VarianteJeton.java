@@ -6,7 +6,9 @@ import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class VarianteJeton extends Variante<Jeton> {
     /*Classe modélisant une Variante telle qu'implémentéée dans l'interface*/

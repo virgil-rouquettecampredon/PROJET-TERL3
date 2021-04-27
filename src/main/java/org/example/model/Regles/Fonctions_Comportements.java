@@ -336,12 +336,22 @@ public class Fonctions_Comportements {
      * @param ordonnanceur : ordonnanceur de jeu
      * @param joueur : joeur perdant
      * @fn désigne j comme perdant et termine la partie*/
-    public static final Function<List<Joueur>, Void> defaite = (joueurs) -> { return null; };
+    public static final Function<List<Joueur>, Void> defaite = (joueurs) -> {
+        for (Joueur j: joueurs) {
+            j.setAPerdu(true);
+        }
+        return null;
+    };
 
     /** Consequence : JOUEUR + PAT
      * @param ordonnanceur : ordonnanceur de jeu
      * @fn désigne pat et termine la partie*/
-    public static final Function<List<Joueur>, Void> pat = (joueurs) -> { return null; };
+    public static final Function<List<Joueur>, Void> pat = (joueurs) -> {
+        for (Joueur j: joueurs) {
+            j.setAPat(true);
+        }
+        return null;
+    };
 
     /** Consequence : PIECE + PREND + PIECE
      * @param pieces_a : liste des pieces attaquantes possible

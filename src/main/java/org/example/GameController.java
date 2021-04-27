@@ -35,6 +35,7 @@ import javafx.scene.Scene;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
 public class GameController extends Controller {
     @FXML

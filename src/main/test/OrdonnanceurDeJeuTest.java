@@ -27,10 +27,15 @@ public class OrdonnanceurDeJeuTest {
         Case origine = varianteTest.getPlateau().getCase(p1);
         Joueur j = varianteTest.getOrdrejoueur().get(idJoueur);
         Case destination = varianteTest.getPlateau().getCase(p2);
-        ordonnanceurDeJeu.deplacerPiece(origine, j, destination);
+        try {
+            ordonnanceurDeJeu.deplacerPiece(origine, j, destination);
+        } catch (DeplacementException e) {
+            e.printStackTrace();
+            Assertions.fail("REGLE PAS BON LE NUL");
+        }
     }
 
-    /**==================================================
+        /**==================================================
      * ================| TESTS MAUVAIS |=================
      * ==================================================*/
     @Test
