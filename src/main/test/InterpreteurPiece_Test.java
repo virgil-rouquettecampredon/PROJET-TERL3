@@ -141,6 +141,7 @@ public class InterpreteurPiece_Test {
         }
     }
 
+
     @Test
     public final void testP7_testMauvais(){
         interpretp = new InterpreteurSujetPiece("P7");
