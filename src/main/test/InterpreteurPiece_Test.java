@@ -28,7 +28,7 @@ public class InterpreteurPiece_Test {
     @BeforeEach
     public void init_allpieces(){
 
-        Jeton.PIECE.setBorne(8);
+        /*Jeton.PIECE.setBorne(8);
         Jeton.JOUEUR.setBorne(5, 0);
         Jeton.JOUEUR.setBorne(4, 1);
 
@@ -78,7 +78,7 @@ public class InterpreteurPiece_Test {
 
         VarianteBuilder vb = new VarianteBuilder();
         vb.setJoueurs(alljoueurs);
-        this.ord = new OrdonnanceurDeJeu(vb.createVariante());
+        this.ord = new OrdonnanceurDeJeu(vb.createVariante());*/
     }
 
     /**==================================================

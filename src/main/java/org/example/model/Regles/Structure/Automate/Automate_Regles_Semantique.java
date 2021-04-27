@@ -1467,9 +1467,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             new InterpreteurCibleCase(regleString.get(indRegleSyntaxe - 1), regleString.get(indRegleSyntaxe)),
                                                             Fonctions_Comportements.est_place);
                                                 }
-                                                default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
-                                                }
+                                                default -> throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                             }
                                         }
 
@@ -1518,12 +1516,16 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         case "0R2R35R11R27" -> {}
                                         //NULL
                                         default -> {
-                                            throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                         }
+                                    }
+
+                                        conditionsDeLaRegle.add(cond);
+                                        nbConditions++;
+                                        jetonsarborescence.add(Jeton.CONDITION);
                                     }
                                 }
 
-                            }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/
                             //regle.ajouterUneConsequence(cons);

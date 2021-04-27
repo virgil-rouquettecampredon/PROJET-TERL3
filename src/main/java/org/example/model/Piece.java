@@ -28,7 +28,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
 
     private List<Position> deplacementsSpecialRegles;               //Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
 
-    public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements) {
+    public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements, List<Position> deplacementsSpecialRegles) {
         this.name = name;
         this.sprite = sprite;
         this.nbMovement = nbMovement;
@@ -48,7 +48,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
             this.etatPiece[i] = false;
         }
 
-        deplacementsSpecialRegles = new ArrayList<>();
+        this.deplacementsSpecialRegles = deplacementsSpecialRegles;
     }
 
     public Piece(String name, String sprite, Joueur joueur) {

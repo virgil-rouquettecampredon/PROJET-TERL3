@@ -13,7 +13,8 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
     private ArrayList<Piece> graveyard;         // Liste des pièce dans la défausse du joueur
     private ArrayList<Piece> pawnList;          // Liste des pieces sur le plateau
     private List<Piece> typePawnList;           // Liste de tous les types de pièces du joueur
-    private Integer timer;                          // Temps du joueur utilisé depuis le début de la partie
+    private int min;                          // Temps du joueur utilisé depuis le début de la partie
+    private int sec;                          // Temps du joueur utilisé depuis le début de la partie
 
 
     public Joueur(String name, int equipe) {
@@ -22,7 +23,8 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.graveyard = new ArrayList<Piece>();
         this.pawnList = new ArrayList<Piece>();
         this.typePawnList = new ArrayList<Piece>();
-        this.timer = 10;
+        this.min = 10;
+        this.sec = 0;
     }
 
     public Joueur(Joueur joueur) {
@@ -31,13 +33,24 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         typePawnList.addAll(joueur.typePawnList);
     }
 
-    public void movePawn(Piece pawn, Case casePlateau){
-
+    public boolean decrementeTempsJoueur(){
+        if(sec == 0 && min > 0){
+            sec = 59;
+            min --;
+            return true;
+        }
+        else if(sec > 0){
+            sec --;
+            return true;
+        }
+        return false;
     }
 
-    public void revive(Piece pawn, Case emplacement){
-        // A completer
-
+    public String toStringTimer(){
+        if(this.getSeconde() <= 9){
+            return this.getMinute() + " : 0" + this.getSeconde();
+        }
+        return this.getMinute() + " : " + this.getSeconde();
     }
 
     @Override
@@ -82,8 +95,12 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         this.graveyard = graveyard;
     }
 
-    public void setTimer(int timer) {
-        this.timer = timer;
+    public void setMinute(int minute) {
+        this.min = minute;
+    }
+
+    public void setSec(int seconde) {
+        this.sec = seconde;
     }
 
     public String getName() {
@@ -106,8 +123,12 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
         return typePawnList;
     }
 
-    public Integer getTimer() {
-        return timer;
+    public Integer getMinute() {
+        return min;
+    }
+
+    public Integer getSeconde() {
+        return sec;
     }
 
     public List<Piece> getPieceConditionDeVictoire(){

@@ -320,8 +320,16 @@ public class GameController extends Controller {
         Label playerLabel = new Label(joueurConcerne.getName());
         playerLabel.getStyleClass().add("label-bright");
         vbox.getChildren().add(playerLabel);
+        String message;
 
-        Label timerLabel = new Label(""+joueurConcerne.getTimer());
+        if (joueurConcerne.getMinute() != 999) {
+            message = joueurConcerne.toStringTimer();
+        }
+        else{
+            message = "Temps infini";
+        }
+
+        Label timerLabel = new Label(message);
         timerLabel.getStyleClass().add("label-bright");
         vbox.getChildren().add(timerLabel);
 
@@ -345,22 +353,23 @@ public class GameController extends Controller {
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                if (joueur.getTimer() > 0) {
-                    joueur.setTimer(joueur.getTimer() - 1);
-                    Platform.runLater(() -> labelCourant.setText(""+joueur.getTimer()));
-                } else {
-                    timer.cancel();
-                    Platform.runLater(() -> {
-                                String s = "Plus de temps pour " + joueur.getName() + "!";
-                                //showAlert(Alert.AlertType.ERROR, "T'as perdu looser de " + joueur.getName() + " Aussi talentueux que Hugo !");
-                                try {
-                                    giveUpButton(s);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    showAlert(Alert.AlertType.ERROR, "WOW! un bug t'as empeché de perde!!");
+                if (joueur.getMinute() != 999) {
+                    if (joueur.decrementeTempsJoueur()) {
+                        Platform.runLater(() -> labelCourant.setText("" + joueur.toStringTimer()));
+                    } else {
+                        timer.cancel();
+                        Platform.runLater(() -> {
+                                    String s = "Plus de temps pour " + joueur.getName() + "!";
+                                    //showAlert(Alert.AlertType.ERROR, "T'as perdu looser de " + joueur.getName() + " Aussi talentueux que Hugo !");
+                                    try {
+                                        giveUpButton(s);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        showAlert(Alert.AlertType.ERROR, "WOW! un bug t'as empeché de perde!!");
+                                    }
                                 }
-                            }
                         );
+                    }
                 }
             }
         }, 1000,1000);
