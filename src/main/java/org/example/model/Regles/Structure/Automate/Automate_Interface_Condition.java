@@ -278,11 +278,11 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             aliasCrees.addLast(elR.getNomRegle());
 
             switch (curEtat){
-                case 1 -> alias.put(elR.getNomRegle(),Jeton_Interface.JOUEUR);
-                case 2 , 12 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECE);
-                case 3 , 14 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECETOKEN);
-                case 15 -> alias.put(elR.getNomRegle(),Jeton_Interface.CASE);
-                case 25 -> alias.put(elR.getNomRegle(), Jeton_Interface.CASEPARAM);
+                case 27 -> alias.put(elR.getNomRegle(),Jeton_Interface.JOUEUR);
+                case 28 , 31 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECE);
+                case 29 , 30 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECETOKEN);
+                case 32 -> alias.put(elR.getNomRegle(),Jeton_Interface.CASE);
+                case 33 -> alias.put(elR.getNomRegle(), Jeton_Interface.CASEPARAM);
                 default -> throw new MauvaiseDefinitionRegleException("Impossible d'appliquer un ALIAS ici : " + curEtat);
             }
         }

@@ -494,7 +494,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 regleApresCoup.addAll(generateur.getRegleApresCoup());
 
                 System.out.println("ALIAS RECONNUS : \n" + COLOR_BLUE + generateur.toStringAlias() + COLOR_RESET);
-                for(Map.Entry<String, Alias<Jeton>> entry : automate.getAliasRegle().entrySet()){
+                for(Map.Entry<String, Alias<Jeton,?>> entry : automate.getAliasRegle().entrySet()){
                     System.out.println(COLOR_CYAN + entry.getKey() +COLOR_RESET+ " -> " +COLOR_YELLOW+entry.getValue().getJetonAssocie()+COLOR_RESET);
                 }
 

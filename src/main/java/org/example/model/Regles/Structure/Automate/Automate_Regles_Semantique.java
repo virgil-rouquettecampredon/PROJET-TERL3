@@ -322,6 +322,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
         //Integer renseignant l'indice de parcour dans regleSyntaxe
         int  indRegleSyntaxe = 0;
+        //Ré-initialisation des Alias
         aliasRegle.clear();
 
         //Compteurs permettant de reconnaitre une Regle bien formée
@@ -335,9 +336,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         List<Jeton> jetonsarborescence = new ArrayList<>();
         List<Condition> conditionsDeLaRegle = new ArrayList<>();
         List<Consequence> consequencesDeLaRegle = new ArrayList<>();
-
-        //Liste d'Alias correspondant à ceux présents dans la Regle
-        List<Alias<Jeton,?>> liste_alias = new ArrayList<>();
 
         //Liste des alias définie dans une Condition
         List<Alias<Jeton,?>> aliasCondtion = new ArrayList<>();
@@ -402,7 +400,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     }
                 }
                 //Gestion des Alias dans la Regle (utilisation)
-                case ALIASREUTILISATION -> j = recupererAlias(regleString.get(indRegleSyntaxe)).getJetonAssocie();
+                case ALIASREUTILISATION -> {
+                    //Si la personne définissaant sa Regle veut réutiliser un des Alias qu'il a correctement défini
+                    //Alors on doit faire en sorte que ce ne soit plus un AliasReutilisation que le systèmedoit reconnaitre, mais la valeur du jeton correspondante à l'alias
+                    j = recupererAlias(regleString.get(indRegleSyntaxe)).getJetonAssocie();
+                    //Puis on indique que l'utilisateur veut réutiliser un Alias à un endroit précis du système
+                    parcours+="R";
+                }
             }
 
             //Récupération de l'état précédent (messages d'erreur)
@@ -441,14 +445,12 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                 //traitement sommet terminal 6 : SUJET-ETAT
                                 //Seul l'état estpromu est possible
                                 if(indRegleSyntaxe >= 1){
+                                    Condition cond;
                                     switch (parcours) {
                                         case "026" -> {
                                             //Cas Piece+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
-                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
-                                                nbConditions++;
-                                                jetonsarborescence.add(Jeton.CONDITION);
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
@@ -456,10 +458,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         case "0236" -> {
                                             //Cas Piece+Joueur+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
-                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2), regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
-                                                nbConditions++;
-                                                jetonsarborescence.add(Jeton.CONDITION);
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2), regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
@@ -467,18 +466,101 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         case "036" -> {
                                             //Cas PieceToken+Etat
                                             if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
-                                                conditionsDeLaRegle.add(new ConditionEtat<Piece>(
-                                                        new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu));
-                                                nbConditions++;
-                                                jetonsarborescence.add(Jeton.CONDITION);
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1)), Fonctions_Comportements.estPromu);
                                             } else {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            }
+                                        }
+                                        /*==== Reutilisation Alias ====*/
+                                        case "0R2R36" -> {
+                                            //Alias sur Piece et Joueur : PIECE+JOUEUR+ETAT
+                                            if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                Alias<Jeton,Piece> alias1;
+                                                Alias<Jeton,Joueur> alias2;
+                                                Alias<Jeton,?> testAlias = null;
+                                                try{
+                                                    testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                    alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                                } catch (ClassCastException e) {
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe - 1) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie() + ")");
+                                                } catch (MauvaiseDefinitionRegleException re){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ETAT)");
+                                                }
+                                                try {
+                                                    testAlias = recupererAlias(regleString.get(indRegleSyntaxe - 2));
+                                                    alias1 = (Alias<Jeton, Piece>) testAlias;
+                                                }catch (ClassCastException e) {
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe - 2) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie() + ")");
+                                                } catch (MauvaiseDefinitionRegleException re){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ETAT)");
+                                                }
+
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<>(alias1),new Interpreteur_Alias_Sujet<>(alias2)),Fonctions_Comportements.estPromu);
+                                            }else{
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            }
+                                        }
+                                        case "0R26", "0R36" -> {
+                                            //Alias sur Piece(Token) : PIECE(Token)+ETAT
+                                            if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                Alias<Jeton,Piece> alias;
+                                                Alias<Jeton,?> testAlias = null;
+                                                try{
+                                                    testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                    alias = (Alias<Jeton, Piece>) testAlias;
+                                                }catch (ClassCastException e){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE(Token) | recu " + testAlias.getJetonAssocie()+")");
+                                                }catch (MauvaiseDefinitionRegleException re){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE(Token)+ETAT)");
+                                                }
+                                                cond = new ConditionEtat<Piece>(new Interpreteur_Alias_Sujet<>(alias),Fonctions_Comportements.estPromu);
+                                            }else{
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            }
+                                        }
+                                        case "02R36" -> {
+                                            //Alias sur Joueur : PIECE+JOUEUR+ETAT
+                                            if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                Alias<Jeton,Joueur> alias;
+                                                Alias<Jeton,?> testAlias = null;
+                                                try{
+                                                    testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                    alias = (Alias<Jeton, Joueur>) testAlias;
+                                                } catch (ClassCastException e){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                                } catch (MauvaiseDefinitionRegleException re){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ETAT)");
+                                                }
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias),regleString.get(indRegleSyntaxe-2)),Fonctions_Comportements.estPromu);
+                                            }else{
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                            }
+                                        }
+                                        case "0R236" -> {
+                                            //Alias sur Piece : PIECE+JOUEUR+ETAT
+                                            if (regleString.get(indRegleSyntaxe).equals("estpromu")) {
+                                                Alias<Jeton,Piece> alias;
+                                                Alias<Jeton,?> testAlias = null;
+                                                try{
+                                                    testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                    alias = (Alias<Jeton, Piece>) testAlias;
+                                                }  catch (MauvaiseDefinitionRegleException re){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ETAT)");
+                                                }catch (ClassCastException e){
+                                                    throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                                }
+                                                cond = new ConditionEtat<Piece>(new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe-1)),Fonctions_Comportements.estPromu);
+                                            }else{
+                                                throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                             }
                                         }
                                         default -> {
                                             throw new MauvaiseSemantiqueRegleException("Bloc Piece-Etat OU Piece-Joueur-Etat OU PieceToken-Etat inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                     }
+                                    conditionsDeLaRegle.add(cond);
+                                    nbConditions++;
+                                    jetonsarborescence.add(Jeton.CONDITION);
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Etat [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -486,85 +568,317 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             }
 
                             case 309 , 331 -> {
-                                //SUJET-ACTION-PIECE
+                                //traitement des sommets terminaux 9 et 31 : SUJET-ACTION-PIECE
                                 if (indRegleSyntaxe >= 2) {
+                                    Condition cond = null;
                                     switch (parcours) {
-                                        //Cas Piece+Action+Piece
                                         case "0259" -> {
+                                            //Cas Piece+Action+Piece
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" ->{
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
-                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.prend_Par_Piece));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                    cond = new ConditionAction<Piece, Piece>(new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)), new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)), Fonctions_Comportements.prend_Par_Piece);
                                                 }
                                                 case "estechec" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                    cond  = new ConditionAction<Piece, Piece>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.est_Menace));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
+                                                            Fonctions_Comportements.est_Menace);
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }
-                                        //Cas PieceToken+Action+Piece
                                         case "0359" -> {
+                                            //Cas PieceToken+Action+Piece
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                    cond = new ConditionAction<Piece, Piece>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.prend_Par_Piece));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
-                                                }
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                    }
                                                 case "estechec" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                    cond = new ConditionAction<Piece, Piece>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.est_Menace));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
-                                                }
+                                                            Fonctions_Comportements.est_Menace);
+                                                    }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }
-                                        //Cas Piece+Joueur+Action+Piece
                                         case "02359" -> {
+                                            //Cas Piece+Joueur+Action+Piece
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                    cond = new ConditionAction<Piece, Piece>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.prend_Par_Piece));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
-                                                }
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                    }
                                                 case "estechec" -> {
-                                                    conditionsDeLaRegle.add(new ConditionAction<Piece, Piece>(
+                                                    cond = new ConditionAction<Piece, Piece>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
-                                                            Fonctions_Comportements.est_Menace));
-                                                    nbConditions++;
-                                                    jetonsarborescence.add(Jeton.CONDITION);
-                                                }
+                                                            Fonctions_Comportements.est_Menace);
+                                                    }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }
+                                        /*==== Reutilisation Alias ====*/
+                                        case "0R259" , "0R359" ->{
+                                            //Alias sur Piece : [PIECE(Token)]+ACTION+PIECE
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu PIECE(Token) | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece(Token)Alias-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "025R9" , "035R9"->{
+                                            //Alias sur Piece : PIECE(Token)+ACTION+[PIECE]
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<>(alias),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<>(alias),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R25R9" , "0R35R9" ->{
+                                            //Alias sur Piece et Piece : [PIECE(Token)]+ACTION+[PIECE]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu PIECE(Token) | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2359" -> {
+                                            //Alias sur Piece : [PIECE]+JOUEUR+ACTION+PIECE
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias),regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias),regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R359" -> {
+                                            //Alias sur Joueur : PIECE+[JOUEUR]+ACTION+PIECE
+                                            Alias<Jeton,Joueur> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+
+                                        }
+                                        case "0235R9" -> {
+                                            //Alias sur Piece : PIECE+JOUEUR+ACTION+[PIECE]
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+
+                                        }
+                                        case "0R2R359" -> {
+                                            //Alias sur Piece et Joueur : [PIECE]+[JOUEUR]+ACTION+PIECE
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R235R9" -> {
+                                            //Alias sur Piece et Piece : [PIECE]+JOUEUR+ACTION+[PIECE]
+
+                                        }
+                                        case "02R35R9" -> {
+                                            //Alias sur Piece et Joueur : PIECE+[JOUEUR]+ACTION+[PIECE]
+
+                                        }
+                                        case "0R2R35R9" -> {
+                                            //Alias sur Piece et Joueur et Piece : [PIECE]+[JOUEUR]+ACTION+[PIECE]
+
+                                        }
                                         default -> {
                                             throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece OU Piece-Joueur-Action-Piece OU PieceToken-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                         }
                                     }
+                                    conditionsDeLaRegle.add(cond);
+                                    nbConditions++;
+                                    jetonsarborescence.add(Jeton.CONDITION);
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -1001,7 +1315,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     switch (parcours){
                                         case "02527" -> {
                                             //PIECE + ACTION + CASEPARAM
-                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
@@ -1035,13 +1349,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                                 }
                                             }
                                         }
                                         case "023527" -> {
                                             //PIECE + JOUEUR + ACTION + CASEPARAM
-                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
@@ -1075,13 +1389,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                                 }
                                             }
                                         }
                                         case "03527" -> {
                                             //PIECETOKEN + ACTION + CASEPARAM
-                                            switch (regleString.get(indRegleSyntaxe-1)) {
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
@@ -1115,14 +1429,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piecetoken-Action-Caseparam inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                                 }
                                             }
                                         }
 
                                         case "0251127" -> {
                                             //PIECE + ACTION + CASE + CASE
-                                           switch (regleString.get(indRegleSyntaxe-2)) {
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
@@ -1156,13 +1470,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                                 }
                                             }
                                         }
                                         case "02351127" -> {
                                             //PIECE + JOUEUR + ACTION + CASE + CASE
-                                            switch (regleString.get(indRegleSyntaxe-2)) {
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
@@ -1196,13 +1510,13 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                     jetonsarborescence.add(Jeton.CONDITION);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Case-Case inconnu [" + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString) + "]");
                                                 }
                                             }
                                         }
                                         case "0351127" -> {
                                             //PIECETOKEN + ACTION + CASE + CASE
-                                            switch (regleString.get(indRegleSyntaxe-2)) {
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
                                                 case "estsur" -> {
                                                     conditionsDeLaRegle.add(new ConditionAction<Piece, GroupCases>(
                                                             new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),

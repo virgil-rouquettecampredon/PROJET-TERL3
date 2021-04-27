@@ -18,7 +18,7 @@ public class Regle {
     private Arbre_Condition arbre_conditions;               //Arbre représentant la formule formée par la définition des condtions de la Regle
     private List<Consequence> consequences;                 //Liste des conséquences à exécuter si les conditions précédement définies sont respectées
 
-    private  List<Alias<Jeton>> listeAlias;                 //Liste des alias définis dans la Regle
+    private  List<Alias<Jeton,?>> listeAlias;                 //Liste des alias définis dans la Regle
 
     public Regle() {
         arbre_conditions = null;
@@ -45,14 +45,14 @@ public class Regle {
 
     /**Méthode permettant d'ajouter un Alias supplémentaire à une Regle
      * @param alias : Aliaas à ajouter à notre Regle**/
-    public void ajouterUnAlias(Alias<Jeton> alias) {
+    public void ajouterUnAlias(Alias<Jeton,?> alias) {
         listeAlias.add(alias);
     }
 
     /**Méthode permettant d'éditer les liens pour les Alias
      * Cela va permettre de mettre à jour les informations importantes pour pouvoir les réutiliser après.**/
     public void editerLesLiens(){
-        for (Alias<Jeton> alias: listeAlias) {
+        for (Alias<Jeton,?> alias: listeAlias) {
             alias.editionDesLiens();
         }
     }
