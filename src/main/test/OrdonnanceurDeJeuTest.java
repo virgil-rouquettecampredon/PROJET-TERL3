@@ -23,7 +23,7 @@ public class OrdonnanceurDeJeuTest {
         ordonnanceurDeJeu = new OrdonnanceurDeJeu(varianteTest);
     }
 
-    private void deplacer(Position p1, int idJoueur, Position p2) throws DeplacementException{
+    private void deplacer(Position p1, int idJoueur, Position p2) throws DeplacementException {
         Case origine = varianteTest.getPlateau().getCase(p1);
         Joueur j = varianteTest.getOrdrejoueur().get(idJoueur);
         Case destination = varianteTest.getPlateau().getCase(p2);

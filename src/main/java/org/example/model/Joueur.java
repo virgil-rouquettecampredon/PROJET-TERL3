@@ -16,6 +16,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
     private int min;                          // Temps du joueur utilisé depuis le début de la partie
     private int sec;                          // Temps du joueur utilisé depuis le début de la partie
 
+    private boolean[] etatJoueur;
 
     public Joueur(String name, int equipe) {
         this.name = name;
@@ -25,6 +26,7 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
         this.typePawnList = new ArrayList<Piece>();
         this.min = 10;
         this.sec = 0;
+        etatJoueur = new boolean[42];
     }
 
     public Joueur(Joueur joueur) {
@@ -33,6 +35,8 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
         sec = joueur.sec;
         pawnList.addAll(joueur.pawnList);
         typePawnList.addAll(joueur.typePawnList);
+        etatJoueur = new boolean[42];
+        System.arraycopy(joueur.etatJoueur, 0, etatJoueur, 0, 42);
     }
 
     /**
@@ -170,6 +174,30 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
             }
         }
         return promouvables;
+    }
+
+    public void setAGagne(boolean aGagne) {
+        etatJoueur[0] = aGagne;
+    }
+
+    public boolean aGagne() {
+        return etatJoueur[0];
+    }
+
+    public void setAPerdu(boolean b) {
+        etatJoueur[1] = b;
+    }
+
+    public boolean aPerdu() {
+        return etatJoueur[1];
+    }
+
+    public void setAPat(boolean b) {
+        etatJoueur[2] = b;
+    }
+
+    public boolean aPat() {
+        return etatJoueur[2];
     }
 
     /*FIN GETTER SETTER*/

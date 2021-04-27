@@ -28,6 +28,7 @@ import javafx.stage.StageStyle;
 import javafx.util.converter.NumberStringConverter;
 import org.example.model.*;
 import org.example.model.Regles.Jeton;
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
 import org.junit.runner.manipulation.Ordering;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -76,6 +77,21 @@ public class GameController extends Controller {
     private ArrayList<Object> labelTimers;
     private Label labelCourant;
 
+    private String nomPieceDeplace;
+
+    private EtatClick etatClick;
+    private EtatCoup etatCoup;
+
+    private ArrayList<Position> casesPromotion;
+
+    private static enum EtatCoup {
+        AVANT, PENDANT, APRES, FIN
+    }
+
+    private static enum EtatClick {
+        JEU, CHOIX
+    }
+
     @Override
     public void initialise(){
         if (userVar == null) {
@@ -93,8 +109,11 @@ public class GameController extends Controller {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Erreur lors du clonage de la variante");
             }
+
+            ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante);
+
             try {
-                gameVariante.initialiser();
+                gameVariante.initialiser(ordonnanceurDeJeu.getListTypesPieces());
             } catch ( VarianteException e ) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, e.getMessage());
@@ -111,11 +130,11 @@ public class GameController extends Controller {
 
             indiceJoueur = 0;
 
-            ordonnanceurDeJeu = new OrdonnanceurDeJeu(gameVariante);
-
             canvasManager = new CanvasManager(canvas, gameVariante.getPlateau());
             graveyardContext = graveyardCanvas.getGraphicsContext2D();
             coupPossibles = new LinkedHashSet<>();
+
+            resetCoup();
             updateCanvas();
         }
     }
@@ -180,24 +199,38 @@ public class GameController extends Controller {
 
         switch (mouseEvent.getButton()) {
             case PRIMARY -> {
-                if (c.isAccessible()) {
-                    if (caseOrigine == null) {
-                        if (c.getPieceOnCase() != null && c.getPieceOnCase().getJoueur().getPawnList().contains(c.getPieceOnCase())) {
-                            caseOrigine = c;
-                            coupPossibles = ordonnanceurDeJeu.deplacementsValide(caseOrigine, joueurQuiJoue());
+                switch (etatClick) {
+                    case JEU -> {
+                        if (c.isAccessible()) {
+                            if (caseOrigine == null) {
+                                if (c.getPieceOnCase() != null && c.getPieceOnCase().getJoueur().getPawnList().contains(c.getPieceOnCase())) {
+                                    caseOrigine = c;
+                                    coupPossibles = ordonnanceurDeJeu.deplacementsValide(caseOrigine, joueurQuiJoue());
+                                }
+                            } else {
+                                caseDestination = c;
+                            }
+                            if (caseDestination != null) {
+                                jouerCoup();
+                            }
                         }
-                    } else {
-                        caseDestination = c;
                     }
-                    if (caseDestination != null) {
-                        jouerCoup();
+                    case CHOIX -> {
+                        if (c.getPieceOnCase() != null) {
+                            selectionnerCase(c);
+                        }
                     }
                 }
+
             }
             case SECONDARY -> {
-                caseOrigine = null;
-                coupPossibles = new LinkedHashSet<>();
-                caseDestination = null;
+                switch (etatClick) {
+                    case JEU -> {
+                        caseOrigine = null;
+                        coupPossibles = new LinkedHashSet<>();
+                        caseDestination = null;
+                    }
+                }
             }
         }
         updateCanvas();
@@ -207,36 +240,83 @@ public class GameController extends Controller {
         return gameVariante.getOrdrejoueur().get(indiceJoueur);
     }
 
-    private void jouerCoup() throws IOException{
-        try {
-            gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
-            String name = caseOrigine.getPieceOnCase().getName();
-            System.out.println(joueurQuiJoue().getName() + " : " + name + " to " + caseDestination.getPosition());
-
-            ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
-
-            addLabelCoup(joueurQuiJoue().getName() + " : " + name + " to " + caseDestination.getPosition());
-            incrementerIndiceJoueur();
-
-            if (timerCourant != null) {
-                pauseTimer(timerCourant);
-            }
-
-            if (ordonnanceurDeJeu.fautPromouvoir()) {
-                fairePromouvoir(caseDestination);
-            }
-            else {
-                timerCourant = playTimer(joueurQuiJoue());
-            }
-        } catch (DeplacementException e) {
-            //showAlert(Alert.AlertType.ERROR, "PAS CONTENT !: "+e.getMessage());
-            System.out.println(e.getMessage());
-        }
-
+    private void resetCoup() {
+        etatCoup = EtatCoup.AVANT;
+        etatClick = EtatClick.JEU;
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
+    }
 
+    private void avancerEtat() {
+        switch (etatCoup) {
+            case AVANT -> {
+                etatCoup = EtatCoup.PENDANT;
+            }
+            case PENDANT -> {
+                etatCoup = EtatCoup.APRES;
+            }
+            case APRES -> {
+                etatCoup = EtatCoup.FIN;
+            }
+            case FIN -> {
+                System.err.println("Erreur etat avancé trop loin");
+            }
+        }
+    }
+
+    private void faireSelectionner() {
+        if (casesPromotion != null) {
+            etatClick = EtatClick.CHOIX;
+            canvasManager.hideCasesExcept(casesPromotion);
+        }
+        //else if ...
+    }
+
+    private void selectionnerCase(Case c) throws IOException{
+        etatClick = EtatClick.JEU;
+        if (casesPromotion != null) {
+            casesPromotion = null;
+            fairePromouvoir(c);
+        }
+        //else if ...
+        updateCanvas();
+    }
+
+    private void verifierEtatsRegle() throws  IOException{
+        //verification Joueur
+        boolean attendreUtilisateur = false;
+        for (Joueur j : gameVariante.getJoueurs()) {
+            if (j.aGagne()) {
+                for (Joueur jAutre : gameVariante.getJoueurs()) {
+                    if (jAutre.getEquipe() != j.getEquipe()) {
+                        boolean fin = giveUp("Victoire de "+j.getName(), jAutre);
+                        if (fin) {
+                            return;
+                        }
+                    }
+                }
+            }
+            else if (j.aPerdu()) {
+                boolean fin = giveUp("Defaite de "+j.getName(), j);
+                if (fin) {
+                    return;
+                }
+            }
+            else if (j.aPat()) {
+                for (Joueur jAutre : gameVariante.getJoueurs()) {
+                    boolean fin = giveUp("Pat par règle sur "+j.getName(), jAutre);
+                    if (fin) {
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (ordonnanceurDeJeu.fautPromouvoir()) {
+            attendreUtilisateur = true;
+            fairePromouvoir(caseDestination);
+        }
         String s = "";
         Joueur j = joueurQuiJoue();
         if (ordonnanceurDeJeu.echecEtMat(j)) {
@@ -254,6 +334,71 @@ public class GameController extends Controller {
 
         if (!s.isEmpty()) {
             giveUpButton(s);
+        }
+
+        if (!attendreUtilisateur) {
+            avancerEtat();
+            jouerCoup();
+        }
+
+        //verification Pieces
+        //attendreUtilisateur = faireSelectionnerPieceParmit(Piece::estAPromouvoir);
+        casesPromotion = new ArrayList<>();
+        for (ArrayList<Case> ligne : gameVariante.getPlateau().getEchiquier()) {
+            for (Case c : ligne) {
+                Piece p = c.getPieceOnCase();
+                if (p != null) {
+                    if (p.estAPromouvoir()) {
+                        casesPromotion.add(c.getPosition());
+                    }
+                    //if est a deplacer...
+                }
+            }
+        }
+        faireSelectionner();
+    }
+
+    private void jouerCoup() throws IOException{
+        try {
+            switch (etatCoup) {
+                case AVANT -> {
+                    gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
+                    nomPieceDeplace = caseOrigine.getPieceOnCase().getName();
+                    //System.out.println(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
+
+                    ordonnanceurDeJeu.appliquerReglesAvant();
+
+                    verifierEtatsRegle();
+                }
+                case PENDANT -> {
+                    try {
+                        ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
+                    } catch (DeplacementException e) {
+                        System.err.println(e.getMessage());
+                        resetCoup();
+                    }
+                    verifierEtatsRegle();
+                }
+                case APRES -> {
+                    ordonnanceurDeJeu.appliquerReglesApres();
+
+                    if (timerCourant != null) {
+                        pauseTimer(timerCourant);
+                    }
+
+                    verifierEtatsRegle();
+                }
+                case FIN -> {
+                    addLabelCoup(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
+                    incrementerIndiceJoueur();
+                    timerCourant = playTimer(joueurQuiJoue());
+                    resetCoup();
+                }
+            }
+        } catch (MauvaiseDefinitionRegleException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur critique : "+e.getMessage());
+            getApp().setRoot("home");
         }
     }
 
@@ -273,12 +418,12 @@ public class GameController extends Controller {
         scroll.setVvalue(2);
     }
 
-    public void giveUpButton(String message) throws IOException{
-        //todo passer le gagnant/perdant
-        fairePerdreJoueurCourant();
+    public boolean giveUp(String message, Joueur jPerdant)  throws IOException {
+        fairePerdreJoueur(jPerdant);
         if (indiceJoueur >= gameVariante.getOrdrejoueur().size()) {
             indiceJoueur = 0;
         }
+
         Set<Integer> equipes = new LinkedHashSet<>();
         for (Joueur j:gameVariante.getOrdrejoueur()) {
             equipes.add(j.getEquipe());
@@ -293,18 +438,24 @@ public class GameController extends Controller {
 
             getApp().soundManager.playSound("win");
             popupWindow("gameOver", new EndGameData((Variante<Jeton>) userVar, perdants, message, this));
+            return true;
         }
         else {
             updateCanvas();
+            return false;
         }
+    }
+
+    public void giveUpButton(String message) throws IOException{
+        giveUp(message, joueurQuiJoue());
     }
 
     public void fairePromouvoir(Case casePromotion) throws IOException{
         popupWindow("promotion", new PromotionController.PromotionData(casePromotion, this));
     }
 
-    public void promote(Case casePromotion, Piece typePiece) {
-        System.out.println("PROMOTION EN "+typePiece);
+    public void promote(Case casePromotion, Piece typePiece) throws IOException{
+        //System.out.println("PROMOTION EN "+typePiece);
 
         Piece p = new Piece(typePiece);
         Joueur j = typePiece.getJoueur();
@@ -319,8 +470,8 @@ public class GameController extends Controller {
         updateCanvas();
         addLabelCoup(j + " : " + p2.getName() + " promu en " + p.getName());
 
-
-        timerCourant = playTimer(joueurQuiJoue());
+        avancerEtat();
+        jouerCoup();
     }
 
     private Label createNewTimer(Joueur joueurConcerne) {
@@ -350,7 +501,7 @@ public class GameController extends Controller {
 
     public Timer playTimer(Joueur joueur) {
         Timer timer = new Timer();
-        System.out.println(labelTimers);
+        //System.out.println(labelTimers);
 
         labelCourant = null;
         for (int i = 0; i < labelTimers.size(); i+=2) {
@@ -360,7 +511,7 @@ public class GameController extends Controller {
                 break;
             }
         }
-        System.out.println(joueur + " : " + labelCourant);
+        //System.out.println(joueur + " : " + labelCourant);
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -409,12 +560,15 @@ public class GameController extends Controller {
         giveUpButton("\nABANDON");
     }
 
-    private void fairePerdreJoueurCourant() {
-        Joueur j = joueurQuiJoue();
-        gameVariante.getOrdrejoueur().removeIf(joueur -> joueur.getEquipe() == j.getEquipe());
-        if (!perdants.contains(j.getEquipe())) {
-            perdants.add(j.getEquipe());
+    private void fairePerdreJoueur(Joueur jPerdant) {
+        gameVariante.getOrdrejoueur().removeIf(joueur -> joueur.getEquipe() == jPerdant.getEquipe());
+        if (!perdants.contains(jPerdant.getEquipe())) {
+            perdants.add(jPerdant.getEquipe());
         }
+    }
+
+    private void fairePerdreJoueurCourant() {
+        fairePerdreJoueur(joueurQuiJoue());
     }
 
     @FXML

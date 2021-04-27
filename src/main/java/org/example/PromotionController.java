@@ -60,7 +60,7 @@ public class PromotionController extends Controller {
     }
 
     @FXML
-    public void selectButton() {
+    public void selectButton() throws IOException{
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
         if (pr == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur : Pas de piece selectionnee");

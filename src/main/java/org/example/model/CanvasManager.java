@@ -1,5 +1,6 @@
 package org.example.model;
 
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -97,6 +98,21 @@ public class CanvasManager {
                     }
                 }
                 context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
+            }
+        }
+    }
+
+    public void hideCasesExcept(List<Position> listPos) {
+        for (int i = 0; i < plateau.getHeightY(); i++) {
+            for (int j = 0; j < plateau.getWitdhX(); j++) {
+                if (!listPos.contains(new Position(j, i))) {
+                    if ((j + i) % 2 == 0) {
+                        context.setFill(lightNonAccessibleCaseColor);
+                    } else {
+                        context.setFill(darkNonAccessibleCaseColor);
+                    }
+                    context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
+                }
             }
         }
     }

@@ -41,7 +41,7 @@ public class VarianteManager {
      * @param joueurs   Liste des joueurs
      */
     public void addClassiqueRules(ArrayList<RegleInterface> regles, ArrayList<Joueur> joueurs) {
-        RegleInterface regle1 = new RegleInterface();
+        /*RegleInterface regle1 = new RegleInterface();
         String j1 = joueurs.get(0).getName();
         regle1.getRegle().add(new ElementRegle(Jeton_Interface.JOUEUR, j1, "J"+0));
         regle1.getRegle().add(new ElementRegle(Jeton_Interface.COMPTEUR_TEMPSRESTANT, "TIMER", "timer"));
@@ -53,7 +53,7 @@ public class VarianteManager {
         regle1.getRegle().add(new ElementRegle(Jeton_Interface.CONSEQUENCE_TERMINALE, "PERT", "pert"));
         regle1.getRegle().add(new ElementRegle(Jeton_Interface.FIN, "FIN", "fin"));
 
-        regles.add(regle1);
+        regles.add(regle1);*/
     }
 
     /**
@@ -85,7 +85,7 @@ public class VarianteManager {
 
         //LES PIECES
         //LES PAWN
-        Piece pawnP1 = new Piece("Pion", "file:" + pawnFile.getAbsolutePath(), j.get(0));
+        Piece pawnP1 = new Piece("Pion blanc", "file:" + pawnFile.getAbsolutePath(), j.get(0));
         pawnP1.getPosDeplacements().add(new PositionDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.DEPLACER));
         pawnP1.getPosDeplacements().add(new PositionDeDeplacement(-1, -1, EquationDeDeplacement.TypeDeplacement.PRENDRE));
         pawnP1.getPosDeplacements().add(new PositionDeDeplacement(1, -1, EquationDeDeplacement.TypeDeplacement.PRENDRE));
@@ -94,7 +94,7 @@ public class VarianteManager {
 
         Piece pawnP2 = null;
         if (j.size() > 1) {
-            pawnP2 = new Piece("Pion", "file:" + pawnBlackFile.getAbsolutePath(), j2);
+            pawnP2 = new Piece("Pion noir", "file:" + pawnBlackFile.getAbsolutePath(), j2);
             pawnP2.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.DEPLACER));
             pawnP2.getPosDeplacements().add(new PositionDeDeplacement(-1, 1, EquationDeDeplacement.TypeDeplacement.PRENDRE));
             pawnP2.getPosDeplacements().add(new PositionDeDeplacement(1, 1, EquationDeDeplacement.TypeDeplacement.PRENDRE));
@@ -103,7 +103,7 @@ public class VarianteManager {
         }
 
         //LES ROIS
-        Piece kingP1 = new Piece("Roi", "file:" + kingFile.getAbsolutePath(), j.get(0));
+        Piece kingP1 = new Piece("Roi blanc", "file:" + kingFile.getAbsolutePath(), j.get(0));
         kingP1.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
         kingP1.getPosDeplacements().add(new PositionDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
         kingP1.getPosDeplacements().add(new PositionDeDeplacement(1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -117,7 +117,7 @@ public class VarianteManager {
 
         Piece kingP2 = null;
         if (j.size() > 1) {
-            kingP2 = new Piece("Roi", "file:" + kingBlackFile.getAbsolutePath(), j2);
+            kingP2 = new Piece("Roi noir", "file:" + kingBlackFile.getAbsolutePath(), j2);
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             kingP2.getPosDeplacements().add(new PositionDeDeplacement(1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -131,7 +131,7 @@ public class VarianteManager {
         }
 
         //LES TOURS
-        Piece tourP1 = new Piece("Tour", "file:"+tourFile.getAbsolutePath(), j.get(0));
+        Piece tourP1 = new Piece("Tour blanc", "file:"+tourFile.getAbsolutePath(), j.get(0));
         tourP1.getVecDeplacements().add(new VecteurDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
         tourP1.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
         tourP1.getVecDeplacements().add(new VecteurDeDeplacement(-1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -140,7 +140,7 @@ public class VarianteManager {
 
         Piece tourP2 = null;
         if (j.size() > 1) {
-            tourP2 = new Piece("Tour", "file:" + tourBlackFile.getAbsolutePath(), j2);
+            tourP2 = new Piece("Tour noir", "file:" + tourBlackFile.getAbsolutePath(), j2);
             tourP2.getVecDeplacements().add(new VecteurDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             tourP2.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
             tourP2.getVecDeplacements().add(new VecteurDeDeplacement(-1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -149,7 +149,7 @@ public class VarianteManager {
         }
 
         //LES FOUS
-        Piece fouP1 = new Piece("Fou", "file:"+fouFile.getAbsolutePath(), j.get(0));
+        Piece fouP1 = new Piece("Fou blanc", "file:"+fouFile.getAbsolutePath(), j.get(0));
         fouP1.getVecDeplacements().add(new VecteurDeDeplacement(1, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
         fouP1.getVecDeplacements().add(new VecteurDeDeplacement(-1, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
         fouP1.getVecDeplacements().add(new VecteurDeDeplacement(1, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -158,7 +158,7 @@ public class VarianteManager {
 
         Piece fouP2 = null;
         if (j.size() > 1) {
-            fouP2 = new Piece("Fou", "file:"+fouBlackFile.getAbsolutePath(), j2);
+            fouP2 = new Piece("Fou noir", "file:"+fouBlackFile.getAbsolutePath(), j2);
             fouP2.getVecDeplacements().add(new VecteurDeDeplacement(1, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             fouP2.getVecDeplacements().add(new VecteurDeDeplacement(-1, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             fouP2.getVecDeplacements().add(new VecteurDeDeplacement(1, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -167,7 +167,7 @@ public class VarianteManager {
         }
 
         //LES CAVALIERS
-        Piece cavalierP1 = new Piece("Cavalier", "file:"+cavalierFile.getAbsolutePath(), j.get(0));
+        Piece cavalierP1 = new Piece("Cavalier blanc", "file:"+cavalierFile.getAbsolutePath(), j.get(0));
         cavalierP1.getPosDeplacements().add(new PositionDeDeplacement(-1, -2, EquationDeDeplacement.TypeDeplacement.BOTH));
         cavalierP1.getPosDeplacements().add(new PositionDeDeplacement(1, -2, EquationDeDeplacement.TypeDeplacement.BOTH));
         cavalierP1.getPosDeplacements().add(new PositionDeDeplacement(-1, 2, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -180,7 +180,7 @@ public class VarianteManager {
 
         Piece cavalierP2 = null;
         if (j.size() > 1) {
-            cavalierP2 = new Piece("Cavalier", "file:"+cavalierBlackFile.getAbsolutePath(), j2);
+            cavalierP2 = new Piece("Cavalier noir", "file:"+cavalierBlackFile.getAbsolutePath(), j2);
             cavalierP2.getPosDeplacements().add(new PositionDeDeplacement(-1, -2, EquationDeDeplacement.TypeDeplacement.BOTH));
             cavalierP2.getPosDeplacements().add(new PositionDeDeplacement(1, -2, EquationDeDeplacement.TypeDeplacement.BOTH));
             cavalierP2.getPosDeplacements().add(new PositionDeDeplacement(-1, 2, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -193,7 +193,7 @@ public class VarianteManager {
         }
 
         //LES DAMES
-        Piece dameP1 = new Piece("Dame", "file:"+dameFile.getAbsolutePath(), j.get(0));
+        Piece dameP1 = new Piece("Dame blanc", "file:"+dameFile.getAbsolutePath(), j.get(0));
         dameP1.getVecDeplacements().add(new VecteurDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
         dameP1.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
         dameP1.getVecDeplacements().add(new VecteurDeDeplacement(-1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -206,7 +206,7 @@ public class VarianteManager {
 
         Piece dameP2 = null;
         if (j.size() > 1) {
-            dameP2 = new Piece("Dame", "file:"+dameBlackFile.getAbsolutePath(), j2);
+            dameP2 = new Piece("Dame noir", "file:"+dameBlackFile.getAbsolutePath(), j2);
             dameP2.getVecDeplacements().add(new VecteurDeDeplacement(0, -1, EquationDeDeplacement.TypeDeplacement.BOTH));
             dameP2.getVecDeplacements().add(new VecteurDeDeplacement(0, 1, EquationDeDeplacement.TypeDeplacement.BOTH));
             dameP2.getVecDeplacements().add(new VecteurDeDeplacement(-1, 0, EquationDeDeplacement.TypeDeplacement.BOTH));
@@ -383,7 +383,7 @@ public class VarianteManager {
         try {
             FileInputStream fin = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fin);
-            VarianteBuilder vb = (VarianteBuilder) ois.readObject();
+            current = (VarianteBuilder) ois.readObject();
             ois.close();
             return applyCurrent();
         }

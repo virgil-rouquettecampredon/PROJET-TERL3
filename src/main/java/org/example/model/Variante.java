@@ -96,12 +96,11 @@ public abstract class Variante<A extends EstToken> implements Cloneable{
             v.listGroupCases.add(gc.clone(v.plateau));
         }
 
-        //todo voir avec ervvan pour le générateur de regle
         return v;
     }
 
     /**Méthode permettant d'initialiser correctement une variante d'après les paramètres qu'elle a recu à la construction**/
-    public abstract void initialiser() throws VarianteException;
+    public abstract void initialiser(List<Piece> typePieces) throws VarianteException;
 
     /*Getter et Setter*/
     public Plateau getPlateau() {

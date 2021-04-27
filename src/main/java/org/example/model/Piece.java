@@ -247,5 +247,11 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
         return comportementPiece[2];
     }
 
+    public boolean estAPromouvoir() { return etatPiece[2];}
+
+    public void setEstApromouvoir(boolean b) {
+        etatPiece[2] = b;
+    }
+
     /*FIN GETTER SETTER*/
 }

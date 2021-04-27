@@ -31,7 +31,16 @@ public class VarianteJeton extends Variante<Jeton> {
         setGenerateurDeRegle(new GenerateurDeRegle_Jeton(auto));
     }
 
-    public void initialiser() throws VarianteException{
+    public Variante<Jeton> clone() throws CloneNotSupportedException{
+        Variante<Jeton> vj = super.clone();
+        //rehinitialiser l'automate
+        Automate_Regles<Jeton> auto = new Automate_Regles_Semantique();
+        auto.initialiserAutomate();
+        vj.setGenerateurDeRegle(new GenerateurDeRegle_Jeton(auto));
+        return vj;
+    }
+
+    public void initialiser(List<Piece> typePieces) throws VarianteException{
         for(RegleInterface ri : getRegles()){
             //Récupération de la liste des éléments composants une Regle sur l'interface
             ArrayList<ElementRegle> regleSousFormeElemRegle = ri.getRegle();

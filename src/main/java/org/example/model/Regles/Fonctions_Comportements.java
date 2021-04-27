@@ -330,7 +330,13 @@ public class Fonctions_Comportements {
      * @param ordonnanceur : ordonnanceur de jeu
      * @param joueur : joueur gagnant
      * @fn désigne j comme gagnant et termine la partie*/
-    public static final Function<List<Joueur>, Void> victoire = (joueurs) -> { return null; };
+    public static final Function<List<Joueur>, Void> victoire = (joueurs) -> {
+        System.out.println("VICTOIRE EXECUTE");
+        for (Joueur j : joueurs) {
+            j.setAGagne(true);
+        }
+        return null;
+    };
 
     /** Consequence : JOUEUR + PERD
      * @param ordonnanceur : ordonnanceur de jeu
@@ -370,9 +376,18 @@ public class Fonctions_Comportements {
     /** Consequence : PIECE + SE_PROMET_EN + PIECE
      * @param pieces : liste des pieces promouvable
      * @param cases : liste des cases sur lequel les pièces peuvent être promu
-     * @fn si au moins une pièce dans la liste des pices est sur une case dans la liste des cases,
+     * @fn si au moins une pièce dans la liste des pieces est sur une case dans la liste des cases,
      * le joueur choisi parmis ces pièces à promouvoir*/
-    public static final BiFunction<List<Piece>, List<GroupCases>, Void> promouvoir = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> promouvoir = (pieces, cases) -> {
+        for (GroupCases gc : cases) {
+            for (Case c : gc.getCasesAbsolue()) {
+                if (c.getPieceOnCase() != null && pieces.contains(c.getPieceOnCase())) {
+                    c.getPieceOnCase().setEstApromouvoir(true);
+                }
+            }
+        }
+        return null;
+    };
 
     /** Consequence : JOUEUR + PLACE + PIECE
      * @param pieces : liste des pieces plaçable
@@ -386,7 +401,7 @@ public class Fonctions_Comportements {
      * @param groupcases : liste des cases sur lequel les pièces peuvent être placé
      * @fn Le joueur effectue un choix de déplacement selon les cases proposé par groupcases pour chacune des pièces.
      * Le groupe de case peut comporter des cases absolu du plateau comme des cases relatives qui seront lu en fonction de la position de la pièce*/
-    public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> { return null; };//todo 2
 
 
 

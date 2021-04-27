@@ -95,7 +95,7 @@ public class OrdonnanceurDeJeu {
      */
     public boolean conditionVictoireZeroVie(Joueur j){
         for (Piece piece: j.getPawnList()) {
-            System.out.println("Joueur: " + j.toString() + " piece " + piece + " nbVie " + piece.getNbLife());
+            //System.out.println("Joueur: " + j.toString() + " piece " + piece + " nbVie " + piece.getNbLife());
             if(piece.getNbLife() == 0){
                 return true;
             }
@@ -316,6 +316,20 @@ public class OrdonnanceurDeJeu {
         return copie;
     }
 
+    public void appliquerReglesAvant() throws MauvaiseDefinitionRegleException{
+        for (Regle r : variantej.getGenerateurDeRegle().getRegleAvantCoup()) {
+            r.editerLesLiens();
+            r.analyser(this);
+        }
+    }
+
+    public void appliquerReglesApres() throws MauvaiseDefinitionRegleException{
+        for (Regle r : variantej.getGenerateurDeRegle().getRegleApresCoup()) {
+            r.editerLesLiens();
+            r.analyser(this);
+        }
+    }
+
     /**
      * Effectue les vérification et déplace la piece si le déplacement est valide
      * @param origine La Case d'origine du coup
@@ -325,6 +339,7 @@ public class OrdonnanceurDeJeu {
      */
     public void deplacerPiece(Case origine, Joueur joueur, Case destination) throws DeplacementException {  //todo créer l'exception
         //Appliquer les règles avant coup
+
 
         Plateau copie = verifierDeplacement(origine, joueur, destination);
 
@@ -372,8 +387,6 @@ public class OrdonnanceurDeJeu {
             //System.out.println("===================================================================================\n");
         }
 
-        //todo Appliquer les règles après coup
-        //regles.appliquer();
     }
 
 
