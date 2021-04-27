@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.model.Regles.*;
+import org.example.model.Regles.Structure.Automate.Automate_Regles;
 import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 
 import java.io.Serializable;
@@ -15,19 +16,36 @@ public class VarianteJeton extends Variante<Jeton> {
     public VarianteJeton(String name, Plateau plateau, ArrayList<Joueur> joueurs, ArrayList<Joueur> ordreJoueurs, ArrayList<RegleInterface> regles, ArrayList<GroupCases> listGroupCases) {
         super(name, plateau, joueurs, ordreJoueurs, listGroupCases);
         this.regles = regles;
-        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
+        Automate_Regles<Jeton> auto = new Automate_Regles_Semantique();
+        auto.initialiserAutomate();
+        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(auto));
     }
 
     public VarianteJeton(Variante<Jeton> variante) {
         super(variante);
         this.regles = new ArrayList<>();
-        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(new Automate_Regles_Semantique()));
+        Automate_Regles<Jeton> auto = new Automate_Regles_Semantique();
+        auto.initialiserAutomate();
+        setGenerateurDeRegle(new GenerateurDeRegle_Jeton(auto));
     }
 
     public void initialiser() throws VarianteException{
         for(RegleInterface ri : getRegles()){
             //Récupération de la liste des éléments composants une Regle sur l'interface
             ArrayList<ElementRegle> regleSousFormeElemRegle = ri.getRegle();
+
+            Jeton.CASE.setBorne(getListGroupCases().size());
+            Jeton.JOUEUR.setBorne(getJoueurs().size());
+            Jeton.PIECE.setBorne(typePieces.size());
+            Set<Integer> equipes = new LinkedHashSet<>();
+            for(Joueur j : getJoueurs()){
+                equipes.add(j.getEquipe());
+            }
+            Jeton.PIECE.setBorne(equipes.size(), 1);
+
+            for(ElementRegle elr : regleSousFormeElemRegle){
+                System.out.println(elr.getJetonAssocie() + "-> {" + elr.getNomInterface() + "|" + elr.getNomRegle() + "}");
+            }
 
             //Instanciation de la liste traduisant la regle obtenue depuis l'interface en regle sous forme de liste de termes
             // 0 : Regle avant le coup d'un joueur
@@ -38,12 +56,7 @@ public class VarianteJeton extends Variante<Jeton> {
 
             for(ElementRegle elRe : regleSousFormeElemRegle){
                 if(elRe.getJetonAssocie() != Jeton_Interface.FIN){
-                    if(elRe.getJetonAssocie() != Jeton_Interface.ALIAS){
-                        regleSousFormeMots.add(elRe.getNomRegle());
-                    }else{
-                        regleSousFormeMots.add(elRe.getNomInterface());
-                        regleSousFormeMots.add(elRe.getNomRegle());
-                    }
+                    regleSousFormeMots.add(elRe.getNomRegle());
                 }
             }
 

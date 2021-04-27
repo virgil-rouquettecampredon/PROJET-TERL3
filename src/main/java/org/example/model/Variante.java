@@ -5,6 +5,8 @@ import org.example.model.Regles.GenerateurDeRegle;
 import org.example.model.Regles.GenerateurDeRegle_Jeton;
 import org.example.model.Regles.Jeton;
 import org.example.model.Regles.Jeton_Interface;
+import org.example.model.Regles.Structure.Automate.Automate;
+import org.example.model.Regles.Structure.Automate.Automate_Regles;
 import org.example.model.Regles.Structure.Automate.Automate_Regles_Semantique;
 import org.example.model.Regles.Regle;
 import org.example.model.Regles.EstToken;
