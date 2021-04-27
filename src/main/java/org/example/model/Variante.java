@@ -10,11 +10,12 @@ import org.example.model.Regles.Regle;
 import org.example.model.Regles.EstToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
-public abstract class Variante<A extends EstToken> {
+public abstract class Variante<A extends EstToken> implements Cloneable{
     private String name;                                // Nom de la variante
     private Plateau plateau;                            // Le plateau correspondant à cette variantes
     private ArrayList<Joueur> joueurs;                  // La liste des joueurs de cette variantes
@@ -49,6 +50,47 @@ public abstract class Variante<A extends EstToken> {
         for (Joueur j : joueurs) {
             j.setGraveyard(new ArrayList<>());
         }
+    }
+
+    @Override
+    public Variante<A> clone() throws CloneNotSupportedException{
+        Variante<A> v = (Variante<A>) super.clone();
+
+        //On clone les joueurs sans leur mettre les pawnList
+        v.joueurs = new ArrayList<>();
+        for (Joueur j : joueurs) {
+            v.joueurs.add(j.clone());
+        }
+
+        //On clone le plateau et si il y a une piece on lui met le joueur correspondant et on l'ajoute dans la pawnList
+        v.plateau = plateau.clone(v.joueurs);
+
+        //On met les joueurs dans l'ordre des joueurs
+        v.ordreJoueurs = new ArrayList<>();
+        for (int i = 0; i < ordreJoueurs.size(); i++) {
+            Joueur jCorrespondant = null;
+            for (Joueur vj : v.joueurs) {
+                if (vj.getName().equals(ordreJoueurs.get(i).getName()) && vj.getEquipe() == ordreJoueurs.get(i).getEquipe()) {
+                    jCorrespondant = vj;
+                    break;
+                }
+            }
+            if (jCorrespondant == null) {
+                System.err.println("Pas possible 2");
+            }
+            else {
+                v.ordreJoueurs.add(jCorrespondant);
+            }
+        }
+
+        //On clone les groupe de case qui recherchent les cases sur le plateau
+        v.listGroupCases = new ArrayList<>();
+        for (GroupCases gc : listGroupCases) {
+            v.listGroupCases.add(gc.clone(v.plateau));
+        }
+
+        //todo voir avec ervvan pour le générateur de regle
+        return v;
     }
 
     /**Méthode permettant d'initialiser correctement une variante d'après les paramètres qu'elle a recu à la construction**/

@@ -195,6 +195,15 @@ public class OrdonnanceurDeJeuTest {
             e.printStackTrace();
         }
     }
+    
+    @Test
+    public void test_variante_clone() {
+        try {
+            Variante<Jeton> vClone = varianteTest.clone();//todo
+        } catch (CloneNotSupportedException e) {
+            Assertions.fail("pas clonable "+e);
+        }
+    }
 
     @Test
     public void test_map_lol_xd() {

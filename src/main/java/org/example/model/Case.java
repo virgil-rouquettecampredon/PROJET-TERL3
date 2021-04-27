@@ -5,7 +5,7 @@ import org.example.model.Regles.CibleDeRegle;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Case implements Serializable {
+public class Case implements Serializable, Cloneable {
     private Position position;                          // Position sur le plateau
     private Piece pieceOnCase;                          // Pièce située sur la case, ou null si aucune pièce
     private boolean accessible;                          // Case accessible ou non
@@ -23,6 +23,15 @@ public class Case implements Serializable {
     public void afficherCase(){
         // A completer
 
+    }
+
+    public Case clone() throws CloneNotSupportedException {
+        Case c = (Case) super.clone();
+        c.position = new Position(position.getX(), position.getY());
+        if (pieceOnCase != null) {
+            c.pieceOnCase = pieceOnCase.clone();
+        }
+        return c;
     }
 
     /*DEBUT GETTER SETTER*/

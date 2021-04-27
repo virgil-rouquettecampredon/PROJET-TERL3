@@ -86,7 +86,11 @@ public class GameController extends Controller {
             }
         }
         else {
-            gameVariante = new VarianteJeton((Variante) userVar);
+            try {
+                gameVariante = ((Variante<Jeton>) userVar).clone();
+            } catch ( CloneNotSupportedException e ) {
+                e.printStackTrace();
+            }
             varLabel.setText(gameVariante.getName());
             playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());
 
@@ -124,7 +128,7 @@ public class GameController extends Controller {
         Position position = new Position(0, 0);
         graveyardContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        double rectSize = canvasManager.getRectSize();
+        double rectSize = canvasManager.getRectSize()/1.5;
         for (Joueur j : gameVariante.getJoueurs()) {
             for (Piece p : j.getGraveyard()) {
                 Image img = new Image(p.getSprite());
@@ -159,7 +163,6 @@ public class GameController extends Controller {
 
     @FXML
     public void play(MouseEvent mouseEvent) throws IOException {
-        System.out.println(joueurQuiJoue().getTimer());
 
         getApp().soundManager.playSound("button-hover");
         //System.out.println(mouseEvent);

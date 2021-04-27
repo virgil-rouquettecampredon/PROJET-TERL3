@@ -140,7 +140,6 @@ public class EditRuleController extends Controller {
         }
         else {
             appearNextCondition();
-            appearNextConsequence();
         }
 
     }
@@ -191,8 +190,8 @@ public class EditRuleController extends Controller {
         ControlElement control;
 
         //if(prochains.size() == 1 && prochains.get(0).getJetonAssocie() == Jeton_Interface.NOMBRE){
-        if(conditionBoxes.size() > 0 && conditionBoxes.getLast().getComboBox() != null &&
-                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.COMPARATEUR){
+        if (conditionBoxes.size() > 0 && conditionBoxes.getLast().getComboBox() != null &&
+                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.COMPARATEUR) {
             TextField field = new TextField();
             field.setPromptText("Nombre");
 
@@ -200,7 +199,7 @@ public class EditRuleController extends Controller {
             control = new ControlElement(field, true);
         }
         else if(conditionBoxes.size() > 0 && conditionBoxes.getLast().getComboBox() != null &&
-                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.ALIAS){
+                conditionBoxes.getLast().getComboBox().getValue().getElementRegle().getJetonAssocie() == Jeton_Interface.ALIASDEF){
             TextField field = new TextField();
             field.setPromptText("Alias");
 
@@ -285,10 +284,10 @@ public class EditRuleController extends Controller {
         //supprimer le dernier comboBox
         ControlElement last = boxes.removeLast();
         HBox lastHBox = hBoxes.getLast();
-        if (last.getComboBox() != null) {
+        if (last.getComboBox() != null && last.getField() == null) {
             lastHBox.getChildren().remove(last.getComboBox());
         }
-        else {
+        else if (last.getComboBox() == null && last.getField() != null){
             lastHBox.getChildren().remove(last.getField());
         }
 
@@ -330,6 +329,26 @@ public class EditRuleController extends Controller {
         deleteLastBox(consequenceBoxes, consequenceHBoxes, consequenceVBox);
     }
 
+    private void deleteAllConsequence() {
+        VarianteBuilder current = getApp().varianteManager.getCurrent();
+        List<Piece> pieces = current.getAllPawn();
+        List<GroupCases> cases = current.getListGroupCases();
+        List<Joueur> joueurs = current.getJoueurs();
+
+        automateConsequence = new Automate_Interface_Consequence(pieces,cases,joueurs);
+        automateConsequence.initialiserAutomate();
+        automateConsequence.setAlias(automateCondition.getAlias());
+
+        //INITIALISATION DE L'INTERFACE
+        consequenceBoxes = new ArrayDeque<>();
+        consequenceHBoxes = new ArrayDeque<>();
+
+        consequenceVBox.getChildren().clear();
+        HBox consequenceHBox = generateNewHBox();
+        consequenceHBoxes.add(consequenceHBox);
+        consequenceVBox.getChildren().add(consequenceHBox);
+    }
+
     private void conditionBoxAction(int index) {
         //System.out.println("ACTION id="+index + " size="+conditionBoxes.size());
         //SUPPRIMER LES CHOIX APRES
@@ -342,6 +361,7 @@ public class EditRuleController extends Controller {
         if (index < size && conditionBoxes.getLast().getField() == null) {
             deleteLastAutomateCondition();
         }
+        deleteAllConsequence();
 
         //DIRE A L'AUTOMATE LE CHOIX
         ControlElement c = conditionBoxes.getLast();
@@ -485,16 +505,23 @@ public class EditRuleController extends Controller {
     }
 
     private void appearNextCondition() {
-        //SI "ALORS" ou "FIN" ALORS NE PAS APPARAITRE PROCHAIN (FIN DE TRAITEMENT)
+        //SI "ALORS" ou "FIN" ALORS FAIRE APPARAITRE UN VIDE ET FAIRE APPARAITRE LES CONSEQUENCES
         if (!lastBoxIsAlors(conditionBoxes)) {
             appearNext(generateNewConditionComboBox(), conditionBoxes, conditionHBoxes, conditionVBox);
+        }
+        else {
+            conditionBoxes.add(new ControlElement());
+            appearNextConsequence();
         }
     }
 
     private void appearNextConsequence() {
-        //SI "ALORS" ou "FIN" ALORS NE PAS APPARAITRE PROCHAIN (FIN DE TRAITEMENT)
+        //SI "ALORS" ou "FIN" ALORS FAIRE APPARAITRE UN VIDE
         if (!lastBoxIsAlors(consequenceBoxes)) {
             appearNext(generateNewConsequenceComboBox(), consequenceBoxes, consequenceHBoxes, consequenceVBox);
+        }
+        else {
+            consequenceBoxes.add(new ControlElement());
         }
     }
 
@@ -519,18 +546,26 @@ public class EditRuleController extends Controller {
     }
 
     public static class ControlElement {
-        private ComboBox<ComboBoxItem> comboBox;
-        private TextField field;
-        private boolean isNumberField;
+        private final ComboBox<ComboBoxItem> comboBox;
+        private final TextField field;
+        private final boolean isNumberField;
 
         public ControlElement(ComboBox<ComboBoxItem> comboBox) {
             this.comboBox = comboBox;
+            this.field = null;
             isNumberField = false;
         }
 
         public ControlElement(TextField field, boolean isNumber) {
             this.field = field;
+            this.comboBox = null;
             isNumberField = isNumber;
+        }
+
+        public ControlElement() {
+            isNumberField = false;
+            this.comboBox = null;
+            this.field = null;
         }
 
         public ComboBox<ComboBoxItem> getComboBox() {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Plateau implements Serializable {
+public class Plateau implements Serializable, Cloneable{
     private int heightY;                                // Hauteur du plateau
     private int witdhX;                                 // Largeur du plateau
     private ArrayList<ArrayList<Case>> echiquier;       // Liste des case du plateau
@@ -49,6 +49,40 @@ public class Plateau implements Serializable {
                 echiquier.get(i).get(j).setPieceOnCase(null);
             }
         }
+    }
+
+    public Plateau clone(ArrayList<Joueur> joueurs) throws CloneNotSupportedException {
+        Plateau p = (Plateau)super.clone();
+        p.echiquier = new ArrayList<>();
+        for (ArrayList<Case> ligne : echiquier) {
+            ArrayList<Case> ligneP = new ArrayList<>();
+            for (Case c : ligne) {
+                Case nc = c.clone();
+                ligneP.add(nc);
+                Case myCase = getCase(c.getPosition());
+
+                if (myCase.getPieceOnCase() != null) {
+                    Joueur monJoueur = myCase.getPieceOnCase().getJoueur();
+                    Joueur jCorrespondant = null;
+                    for (Joueur vj : joueurs) {
+                        if (vj.getName().equals(monJoueur.getName()) && vj.getEquipe() == monJoueur.getEquipe()) {
+                            jCorrespondant = vj;
+                            break;
+                        }
+                    }
+                    if (jCorrespondant == null) {
+                        System.err.println("Pas possible");
+                    }
+                    else {
+                        nc.getPieceOnCase().setJoueur(jCorrespondant);
+                        jCorrespondant.getPawnList().add(nc.getPieceOnCase());
+                    }
+                }
+            }
+            p.echiquier.add(ligneP);
+        }
+
+        return p;
     }
 
     /*DEBUT GETTER SETTER*/

@@ -6,7 +6,7 @@ import org.example.model.Regles.SujetDeRegle;
 import java.io.Serializable;
 import java.util.*;
 
-public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
+public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneable {
 
     private String name;                        // Nom du joueur
     private int equipe;                         // Équipe du joueur
@@ -29,8 +29,24 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable {
 
     public Joueur(Joueur joueur) {
         this(joueur.name, joueur.equipe);
+        min = joueur.min;
+        sec = joueur.sec;
         pawnList.addAll(joueur.pawnList);
         typePawnList.addAll(joueur.typePawnList);
+    }
+
+    public Joueur clone() throws CloneNotSupportedException {
+        Joueur j = (Joueur)super.clone();
+        j.graveyard = new ArrayList<>();
+        for (Piece p : graveyard) {
+            j.graveyard.add(p.clone());
+        }
+        j.pawnList = new ArrayList<>();
+        j.typePawnList = new ArrayList<>();
+        for (Piece p : typePawnList) {
+            j.typePawnList.add(p.clone());
+        }
+        return j;
     }
 
     public boolean decrementeTempsJoueur(){

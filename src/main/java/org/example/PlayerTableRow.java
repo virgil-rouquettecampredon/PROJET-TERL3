@@ -7,6 +7,8 @@ import org.example.model.Joueur;
 class PlayerTableRow {
     private final SimpleStringProperty name;
     private final SimpleIntegerProperty team;
+    private final SimpleIntegerProperty timerMinute;
+    private final SimpleIntegerProperty timerSeconde;
     private final Joueur joueur;
     private final int id;
 
@@ -14,12 +16,16 @@ class PlayerTableRow {
         this.name = new SimpleStringProperty(name);
         this.team = new SimpleIntegerProperty(team);
         joueur = new Joueur(name, team);
+        this.timerMinute = new SimpleIntegerProperty(joueur.getMinute());
+        this.timerSeconde = new SimpleIntegerProperty(joueur.getSeconde());
         this.id = id;
     }
 
     PlayerTableRow(Joueur p, int id) {
         name = new SimpleStringProperty(p.getName());
         team = new SimpleIntegerProperty(p.getEquipe());
+        this.timerMinute = new SimpleIntegerProperty(p.getMinute());
+        this.timerSeconde = new SimpleIntegerProperty(p.getSeconde());
         this.joueur = p;
         this.id = id;
     }
@@ -27,6 +33,18 @@ class PlayerTableRow {
     public SimpleStringProperty nameProperty() {
         return name;
     }
+
+    public SimpleIntegerProperty timerMinuteProperty() {
+        return timerMinute;
+    }
+
+    public int getTimerMinute() {return timerMinute.get();}
+
+    public SimpleIntegerProperty timerSecondeProperty() {
+        return timerSeconde;
+    }
+
+    public int getTimerSeconde() {return timerSeconde.get();}
 
     public int getTeam() {
         return team.get();

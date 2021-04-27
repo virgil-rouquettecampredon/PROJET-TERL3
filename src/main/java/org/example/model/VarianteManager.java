@@ -23,7 +23,6 @@ public class VarianteManager {
         variantes = new ArrayList<>();
         current = new VarianteBuilder();
         variantes.add(createVarianteClassique());
-        variantes.add(FactoryVariante960.createVariante());
     }
 
     /**

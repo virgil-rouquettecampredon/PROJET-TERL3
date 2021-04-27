@@ -5,7 +5,7 @@ import org.example.model.Regles.CibleDeRegle;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GroupCases implements CibleDeRegle, Serializable {
+public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
     /*Classe permettant de modéliser un regroupement de cases*/
     private String name;                                // Nom du groupe
     private ArrayList<Case> casesAbsolue;               // Liste des case en position Absolue
@@ -17,6 +17,20 @@ public class GroupCases implements CibleDeRegle, Serializable {
         this.casesAbsolue = new ArrayList<>();
         this.positionsRelatives = new ArrayList<>();
         this.plateau = plateau;
+    }
+
+    public GroupCases clone(Plateau p) throws CloneNotSupportedException {
+        GroupCases gc = (GroupCases)super.clone();
+        gc.plateau = p;
+        gc.casesAbsolue = new ArrayList<>();
+        for (Case c : casesAbsolue) {
+            gc.casesAbsolue.add(p.getCase(c.getPosition()));
+        }
+        gc.positionsRelatives = new ArrayList<>();
+        for (Position pos : positionsRelatives) {
+            gc.positionsRelatives.add(new Position(pos.getX(), pos.getY()));
+        }
+        return gc;
     }
 
     /*GETTER ET SETTER*/

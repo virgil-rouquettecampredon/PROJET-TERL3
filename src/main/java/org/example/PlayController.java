@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import org.example.model.FactoryVariante960;
 import org.example.model.Variante;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class PlayController extends Controller {
                 getApp().varianteManager.getVariantes()) {
             varianteBox.getItems().add(new VarianteBox(v));
         }
+        varianteBox.getItems().add(new VarianteBox(FactoryVariante960.createVariante()));
     }
 
     @FXML

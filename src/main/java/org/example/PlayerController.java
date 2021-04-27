@@ -21,6 +21,10 @@ public class PlayerController extends Controller {
     private TableColumn<PlayerTableRow, String> nameColumn;
     @FXML
     private TableColumn<PlayerTableRow, Integer> teamColumn;
+    @FXML
+    private TableColumn<PlayerTableRow, Integer> timerMinuteColumn;
+    @FXML
+    private TableColumn<PlayerTableRow, Integer> timerSecondeColumn;
 
     private ObservableList<PlayerTableRow> data;
 
@@ -32,13 +36,24 @@ public class PlayerController extends Controller {
             showAlert(Alert.AlertType.ERROR, "Erreur : pas assez de joueur (1 au minimum)");
             return;
         }
+        for (PlayerTableRow prow : data) {
+            if (prow.getTimerMinute() == 0 && prow.getTimerSeconde() == 0 || prow.getTimerMinute() < 0 || prow.getTimerSeconde() < 0 || prow.getTimerSeconde() >= 60) {
+                showAlert(Alert.AlertType.ERROR, "Erreur : temps de "+prow.getTimerMinute()+" minute et "+prow.getTimerSeconde()+" seconde impossible!" +
+                        "\nLe joueur est "+prow.getJoueur().getName());
+                return;
+            }
+        }
+
 
         List<Joueur> list = getApp().varianteManager.getCurrent().getJoueurs();
         list.clear();
         getApp().varianteManager.getCurrent().getPlateau().clear();
         for (PlayerTableRow prow:
              data) {
-            list.add(new Joueur(prow.getName(), prow.getTeam()));
+            Joueur j =new Joueur(prow.getName(), prow.getTeam());
+            j.setMinute(prow.getTimerMinute());
+            j.setSec(prow.getTimerSeconde());
+            list.add(j);
         }
 
         /*System.out.println(nbPlayerInput.getText());
@@ -51,8 +66,14 @@ public class PlayerController extends Controller {
     public void initialise() {
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
         teamColumn.setCellValueFactory(cellData -> cellData.getValue().teamProperty().asObject());
         teamColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
+        timerMinuteColumn.setCellValueFactory(cellData -> cellData.getValue().timerMinuteProperty().asObject());
+        timerMinuteColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        timerSecondeColumn.setCellValueFactory(cellData -> cellData.getValue().timerSecondeProperty().asObject());
+        timerSecondeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
 
         data = FXCollections.observableArrayList();

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
+public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneable {
     private String name;                                            // Nom de la pièce
     private String sprite;                                          // Image qui sera afficher sur le plateau pour cette pièce
     private int nbMovement;                                         // Le nombre total de mouvement qu'a effectué la pièce au cours de la partie jouée
@@ -52,7 +52,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     }
 
     public Piece(String name, String sprite, Joueur joueur) {
-        this(name, sprite, 0, -1, joueur, new ArrayList<>(), new ArrayList<>());
+        this(name, sprite, 0, -1, joueur, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Piece(String name, String sprite) {
@@ -63,10 +63,35 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable {
     /**@param piece: La pèce utilisé afin de la dupliquer.
      * La fonction duplique une pièce */
     public Piece(Piece piece) {
-        this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements);
+        this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements, piece.deplacementsSpecialRegles);
 
         comportementPiece = new Boolean[3];
         System.arraycopy(piece.comportementPiece, 0, comportementPiece, 0, 3);
+    }
+
+    public Piece clone() throws CloneNotSupportedException {
+        Piece p = (Piece)super.clone();
+        p.joueur = null;
+
+        p.posDeplacements = new ArrayList<>();
+        p.posDeplacements.addAll(posDeplacements);
+        p.vecDeplacements = new ArrayList<>();
+        p.vecDeplacements.addAll(vecDeplacements);
+        p.comportementPiece = new Boolean[3];
+        for (int i = 0; i < 3; i++){
+            p.comportementPiece[i] = comportementPiece[i];
+        }
+        p.etatPiece = new Boolean[42];
+        for (int i = 0; i < 42; i++) {
+            p.etatPiece[i] = etatPiece[i];
+        }
+        pieceMange = null;
+        pieceMenace = null;
+        p.deplacementsSpecialRegles = new ArrayList<>();
+        for (Position pos : deplacementsSpecialRegles) {
+            p.deplacementsSpecialRegles.add(new Position(pos.getX(), pos.getY()));
+        }
+        return p;
     }
 
     public void ajouterDeplacementsSpecialRegles(Position p){
