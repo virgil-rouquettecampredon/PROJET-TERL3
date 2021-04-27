@@ -785,7 +785,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             Fonctions_Comportements.est_Menace);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
 
@@ -838,9 +838,9 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                 testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
                                                 alias2 = (Alias<Jeton, Joueur>) testAlias;
                                             }catch (ClassCastException e){
-                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
                                             }catch (MauvaiseDefinitionRegleException re){
-                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
                                             }
                                             switch (regleString.get(indRegleSyntaxe - 1)) {
                                                 case "prend" -> {
@@ -856,20 +856,137 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                             Fonctions_Comportements.est_Menace);
                                                 }
                                                 default -> {
-                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-Piece inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }
                                         case "0R235R9" -> {
                                             //Alias sur Piece et Piece : [PIECE]+JOUEUR+ACTION+[PIECE]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
 
                                         }
                                         case "02R35R9" -> {
                                             //Alias sur Piece et Joueur : PIECE+[JOUEUR]+ACTION+[PIECE]
-
+                                            Alias<Jeton,Joueur> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias1 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
                                         }
                                         case "0R2R35R9" -> {
                                             //Alias sur Piece et Joueur et Piece : [PIECE]+[JOUEUR]+ACTION+[PIECE]
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias3),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias3),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-PieceAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
 
                                         }
                                         default -> {
@@ -1006,6 +1123,1296 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                 }
                                                 default -> {
                                                     throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        /*==== Reutilisation Alias ====*/
+                                        case "0R25910" , "0R35910" ->{
+                                            //Alias sur Piece : [PIECE(Token)]+ACTION+PIECE+JOUEUR
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE(Token) | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE+JOUEUR)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "025R910" , "035R910" ->{
+                                            //Alias sur Piece : PIECE(Token)+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE]+JOUEUR)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0259R10" , "0359R10" ->{
+                                            //Alias sur Joueur : PIECE(Token)+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Joueur> alias;
+                                            Alias<Jeton,?> testAlias = null;
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+PIECE+[JOUEUR])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R259R10" , "0R359R10" ->{
+                                            //Alias sur Piece et Joueur : [PIECE(Token)]+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+                                            Alias<Jeton,Joueur> alias2;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE+JOUEUR)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+PIECE+[JOUEUR])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R25R910" , "0R35R910" ->{
+                                            //Alias sur Piece et Piece : [PIECE(Token)]+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+                                            Alias<Jeton,Piece> alias2;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE+JOUEUR)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE]+JOUEUR)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "025R9R10" , "035R9R10" ->{
+                                            //Alias sur Piece et Joueur : PIECE(Token)+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+                                            Alias<Jeton,Joueur> alias2;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE]+JOUEUR)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+PIECE+[JOUEUR])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias1), new Interpreteur_Alias_Cible<Joueur>(alias2)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias1), new Interpreteur_Alias_Cible<Joueur>(alias2)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R25R9R10" , "0R35R9R10" ->{
+                                            //Alias sur Piece et Piece et Joueur : [PIECE(Token)]+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+                                            Alias<Jeton,Joueur> alias3;
+                                            Alias<Jeton,Piece> alias2;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECE+JOUEUR)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECE]+JOUEUR)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+PIECE+[JOUEUR])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 2)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2), new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2), new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+
+                                        case "0R2510" , "0R3510" ->{
+                                            //Alias sur Piece : [PIECE(Token)]+ACTION+PIECETOKEN
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECETOKEN)");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "025R10" , "035R10" ->{
+                                            //Alias sur Piece : PIECE(Token)+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECETOKEN])");
+                                            }
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R25R10" , "0R35R10" ->{
+                                            //Alias sur Piece et PieceToken : PIECE(Token)+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+ACTION+PIECETOKEN)");
+                                            }
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE(Token)+ACTION+[PIECETOKEN])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new Interpreteur_Alias_Sujet<Piece>(alias1),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+
+                                        case "0R235910" -> {
+                                            //Alias sur Piece : [PIECE]+JOUEUR+ACTION+PIECE+JOUEUR
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R35910" -> {
+                                            //Alias sur Joueur : PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR
+                                            Alias<Jeton,Joueur> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias), regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias), regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0235R910" -> {
+                                            //Alias sur Piece : PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02359R10" -> {
+                                            //Alias sur Piece : PIECE+JOUEUR+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Joueur> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0235R9R10" -> {
+                                            //Alias sur Piece et Joueur : PIECE+JOUEUR+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias1), new Interpreteur_Alias_Cible<Joueur>(alias2)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-4), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias1), new Interpreteur_Alias_Cible<Joueur>(alias2)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R359R10" -> {
+                                            //Alias sur Joueur et Joueur : PIECE+[JOUEUR]+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Joueur> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R35R910" -> {
+                                            //Alias sur Joueur et Piece : PIECE+[JOUEUR]+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,Joueur> alias1;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2359R10" -> {
+                                            //Alias sur Piece et Joueur : [PIECE]+JOUEUR+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias2), regleString.get(indRegleSyntaxe-1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R235R910" -> {
+                                            //Alias sur Piece et Piece : [PIECE]+JOUEUR+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias2), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R35910" -> {
+                                            //Alias sur Piece et Joueur : [PIECE]+[JOUEUR]+ACTION+PIECE+JOUEUR
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-1), regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-Piece-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R35R9R10" -> {
+                                            //Alias sur Joueur et Piece et Joueur : PIECE+[JOUEUR]+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Joueur> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,Joueur> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2),new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1),regleString.get(indRegleSyntaxe-4)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2),new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R235R9R10" -> {
+                                            //Alias sur Piece et Piece et Joueur : [PIECE]+JOUEUR+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,Joueur> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2),new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias2),new Interpreteur_Alias_Cible<Joueur>(alias3)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R359R10" -> {
+                                            //Alias sur Piece et Joueur et Joueur : [PIECE]+[JOUEUR]+ACTION+PIECE+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Joueur> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias3),regleString.get(indRegleSyntaxe - 1)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCiblePieceAliasPT(new Interpreteur_Alias_Cible<Joueur>(alias3),regleString.get(indRegleSyntaxe - 1)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-Piece-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R35R910" -> {
+                                            //Alias sur Piece et Joueur et Piece : [PIECE]+[JOUEUR]+ACTION+[PIECE]+JOUEUR
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Piece> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias3 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias3),regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCibleAliasJoueurPT(new Interpreteur_Alias_Cible<Piece>(alias3),regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-PieceAlias-Joueur inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R35R9R10" -> {
+                                            //Alias sur Piece et Joueur et Piece et Joueur : [PIECE]+[JOUEUR]+ACTION+[PIECE]+[JOUEUR]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Piece> alias3;
+                                            Alias<Jeton,Joueur> alias4;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-4));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-4) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECE+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-1));
+                                                alias3 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-1) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECE]+JOUEUR)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias4 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+PIECE+[JOUEUR])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 2)){
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias3),new Interpreteur_Alias_Cible<Joueur>(alias4)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurCibleAliasAliasPT(new Interpreteur_Alias_Cible<Piece>(alias3),new Interpreteur_Alias_Cible<Joueur>(alias4)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-PieceAlias-JoueurAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+
+                                        case "0R23510" -> {
+                                            //Alias sur Piece : [PIECE]+JOUEUR+ACTION+PIECETOKEN
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECETOKEN)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias), regleString.get(indRegleSyntaxe-2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R3510" -> {
+                                            //Alias sur Joueur : PIECE+[JOUEUR]+ACTION+PIECETOKEN
+                                            Alias<Jeton,Joueur> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECETOKEN)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias), regleString.get(indRegleSyntaxe-3)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0235R10" -> {
+                                            //Alias sur PieceToken : PIECE+JOUEUR+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Piece> alias;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECETOKEN])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3), regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-Joueur-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "02R35R10" -> {
+                                            //Alias sur Joueur et PieceToken : PIECE+[JOUEUR]+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Joueur> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias1 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECETOKEN)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECETOKEN])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1), regleString.get(indRegleSyntaxe-3)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetPieceAliasPT(new Interpreteur_Alias_Sujet<Joueur>(alias1), regleString.get(indRegleSyntaxe-3)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc Piece-JoueurAlias-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R3510" -> {
+                                            //Alias sur Piece et Joueur : [PIECE]+[JOUEUR]+ACTION+PIECETOKEN
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECETOKEN)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECETOKEN)");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe)),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R235R10" -> {
+                                            //Alias sur Piece et PieceToken : [PIECE]+JOUEUR+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Piece> alias2;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECETOKEN)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias2 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECETOKEN])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasJoueurPT(new Interpreteur_Alias_Sujet<Piece>(alias1),regleString.get(indRegleSyntaxe-2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias2),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-Joueur-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
+                                                }
+                                            }
+                                        }
+                                        case "0R2R35R10" -> {
+                                            //Alias sur Piece et Joueur et PieceToken : [PIECE]+[JOUEUR]+ACTION+[PIECETOKEN]
+                                            Alias<Jeton,Piece> alias1;
+                                            Alias<Jeton,Joueur> alias2;
+                                            Alias<Jeton,Piece> alias3;
+                                            Alias<Jeton,?> testAlias = null;
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-3));
+                                                alias1 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " connu mais référencant le mauvais type de donnée : (attendu PIECE | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-3) + " inconnu dans sa réutilisation ([PIECE]+JOUEUR+ACTION+PIECETOKEN)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe-2));
+                                                alias2 = (Alias<Jeton, Joueur>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " connu mais référencant le mauvais type de donnée : (attendu JOUEUR | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation (PIECE+[JOUEUR]+ACTION+PIECETOKEN)");
+                                            }
+
+                                            try{
+                                                testAlias = recupererAlias(regleString.get(indRegleSyntaxe));
+                                                alias3 = (Alias<Jeton, Piece>) testAlias;
+                                            }catch (ClassCastException e){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " connu mais référencant le mauvais type de donnée : (attendu PIECETOKEN | recu " + testAlias.getJetonAssocie()+")");
+                                            }catch (MauvaiseDefinitionRegleException re){
+                                                throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe) + " inconnu dans sa réutilisation (PIECE+JOUEUR+ACTION+[PIECETOKEN])");
+                                            }
+
+                                            switch (regleString.get(indRegleSyntaxe - 1)) {
+                                                case "prend" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias3),
+                                                            Fonctions_Comportements.prend_Par_Piece);
+                                                }
+                                                case "estechec" -> {
+                                                    cond = new ConditionAction<Piece, Piece>(
+                                                            new InterpreteurSujetAliasAliasPT(new Interpreteur_Alias_Sujet<Piece>(alias1),new Interpreteur_Alias_Sujet<Joueur>(alias2)),
+                                                            new Interpreteur_Alias_Cible<Piece>(alias3),
+                                                            Fonctions_Comportements.est_Menace);
+                                                }
+                                                default -> {
+                                                    throw new MauvaiseSemantiqueRegleException("Bloc PieceAlias-JoueurAlias-Action-PieceTokenAlias inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                                 }
                                             }
                                         }
