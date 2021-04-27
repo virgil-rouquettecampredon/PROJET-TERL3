@@ -17,7 +17,6 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
         this.str_source = str_source;
     }
 
-
     @Override
     public List<Joueur> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         List<Joueur> lret = new ArrayList<>();
@@ -64,6 +63,5 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
         //catch (NumberFormatException | IndexOutOfBoundsException e) {return null;}
         //return null;
     }
-
 
 }

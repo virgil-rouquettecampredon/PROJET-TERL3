@@ -2,20 +2,20 @@ package org.example.model.Regles.Structure.Interpreteur;
 
 import org.example.model.OrdonnanceurDeJeu;
 import org.example.model.Regles.CibleDeRegle;
-import org.example.model.Regles.Structure.Alias_Cible;
-import org.example.model.Regles.SujetDeRegle;
+import org.example.model.Regles.Jeton;
+import org.example.model.Regles.Structure.Alias;
 
 import java.util.List;
 
-public class Interpreteur_Alias_Cible extends Interpreteur_Alias<CibleDeRegle> {
+public class Interpreteur_Alias_Cible<T extends CibleDeRegle> implements Interpreteur_Objet_Regle<T> {
 
-    private Alias_Cible alias;
+    private Alias<Jeton,T> alias;
 
-    public Interpreteur_Alias_Cible(Alias_Cible cibles){
+    public Interpreteur_Alias_Cible(Alias<Jeton,T> cibles){
         this.alias = cibles;
     }
 
-    public List<CibleDeRegle> recupererTout(OrdonnanceurDeJeu ord){
-        return this.alias.getCiblesDeRegle();
+    public List<T> recupererTout(OrdonnanceurDeJeu ord){
+        return this.alias.getObjetsDeRegle();
     }
 }

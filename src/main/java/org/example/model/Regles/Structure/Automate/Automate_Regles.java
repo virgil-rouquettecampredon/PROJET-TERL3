@@ -17,7 +17,7 @@ import java.util.Map;
  * */
 public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
 
-    protected Map<String, Alias<A>> aliasRegle;       //Liste des alias de la Regle (nom -> Alias)
+    protected Map<String, Alias<A,?>> aliasRegle;       //Liste des alias de la Regle (nom -> Alias)
 
     public Automate_Regles(int nbEtat, int etatDeDepart){
         super(nbEtat,etatDeDepart);
@@ -41,10 +41,10 @@ public abstract class Automate_Regles<A extends EstToken> extends Automate<A> {
     /**Méthode permettant de récupérer un Alias de la liste des Alias
      * @param nomAlias : Nom de l'alias à récupérer
      * @return l'Alias correspondant au nom de l'alias, erreur sinon**/
-    public abstract Alias<A> recupererAlias(String nomAlias) throws MauvaiseDefinitionRegleException;
+    public abstract Alias<A,?> recupererAlias(String nomAlias) throws MauvaiseDefinitionRegleException;
 
     /*Getter et Setter*/
-    public Map<String,Alias<A>> getAliasRegle(){
+    public Map<String,Alias<A,?>> getAliasRegle(){
         return aliasRegle;
     }
 }

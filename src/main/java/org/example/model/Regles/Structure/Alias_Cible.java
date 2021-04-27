@@ -4,7 +4,7 @@ import org.example.model.Regles.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class Alias_Cible extends Alias<Jeton>{
 
     private List<CibleDeRegle> ciblesDeRegle;
@@ -26,4 +26,4 @@ public class Alias_Cible extends Alias<Jeton>{
             ciblesDeRegle = new ArrayList<>();
         }
     }
-}
+}*/

@@ -27,19 +27,19 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
     public void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException{
         switch (parcours){
-            case "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.PIECE));
-            case "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.PIECETOKEN));
-            case "01"-> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.JOUEUR));
-            case "02" -> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.PIECE));
-            case "023" , "03" -> aliasRegle.put(nomAlias,new Alias_Sujet(Jeton.PIECETOKEN));
-            case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.CASE));
-            case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,new Alias_Cible(Jeton.CASEPARAM));
+            case "0259" , "0359" , "02359" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECE,false)/*Alias_Cible(Jeton.PIECE)*/);
+            case "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECETOKEN,false)/*Alias_Cible(Jeton.PIECETOKEN)*/);
+            case "01"-> aliasRegle.put(nomAlias,new Alias<Jeton,Joueur>(Jeton.JOUEUR,true)/*Alias_Sujet(Jeton.JOUEUR)*/);
+            case "02" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECE,true)/*Alias_Sujet(Jeton.PIECE)*/);
+            case "023" , "03" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECETOKEN,true)/*Alias_Sujet(Jeton.PIECETOKEN)*/);
+            case "02511" , "023511" , "03511" -> aliasRegle.put(nomAlias,new Alias<Jeton,GroupCases>(Jeton.CASE,false)/*Alias_Cible(Jeton.CASE)*/);
+            case "0251127" , "02351127" , "0351127" , "02527" , "023527" , "03527" -> aliasRegle.put(nomAlias,new Alias<Jeton,GroupCases>(Jeton.CASEPARAM,false)/*Alias_Cible(Jeton.CASEPARAM)*/);
             default -> throw new MauvaiseDefinitionRegleException("Impossible de définir l'alias " + nomAlias);
         }
     }
 
-    public Alias<Jeton> recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
-        Alias<Jeton> alias = aliasRegle.get(nomAlias);
+    public Alias<Jeton,?> recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
+        Alias<Jeton,?> alias = aliasRegle.get(nomAlias);
         if(alias == null){
             throw new MauvaiseDefinitionRegleException("Alias inconnu : " + nomAlias);
         }
@@ -337,7 +337,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         List<Consequence> consequencesDeLaRegle = new ArrayList<>();
 
         //Liste d'Alias correspondant à ceux présents dans la Regle
-        List<Alias<Jeton>> liste_alias = new ArrayList<>();
+        List<Alias<Jeton,?>> liste_alias = new ArrayList<>();
+
+        //Liste des alias définie dans une Condition
+        List<Alias<Jeton,?>> aliasCondtion = new ArrayList<>();
 
         //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
@@ -392,6 +395,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                         //Sinon, on doit la définir dans notre flot d'alias
                         try {
                             ajouterAlias(regleString.get(indRegleSyntaxe), parcours);
+                            aliasCondtion.add(recupererAlias(regleString.get(indRegleSyntaxe)));
                         }catch (MauvaiseDefinitionRegleException e){
                             throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
                         }

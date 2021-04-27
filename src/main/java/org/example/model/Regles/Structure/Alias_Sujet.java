@@ -7,7 +7,7 @@ import org.example.model.Regles.SujetDeRegle;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class Alias_Sujet extends Alias<Jeton>{
 
     private List<SujetDeRegle> sujetsDeRegle;
@@ -28,4 +28,4 @@ public class Alias_Sujet extends Alias<Jeton>{
             sujetsDeRegle = new ArrayList<>();
         }
     }
-}
+}*/

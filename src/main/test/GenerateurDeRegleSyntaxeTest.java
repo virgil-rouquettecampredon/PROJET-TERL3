@@ -380,7 +380,7 @@ public class GenerateurDeRegleSyntaxeTest {
                 assertEquals(regleJeton.get(i),jetons.get(i));
             }
 
-            assertEquals("{ masupercase -> CASE }",generateur.toStringAlias());
+            assertEquals("{ nom : masupercase }",generateur.toStringAlias());
 
 
             assertEquals(regleFinale.size(),regle.size());
