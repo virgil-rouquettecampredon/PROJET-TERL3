@@ -7,6 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * OrdreDesJoueurs est une classe permettant de créer un ordre personnalité des tours de jeux à partir d'une chaine de caractère selon le nombre de joueur.
+ * La chaine de caractère est de la forme : JXJY....JZ où X ,Y et Z sont des entiers positifs représentant le numéro de joueur.
+ * Exemple: J2J3J3J1J4J1 : Ici le joueur 2 commence, puis le joueur 3 joue 2 fois, puis le joueur 1 joue, puis le joueur 4 joue,
+ * puis le joueur 1 rejoue, puis le cycle recommence.
+ * */
 public class OrdreDesJoueurs implements Supplier<Integer> {
     /*Classe permettaant de définir un ordonnanceur pour les Joueurs*/
 

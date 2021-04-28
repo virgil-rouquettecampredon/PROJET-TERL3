@@ -5,6 +5,8 @@ import org.example.model.Regles.Structure.Interpreteur.*;
 
 import java.util.List;
 
+/** BlocDeRegle est une interface représentant un objet Condition ou Consequence. */
+
 public interface BlocDeRegle {
     /**Méthode permettant à un BlocDeRegle de vérifier s'il PEUT récupérer les éléments dont il a besoin pour fonctionner
      * Théoriquement, l'interpreteur de règle ne sera jamais incorrect car une analyse syntaxique et sémantique est appliqué

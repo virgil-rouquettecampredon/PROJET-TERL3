@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.BiFunction;
 
+
+/**
+ * Fonctions_Comportements est une classe qui contient les fonctions associé aux actions proposé à la création de règle.
+ * Elle comprend les fonctions permettant de vérifier des conditions et d'exécuter les conséquences selon une suite de liste de sujet de règle
+ * donné en paramètre grâce aux interpreteurs. Les interpreteurs et la fonction comportement correspondante sont lié
+ * grâce à la classe Condition. De même pour les fonctions comportements des conséquences lié avec ses interpréteurs grâce à la classe Consequence
+ * */
 public class Fonctions_Comportements {
     
     public static List<SujetDeRegle> sujetDeLaConditionVrai = new ArrayList<>();            //Liste des SujetDeRegle rendant une Condition vrai (Alias)
@@ -373,7 +380,10 @@ public class Fonctions_Comportements {
      * @param pieces_v : liste des pieces victimes possible
      * @fn le joueur choisi la pièce attaquante parmis la liste pièces_a et choisi la pièce que celle-ci va prendre
      * parmis la liste des pièces victime dans pieces_v  */
-    public static final BiFunction<List<Piece>, List<Piece>, Void> prendre_piece = (pieces_a, pieces_v) -> { return null; };
+    public static final BiFunction<List<Piece>, List<Piece>, Void> prendre_piece = (pieces_a, pieces_v) -> {
+
+        return null;
+    };
 
     /** Consequence : PIECE + PREND + CASE
      * @param pieces : liste des pieces attaquantes possible
@@ -406,7 +416,16 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases sur lequel les pièces peuvent être placé
      * @fn si au moins une pièce dans la liste des pièces est dans la defausse,
      * le joueur choisi parmis une de ces pièces pour la placer sur le terrain*/
-    public static final BiFunction<List<Piece>, List<GroupCases>, Void> placer = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> placer = (pieces, groupcases) -> {
+        ArrayList<Case> cases = new ArrayList<>();
+        for (GroupCases g: groupcases) {
+            cases.addAll(g.getCasesAbsolue());
+        }
+        for (Piece p : pieces) {
+            p.setCasesPourRevivre(cases);
+        }
+        return null;
+    };
 
     /**
      * Consequence : PIECE + DEPLACE + CASE

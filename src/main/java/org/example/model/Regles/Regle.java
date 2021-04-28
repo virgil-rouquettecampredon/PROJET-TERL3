@@ -12,6 +12,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Regle est un objet qui représente une règle créée, càd un arbre de Condition et une liste de Consequence associées
+ * Règle fait également le lien avec les alias créé et associé dans les Conditions et Consequence
+ * Pour s'exécuter, la règle va interpreter les alias associé, puis vérifier l'évaluation de l'arbre de Condition pour
+ * enfin exécuter la liste des Consequence si l'arbre des Conditions retourne vrai. */
 
 public class Regle {
     /*Classe permettant de modéliser une Regle de jeu*/
