@@ -417,7 +417,10 @@ public class GameController extends Controller {
             getApp().setRoot("home");
         }
     }
-    
+
+    private void finirTour() throws IOException {
+
+    }
 
     private void jouerCoup() throws IOException{
         System.out.println("Coup : etatCoup="+etatCoup.name());
@@ -519,7 +522,7 @@ public class GameController extends Controller {
         //System.out.println("PROMOTION EN "+typePiece);
 
         Piece p = new Piece(typePiece);
-        Joueur j = typePiece.getJoueur();
+        Joueur j = casePromotion.getPieceOnCase().getJoueur();
         p.setJoueur(j);
         j.getPawnList().add(p);
         p.setAEtePromu(true);
@@ -640,6 +643,6 @@ public class GameController extends Controller {
 
     @FXML
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "Clic gauche et clic droit et give up shrek"); //todo texte edition regle
+        showAlert(Alert.AlertType.INFORMATION, "Maintenant que vous avez choisi la variante, vous allez donc jouer la partie avec toutes les règles défini pour elle (pièces, plateau, règles, temps, etc ...).\n\nPour commencer, il suffit de choisir la pièce à déplacer de faire un clic gauche puis les emplacement des déplacement valides sera alors afficher, il suffira donc de cliquer sur l'emplacement et votre pièce se déplacera.\n\nSi vous avez cliqué sur une pièce par erreur, un clic droit annulera la sélection.\n\nDe plus, à tout moment vous pouvez abandonner la partie en cliquant sur le bouton abandonner en bas de l'écran, puis dès que il ne reste plus que un joueur sur le plateau alors un classement s'affichera pour afficher le gagnant et le second, ....\n\nIl ne vous reste plus qu'à jouer."); //todo texte edition regle
     }
 }

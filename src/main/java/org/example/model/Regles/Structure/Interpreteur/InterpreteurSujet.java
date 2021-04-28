@@ -7,10 +7,10 @@ import java.util.List;
 
 public abstract class InterpreteurSujet<T extends SujetDeRegle> implements Interpreteur_Objet_Regle<T> {
 
-    @Override
+    /*@Override
     public List<T> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         return null;
-    }
+    }*/
 }
 
 

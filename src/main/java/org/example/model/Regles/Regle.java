@@ -116,4 +116,13 @@ public class Regle {
     public void setArbreCondition(Arbre_Condition cond) {
         this.arbre_conditions = cond;
     }
+
+    @Override
+    public String toString() {
+        return "Regle{" +
+                "arbre_conditions=" + arbre_conditions +
+                ", consequences=" + consequences +
+                ", listeAlias=" + listeAlias +
+                '}';
+    }
 }

@@ -527,7 +527,7 @@ public class EditRuleController extends Controller {
     }
 
     public void infoButton() {
-        showAlert(Alert.AlertType.INFORMATION, "texte"); //todo texte edition regle
+        showAlert(Alert.AlertType.INFORMATION, "Dans cette section, c'est ici où vous allez définir les règles de la partie comme par exemple des variante comme king of the hills, car vous pouvez définir que si une pièce est sur un groupe de case défini précédement, alors le joueur gagne, etc, ....\n\nLors de la création des règles, vous serez guidez lors de la sélection afin que vous ne mettez pas des choses incohérentes, comme par exmple une case qui se déplace, etc ...\n\n Lors que vous avez fini votre condition, un alors apparaîtra dans le menu déroulant, il suffit de le mettre et vous serez après dans les conséquences de cette condition.\n\n Attention, si vous modifier un élément dans les règles, tout ce qui ce trouve après, sera alors enlever et vous devrez tout remmettre à la main pour la règle en cours."); //todo texte edition regle
     }
 
     @FXML

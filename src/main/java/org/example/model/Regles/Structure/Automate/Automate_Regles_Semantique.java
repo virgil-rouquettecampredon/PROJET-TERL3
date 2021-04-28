@@ -4547,23 +4547,20 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     if (parcours.equals("151619")) {
                                         //"victoire", "defaite", "pat"
                                         switch (regleString.get(indRegleSyntaxe)) {
-                                            case "victoire" -> {
-                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
-                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
-                                                        Fonctions_Comportements.victoire));
-                                                nbConsequence++;
+                                            case "victoire" ->{
+                                                conseq = new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-1)),
+                                                        Fonctions_Comportements.victoire);
                                             }
                                             case "defaite" -> {
-                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
-                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
-                                                        Fonctions_Comportements.defaite));
-                                                nbConsequence++;
+                                                conseq = new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-1)),
+                                                        Fonctions_Comportements.defaite);
                                             }
                                             case "pat" -> {
-                                                consequencesDeLaRegle.add(new ConsequenceTerminale<Joueur>(
-                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe)),
-                                                        Fonctions_Comportements.pat));
-                                                nbConsequence++;
+                                                conseq = new ConsequenceTerminale<Joueur>(
+                                                        new InterpreteurSujetJoueur(regleString.get(indRegleSyntaxe-1)),
+                                                        Fonctions_Comportements.pat);
                                             }
                                             default -> {
                                                 throw new MauvaiseSemantiqueRegleException("Bloc Joueur-ConsequenceTerminale inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
