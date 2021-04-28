@@ -21,7 +21,7 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
 
 
     public Automate_Interface_Consequence(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
-        super(15, 0);
+        super(17, 0);
 
         this.pieces = pieces;
         this.cases = cases;
@@ -35,6 +35,9 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUnEtatTerminal(12,300);
         this.ajouterUnEtatTerminal(13,300);
         this.ajouterUnEtatTerminal(14,300);
+
+        this.ajouterUnEtatTerminal(9,300);
+        this.ajouterUnEtatTerminal(10,300);
 
         //ETAT 0
         this.ajouterUneTransition(0,Jeton_Interface.JOUEUR,1);
@@ -59,8 +62,9 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         //ETAT 4
 
         //ETAT 5
-        this.ajouterUneTransition(5,Jeton_Interface.PIECE,9);
-        this.ajouterUneTransition(5,Jeton_Interface.PIECETOKEN,10);
+        this.ajouterUneTransition(5,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(5,Jeton_Interface.CASEALIAS,15);
+        this.ajouterUneTransition(5,Jeton_Interface.CASEPARAM,16);
 
         //ETAT 6
         this.ajouterUneTransition(6,Jeton_Interface.PIECETOKEN,11);
@@ -81,14 +85,8 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
 
         //ETAT 9
         this.ajouterUneTransition(9,Jeton_Interface.JOUEUR,10);
-        this.ajouterUneTransition(9,Jeton_Interface.CASE,13);
-        this.ajouterUneTransition(9,Jeton_Interface.CASEALIAS,13);
-        this.ajouterUneTransition(9,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 10
-        this.ajouterUneTransition(10,Jeton_Interface.CASE,13);
-        this.ajouterUneTransition(10,Jeton_Interface.CASEALIAS,13);
-        this.ajouterUneTransition(10,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 11
 
@@ -98,6 +96,16 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         //ETAT 13
         this.ajouterUneTransition(13,Jeton_Interface.CASE,14);
 
+        //ETAT 14
+
+        //ETAT 15
+        this.ajouterUneTransition(15,Jeton_Interface.PIECE,9);
+        this.ajouterUneTransition(15,Jeton_Interface.PIECETOKEN,10);
+        this.ajouterUneTransition(15,Jeton_Interface.CASE,16);
+
+        //ETAT 16
+        this.ajouterUneTransition(16,Jeton_Interface.PIECE,9);
+        this.ajouterUneTransition(16,Jeton_Interface.PIECETOKEN,10);
     }
 
     public void revenirEnArriere(){
