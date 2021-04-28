@@ -80,20 +80,61 @@ public class GameController extends Controller {
     private String nomPieceDeplace;
 
     private EtatClick etatClick;
-    private EtatCoup etatCoup;
+    private boolean aJoue;
 
     private ArrayList<Position> casesPromotion;
+    private ArrayList<Piece> piecesRevivre;
+    private ArrayList<Case> casesRevivre;
 
     private Position selectionCase;
+    private Piece selectionPieceRevivre;
+    private String messageFinDeTour;
 
-    private static enum EtatCoup {
-        DEBUT, FIN
-    }
 
     private static enum EtatClick {
-        JEU, CHOIX, DESACTIVE
+        JEU, CHOIX, CHOIXREVIVRE, DESACTIVE
     }
 
+    /**
+     * Fonction exécutée lors d'un clic sur le cimetière
+     * @param mouseEvent des détails sur l'évènement du clic
+     * @throws IOException
+     */
+    @FXML
+    public void ClickGraveyard(MouseEvent mouseEvent) throws IOException{
+        if (etatClick == EtatClick.CHOIXREVIVRE) {
+            Position position = new Position(0, 0);
+            double rectSize = canvasManager.getRectSize()/1.5;
+            Position positionClick = new Position((int)(mouseEvent.getX()/rectSize), (int)(mouseEvent.getY()/rectSize));
+            for (Joueur j : gameVariante.getJoueurs()) {
+                for (Piece p : j.getGraveyard()) {
+                    if (position.equals(positionClick)) {
+                        selectionnerPieceRevivre(p);
+
+                        System.out.println("Piece morte choisie : "+p);
+
+                        return;
+                    }
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+                if (j.getGraveyard().size() > 0) {
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Initialise le controlleur : récupère la variante, initialise l'ordonanceur de jeu et la variante, et débute le tour
+     */
     @Override
     public void initialise(){
         if (userVar == null) {
@@ -137,8 +178,11 @@ public class GameController extends Controller {
             coupPossibles = new LinkedHashSet<>();
 
             casesPromotion = new ArrayList<>();
+            piecesRevivre = new ArrayList<>();
+            casesRevivre = new ArrayList<>();
             try {
                 resetCoup();
+                debutTour();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -146,7 +190,13 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Fonction qui dit au plateau ce qu'il faut dessiner et dans quel ordre
+     */
     public void updateCanvas() {
+
+        graveyardContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         playerLabel.setText(gameVariante.getOrdrejoueur().get(indiceJoueur).getName());
         canvasManager.drawCanvas();
         if (caseOrigine != null) {
@@ -160,15 +210,67 @@ public class GameController extends Controller {
         if (!casesPromotion.isEmpty()) {
             canvasManager.hideCasesExcept(casesPromotion);
         }
+        else if (!piecesRevivre.isEmpty()) {
+            System.out.println(" DESSIN : PIECES REVRIVRE" + piecesRevivre);
+            Position position = new Position(0, 0);
+            double rectSize = canvasManager.getRectSize()/1.5;
+            for (Joueur j : gameVariante.getJoueurs()) {
+                for (Piece p : j.getGraveyard()) {
+                    if (!piecesRevivre.contains(p)) {
+                        graveyardContext.setFill(Color.GRAY);
+                        graveyardContext.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+                    }
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+                if (j.getGraveyard().size() > 0) {
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+            }
+            canvasManager.hideAllCases();
+        }
+        else if (!casesRevivre.isEmpty()) {
+            canvasManager.hideCasesExceptCase(casesRevivre);
+        }
 
         if (selectionCase != null) {
             canvasManager.drawSelectionCase(selectionCase);
+        }
+        if (selectionPieceRevivre != null) {
+            Position position = new Position(0, 0);
+            double rectSize = canvasManager.getRectSize()/1.5;
+            for (Joueur j : gameVariante.getJoueurs()) {
+                for (Piece p : j.getGraveyard()) {
+                    if (p == selectionPieceRevivre) {
+                        graveyardContext.setFill(Color.MEDIUMBLUE);
+                        graveyardContext.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+                    }
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+                if (j.getGraveyard().size() > 0) {
+                    position.setX(position.getX()+1);
+                    if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
+                        position.setX(0);
+                        position.setY(position.getY()+1);
+                    }
+                }
+            }
         }
         canvasManager.drawPawn();
 
         //Graveyard
         Position position = new Position(0, 0);
-        graveyardContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         double rectSize = canvasManager.getRectSize()/1.5;
         for (Joueur j : gameVariante.getJoueurs()) {
@@ -188,14 +290,14 @@ public class GameController extends Controller {
                 graveyardContext.drawImage(img, cx - w / 2, cy - h / 2, w, h);
 
                 position.setX(position.getX()+1);
-                if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
+                if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
                     position.setX(0);
                     position.setY(position.getY()+1);
                 }
             }
             if (j.getGraveyard().size() > 0) {
                 position.setX(position.getX()+1);
-                if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
+                if (position.getX()*(rectSize+2) >= canvas.getWidth()) {
                     position.setX(0);
                     position.setY(position.getY()+1);
                 }
@@ -203,8 +305,14 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Fonction exécutée lors d'un clic sur le plateau de jeu
+     * @param mouseEvent des détails sur le clic
+     * @throws IOException
+     */
     @FXML
     public void play(MouseEvent mouseEvent) throws IOException {
+        //System.out.println("CLICK! "+etatClick);
 
         getApp().soundManager.playSound("button-hover");
         //System.out.println(mouseEvent);
@@ -221,7 +329,6 @@ public class GameController extends Controller {
                                 if (c.getPieceOnCase() != null && c.getPieceOnCase().getJoueur().getPawnList().contains(c.getPieceOnCase())) {
                                     caseOrigine = c;
                                     coupPossibles = ordonnanceurDeJeu.deplacementsValide(caseOrigine, joueurQuiJoue());
-                                    System.out.println("DEPLACEMENTS REGLES"+c.getPieceOnCase().getDeplacementsSpecialRegles());
                                 }
                             } else {
                                 caseDestination = c;
@@ -237,9 +344,8 @@ public class GameController extends Controller {
                         }
                     }
                     case CHOIX -> {
-                        if (c.getPieceOnCase() != null) {
-                            selectionnerCase(c);
-                        }
+                        selectionnerCase(c);
+
                     }
                 }
 
@@ -247,9 +353,7 @@ public class GameController extends Controller {
             case SECONDARY -> {
                 switch (etatClick) {
                     case JEU -> {
-                        caseOrigine = null;
-                        coupPossibles = new LinkedHashSet<>();
-                        caseDestination = null;
+                        resetCoup();
                     }
                 }
             }
@@ -257,34 +361,34 @@ public class GameController extends Controller {
         updateCanvas();
     }
 
+    /**
+     * Permet d'obtenir le joueur qui joue
+     * @return le Joueur qui joue
+     */
     private Joueur joueurQuiJoue() {
         return gameVariante.getOrdrejoueur().get(indiceJoueur);
     }
 
+    /**
+     * réhinitialise un coup. Utilisé si le coup n'est pas valide ou si l'utilisateur fait un clic droit
+     * @throws IOException
+     */
     private void resetCoup() throws IOException{
-        etatCoup = EtatCoup.DEBUT;
         etatClick = EtatClick.JEU;
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
-        debutTour();
     }
 
-    private void avancerEtat() {
-        switch (etatCoup) {
-            case DEBUT -> {
-                etatCoup = EtatCoup.FIN;
-            }
-            case FIN -> {
-                System.err.println("Erreur etat avancé trop loin");
-            }
-        }
-    }
-
+    /**
+     * Demande à l'utilisateur de selectionner en fonction du comportement courrant
+     * @return vrai ssi il faut attendre que l'utilisateur choisisse
+     * @throws IOException
+     */
     private boolean faireSelectionner() throws IOException{
         boolean attendreUtilisateur = false;
         if (!casesPromotion.isEmpty()) {
-            System.out.println("SELECTION PROMOTION");
+            //System.out.println("SELECTION PROMOTION");
             attendreUtilisateur = true;
             if (casesPromotion.size() == 1) {
                 selectionnerCase(gameVariante.getPlateau().getCase(casesPromotion.get(0)));
@@ -295,6 +399,19 @@ public class GameController extends Controller {
                 etatClick = EtatClick.CHOIX;
             }
         }
+        else if (!piecesRevivre.isEmpty()) {
+            System.out.println("SELECTION REVIVRE");
+            //PIECE A FAIRE REVIVRE
+            attendreUtilisateur = true;
+            if (piecesRevivre.size() == 1) {
+                selectionnerPieceRevivre(piecesRevivre.get(0));
+            }
+            else {
+                varLabel.setText("Selection : Piece à revivre");
+                updateCanvas();
+                etatClick = EtatClick.CHOIXREVIVRE;
+            }
+        }
         //else if ...
         return attendreUtilisateur;
     }
@@ -302,8 +419,8 @@ public class GameController extends Controller {
     private void selectionnerCase(Case c) throws IOException{
         boolean attendreUtilisateur = false;
         boolean caseValide = false;
-        if (casesPromotion.contains(c.getPosition())) {
-            System.out.println("CHOIX VALIDE : PROMOTION");
+        if (c.getPieceOnCase() != null && casesPromotion.contains(c.getPosition())) {
+            //System.out.println("CHOIX VALIDE : PROMOTION");
 
             caseValide = true;
 
@@ -313,6 +430,23 @@ public class GameController extends Controller {
             selectionCase = c.getPosition();
             fairePromouvoir(c);
         }
+        else if (casesRevivre.contains(c)) {
+            System.out.println("CASE CHOISIE VALIDE");
+            caseValide = true;
+
+            casesRevivre.clear();
+            attendreUtilisateur = false;
+
+            c.setPieceOnCase(selectionPieceRevivre);
+            selectionPieceRevivre.getJoueur().getGraveyard().remove(selectionPieceRevivre);
+            messageFinDeTour = joueurQuiJoue().getName()+" fait revivre "+selectionPieceRevivre.getName()+" "+c.getPosition();
+            aJoue = true;
+
+            selectionPieceRevivre = null;
+        }
+        else {
+            System.out.println("CASE CHOISIE INVALIDE : "+c);
+        }
         //else if ...
 
         if (caseValide) {
@@ -321,10 +455,30 @@ public class GameController extends Controller {
             varLabel.setText(gameVariante.getName());
             updateCanvas();
 
+            if (!attendreUtilisateur && aJoue) {
+                finirTour();
+            }
+        }
+    }
 
-            if (!attendreUtilisateur) {
-                avancerEtat();
-                jouerCoup();
+    private void selectionnerPieceRevivre(Piece p) throws IOException {
+        if (piecesRevivre.contains(p)) {
+            piecesRevivre.clear();
+            selectionPieceRevivre = p;
+
+            for (Case c : p.getCasesPourRevivre()) {
+                if (c.isAccessible() && c.getPieceOnCase() == null) {
+                    casesRevivre.add(c);
+                }
+            }
+
+            if (casesRevivre.size() == 1) {
+                selectionnerCase(casesRevivre.get(0));
+            }
+            else {
+                varLabel.setText("Selection : Placer piece");
+                updateCanvas();
+                etatClick = EtatClick.CHOIX;
             }
         }
     }
@@ -388,11 +542,19 @@ public class GameController extends Controller {
         for (ArrayList<Case> ligne : gameVariante.getPlateau().getEchiquier()) {
             for (Case c : ligne) {
                 Piece p = c.getPieceOnCase();
-                if (p != null) {
-                    if (p.estAPromouvoir() && p.getJoueur().equals(joueurQuiJoue())) {
+                if (p != null && p.getJoueur().equals(joueurQuiJoue())) {
+                    if (p.estAPromouvoir()) {
                         casesPromotion.add(c.getPosition());
                     }
                     //if est a deplacer...
+                }
+            }
+        }
+        piecesRevivre = new ArrayList<>();
+        for (Joueur joueur : gameVariante.getJoueurs()) {
+            for (Piece p : joueur.getGraveyard()) {
+                if (p.getCasesPourRevivre() != null && p.getJoueur().getEquipe()!=joueurQuiJoue().getEquipe()) {
+                    piecesRevivre.add(p);
                 }
             }
         }
@@ -404,9 +566,27 @@ public class GameController extends Controller {
 
     private void debutTour() throws IOException{
         try {
+            aJoue = false;
+
             gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
 
             ordonnanceurDeJeu.appliquerReglesAvant();
+
+            //Todo enlmever ce truc
+            ArrayList<Case> cases = new ArrayList<>();
+            for (int i = 1; i < 7; i++) {
+                for (int j = 0; j < 8; j++) {
+                    Case c = gameVariante.getPlateau().getCase(new Position(j, i));
+                    cases.add(c);
+                    Piece p = c.getPieceOnCase();
+                    if ( p != null && (p.getName().equals("Pion blanc") || p.getName().equals("Pion noir"))) {
+                        p.getJoueur().getPawnList().remove(p);
+                        p.getJoueur().getGraveyard().add(p);
+                        p.setCasesPourRevivre(cases);
+                        c.setPieceOnCase(null);
+                    }
+                }
+            }
 
             System.out.println("---------VERIFICATION REGLES DEBUT----------");
             verifierEtatsRegle();
@@ -419,45 +599,36 @@ public class GameController extends Controller {
     }
 
     private void finirTour() throws IOException {
-
+        addLabelCoup(messageFinDeTour);
+        incrementerIndiceJoueur();
+        timerCourant = playTimer(joueurQuiJoue());
+        resetCoup();
+        debutTour();
     }
 
     private void jouerCoup() throws IOException{
-        System.out.println("Coup : etatCoup="+etatCoup.name());
         //System.out.println("Case origine : "+caseOrigine + " Case destination : "+caseDestination);
         try {
-            switch (etatCoup) {
-                case DEBUT -> {
-                    etatClick = EtatClick.DESACTIVE; //Desactiver le click
+            etatClick = EtatClick.DESACTIVE; //Desactiver le click
 
-                    nomPieceDeplace = caseOrigine.getPieceOnCase().getName();
-                    //System.out.println(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
+            nomPieceDeplace = caseOrigine.getPieceOnCase().getName();
+            //System.out.println(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
 
-                    ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
+            ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
+            messageFinDeTour = joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition();
+            aJoue = true;
 
-                    avancerEtat();
-                    jouerCoup();
+            ordonnanceurDeJeu.appliquerReglesApres();
 
-                    ordonnanceurDeJeu.appliquerReglesApres();
+            if (timerCourant != null) {
+                pauseTimer(timerCourant);
+            }
 
-                    if (timerCourant != null) {
-                        pauseTimer(timerCourant);
-                    }
+            System.out.println("---------VERIFICATION REGLES APRES----------");
+            boolean attendreUtilisateur = verifierEtatsRegle();
 
-                    System.out.println("---------VERIFICATION REGLES APRES----------");
-                    boolean attendreUtilisateur = verifierEtatsRegle();
-
-                    if (!attendreUtilisateur) {
-                        avancerEtat();
-                        jouerCoup();
-                    }
-                }
-                case FIN -> {
-                    addLabelCoup(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
-                    incrementerIndiceJoueur();
-                    timerCourant = playTimer(joueurQuiJoue());
-                    resetCoup();
-                }
+            if (!attendreUtilisateur) {
+                finirTour();
             }
         } catch (MauvaiseDefinitionRegleException e) {
             e.printStackTrace();
@@ -510,10 +681,6 @@ public class GameController extends Controller {
         }
     }
 
-    public boolean giveUpButton(String message) throws IOException{
-        return giveUp(message, joueurQuiJoue());
-    }
-
     public void fairePromouvoir(Case casePromotion) throws IOException{
         popupWindow("promotion", new PromotionController.PromotionData(casePromotion, this));
     }
@@ -534,13 +701,13 @@ public class GameController extends Controller {
         addLabelCoup(j + " : " + p2.getName() + " promu en " + p.getName());
 
         selectionCase = null;
-        System.out.println("FIN PROMOTION");
+        updateCanvas();
+
+        //System.out.println("FIN PROMOTION");
         boolean attendreUtilisateur = faireSelectionner();
 
-        if (!attendreUtilisateur) {
-            updateCanvas();
-            avancerEtat();
-            jouerCoup();
+        if (!attendreUtilisateur && aJoue) {
+            finirTour();
         }
     }
 
@@ -594,7 +761,7 @@ public class GameController extends Controller {
                                     String s = "Plus de temps pour " + joueur.getName() + "!";
                                     //showAlert(Alert.AlertType.ERROR, "T'as perdu looser de " + joueur.getName() + " Aussi talentueux que Hugo !");
                                     try {
-                                        giveUpButton(s);
+                                        giveUp(s, joueurQuiJoue());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         showAlert(Alert.AlertType.ERROR, "WOW! un bug t'as empeché de perde!!");
@@ -627,7 +794,7 @@ public class GameController extends Controller {
 
     @FXML
     public void giveUpButton() throws IOException{
-        giveUpButton("\nABANDON");
+        giveUp("\nAbandon de "+joueurQuiJoue(), joueurQuiJoue());
     }
 
     private void fairePerdreJoueur(Joueur jPerdant) {
@@ -635,10 +802,6 @@ public class GameController extends Controller {
         if (!perdants.contains(jPerdant.getEquipe())) {
             perdants.add(jPerdant.getEquipe());
         }
-    }
-
-    private void fairePerdreJoueurCourant() {
-        fairePerdreJoueur(joueurQuiJoue());
     }
 
     @FXML

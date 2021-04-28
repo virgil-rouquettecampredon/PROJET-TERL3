@@ -113,6 +113,18 @@ public class CanvasManager {
         }
     }
 
+    public void hideCasesExceptCase(List<Case> listCase) {
+        ArrayList<Position> pos = new ArrayList<>();
+        for (Case c: listCase) {
+            pos.add(c.getPosition());
+        }
+        hideCasesExcept(pos);
+    }
+
+    public void hideAllCases() {
+        hideCasesExcept(new ArrayList<Position>());
+    }
+
     /**
      * Dessine les pieces sur le plateau
      */

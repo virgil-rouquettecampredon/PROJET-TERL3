@@ -26,7 +26,8 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
     private Piece pieceMange = null;                                // Retourne la pièce qui vient d'être mangé, sinon retourne null
     private Piece pieceMenace = null;                               // Retourne la pièce qu'il menace
 
-    private List<Position> deplacementsSpecialRegles;               //Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
+    private List<Position> deplacementsSpecialRegles;               // Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
+    private ArrayList<Case> casesPourRevivre;
 
     public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements, List<Position> deplacementsSpecialRegles) {
         this.name = name;
@@ -251,6 +252,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
 
     public void setEstApromouvoir(boolean b) {
         etatPiece[2] = b;
+    }
+
+    public void setCasesPourRevivre(ArrayList<Case> casesPourRevivre) {
+        this.casesPourRevivre = casesPourRevivre;
+    }
+
+    public ArrayList<Case> getCasesPourRevivre() {
+        return casesPourRevivre;
     }
 
     /*FIN GETTER SETTER*/

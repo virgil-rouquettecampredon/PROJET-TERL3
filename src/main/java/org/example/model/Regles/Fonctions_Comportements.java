@@ -436,8 +436,8 @@ public class Fonctions_Comportements {
      * Le groupe de case peut comporter des cases absolu du plateau comme des cases relatives qui seront lu en fonction de la position de la pièce
      */
     public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> {
-        System.out.println("DEPLACER jkhfahkjefahkjfehjkafhkjeaehfajk Pieces="+pieces);
-        System.out.println("groupCase="+groupcases);
+        //System.out.println("DEPLACER : Pieces="+pieces);
+        //System.out.println("groupCase="+groupcases);
         for (Piece p : pieces) {
             for (GroupCases gc : groupcases) {
                 for (Position pos : gc.getPositionsRelatives()) {

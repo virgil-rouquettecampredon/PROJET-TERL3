@@ -62,7 +62,7 @@
                                                 <VBox prefHeight="200.0">
                                                     <children>
                                                         <Label fx:id="playerLabel" styleClass="label-header" text="Joueur" textAlignment="CENTER" wrapText="true" />
-                                                        <Canvas fx:id="graveyardCanvas" height="180.0" width="300.0" />
+                                                        <Canvas fx:id="graveyardCanvas" onMouseClicked="#ClickGraveyard" height="180.0" width="300.0" />
                                                         <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" vbarPolicy="NEVER">
                                                             <content>
                                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="75.0" styleClass="transparent">
