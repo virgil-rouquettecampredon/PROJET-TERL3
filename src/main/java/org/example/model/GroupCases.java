@@ -97,7 +97,8 @@ public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
     public ArrayList<Case> getCasesRelatives(int posX, int posY) {
         ArrayList<Case> casesRelatives = new ArrayList<>();
         for (Position p : positionsRelatives) {
-            if (p.getY() + posY < plateau.getHeightY() && p.getX() + posX < plateau.getWitdhX()) {
+            if (p.getY() + posY < plateau.getHeightY() && p.getX() + posX < plateau.getWitdhX()
+                    && p.getY() + posY >= 0 && p.getX() + posX >= 0) {
                 casesRelatives.add(plateau.getEchiquier().get(p.getY() + posY).get(p.getX() + posX));
             }
         }
@@ -107,7 +108,8 @@ public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
     public ArrayList<Case> getCasesRelatives(Position pos) {
         ArrayList<Case> casesRelatives = new ArrayList<>();
         for (Position p : positionsRelatives) {
-            if (p.getY() + pos.getY() < plateau.getHeightY() && p.getX() + pos.getX() < plateau.getWitdhX()) {
+            if (p.getY() + pos.getY() < plateau.getHeightY() && p.getX() + pos.getX() < plateau.getWitdhX()
+                    && p.getY() + pos.getY() >= 0 && p.getX() + pos.getX() >= 0) {
                 casesRelatives.add(plateau.getEchiquier().get(p.getY() + pos.getY()).get(p.getX() + pos.getX()));
             }
         }

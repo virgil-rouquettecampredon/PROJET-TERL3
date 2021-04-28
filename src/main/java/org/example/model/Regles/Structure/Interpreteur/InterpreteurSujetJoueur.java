@@ -32,7 +32,9 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
                 try {
                     //System.out.println("Borne Joueur: " + Jeton.JOUEUR.getBorne(0));
                     int numjoueur = Integer.parseInt(this.str_source.substring(1));
+                    //System.out.println("num joueur: " + numjoueur);
                     if (numjoueur < Jeton.JOUEUR.getBorne(0) && numjoueur >= 0) {
+                        //System.out.println("liste joueurs: " + ord.getVariante().getJoueurs());
                         lret.add(ord.getVariante().getJoueurs().get(numjoueur));
                         return lret;
                     } else {

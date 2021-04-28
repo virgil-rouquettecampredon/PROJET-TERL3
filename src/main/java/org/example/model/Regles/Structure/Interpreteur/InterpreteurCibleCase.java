@@ -39,17 +39,24 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
 
                 String[] str_proprio_type = this.str_source.split("#");
                 if (str_proprio_type.length < 2) { throw new MauvaiseInterpretationObjetRegleException("Format: '#' vide"); }
+                System.out.println("str 0: '" + str_proprio_type[0] + "'");
+                System.out.println("str 1: '" + str_proprio_type[1] + "'");
 
                 List<GroupCases> gcases_absolu = interpreterGroupCases(str_proprio_type[0], ord);
                 List<GroupCases> gcases_relatif = interpreterGroupCases(str_proprio_type[1], ord);
 
                 LinkedHashSet<Case> ensemble_casesabsolufinales = new LinkedHashSet<>();
-                for(Case c: gcases_absolu.get(0).getCasesAbsolue()){
-                    ensemble_casesabsolufinales.addAll(gcases_relatif.get(0).getCasesRelatives(c.getPosition()));
+                for(Case ca: gcases_absolu.get(0).getCasesAbsolue()){
+                    ensemble_casesabsolufinales.addAll(gcases_relatif.get(0).getCasesRelatives(ca.getPosition()));
+                    /*for(Case cr: gcases_relatif.get(0).getCasesRelatives(ca.getPosition())){
+                        if(cr != null) {
+                            ensemble_casesabsolufinales.add(cr);
+                        }
+                    }*/
                 }
 
-                GroupCases newg = new GroupCases("[" + gcases_absolu.get(0).getName() + "]" + " absolu avec ["
-                        + gcases_relatif.get(0).getName() + "] relatif",
+                GroupCases newg = new GroupCases( "[" + gcases_relatif.get(0).getName() + "] relatif par rapport à ["
+                        + gcases_absolu.get(0).getName() + "]",
                         ord.getVariante().getPlateau());
 
                 ArrayList<Case> tmp = new ArrayList<>();
@@ -71,16 +78,18 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
 
     public List<GroupCases> interpreterGroupCases(String str, OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         ArrayList<GroupCases> lret = new ArrayList<>();
-        String erreurCase = "GroupCases: '" + this.str_source + "': ";
-        if (str.charAt(0) == 'C' && str.length() >= 2) {
+        String erreurCase = "GroupCases: '" + str + "': ";
+        if (str.length() >= 2 && str.charAt(0) == 'C') {
             if (str.equals("CALL")) {
-                lret.addAll(ord.getVariante().getListGroupCases());
+                lret.add(ord.getVariante().getListGroupCases().get(0));
                 return lret;
             } else {
                 int indgc;
                 try {
                     indgc = Integer.parseInt(str.substring(1));
+                    //System.out.println("indice groupe case: "+indgc);
                     if (indgc >= 0 && indgc < Jeton.CASE.getBorne()){
+                        //System.out.println("liste groupe cases variante: " + ord.getVariante().getListGroupCases());
                         lret.add(ord.getVariante().getListGroupCases().get(indgc));
                         return lret;
                     } else {
@@ -96,6 +105,8 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
         throw new MauvaiseInterpretationObjetRegleException(erreurCase + "Format incorrect (syntaxe de la forme CALL ou CN où N est un entier positif)");
         //return null;
     }
+
+
 
 
 }

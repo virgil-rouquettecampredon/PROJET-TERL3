@@ -170,7 +170,7 @@ public class InterpreteurCase_Test {
      * ==================================================
      */
 
-    @Test
+    /*@Test
     public final void testCALL_testBon() {
         interpretc = new InterpreteurCibleCase("CALL");
         try {
@@ -183,7 +183,7 @@ public class InterpreteurCase_Test {
         } catch (MauvaiseInterpretationObjetRegleException m) {
             fail("Exception détectée: " + m.getMessage());
         }
-    }
+    }*/
 
     @Test
     public final void testC0_testBon() {
