@@ -66,23 +66,28 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUneTransition(6,Jeton_Interface.PIECETOKEN,11);
         this.ajouterUneTransition(6,Jeton_Interface.PIECE,12);
         this.ajouterUneTransition(6,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(6,Jeton_Interface.CASEALIAS,13);
         this.ajouterUneTransition(6,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 7
         this.ajouterUneTransition(7,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(7,Jeton_Interface.CASEALIAS,13);
         this.ajouterUneTransition(7,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 8
         this.ajouterUneTransition(8,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(8,Jeton_Interface.CASEALIAS,13);
         this.ajouterUneTransition(8,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 9
         this.ajouterUneTransition(9,Jeton_Interface.JOUEUR,10);
         this.ajouterUneTransition(9,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(9,Jeton_Interface.CASEALIAS,13);
         this.ajouterUneTransition(9,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 10
         this.ajouterUneTransition(10,Jeton_Interface.CASE,13);
+        this.ajouterUneTransition(10,Jeton_Interface.CASEALIAS,13);
         this.ajouterUneTransition(10,Jeton_Interface.CASEPARAM,14);
 
         //ETAT 11
@@ -126,7 +131,8 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
             int ind = 0;
             switch (t.getEtiquetteArete()) {
                 case CASE -> {
-                        elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les cases", "tous-typecase"));
+                        elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les cases", "tous-case"));
+                        ind = 1;
                         for (GroupCases gc : cases) {
                             elements.add(new ElementRegle(Jeton_Interface.CASE,gc.getName(), "C" + ind));
                             ind++;

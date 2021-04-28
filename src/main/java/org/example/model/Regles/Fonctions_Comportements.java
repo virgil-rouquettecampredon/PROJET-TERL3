@@ -396,12 +396,26 @@ public class Fonctions_Comportements {
      * le joueur choisi parmis une de ces pièces pour la placer sur le terrain*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Void> placer = (pieces, cases) -> { return null; };
 
-    /** Consequence : PIECE + DEPLACE + CASE
+    /**
+     * Consequence : PIECE + DEPLACE + CASE
+     *
      * @param pieces : liste des pieces plaçable
      * @param groupcases : liste des cases sur lequel les pièces peuvent être placé
      * @fn Le joueur effectue un choix de déplacement selon les cases proposé par groupcases pour chacune des pièces.
-     * Le groupe de case peut comporter des cases absolu du plateau comme des cases relatives qui seront lu en fonction de la position de la pièce*/
-    public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> { return null; };//todo 2
+     * Le groupe de case peut comporter des cases absolu du plateau comme des cases relatives qui seront lu en fonction de la position de la pièce
+     */
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> deplacer = (pieces, groupcases) -> {
+        System.out.println("DEPLACER jkhfahkjefahkjfehjkafhkjeaehfajk Pieces="+pieces);
+        System.out.println("groupCase="+groupcases);
+        for (Piece p : pieces) {
+            for (GroupCases gc : groupcases) {
+                for (Position pos : gc.getPositionsRelatives()) {
+                    p.getDeplacementsSpecialRegles().add(pos);
+                }
+            }
+        }
+        return null;
+    };
 
 
 

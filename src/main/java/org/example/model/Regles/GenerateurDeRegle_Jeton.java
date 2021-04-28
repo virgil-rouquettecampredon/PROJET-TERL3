@@ -160,7 +160,7 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                                         regle.set(i,"JALL");
                                         curJeton = Jeton.JOUEUR;
                                     }
-                                    case "tous-typecase" ->{
+                                    case "tous-case" ->{
                                         regle.set(i,"CALL");
                                         curJeton = Jeton.CASE;
                                     }

@@ -16,12 +16,12 @@ import org.example.model.Regles.Structure.Interpreteur.*;
 public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
     public Automate_Regles_Semantique(){
-        super(35,0);
+        super(37,0);
         aliasRegle = new HashMap<>();
     }
 
     public Automate_Regles_Semantique(List<String> nomEtat){
-        super(35,0, nomEtat);
+        super(37,0, nomEtat);
         aliasRegle = new HashMap<>();
     }
 
@@ -53,9 +53,16 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
             this.ajouterUnEtatTerminal(i,300+i);
         }
 
-        //GESTION DES NEGATIONS
-        this.ajouterUneTransition(4,Jeton.NON,4);
-        this.ajouterUneTransition(7,Jeton.NON,7);
+        //GESTION DES NEGATIONS (COMPARATEURS)
+        this.ajouterUneTransition(4,Jeton.NON,35);
+        this.ajouterUneTransition(35,Jeton.COMPARAISON,8);
+        this.ajouterUneTransition(7,Jeton.NON,36);
+        this.ajouterUneTransition(36,Jeton.COMPARAISON,12);
+
+        //Permet de ne pas renseigner la traversée de ces états dans le parcours de l'automate
+        //La négation d'une comparaison se fera au moment de la détection du NON, indépendamment de son traitement au sein de l'automate
+        this.setValeurEtat(35,"");
+        this.setValeurEtat(36,"");
 
         //Permet de ne pas renseigner la traversée de cet état dans le parcours de l'automate
         //La négation d'une condition ne change pas fondamentalement le traitement sémantique de celle-ci
@@ -299,6 +306,12 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         return j == Jeton.ET;
     }
 
+    /**Méthode permettant de vérifier si un jeton non référence un comparateur ou non, d'après le parcours de l'automate
+     * @param parcours : parcours daans l'automate**/
+    private boolean estNonComparateur(String parcours){
+        return parcours.equals("014") || parcours.equals("0R14")|| parcours.equals("027") || parcours.equals("037")|| parcours.equals("0237") || parcours.equals("0R27")|| parcours.equals("0R237") || parcours.equals("02R37")|| parcours.equals("0R2R37")|| parcours.equals("0R37");
+    }
+
     private String getMessageErreur(int id, List<Jeton> regleSyntaxe, List<String> regleString){
         return id+"";
     }
@@ -367,7 +380,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 //Gestion de la négation
                 case NON -> {
                     if (traitementCondition) {
-                        if(!(parcours.equals("014") || parcours.equals("027") || parcours.equals("0237") || parcours.equals("037"))){
+                        if (!estNonComparateur(parcours)) {
                             jetonsarborescence.add(j);
                         }
                     }
@@ -561,6 +574,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     conditionsDeLaRegle.add(cond);
                                     nbConditions++;
                                     jetonsarborescence.add(Jeton.CONDITION);
+                                    //Edition des Alias : ConditionDeDepart
+                                    for(Alias<Jeton,?> alias : aliasCondtion){
+
+                                    }
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Etat [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -3141,7 +3158,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     switch (parcours) {
                                         case "0271214" -> {
                                             //Cas Piece+Compteur+Comparaison+Nombre
-                                            if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("nb_deplacement")) {
                                                 switch(regleString.get(indRegleSyntaxe-1)){
                                                     case "<" -> {
                                                         cond = new ConditionAction<Piece, IntegerRegle>(
@@ -3168,7 +3185,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         }
                                         case "02371214" -> {
                                             //Cas Piece+Joueur+Compteur+Comparaison+Nombre
-                                            if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("nb_deplacement")) {
                                                 switch(regleString.get(indRegleSyntaxe-1)) {
                                                     case "<" -> {
                                                         cond = new ConditionAction<Piece, IntegerRegle>(
@@ -3195,7 +3212,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         }
                                         case "0371214" -> {
                                             //Cas PieceToken+Compteur+Comparaison+Nombre
-                                            if (regleString.get(indRegleSyntaxe - 2).equals("nbdeplacement")) {
+                                            if (regleString.get(indRegleSyntaxe - 2).equals("nb_deplacement")) {
                                                 switch(regleString.get(indRegleSyntaxe-1)){
                                                     case "<" -> {
                                                         cond = new ConditionAction<Piece, IntegerRegle>(

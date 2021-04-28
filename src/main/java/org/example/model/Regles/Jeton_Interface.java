@@ -22,6 +22,7 @@ public enum Jeton_Interface implements EstToken, Serializable {
     JOUEUR(),
     PIECETOKEN(),
     CASEPARAM(),
+    CASEALIAS(),
 
     //Jetons CONDITION
     //==== ETAT ====

@@ -134,18 +134,22 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
         this.ajouterUneTransition(7,Jeton_Interface.PIECE,12);
         this.ajouterUneTransition(7,Jeton_Interface.PIECETOKEN,14);
         this.ajouterUneTransition(7,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(7,Jeton_Interface.CASEALIAS,15);
         this.ajouterUneTransition(7,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 8
         this.ajouterUneTransition(8,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(8,Jeton_Interface.CASEALIAS,15);
         this.ajouterUneTransition(8,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 9
         this.ajouterUneTransition(9,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(9,Jeton_Interface.CASEALIAS,15);
         this.ajouterUneTransition(9,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 10
         this.ajouterUneTransition(10,Jeton_Interface.CASE,15);
+        this.ajouterUneTransition(10,Jeton_Interface.CASEALIAS,15);
         this.ajouterUneTransition(10,Jeton_Interface.CASEPARAM,25);
 
         //ETAT 11
@@ -218,7 +222,8 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             int ind = 0;
             switch (t.getEtiquetteArete()) {
                 case CASE -> {
-                    elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les groupes de cases", "tous-typecase"));
+                    elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les cases", "tous-case"));
+                    ind = 1;
                     for (GroupCases gc : cases) {
                         elements.add(new ElementRegle(Jeton_Interface.CASE,gc.getName(), "C" + ind));
                         ind++;
@@ -281,7 +286,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                 case 27 -> alias.put(elR.getNomRegle(),Jeton_Interface.JOUEUR);
                 case 28 , 31 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECE);
                 case 29 , 30 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECETOKEN);
-                case 32 -> alias.put(elR.getNomRegle(),Jeton_Interface.CASE);
+                case 32 -> alias.put(elR.getNomRegle(),Jeton_Interface.CASEALIAS);
                 case 33 -> alias.put(elR.getNomRegle(), Jeton_Interface.CASEPARAM);
                 default -> throw new MauvaiseDefinitionRegleException("Impossible d'appliquer un ALIAS ici : " + curEtat);
             }
@@ -408,74 +413,107 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                         continue;
                     }
                 }else {
-                    //Affichage des choix possibles
-                    if (regleChoix.size() > 0) {
-                        System.out.println("Elements possibles (sélectionner " + COLOR_GREEN + "indice" + COLOR_RESET + " ou " + COLOR_RED + "#P " + COLOR_RESET + "pour revenir en arrière) : ");
-                    } else {
-                        System.out.println("Elements possibles (sélectionner " + COLOR_GREEN + "indice" + COLOR_RESET + ") : ");
-                    }
-                    int ind = 1;
-                    for (ElementRegle e : elem) {
-                        System.out.println(COLOR_GREEN + ind + COLOR_RESET + " -> " + e.getNomInterface());
-                        ind++;
-                    }
-                    //Affichage et traitement du choix
-                    System.out.print("Choix : " + COLOR_GREEN);
-                    String rep = scan.next();
-                    System.out.print(COLOR_RESET);
-
-                    //Gestion retour en arrière
-                    if (rep.equals("#P") && regleChoix.size() > 0) {
-                        int etatEnleve = auto.getCurEtat();
-                        auto.revenirEnArriere();
-                        ElementRegle elemSup = regleChoix.remove(regleChoix.size() - 1);
-                        //Gestion chaine de caractère regle
-                        regle = regle.substring(0, regle.lastIndexOf("]"));
-                        regle = regle.substring(0, regle.lastIndexOf("]") + 1);
-                        System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface() + CYAN_BRIGHT + " (" + etatEnleve + ")" + COLOR_RESET);
-                        System.out.println("Regle : " + regle + "\n");
-                        continue;
-                    } else {
-                        int indRep = Integer.parseInt(rep);
-                        --indRep;
-                        if (indRep < 0 || indRep > ind) {
-                            throw new MauvaiseDefinitionRegleException("Seul un nombre valide est autorisé");
-                        } else {
-                            choix = elem.get(indRep);
-                            if (choix.getJetonAssocie() == Jeton_Interface.ALIAS) {
-                                //Si c'est un alias qui a été choisi par l'utilisateur
-                                boolean bon = false;
-
-                                String mes = "Veuillez entrer un nom d'alias (" + COLOR_RED + "#P" + COLOR_RESET + " pour revenir en arrière) :";
-                                while (!bon) {
-                                    System.out.println(mes);
-                                    rep = scan.next();
-                                    //Si on veut revenir en arrière
-                                    if (rep.equals("#P") && regleChoix.size() > 0) {
-                                        //Comme le choix n'a pas vraiment été pris en compte
-                                        //On peut simplement l'annuler
-                                        System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + Jeton_Interface.ALIAS + CYAN_BRIGHT + " (" + auto.etatSuivant(auto.curEtat, Jeton_Interface.ALIAS) + ")" + COLOR_RESET);
-                                        break;
-                                    }
-                                    //Si la chaine de caractère est autorisée
-                                    if (auto.peutEtreRenseigne(rep)) {
-                                        //Alors on valide ce choix
-                                        bon = true;
-
-                                        choix.setNomInterface(choix.getNomInterface() + " " + rep);
-                                        choix.setNomRegle(rep);
-                                    }
-                                    mes = "Nom interdit : " + COLOR_RED + rep + COLOR_RESET;
-                                }
-                                if(!bon){
-                                    System.out.println("Regle : " + regle + "\n");
-                                    continue;
+                    if(elem.size() == 1 && elem.get(0).getJetonAssocie() == Jeton_Interface.ALIAS) {
+                        boolean bon = false;
+                        String mes = "Veuillez entrer un nom d'alias valide (" + COLOR_RED + "#P" + COLOR_RESET + " pour revenir en arrière) :";
+                        while (!bon) {
+                            System.out.println(mes);
+                            String rep = scan.next();
+                            //Si on veut revenir en arrière
+                            if (rep.equals("#P") && regleChoix.size() > 0) {
+                                int etatEnleve = auto.getCurEtat();
+                                auto.revenirEnArriere();
+                                ElementRegle elemSup = regleChoix.remove(regleChoix.size() - 1);
+                                //Gestion chaine de caractère regle
+                                regle = regle.substring(0, regle.lastIndexOf("]"));
+                                regle = regle.substring(0, regle.lastIndexOf("]") + 1);
+                                System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface() + CYAN_BRIGHT + " (" + etatEnleve + ")" + COLOR_RESET);
+                                break;
+                            } else {
+                                if (auto.peutEtreRenseigne(rep)) {
+                                    reponse = rep;
+                                    bon = true;
+                                    choix = elem.get(0);
+                                    choix.setNomInterface(rep);
+                                } else {
+                                    mes = COLOR_RED + "J'ai dit valide : " + COLOR_RESET;
                                 }
                             }
-                            reponse = choix.getNomInterface();
+                        }
+                        //Si on revient en arrière
+                        if (!bon) {
+                            System.out.println("Regle : " + regle + "\n");
+                            continue;
+                        }
+                    }else {
+                        //Affichage des choix possibles
+                        if (regleChoix.size() > 0) {
+                            System.out.println("Elements possibles (sélectionner " + COLOR_GREEN + "indice" + COLOR_RESET + " ou " + COLOR_RED + "#P " + COLOR_RESET + "pour revenir en arrière) : ");
+                        } else {
+                            System.out.println("Elements possibles (sélectionner " + COLOR_GREEN + "indice" + COLOR_RESET + ") : ");
+                        }
+                        int ind = 1;
+                        for (ElementRegle e : elem) {
+                            System.out.println(COLOR_GREEN + ind + COLOR_RESET + " -> " + e.getNomInterface());
+                            ind++;
+                        }
+                        //Affichage et traitement du choix
+                        System.out.print("Choix : " + COLOR_GREEN);
+                        String rep = scan.next();
+                        System.out.print(COLOR_RESET);
+
+                        //Gestion retour en arrière
+                        if (rep.equals("#P") && regleChoix.size() > 0) {
+                            int etatEnleve = auto.getCurEtat();
+                            auto.revenirEnArriere();
+                            ElementRegle elemSup = regleChoix.remove(regleChoix.size() - 1);
+                            //Gestion chaine de caractère regle
+                            regle = regle.substring(0, regle.lastIndexOf("]"));
+                            regle = regle.substring(0, regle.lastIndexOf("]") + 1);
+                            System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface() + CYAN_BRIGHT + " (" + etatEnleve + ")" + COLOR_RESET);
+                            System.out.println("Regle : " + regle + "\n");
+                            continue;
+                        } else {
+                            int indRep = Integer.parseInt(rep);
+                            --indRep;
+                            if (indRep < 0 || indRep > ind) {
+                                throw new MauvaiseDefinitionRegleException("Seul un nombre valide est autorisé");
+                            } else {
+                                choix = elem.get(indRep);
+                                /* if (choix.getJetonAssocie() == Jeton_Interface.ALIAS) {
+                                    //Si c'est un alias qui a été choisi par l'utilisateur
+                                    boolean bon = false;
+
+                                    String mes = "Veuillez entrer un nom d'alias (" + COLOR_RED + "#P" + COLOR_RESET + " pour revenir en arrière) :";
+                                    while (!bon) {
+                                        System.out.println(mes);
+                                        rep = scan.next();
+                                        //Si on veut revenir en arrière
+                                        if (rep.equals("#P") && regleChoix.size() > 0) {
+                                            //Comme le choix n'a pas vraiment été pris en compte
+                                            //On peut simplement l'annuler
+                                            System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + Jeton_Interface.ALIAS + CYAN_BRIGHT + " (" + auto.etatSuivant(auto.curEtat, Jeton_Interface.ALIAS) + ")" + COLOR_RESET);
+                                            break;
+                                        }
+                                        //Si la chaine de caractère est autorisée
+                                        if (auto.peutEtreRenseigne(rep)) {
+                                            //Alors on valide ce choix
+                                            bon = true;
+
+                                            choix.setNomInterface(choix.getNomInterface() + " " + rep);
+                                            choix.setNomRegle(rep);
+                                        }
+                                        mes = "Nom interdit : " + COLOR_RED + rep + COLOR_RESET;
+                                    }
+                                    if (!bon) {
+                                        System.out.println("Regle : " + regle + "\n");
+                                        continue;
+                                    }
+                                }*/
+                                reponse = choix.getNomInterface();
+                            }
                         }
                     }
-
                 }
                 //Gestion + Affichage Regle à un instant t de l'exécution
                 regleChoix.add(choix);

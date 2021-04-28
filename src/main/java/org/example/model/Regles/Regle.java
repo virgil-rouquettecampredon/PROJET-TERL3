@@ -92,6 +92,13 @@ public class Regle {
         //Si l'évaluation de l'arbre condition est positive, on peut exécuter les Consequences
         if (arbre_conditions.evaluer()) {
             for (Consequence cons : consequences) {
+                i = 0;
+                try{
+                    cons.verifierElements(ord);
+                    i++;
+                }catch (MauvaiseInterpretationObjetRegleException e){
+                    throw new MauvaiseDefinitionRegleException("Impossible d'interpréter le ou les élément(s) de la consequence" + i + ": " + e.getMessage());
+                }
                 cons.comportement(ord);
             }
         }
