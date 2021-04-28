@@ -218,7 +218,7 @@ public enum Jeton implements Serializable, EstToken {
     },
 
     //Jeton pour les macros, à traiter dans le générateur
-    TOUS("macro tous","tous-piece", "tous-joueur", "tous-typecase"),
+    TOUS("macro tous","tous-piece", "tous-joueur", "tous-case"),
 
     //Jeton Action ou etat
     ACTION("action","prend","sedeplace","estplace","estsur","estechec"),
