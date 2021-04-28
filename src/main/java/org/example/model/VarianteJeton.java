@@ -54,9 +54,9 @@ public class VarianteJeton extends Variante<Jeton> {
             }
             Jeton.PIECE.setBorne(equipes.size(), 1);
 
-            for(ElementRegle elr : regleSousFormeElemRegle){
-                System.out.println(elr.getJetonAssocie() + "-> {" + elr.getNomInterface() + "|" + elr.getNomRegle() + "}");
-            }
+            //for(ElementRegle elr : regleSousFormeElemRegle){
+                //System.out.println(elr.getJetonAssocie() + "-> {" + elr.getNomInterface() + "|" + elr.getNomRegle() + "}");
+            //}
 
             //Instanciation de la liste traduisant la regle obtenue depuis l'interface en regle sous forme de liste de termes
             // 0 : Regle avant le coup d'un joueur

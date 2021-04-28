@@ -84,12 +84,14 @@ public class GameController extends Controller {
 
     private ArrayList<Position> casesPromotion;
 
+    private Position selectionCase;
+
     private static enum EtatCoup {
-        AVANT, PENDANT, APRES, FIN
+        DEBUT, FIN
     }
 
     private static enum EtatClick {
-        JEU, CHOIX
+        JEU, CHOIX, DESACTIVE
     }
 
     @Override
@@ -134,7 +136,12 @@ public class GameController extends Controller {
             graveyardContext = graveyardCanvas.getGraphicsContext2D();
             coupPossibles = new LinkedHashSet<>();
 
-            resetCoup();
+            casesPromotion = new ArrayList<>();
+            try {
+                resetCoup();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             updateCanvas();
         }
     }
@@ -149,6 +156,14 @@ public class GameController extends Controller {
             canvasManager.drawCase(caseDestination.getPosition());
         }
         canvasManager.drawCoupPossibles(coupPossibles);
+
+        if (!casesPromotion.isEmpty()) {
+            canvasManager.hideCasesExcept(casesPromotion);
+        }
+
+        if (selectionCase != null) {
+            canvasManager.drawSelectionCase(selectionCase);
+        }
         canvasManager.drawPawn();
 
         //Graveyard
@@ -206,12 +221,18 @@ public class GameController extends Controller {
                                 if (c.getPieceOnCase() != null && c.getPieceOnCase().getJoueur().getPawnList().contains(c.getPieceOnCase())) {
                                     caseOrigine = c;
                                     coupPossibles = ordonnanceurDeJeu.deplacementsValide(caseOrigine, joueurQuiJoue());
+                                    System.out.println("DEPLACEMENTS REGLES"+c.getPieceOnCase().getDeplacementsSpecialRegles());
                                 }
                             } else {
                                 caseDestination = c;
-                            }
-                            if (caseDestination != null) {
-                                jouerCoup();
+
+                                try {
+                                    ordonnanceurDeJeu.verifierDeplacement(caseOrigine, joueurQuiJoue(), caseDestination);
+                                    jouerCoup();
+                                } catch (DeplacementException e) {
+                                    System.err.println(e.getMessage());
+                                    resetCoup();
+                                }
                             }
                         }
                     }
@@ -240,23 +261,18 @@ public class GameController extends Controller {
         return gameVariante.getOrdrejoueur().get(indiceJoueur);
     }
 
-    private void resetCoup() {
-        etatCoup = EtatCoup.AVANT;
+    private void resetCoup() throws IOException{
+        etatCoup = EtatCoup.DEBUT;
         etatClick = EtatClick.JEU;
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
+        debutTour();
     }
 
     private void avancerEtat() {
         switch (etatCoup) {
-            case AVANT -> {
-                etatCoup = EtatCoup.PENDANT;
-            }
-            case PENDANT -> {
-                etatCoup = EtatCoup.APRES;
-            }
-            case APRES -> {
+            case DEBUT -> {
                 etatCoup = EtatCoup.FIN;
             }
             case FIN -> {
@@ -265,34 +281,66 @@ public class GameController extends Controller {
         }
     }
 
-    private void faireSelectionner() {
-        if (casesPromotion != null) {
-            etatClick = EtatClick.CHOIX;
-            canvasManager.hideCasesExcept(casesPromotion);
+    private boolean faireSelectionner() throws IOException{
+        boolean attendreUtilisateur = false;
+        if (!casesPromotion.isEmpty()) {
+            System.out.println("SELECTION PROMOTION");
+            attendreUtilisateur = true;
+            if (casesPromotion.size() == 1) {
+                selectionnerCase(gameVariante.getPlateau().getCase(casesPromotion.get(0)));
+            }
+            else {
+                varLabel.setText("Selection : Promotion");
+                updateCanvas();
+                etatClick = EtatClick.CHOIX;
+            }
         }
         //else if ...
+        return attendreUtilisateur;
     }
 
     private void selectionnerCase(Case c) throws IOException{
-        etatClick = EtatClick.JEU;
-        if (casesPromotion != null) {
-            casesPromotion = null;
+        boolean attendreUtilisateur = false;
+        boolean caseValide = false;
+        if (casesPromotion.contains(c.getPosition())) {
+            System.out.println("CHOIX VALIDE : PROMOTION");
+
+            caseValide = true;
+
+            casesPromotion.clear();
+            attendreUtilisateur = true;
+
+            selectionCase = c.getPosition();
             fairePromouvoir(c);
         }
         //else if ...
-        updateCanvas();
+
+        if (caseValide) {
+            etatClick = EtatClick.JEU;
+
+            varLabel.setText(gameVariante.getName());
+            updateCanvas();
+
+
+            if (!attendreUtilisateur) {
+                avancerEtat();
+                jouerCoup();
+            }
+        }
     }
 
-    private void verifierEtatsRegle() throws  IOException{
+    private boolean verifierEtatsRegle() throws  IOException{
+
         //verification Joueur
         boolean attendreUtilisateur = false;
         for (Joueur j : gameVariante.getJoueurs()) {
             if (j.aGagne()) {
+                //System.out.println("JOUEUR VICTOIRE TROUVE "+j);
                 for (Joueur jAutre : gameVariante.getJoueurs()) {
                     if (jAutre.getEquipe() != j.getEquipe()) {
                         boolean fin = giveUp("Victoire de "+j.getName(), jAutre);
                         if (fin) {
-                            return;
+                            return true;
                         }
                     }
                 }
@@ -300,23 +348,19 @@ public class GameController extends Controller {
             else if (j.aPerdu()) {
                 boolean fin = giveUp("Defaite de "+j.getName(), j);
                 if (fin) {
-                    return;
+                    return true;
                 }
             }
             else if (j.aPat()) {
                 for (Joueur jAutre : gameVariante.getJoueurs()) {
                     boolean fin = giveUp("Pat par règle sur "+j.getName(), jAutre);
                     if (fin) {
-                        return;
+                        return true;
                     }
                 }
             }
         }
 
-        if (ordonnanceurDeJeu.fautPromouvoir()) {
-            attendreUtilisateur = true;
-            fairePromouvoir(caseDestination);
-        }
         String s = "";
         Joueur j = joueurQuiJoue();
         if (ordonnanceurDeJeu.echecEtMat(j)) {
@@ -333,60 +377,77 @@ public class GameController extends Controller {
         }
 
         if (!s.isEmpty()) {
-            giveUpButton(s);
-        }
-
-        if (!attendreUtilisateur) {
-            avancerEtat();
-            jouerCoup();
+            boolean fin = giveUp(s, j);
+            if (fin) {
+                return true;
+            }
         }
 
         //verification Pieces
-        //attendreUtilisateur = faireSelectionnerPieceParmit(Piece::estAPromouvoir);
         casesPromotion = new ArrayList<>();
         for (ArrayList<Case> ligne : gameVariante.getPlateau().getEchiquier()) {
             for (Case c : ligne) {
                 Piece p = c.getPieceOnCase();
                 if (p != null) {
-                    if (p.estAPromouvoir()) {
+                    if (p.estAPromouvoir() && p.getJoueur().equals(joueurQuiJoue())) {
                         casesPromotion.add(c.getPosition());
                     }
                     //if est a deplacer...
                 }
             }
         }
-        faireSelectionner();
+        attendreUtilisateur = faireSelectionner();
+
+
+        return attendreUtilisateur;
     }
 
+    private void debutTour() throws IOException{
+        try {
+            gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
+
+            ordonnanceurDeJeu.appliquerReglesAvant();
+
+            System.out.println("---------VERIFICATION REGLES DEBUT----------");
+            verifierEtatsRegle();
+
+        } catch (MauvaiseDefinitionRegleException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur critique : "+e.getMessage());
+            getApp().setRoot("home");
+        }
+    }
+    
+
     private void jouerCoup() throws IOException{
+        System.out.println("Coup : etatCoup="+etatCoup.name());
+        //System.out.println("Case origine : "+caseOrigine + " Case destination : "+caseDestination);
         try {
             switch (etatCoup) {
-                case AVANT -> {
-                    gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
+                case DEBUT -> {
+                    etatClick = EtatClick.DESACTIVE; //Desactiver le click
+
                     nomPieceDeplace = caseOrigine.getPieceOnCase().getName();
                     //System.out.println(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
 
-                    ordonnanceurDeJeu.appliquerReglesAvant();
+                    ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
 
-                    verifierEtatsRegle();
-                }
-                case PENDANT -> {
-                    try {
-                        ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
-                    } catch (DeplacementException e) {
-                        System.err.println(e.getMessage());
-                        resetCoup();
-                    }
-                    verifierEtatsRegle();
-                }
-                case APRES -> {
+                    avancerEtat();
+                    jouerCoup();
+
                     ordonnanceurDeJeu.appliquerReglesApres();
 
                     if (timerCourant != null) {
                         pauseTimer(timerCourant);
                     }
 
-                    verifierEtatsRegle();
+                    System.out.println("---------VERIFICATION REGLES APRES----------");
+                    boolean attendreUtilisateur = verifierEtatsRegle();
+
+                    if (!attendreUtilisateur) {
+                        avancerEtat();
+                        jouerCoup();
+                    }
                 }
                 case FIN -> {
                     addLabelCoup(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
@@ -414,7 +475,7 @@ public class GameController extends Controller {
         Label l = new Label(message);
         l.setTextAlignment(TextAlignment.CENTER);
         l.setWrapText(true);
-        coupsBox.getChildren().add(new Label(message));
+        coupsBox.getChildren().add(l);
         scroll.setVvalue(2);
     }
 
@@ -446,8 +507,8 @@ public class GameController extends Controller {
         }
     }
 
-    public void giveUpButton(String message) throws IOException{
-        giveUp(message, joueurQuiJoue());
+    public boolean giveUpButton(String message) throws IOException{
+        return giveUp(message, joueurQuiJoue());
     }
 
     public void fairePromouvoir(Case casePromotion) throws IOException{
@@ -467,11 +528,17 @@ public class GameController extends Controller {
         casePromotion.setPieceOnCase(p);
         destroyPopup();
 
-        updateCanvas();
         addLabelCoup(j + " : " + p2.getName() + " promu en " + p.getName());
 
-        avancerEtat();
-        jouerCoup();
+        selectionCase = null;
+        System.out.println("FIN PROMOTION");
+        boolean attendreUtilisateur = faireSelectionner();
+
+        if (!attendreUtilisateur) {
+            updateCanvas();
+            avancerEtat();
+            jouerCoup();
+        }
     }
 
     private Label createNewTimer(Joueur joueurConcerne) {

@@ -105,13 +105,9 @@ public class CanvasManager {
     public void hideCasesExcept(List<Position> listPos) {
         for (int i = 0; i < plateau.getHeightY(); i++) {
             for (int j = 0; j < plateau.getWitdhX(); j++) {
-                if (!listPos.contains(new Position(j, i))) {
-                    if ((j + i) % 2 == 0) {
-                        context.setFill(lightNonAccessibleCaseColor);
-                    } else {
-                        context.setFill(darkNonAccessibleCaseColor);
-                    }
-                    context.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
+                Position p = new Position(j, i);
+                if (!listPos.contains(p)) {
+                    drawCase(p, lightNonAccessibleCaseColor, darkNonAccessibleCaseColor);
                 }
             }
         }
@@ -216,28 +212,12 @@ public class CanvasManager {
     public void drawGroupCases(int posX, int posY, GroupCases group) {
         for (Case c : group.getCasesAbsolue()) {
             Position p = c.getPosition();
-            if ((p.getX()+p.getY())%2==0) {
-                //context.setFill(darkColorFromString(group.getName()));
-                context.setFill(lightMoveColor);
-            }
-            else {
-                //context.setFill(lightColorFromString(group.getName()));
-                context.setFill(darkMoveColor);
-            }
-            context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
+            drawCase(p, lightMoveColor, darkMoveColor);
         }
 
         for (Position relP : group.getPositionsRelatives()) {
             Position p = new Position(relP.getX() + posX, relP.getY() + posY);
-            if ((p.getX()+p.getY())%2==0) {
-                //context.setFill(darkColorFromString(group.getName()+"a"));
-                context.setFill(lightBothColor);
-            }
-            else {
-                //context.setFill(lightColorFromString(group.getName()+"a"));
-                context.setFill(darkBothColor);
-            }
-            context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
+            drawCase(p, lightBothColor, darkBothColor);
         }
 
         context.setFill(arrowTakeColor);
@@ -296,14 +276,22 @@ public class CanvasManager {
         return plateau.getEchiquier().get(y).get(x);
     }
 
-    public void drawCase(Position position) {
-        if ((position.getX()+position.getY())%2==0) {
-            context.setFill(lightTakeColor);
+    private void drawCase(Position p, Color cLight, Color cDark) {
+        if ((p.getX()+p.getY())%2==0) {
+            context.setFill(cLight);
         }
         else {
-            context.setFill(darkTakeColor);
+            context.setFill(cDark);
         }
-        context.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+        context.fillRect(p.getX() * rectSize, p.getY() * rectSize, rectSize, rectSize);
+    }
+
+    public void drawCase(Position position) {
+        drawCase(position, lightTakeColor, darkTakeColor);
+    }
+
+    public void drawSelectionCase(Position pos) {
+        drawCase(pos, lightBothColor, darkBothColor);
     }
 
     public double getRectSize() {return rectSize;}
@@ -311,13 +299,7 @@ public class CanvasManager {
     public void drawCoupPossibles(Set<Case> coupPossibles) {
         for (Case c: coupPossibles) {
             Position position = c.getPosition();
-            if ((position.getX()+position.getY())%2==0) {
-                context.setFill(lightMoveColor);
-            }
-            else {
-                context.setFill(darkMoveColor);
-            }
-            context.fillRect(position.getX() * rectSize, position.getY() * rectSize, rectSize, rectSize);
+            drawCase(position, lightMoveColor, darkMoveColor);
         }
     }
 }

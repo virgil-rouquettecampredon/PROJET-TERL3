@@ -83,6 +83,7 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste pieces est sur une case inclu dans la liste cases*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_Sur = (pieces, groupescases) -> {
+        //System.out.println("EST SUR : "+pieces+"\n et "+groupescases);
         sujetDeLaConditionVrai.clear();
         cibleDeLaConditionVrai.clear();
 
@@ -105,6 +106,9 @@ public class Fonctions_Comportements {
         if(valeurDeRetour){
             groupe.setPlateau(plateau);
             cibleDeLaConditionVrai.add(groupe);
+
+            System.out.println("EST SUR EST "+valeurDeRetour);
+            System.out.println("cibleDeLaConditionVrai : "+cibleDeLaConditionVrai);
         }
         return valeurDeRetour;
     };
@@ -136,6 +140,10 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste des pièces se deplace sur une case dans la liste des cases*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> se_deplace = (pieces, groupcases) -> {
+        System.out.println("SE DEPLACE");
+        System.out.println("PIECES "+pieces);
+        System.out.println("GroupCases "+groupcases);
+
         sujetDeLaConditionVrai.clear();
         cibleDeLaConditionVrai.clear();
 
@@ -159,6 +167,8 @@ public class Fonctions_Comportements {
             groupe.setPlateau(plateau);
             cibleDeLaConditionVrai.add(groupe);
         }
+
+        System.out.println("donne "+valeurDeRetour);
         return valeurDeRetour;
     };
 
@@ -331,7 +341,6 @@ public class Fonctions_Comportements {
      * @param joueur : joueur gagnant
      * @fn désigne j comme gagnant et termine la partie*/
     public static final Function<List<Joueur>, Void> victoire = (joueurs) -> {
-        System.out.println("VICTOIRE EXECUTE");
         for (Joueur j : joueurs) {
             j.setAGagne(true);
         }
@@ -379,6 +388,9 @@ public class Fonctions_Comportements {
      * @fn si au moins une pièce dans la liste des pieces est sur une case dans la liste des cases,
      * le joueur choisi parmis ces pièces à promouvoir*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Void> promouvoir = (pieces, cases) -> {
+        System.out.println("PROMOUVOIR");
+        System.out.println("pieces : " + pieces);
+        System.out.println("cases : " + cases);
         for (GroupCases gc : cases) {
             for (Case c : gc.getCasesAbsolue()) {
                 if (c.getPieceOnCase() != null && pieces.contains(c.getPieceOnCase())) {

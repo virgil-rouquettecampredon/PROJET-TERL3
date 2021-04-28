@@ -75,6 +75,10 @@ public class OrdonnanceurDeJeu {
                     for (VecteurDeDeplacement vec : p.getVecDeplacements()) {
                         cases.addAll(equDeplacementsValide(vec, c, j));
                     }
+                    for (Position pos : p.getDeplacementsSpecialRegles()) {
+                        PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
+                        cases.addAll(equDeplacementsValide(nPos, c, j));
+                    }
                 }
             }
         }
@@ -121,6 +125,10 @@ public class OrdonnanceurDeJeu {
         }
         for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
             cases.addAll(equDeplacementsValide(vec, origine, j));
+        }
+        for (Position pos : piece.getDeplacementsSpecialRegles()) {
+            PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
+            cases.addAll(equDeplacementsValide(nPos, origine, j));
         }
         return cases;
     }
@@ -262,6 +270,9 @@ public class OrdonnanceurDeJeu {
     public Plateau verifierDeplacement(Case origine, Joueur joueur, Case destination) throws DeplacementException {
         //VERIFIER
         //Verifier qu'il y a une piece et que c'est le bon joueur
+        if (origine == null) {
+            throw new DeplacementException("pas de case d'origine");
+        }
         Piece piece = origine.getPieceOnCase();
         if (piece==null || !(piece.getJoueur().equals(joueur))){
             throw new DeplacementException("Pas le bon joueur");
@@ -281,6 +292,13 @@ public class OrdonnanceurDeJeu {
                 //System.out.println(vec.toString());
                 valide = verifierEquDeplacement(origine, destination, vec);
                 if (valide) break;
+            }
+            if (!valide) {
+                for (Position pos : piece.getDeplacementsSpecialRegles()) {
+                    PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
+                    valide = verifierEquDeplacement(origine, destination, nPos);
+                    if (valide) break;
+                }
             }
         }
 
@@ -317,14 +335,18 @@ public class OrdonnanceurDeJeu {
     }
 
     public void appliquerReglesAvant() throws MauvaiseDefinitionRegleException{
+        System.out.println("REGLES AVANT");
         for (Regle r : variantej.getGenerateurDeRegle().getRegleAvantCoup()) {
+            System.out.println(r.toString());
             r.editerLesLiens();
             r.analyser(this);
         }
     }
 
     public void appliquerReglesApres() throws MauvaiseDefinitionRegleException{
+        System.out.println("REGLES APRES");
         for (Regle r : variantej.getGenerateurDeRegle().getRegleApresCoup()) {
+            System.out.println(r.toString());
             r.editerLesLiens();
             r.analyser(this);
         }
@@ -337,11 +359,15 @@ public class OrdonnanceurDeJeu {
      * @param destination La destination du coup
      * @throws Exception Si le coup n'est pas valide. Le message permet d'avoir plus d'information
      */
-    public void deplacerPiece(Case origine, Joueur joueur, Case destination) throws DeplacementException {  //todo créer l'exception
-        //Appliquer les règles avant coup
+    public void deplacerPiece(Case origine, Joueur joueur, Case destination) {
 
+        Plateau copie = new Plateau(variantej.getPlateau());
 
-        Plateau copie = verifierDeplacement(origine, joueur, destination);
+        //System.out.println("Deplacement de la piece de "+origine+" à "+destination);
+        Case c = copie.getCase(origine.getPosition());
+        Piece p = c.getPieceOnCase();
+        c.setPieceOnCase(null);
+        copie.getCase(destination.getPosition()).setPieceOnCase(p);
 
         //System.out.println("APPLIQUER");
         //APPLIQUER

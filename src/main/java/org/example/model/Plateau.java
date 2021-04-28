@@ -109,6 +109,9 @@ public class Plateau implements Serializable, Cloneable{
     }
 
     public Case getCase(Position p) {
+        if (p.getX() >= witdhX || p.getX() < 0 || p.getY() >= heightY || p.getY() < 0) {
+            return null;
+        }
         return echiquier.get(p.getY()).get(p.getX());
     }
 
@@ -153,9 +156,13 @@ public class Plateau implements Serializable, Cloneable{
     public void reinitialiserComportementLieAunTour(Joueur j){
         for (List<Case> listCase: echiquier) {
             for (Case casePlateau: listCase) {
-                if (casePlateau.getPieceOnCase() != null && casePlateau.getPieceOnCase().getJoueur() != j){
-                    casePlateau.getPieceOnCase().setPieceMange(null);
-                    casePlateau.getPieceOnCase().setDeplaceCeTour(false);
+                if (casePlateau.getPieceOnCase() != null) {
+                    if (casePlateau.getPieceOnCase().getJoueur() != j) {
+                        casePlateau.getPieceOnCase().setPieceMange(null);
+                        casePlateau.getPieceOnCase().setDeplaceCeTour(false);
+                    }
+                    casePlateau.getPieceOnCase().setEstApromouvoir(false);
+                    casePlateau.getPieceOnCase().getDeplacementsSpecialRegles().clear();
                 }
             }
         }
