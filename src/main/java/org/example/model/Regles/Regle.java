@@ -56,9 +56,9 @@ public class Regle {
 
     /**Méthode permettant d'éditer les liens pour les Alias
      * Cela va permettre de mettre à jour les informations importantes pour pouvoir les réutiliser après.**/
-    public void editerLesLiens(){
+    public void editerLesLiens(OrdonnanceurDeJeu ord) throws MauvaiseDefinitionRegleException{
         for (Alias<Jeton,?> alias: listeAlias) {
-            alias.editionDesLiens();
+            alias.editionDesLiens(ord);
         }
     }
 

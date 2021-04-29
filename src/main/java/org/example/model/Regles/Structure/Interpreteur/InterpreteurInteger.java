@@ -20,6 +20,10 @@ public class InterpreteurInteger implements Interpreteur_Objet_Regle<IntegerRegl
     public List<IntegerRegle> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
         try {
             int val = Integer.parseInt(this.str_int);
+
+            //TODO enlever
+            System.out.println("INT NB : " + val);
+
             this.int_regle = new IntegerRegle(val);
             List<IntegerRegle> lir = new ArrayList<>();
             lir.add(this.int_regle);

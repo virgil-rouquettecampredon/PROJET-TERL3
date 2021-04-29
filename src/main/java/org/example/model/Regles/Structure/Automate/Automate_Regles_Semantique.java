@@ -26,6 +26,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
     }
 
     public void ajouterAlias(String nomAlias, String parcours) throws MauvaiseDefinitionRegleException{
+        System.out.println("CREATION ALIAS");
         switch (parcours){
             case "0259" , "0359" , "02359" , /*ALIAS : 0259*/ "0R259" , "025R9" , "0R25R9" , /*ALIAS : 0359*/ "0R359" , "035R9" , "0R35R9" ,/*ALIAS : 02359*/ "0R2359" , "02R359" , "0235R9" , "02R35R9" , "0R235R9"  , "0R2R359" , "0R2R35R9" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECE,false)/*Alias_Cible(Jeton.PIECE)*/);
             case "025910" , "02510" , "0235910" ,"023510" , "035910" , "03510" , /*ALIAS : 025910*/ "0R25910" , "025R910" , "259R10" , "025R9R10" , "0R259R10" , "0R25R910" , "0R25R9R10" , /*ALIAS : 02510*/ "0R2510" , "025R10" , "0R25R10" , /*ALIAS : 0235910*/ "0R235910" , "02R35910" , "0235R910" , "02359R10" , "0235R9R10" , "02R359R10" , "02R35R910" , "0R2359R10" , "0R235R910" , "0R2R35910" , "02R35R9R10" , "0R235R9R10" , "0R2R359R10" , "0R2R35R910" , "0R2R35R9R10" , /*ALIAS : 023510*/ "0R23510" , "02R3510" , "0235R10" , "02R35R10" , "0R235R10" , "0R2R3510" , "0R2R35R10" , /*ALIAS : 035910*/ "0R35910" , "035R910" , "0359R10" , "035R9R10" , "0R359R10" , "0R35R910" , "0R35R9R10" , /*ALIAS : 03510*/ "0R3510" , "035R10" , "0R35R10" -> aliasRegle.put(nomAlias,new Alias<Jeton,Piece>(Jeton.PIECETOKEN,false)/*Alias_Cible(Jeton.PIECETOKEN)*/);
@@ -39,6 +40,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
     }
 
     public Alias<Jeton,?> recupererAlias(String nomAlias)throws MauvaiseDefinitionRegleException{
+        System.out.println("RECUPERATION ALIAS");
         Alias<Jeton,?> alias = aliasRegle.get(nomAlias);
         if(alias == null){
             throw new MauvaiseDefinitionRegleException("Alias inconnu : " + nomAlias);
@@ -356,7 +358,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
 
-        for (Jeton j: regleSyntaxe) {
+        Iterator<Jeton> ite = regleSyntaxe.iterator();
+
+        while(ite.hasNext()){
+            Jeton j = ite.next();
             switch (j) {
                 //Gestion du parenthésage
                 case PARENTHESEOUVRANTE -> {
@@ -410,6 +415,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             ajouterAlias(regleString.get(indRegleSyntaxe), parcours);
                             aliasCondtion.add(recupererAlias(regleString.get(indRegleSyntaxe)));
                             regleString.remove(indRegleSyntaxe);
+                            --indRegleSyntaxe;
+                            ite.remove();
                         }catch (MauvaiseDefinitionRegleException e){
                             throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
                         }
@@ -425,7 +432,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 }
             }
 
-            System.out.println("REGLESTRING ARS: " + regleString);
+            System.out.println("REGLESTRING ARS: " + regleString + " à l'indice : " + indRegleSyntaxe);
+            System.out.println("PARCOUR : " + parcours);
 
             //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
@@ -1309,7 +1317,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     switch (parcours) {
                                         case "0271214" -> {
                                             //Cas Piece+Compteur+Comparaison+Nombre
-                                            if (regleString.get(indRegleSyntaxe - 2).equals("nb_deplacement")) {
+                                            if (regleString.get(indRegleSyntaxe-2).equals("nb_deplacement")) {
                                                 switch(regleString.get(indRegleSyntaxe-1)){
                                                     case "<" -> {
                                                         cond = new ConditionAction<Piece, IntegerRegle>(
@@ -1318,6 +1326,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                                 Fonctions_Comportements.deplacement_inferieur_a);
                                                     }
                                                     case "=" -> {
+                                                        System.out.println("EGAL 0o");
                                                         cond = new ConditionAction<Piece, IntegerRegle>(
                                                                 new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                                                 new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
@@ -5687,7 +5696,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     // Piece+ConsequenceAction+Case
                     switch (regleString.get(indRegleSyntaxe - 1)) {
                         case "prendre" -> {
-                            //nbConsequence++; todo voir avec le mec qui a mit ça là
                             conseq = new ConsequenceAction<Piece, GroupCases>(
                                     new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-2)),
                                     new InterpreteurCibleCase(regleString.get(indRegleSyntaxe)),

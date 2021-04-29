@@ -73,9 +73,17 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
                 try {
                     List<Piece> lret = new ArrayList<>();
                     Piece piece_reference = ord.getListTypesPieces().get(Integer.parseInt(str.substring(1)));
+
+                    //TODO enlever
+                    System.out.println("INT PIECE REF : " + piece_reference);
+
                     for(Piece p: allpieces){
                         if(p.equals(piece_reference)) { lret.add(p); }
                     }
+
+                    //TODO enlever
+                    System.out.println("INT PIECES : " + lret);
+
                     return lret;
                 } catch (NumberFormatException ne) {
                     throw new MauvaiseInterpretationObjetRegleException(erreurPiece + "Entier imparsable (NumberFormatException)");

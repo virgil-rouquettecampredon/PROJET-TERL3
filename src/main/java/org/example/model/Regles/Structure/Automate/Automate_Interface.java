@@ -63,6 +63,12 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
                 return false;
             }
         }
+        //Traitements supplémentaires pour la bonne création ensuite
+        if(s.length()>=1){
+            if(s.charAt(0) == 'P' || s.charAt(0) == 'E' || s.charAt(0) == 'C' || s.charAt(0) == 'J'){
+                return false;
+            }
+        }
         return alias.get(s) == null;
     }
 
