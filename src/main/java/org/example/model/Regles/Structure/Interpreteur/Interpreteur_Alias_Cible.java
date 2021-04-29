@@ -18,4 +18,9 @@ public class Interpreteur_Alias_Cible<T extends CibleDeRegle> implements Interpr
     public List<T> recupererTout(OrdonnanceurDeJeu ord){
         return this.alias.getObjetsDeRegle();
     }
+
+    @Override
+    public String toString(){
+        return "[Interpreteur_Alias_Cible: " + this.alias + "]";
+    }
 }

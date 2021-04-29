@@ -43,4 +43,10 @@ public class InterpreteurCibleAliasCaseParam extends InterpreteurCible<GroupCase
         casesARetourner.add(group);
         return casesARetourner;
     }
+
+    @Override
+    public String toString(){
+        return "[InterpreteurCibleAliasCaseParam: interpret Case:" + this.interpreteurCaseAlias
+                + " String GroupCases : " + this.groupCase + "]";
+    }
 }

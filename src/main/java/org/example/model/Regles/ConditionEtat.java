@@ -35,4 +35,12 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
     public boolean evaluer(){
         return comportement.apply(sujets);
     }
+
+    @Override
+    public String toString(){
+        return "[CONSEQUENCE " + sujets.getClass() + " ETAT"
+                + ": interpreteur sujet: " + this.interpreteurSujet
+                + ", comportement: " + this.comportement
+                + ", liste sujets: " + this.sujets + "]";
+    }
 }

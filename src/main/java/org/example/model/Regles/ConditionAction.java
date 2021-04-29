@@ -48,4 +48,14 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
     public boolean evaluer(){
         return comportement.apply(sujets, cibles);
     }
+
+    @Override
+    public String toString(){
+        return "[CONSEQUENCE " + sujets.getClass() + " ACTION " + cibles.getClass()
+                + ": interpreteur sujet: " + this.interpretSujet
+                + ", interpreteur cible: " + this.interpretCible
+                + ", comportement: " + this.comportement
+                + ", liste sujets: " + this.sujets
+                + ", liste cibles: " + this.cibles + "]";
+    }
 }

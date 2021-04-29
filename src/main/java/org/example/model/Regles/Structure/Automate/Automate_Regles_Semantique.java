@@ -1859,6 +1859,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     for(Alias<Jeton,?> alias : aliasCondtion){
                                         alias.setConditionDeDefinition(cond);
                                     }
+                                    System.out.println("Alias après setCondition: " + aliasCondtion);
                                     aliasCondtion.clear();
                                 } else {
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
@@ -1919,6 +1920,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
                             case 323 -> {
                                 //SUJET-CONSEQUENCE-CASE
+                                System.out.println("323");
                                 if(indRegleSyntaxe>=2) {
                                     Consequence conseq = case323(parcours, indRegleSyntaxe, regleSyntaxe, regleString);
                                     nbConsequence++;
@@ -5773,6 +5775,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 /*==== Reutilisation Alias ====*/
                 case "15R172023" , "15R182023" ->{
                     //Alias sur Piece : [PIECE(Token)]+CONSEQUENCEACTION+CASE
+                    System.out.println("---------------------------------case 15R172023");
                     Alias<Jeton,Piece> alias;
                     Alias<Jeton,?> testAlias = null;
 
@@ -5784,6 +5787,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     }catch (MauvaiseDefinitionRegleException re){
                         throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+CONSEQUENCEACTION+CASE)");
                     }
+                    System.out.println(regleString.get(indRegleSyntaxe-2));
+                    System.out.println("testAlias: " + testAlias);
+                    System.out.println("Alias: " + alias);
+                    System.out.println("---------------------------------fin case 15R172023");
 
                     switch (regleString.get(indRegleSyntaxe - 1)) {
                         case "prendre" -> {

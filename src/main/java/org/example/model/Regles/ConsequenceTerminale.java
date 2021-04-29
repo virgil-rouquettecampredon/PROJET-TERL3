@@ -35,6 +35,9 @@ public class ConsequenceTerminale<A extends SujetDeRegle> extends Consequence{
 
     @Override
     public String toString(){
-        return "CONSEQUENCE " + sujets.getClass() + " TERMINALE";
+        return "[CONSEQUENCE " + sujets.getClass() + " TERMINALE"
+                + ": interpreteur sujet: " + this.interpretSujet
+                + ", comportement: " + this.comportement
+                + ", liste sujets: " + this.sujets + "]";
     }
 }

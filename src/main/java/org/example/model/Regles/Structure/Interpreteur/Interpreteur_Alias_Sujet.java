@@ -19,4 +19,9 @@ public class Interpreteur_Alias_Sujet<T extends SujetDeRegle> extends Interprete
     public List<T> recupererTout(OrdonnanceurDeJeu ord){
         return alias.getObjetsDeRegle();
     }
+
+    @Override
+    public String toString(){
+        return "[Interpreteur_Alias_Sujet: " + this.alias + "]";
+    }
 }

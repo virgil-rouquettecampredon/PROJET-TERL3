@@ -57,4 +57,12 @@ public class Alias<A extends EstToken,T extends ObjetsDeRegle> {
             }
         }
     }
+
+    @Override
+    public String toString(){
+        return "---ALIAS---\nJeton: " + this.jetonAssocie
+                + ", Condition de def: " + this.conditionDeDefinition
+                + ", estSurSujet: " + this.estSurSujet
+                + ", Objet de Regle: " + this.objetsDeRegle + "\n";
+    }
 }

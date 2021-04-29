@@ -96,4 +96,9 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
         //return null;
     }
 
+    @Override
+    public String toString(){
+        return "[InterpreteurSujetPiece: String source:" + this.str_source + "]";
+    }
+
 }

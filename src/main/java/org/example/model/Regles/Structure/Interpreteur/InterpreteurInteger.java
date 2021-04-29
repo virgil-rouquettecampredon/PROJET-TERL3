@@ -33,4 +33,9 @@ public class InterpreteurInteger implements Interpreteur_Objet_Regle<IntegerRegl
             throw new MauvaiseInterpretationObjetRegleException("Entier: '" + this.str_int + "': Entier imparsable (NumberFormatException)");
         }
     }
+
+    @Override
+    public String toString(){
+        return "[InterpreteurInteger: string int:" + this.str_int + "]";
+    }
 }

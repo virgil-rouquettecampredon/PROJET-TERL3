@@ -40,6 +40,11 @@ public class ConsequenceAction<A extends SujetDeRegle,B extends CibleDeRegle> ex
 
     @Override
     public String toString(){
-        return "CONSEQUENCE " + sujets.getClass() + " ACTION " + cibles.getClass();
+        return "[CONSEQUENCE " + sujets.getClass() + " ACTION " + cibles.getClass()
+                + ": interpreteur sujet: " + this.interpreteurSujet
+                + ", interpreteur cible: " + this.interpreteurCible
+                + ", comportement: " + this.comportement
+                + ", liste sujets: " + this.sujets
+                + ", liste cibles: " + this.cibles + "]";
     }
 }

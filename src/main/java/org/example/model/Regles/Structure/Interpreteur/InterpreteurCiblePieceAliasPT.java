@@ -32,4 +32,10 @@ public class InterpreteurCiblePieceAliasPT extends InterpreteurCible<Piece>{
         }
         return piecesARetourner;
     }
+
+    @Override
+    public String toString(){
+        return "[InterpreteurCiblePieceAliasPT: interpret joueur:" + this.interpreteurJoueursAlias
+                + " String piece : " + this.pieces + "]";
+    }
 }

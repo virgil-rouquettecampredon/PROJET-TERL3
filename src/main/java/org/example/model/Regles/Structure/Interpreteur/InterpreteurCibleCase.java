@@ -106,6 +106,11 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
         //return null;
     }
 
+    @Override
+    public String toString(){
+        return "[InterpreteurCibleAliasJoueurPT: string source:" + this.str_source + "]";
+    }
+
 
 
 
