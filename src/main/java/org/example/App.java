@@ -17,6 +17,7 @@ import org.example.model.Regles.Jeton;
 import org.example.model.Variante;
 import org.example.model.VarianteManager;
 
+import java.io.File;
 import java.io.IOException;
 
 public class App extends Application {
@@ -36,7 +37,10 @@ public class App extends Application {
         soundManager = new SoundManager();
         varianteManager = new VarianteManager();
 
+        File bigIcon = new File("src/main/resources/org/example/images/icon.png");
+
         stage.setTitle("ChessBurger");
+        stage.getIcons().add(new Image("file:"+bigIcon.getAbsolutePath()));
         stage.setResizable(false);
         scene = new Scene(loadFXML("home", null), 1024, 640);
         stage.setScene(scene);
