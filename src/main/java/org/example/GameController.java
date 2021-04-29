@@ -583,6 +583,14 @@ public class GameController extends Controller {
             }
         }
 
+
+        if (ordonnanceurDeJeu.getJoueurPieceCondtionVictoireMorte() != null) {
+            boolean fin = giveUp("Condition de victoire mangée!!", ordonnanceurDeJeu.getJoueurPieceCondtionVictoireMorte());
+            if (fin) {
+                return true;
+            }
+        }
+
         //verification Pieces
         casesPromotion = new ArrayList<>();
         for (ArrayList<Case> ligne : gameVariante.getPlateau().getEchiquier()) {
@@ -729,6 +737,11 @@ public class GameController extends Controller {
 
             getApp().soundManager.playSound("win");
             popupWindow("gameOver", new EndGameData((Variante<Jeton>) userVar, perdants, message, this));
+
+            if (timerCourant != null) {
+                pauseTimer(timerCourant);
+            }
+
             return true;
         }
         else {

@@ -20,6 +20,8 @@ public class OrdonnanceurDeJeu {
     private List<Piece> listTypesPieces;
     private Variante<Jeton> variantej;
 
+    private Joueur joueurPieceCondtionVictoireMorte;
+
 
     public OrdonnanceurDeJeu(Variante<Jeton> variantej){
         this.variantej = variantej;
@@ -29,7 +31,10 @@ public class OrdonnanceurDeJeu {
             tmp.addAll(this.variantej.getJoueurs().get(i).getTypePawnList());
         }
         this.listTypesPieces.addAll(tmp);
+        this.joueurPieceCondtionVictoireMorte = null;
     }
+
+    public Joueur getJoueurPieceCondtionVictoireMorte() { return joueurPieceCondtionVictoireMorte; }
 
     public Variante<Jeton> getVariante() { return this.variantej; }
 
@@ -350,7 +355,7 @@ public class OrdonnanceurDeJeu {
         System.out.println("REGLES AVANT");
         for (Regle r : variantej.getGenerateurDeRegle().getRegleAvantCoup()) {
             System.out.println(r.toString());
-            r.editerLesLiens();
+            r.editerLesLiens(this);
             r.analyser(this);
         }
     }
@@ -359,7 +364,7 @@ public class OrdonnanceurDeJeu {
         System.out.println("REGLES APRES");
         for (Regle r : variantej.getGenerateurDeRegle().getRegleApresCoup()) {
             System.out.println(r.toString());
-            r.editerLesLiens();
+            r.editerLesLiens(this);
             r.analyser(this);
         }
     }
@@ -383,6 +388,9 @@ public class OrdonnanceurDeJeu {
 
         //System.out.println("APPLIQUER");
         //APPLIQUER
+        if (destination.getPieceOnCase() != null && destination.getPieceOnCase().estConditionDeVictoire()) {
+            joueurPieceCondtionVictoireMorte = destination.getPieceOnCase().getJoueur();
+        }
 
         Piece pDeplace = origine.getPieceOnCase();
         // Modifier les états de la piece (déplacé, promu, etc)

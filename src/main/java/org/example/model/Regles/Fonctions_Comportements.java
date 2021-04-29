@@ -241,18 +241,25 @@ public class Fonctions_Comportements {
      * @param valeur : valeur à comparer sous forme de liste IntegerRegle à un element
      * @return vrai si au moins une pièce a un nombre de deplacement egal valeur*/
     public static final BiFunction<List<Piece>, List<IntegerRegle>, Boolean> deplacement_egal_a = (pieces, lvaleur) -> {
+        System.out.println("DEPLACEMENT EGAL");
+        System.out.println("pieces : "+pieces);
+        System.out.print("lvaleur : ");
+        lvaleur.stream().forEach(i -> System.out.print(i.getVal()+" "));
         sujetDeLaConditionVrai.clear();
         cibleDeLaConditionVrai.clear();
 
         boolean valeurDeRetour = false;
         if (lvaleur != null) {
             for (Piece piece : pieces) {
-                if (piece.getNbMovement() == lvaleur.get(0).getVal()) {
-                    sujetDeLaConditionVrai.add(piece);
-                    valeurDeRetour = true;
+                for (IntegerRegle v : lvaleur) {
+                    if (piece.getNbMovement() == v.getVal()) {
+                        sujetDeLaConditionVrai.add(piece);
+                        valeurDeRetour = true;
+                    }
                 }
             }
         }
+        System.out.println("\nDONNE "+valeurDeRetour);
         return valeurDeRetour;
     };
 

@@ -34,6 +34,11 @@ public class GroupCaseController extends Controller {
     private ModeCase modeCase;
     private Plateau plateau;
 
+    private double mouseX, mouseY;
+    private boolean primaryMouseDown;
+    private boolean secondaryMouseDown;
+    private boolean middleMouseDown;
+
     @Override
     public void initialise() {
         modeCase = ModeCase.ABSOLU;
@@ -118,47 +123,50 @@ public class GroupCaseController extends Controller {
     }
 
     @FXML
-    public void onClick(MouseEvent mouseEvent) {
+    public void onClick() {
         GroupeRow gr = tab.getSelectionModel().getSelectedItem();
 
-        Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
+        Case c = canvasManager.getCase(mouseX, mouseY);
+        if (c == null) {
+            System.out.println("NULL : ("+mouseX+", "+mouseY+")");
+            return;
+        }
 
-        switch (mouseEvent.getButton()) {
-            case PRIMARY -> {
-                switch (modeCase) {
-                    case ABSOLU -> {
-                        if (gr != null && c.isAccessible() && !gr.getGroup().getCasesAbsolue().contains(c)) {
-                            gr.getGroup().getCasesAbsolue().add(c);
-                        }
-                    }
-                    case RELATIF -> {
-                        if (gr != null && !gr.getGroup().getPositionsRelatives().contains(c.getPosition())) {
-                            Position p = new Position(c.getPosition().getX() - posX, c.getPosition().getY() - posY);
-                            gr.getGroup().getPositionsRelatives().add(p);
-                        }
+        if (secondaryMouseDown) {
+            switch (modeCase) {
+                case ABSOLU -> {
+                    if (gr != null) {
+                        gr.getGroup().getCasesAbsolue().remove(c);
                     }
                 }
-            }
-            case SECONDARY -> {
-                switch (modeCase) {
-                    case ABSOLU -> {
-                        if (gr != null) {
-                            gr.getGroup().getCasesAbsolue().remove(c);
-                        }
-                    }
-                    case RELATIF -> {
-                        if (gr != null) {
-                            Position p = new Position(c.getPosition().getX() - posX, c.getPosition().getY() - posY);
-                            gr.getGroup().getPositionsRelatives().remove(p);
-                        }
+                case RELATIF -> {
+                    if (gr != null) {
+                        Position p = new Position(c.getPosition().getX() - posX, c.getPosition().getY() - posY);
+                        gr.getGroup().getPositionsRelatives().remove(p);
                     }
                 }
-            }
-            case MIDDLE -> {
-                posX = c.getPosition().getX();
-                posY = c.getPosition().getY();
             }
         }
+        else if (primaryMouseDown) {
+            switch (modeCase) {
+                case ABSOLU -> {
+                    if (gr != null && c.isAccessible() && !gr.getGroup().getCasesAbsolue().contains(c)) {
+                        gr.getGroup().getCasesAbsolue().add(c);
+                    }
+                }
+                case RELATIF -> {
+                    Position p = new Position(c.getPosition().getX() - posX, c.getPosition().getY() - posY);
+                    if (gr != null && !gr.getGroup().getPositionsRelatives().contains(p)) {
+                        gr.getGroup().getPositionsRelatives().add(p);
+                    }
+                }
+            }
+        }
+        else if (middleMouseDown) {
+            posX = c.getPosition().getX();
+            posY = c.getPosition().getY();
+        }
+
         updateCanvas();
     }
 
@@ -191,6 +199,41 @@ public class GroupCaseController extends Controller {
         groupeRowStringCellEditEvent.getRowValue().setName(groupeRowStringCellEditEvent.getNewValue());
         groupeRowStringCellEditEvent.getRowValue().getGroup().setName(groupeRowStringCellEditEvent.getNewValue());
         updateCanvas();
+    }
+
+    public void mouseMoved(MouseEvent mouseEvent) {
+        mouseX = mouseEvent.getX();
+        mouseY = mouseEvent.getY();
+        onClick();
+    }
+
+    public void mousePressed(MouseEvent mouseEvent) {
+        switch (mouseEvent.getButton()) {
+            case PRIMARY -> {
+                primaryMouseDown = true;
+            }
+            case SECONDARY -> {
+                secondaryMouseDown = true;
+            }
+            case MIDDLE -> {
+                middleMouseDown = true;
+            }
+        }
+        mouseMoved(mouseEvent);
+    }
+
+    public void mouseReleased(MouseEvent mouseEvent) {
+        switch (mouseEvent.getButton()) {
+            case PRIMARY -> {
+                primaryMouseDown = false;
+            }
+            case SECONDARY -> {
+                secondaryMouseDown = false;
+            }
+            case MIDDLE -> {
+                middleMouseDown = false;
+            }
+        }
     }
 
     private static enum ModeCase {

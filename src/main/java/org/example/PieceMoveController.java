@@ -294,14 +294,16 @@ public class PieceMoveController extends Controller {
                 switch (tool) {
                     case BOX -> {
                         //add case to piece deplacement
-                        if (!posDeplacements.contains(new PositionDeDeplacement(relativeX, relativeY, typeDeplacement)) && (relativeX != 0 || relativeY != 0)) {
-                            posDeplacements.add(new PositionDeDeplacement(relativeX, relativeY, typeDeplacement));
+                        PositionDeDeplacement pos = new PositionDeDeplacement(relativeX, relativeY, typeDeplacement);
+                        if (!posDeplacements.contains(pos) && (relativeX != 0 || relativeY != 0)) {
+                            posDeplacements.add(pos);
                         }
                     }
                     case ARROW -> {
                         //add arrow to piece deplacement
-                        if (!vecDeplacements.contains(new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement)) && (relativeX != 0 || relativeY != 0)) {
-                            vecDeplacements.add(new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement));
+                        VecteurDeDeplacement vec = new VecteurDeDeplacement(relativeX, relativeY, typeDeplacement);
+                        if (!vecDeplacements.contains(vec) && (relativeX != 0 || relativeY != 0)) {
+                            vecDeplacements.add(vec);
                         }
                     }
                 }

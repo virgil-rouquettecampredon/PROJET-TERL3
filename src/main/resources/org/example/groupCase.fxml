@@ -37,16 +37,16 @@
                         </TableView>
                      </children>
                   </VBox>
-                  <Canvas fx:id="canvas" height="300.0" onMouseClicked="#onClick" width="300.0" />
+                  <Canvas fx:id="canvas" height="300.0" onMouseDragged="#mouseMoved" onMousePressed="#mousePressed" onMouseReleased="#mouseReleased" width="300.0" />
                   <VBox alignment="CENTER_LEFT" maxWidth="200.0" prefHeight="264.0" prefWidth="200.0">
                      <children>
                         <Label alignment="CENTER" styleClass="label-input" text="Mode" />
-                        <Button fx:id="absoluButton" styleClass="buttonLight" disable="true" mnemonicParsing="false" onAction="#selectAbsolu" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="150.0" text="ABSOLU">
+                        <Button fx:id="absoluButton" disable="true" mnemonicParsing="false" onAction="#selectAbsolu" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="150.0" styleClass="buttonLight" text="ABSOLU">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>
                         </Button>
-                        <Button fx:id="relatifButton" styleClass="buttonLight" mnemonicParsing="false" onAction="#selectRelatif" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="150.0" text="RELATIF">
+                        <Button fx:id="relatifButton" mnemonicParsing="false" onAction="#selectRelatif" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="150.0" styleClass="buttonLight" text="RELATIF">
                            <font>
                               <Font name="Candara" size="36.0" />
                            </font>

@@ -285,7 +285,7 @@ public class CanvasManager {
     public Case getCase(double mouseX, double mouseY) {
         int x = (int) (mouseX / rectSize);
         int y = (int) (mouseY / rectSize);
-        return plateau.getEchiquier().get(y).get(x);
+        return plateau.getCase(new Position(x, y));
     }
 
     private void drawCase(Position p, Color cLight, Color cDark) {
