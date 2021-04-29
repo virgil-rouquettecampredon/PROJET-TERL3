@@ -23,8 +23,6 @@ import java.util.*;
 
 public class EditRuleController extends Controller {
     @FXML
-    public ComboBox<String> transitionBox;
-    @FXML
     public VBox conditionVBox;
     @FXML
     public VBox consequenceVBox;
