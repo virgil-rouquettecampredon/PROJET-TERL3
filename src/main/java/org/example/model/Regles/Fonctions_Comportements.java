@@ -291,7 +291,7 @@ public class Fonctions_Comportements {
         if (lvaleur != null) {
             for (Joueur joueur : joueurs) {
                 int secondeTotal = 60 * joueur.getMinute() + joueur.getSeconde();
-                if (secondeTotal < lvaleur.get(0).getVal()) { //TODO VOIR AVEC HUGO
+                if (secondeTotal < lvaleur.get(0).getVal()) {
                     sujetDeLaConditionVrai.add(joueur);
                     valeurDeRetour = true;
                 }
