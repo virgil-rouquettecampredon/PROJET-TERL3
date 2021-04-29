@@ -409,6 +409,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                         try {
                             ajouterAlias(regleString.get(indRegleSyntaxe), parcours);
                             aliasCondtion.add(recupererAlias(regleString.get(indRegleSyntaxe)));
+                            regleString.remove(indRegleSyntaxe);
                         }catch (MauvaiseDefinitionRegleException e){
                             throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
                         }
