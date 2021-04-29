@@ -205,12 +205,12 @@ public class CanvasManager {
         double w;
         double h;
         if (img.getHeight() > img.getWidth()) {
-            h = rectSize;
-            w = img.getWidth()/img.getHeight() * rectSize;
+            h = rectSize*0.9;
+            w = img.getWidth()/img.getHeight() * rectSize*0.9;
         }
         else {
-            w = rectSize;
-            h = img.getHeight()/img.getWidth() * rectSize;
+            w = rectSize*0.9;
+            h = img.getHeight()/img.getWidth() * rectSize*0.9;
         }
         context.drawImage(img, cx-w/2, cy-h/2, w, h);
     }
