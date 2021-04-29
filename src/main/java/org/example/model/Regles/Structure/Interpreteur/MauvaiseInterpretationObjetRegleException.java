@@ -1,6 +1,8 @@
 package org.example.model.Regles.Structure.Interpreteur;
 
-public class MauvaiseInterpretationObjetRegleException extends Exception {
+import org.example.model.Regles.MauvaiseDefinitionRegleException;
+
+public class MauvaiseInterpretationObjetRegleException extends MauvaiseDefinitionRegleException {
 
     public MauvaiseInterpretationObjetRegleException(){ super(); }
 

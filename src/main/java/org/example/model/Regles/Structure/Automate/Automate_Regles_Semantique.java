@@ -1420,6 +1420,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                                                 Fonctions_Comportements.deplacement_inferieur_a);
                                                     }
                                                     case "=" -> {
+                                                        System.out.println("EGAL : alias: " + alias);
                                                         cond = new ConditionAction<Piece, IntegerRegle>(
                                                                 new Interpreteur_Alias_Sujet<Piece>(alias),
                                                                 new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
