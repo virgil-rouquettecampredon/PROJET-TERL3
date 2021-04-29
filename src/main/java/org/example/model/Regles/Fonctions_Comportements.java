@@ -1,6 +1,8 @@
 package org.example.model.Regles;
 
 import org.example.model.*;
+import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
+import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -390,7 +392,21 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases victimes possible
      * @fn le joueur choisi la pièce attaquante parmis la liste pièces_a et choisi la pièce que celle-ci va prendre
      * parmis la liste des pièces se trouvant sur les cases dans cases */
-    public static final BiFunction<List<Piece>, List<GroupCases>, Void> prendre_par_case = (pieces, cases) -> { return null; };
+    public static final BiFunction<List<Piece>, List<GroupCases>, Void> prendre_par_case = (pieces, groupcases) -> {
+        for (Piece p : pieces) {
+            for (GroupCases gc : groupcases) {
+                for (Case c : gc.getCasesAbsolue()) {
+                    PositionDeDeplacement nPos = new PositionDeDeplacement(c.getPosition().getX(), c.getPosition().getY(), EquationDeDeplacement.TypeDeplacement.PRENDRE);
+                    p.getDeplacementsSpecialReglesAbsolue().add(nPos);
+                }
+                for (Position pos : gc.getPositionsRelatives()) {
+                    PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.PRENDRE);
+                    p.getDeplacementsSpecialRegles().add(nPos);
+                }
+            }
+        }
+        return null;
+    };
 
     /** Consequence : PIECE + SE_PROMET_EN + PIECE
      * @param pieces : liste des pieces promouvable
@@ -398,9 +414,9 @@ public class Fonctions_Comportements {
      * @fn si au moins une pièce dans la liste des pieces est sur une case dans la liste des cases,
      * le joueur choisi parmis ces pièces à promouvoir*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Void> promouvoir = (pieces, cases) -> {
-        System.out.println("PROMOUVOIR");
-        System.out.println("pieces : " + pieces);
-        System.out.println("cases : " + cases);
+        //System.out.println("PROMOUVOIR");
+        //System.out.println("pieces : " + pieces);
+        //System.out.println("cases : " + cases);
         for (GroupCases gc : cases) {
             for (Case c : gc.getCasesAbsolue()) {
                 if (c.getPieceOnCase() != null && pieces.contains(c.getPieceOnCase())) {
@@ -440,14 +456,17 @@ public class Fonctions_Comportements {
         //System.out.println("groupCase="+groupcases);
         for (Piece p : pieces) {
             for (GroupCases gc : groupcases) {
+                for (Case c : gc.getCasesAbsolue()) {
+                    PositionDeDeplacement nPos = new PositionDeDeplacement(c.getPosition().getX(), c.getPosition().getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);
+                    p.getDeplacementsSpecialReglesAbsolue().add(nPos);
+                }
                 for (Position pos : gc.getPositionsRelatives()) {
-                    p.getDeplacementsSpecialRegles().add(pos);
+                    PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);
+                    p.getDeplacementsSpecialRegles().add(nPos);
                 }
             }
         }
         return null;
     };
-
-
 
 }

@@ -26,19 +26,25 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
     private Piece pieceMange = null;                                // Retourne la pièce qui vient d'être mangé, sinon retourne null
     private Piece pieceMenace = null;                               // Retourne la pièce qu'il menace
 
-    private List<Position> deplacementsSpecialRegles;               // Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
+    private List<PositionDeDeplacement> deplacementsSpecialRegles;               // Liste des déplacements spéciaux d'une pièce, MAJ d'après les Regles
     private ArrayList<Case> casesPourRevivre;
+    private List<PositionDeDeplacement> deplacementsSpecialReglesAbsolue;
 
-    public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements, List<Position> deplacementsSpecialRegles) {
+    public Piece(String name, String sprite, int nbMovement, int nbLife, Joueur joueur, ArrayList<PositionDeDeplacement> posDeplacements, ArrayList<VecteurDeDeplacement> vecDeplacements, List<PositionDeDeplacement> deplacementsSpecialRegles, List<PositionDeDeplacement> deplacementsSpecialReglesAbsolue) {
         this.name = name;
         this.sprite = sprite;
         this.nbMovement = nbMovement;
         this.nbLife = nbLife;
         this.joueur = joueur;
+
         this.posDeplacements = new ArrayList<>();
-        this.posDeplacements.addAll(posDeplacements);
+        for (PositionDeDeplacement pos : posDeplacements) {
+            this.posDeplacements.add(new PositionDeDeplacement(pos));
+        }
         this.vecDeplacements = new ArrayList<>();
-        this.vecDeplacements.addAll(vecDeplacements);
+        for (VecteurDeDeplacement vec : vecDeplacements) {
+            this.vecDeplacements.add(new VecteurDeDeplacement(vec));
+        }
 
         this.comportementPiece = new Boolean[3];
         for (int i = 0; i < 3; i++){
@@ -49,11 +55,18 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
             this.etatPiece[i] = false;
         }
 
-        this.deplacementsSpecialRegles = deplacementsSpecialRegles;
+        this.deplacementsSpecialRegles = new ArrayList<>();
+        for (PositionDeDeplacement pos : deplacementsSpecialRegles) {
+            this.deplacementsSpecialRegles.add(new PositionDeDeplacement(pos));
+        }
+        this.deplacementsSpecialReglesAbsolue = new ArrayList<>();
+        for (PositionDeDeplacement pos : deplacementsSpecialReglesAbsolue) {
+            this.deplacementsSpecialReglesAbsolue.add(new PositionDeDeplacement(pos));
+        }
     }
 
     public Piece(String name, String sprite, Joueur joueur) {
-        this(name, sprite, 0, -1, joueur, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        this(name, sprite, 0, -1, joueur, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Piece(String name, String sprite) {
@@ -64,7 +77,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
     /**@param piece: La pèce utilisé afin de la dupliquer.
      * La fonction duplique une pièce */
     public Piece(Piece piece) {
-        this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements, piece.deplacementsSpecialRegles);
+        this(piece.name, piece.sprite, piece.nbMovement, piece.nbLife, piece.joueur, piece.posDeplacements, piece.vecDeplacements, piece.deplacementsSpecialRegles, piece.getDeplacementsSpecialReglesAbsolue());
 
         comportementPiece = new Boolean[3];
         System.arraycopy(piece.comportementPiece, 0, comportementPiece, 0, 3);
@@ -80,9 +93,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
         p.joueur = null;
 
         p.posDeplacements = new ArrayList<>();
-        p.posDeplacements.addAll(posDeplacements);
+        for (PositionDeDeplacement pos : posDeplacements) {
+            p.posDeplacements.add(new PositionDeDeplacement(pos));
+        }
         p.vecDeplacements = new ArrayList<>();
-        p.vecDeplacements.addAll(vecDeplacements);
+        for (VecteurDeDeplacement vec : vecDeplacements) {
+            p.vecDeplacements.add(new VecteurDeDeplacement(vec));
+        }
+
         p.comportementPiece = new Boolean[3];
         for (int i = 0; i < 3; i++){
             p.comportementPiece[i] = comportementPiece[i];
@@ -93,14 +111,19 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
         }
         pieceMange = null;
         pieceMenace = null;
+
         p.deplacementsSpecialRegles = new ArrayList<>();
-        for (Position pos : deplacementsSpecialRegles) {
-            p.deplacementsSpecialRegles.add(new Position(pos.getX(), pos.getY()));
+        for (PositionDeDeplacement pos : deplacementsSpecialRegles) {
+            p.deplacementsSpecialRegles.add(new PositionDeDeplacement(pos));
+        }
+        p.deplacementsSpecialReglesAbsolue = new ArrayList<>();
+        for (PositionDeDeplacement pos : deplacementsSpecialReglesAbsolue) {
+            p.deplacementsSpecialReglesAbsolue.add(new PositionDeDeplacement(pos));
         }
         return p;
     }
 
-    public void ajouterDeplacementsSpecialRegles(Position p){
+    public void ajouterDeplacementsSpecialRegles(PositionDeDeplacement p){
         deplacementsSpecialRegles.add(p);
     }
 
@@ -208,7 +231,7 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
         this.vecDeplacements = vecDeplacements;
     }
 
-    public List<Position> getDeplacementsSpecialRegles(){
+    public List<PositionDeDeplacement> getDeplacementsSpecialRegles(){
         return deplacementsSpecialRegles;
     }
 
@@ -260,6 +283,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
 
     public ArrayList<Case> getCasesPourRevivre() {
         return casesPourRevivre;
+    }
+
+    public List<PositionDeDeplacement> getDeplacementsSpecialReglesAbsolue() {
+        return deplacementsSpecialReglesAbsolue;
+    }
+
+    public void setDeplacementsSpecialReglesAbsolue(List<PositionDeDeplacement> deplacementsSpecialReglesAbsolue) {
+        this.deplacementsSpecialReglesAbsolue = deplacementsSpecialReglesAbsolue;
     }
 
     /*FIN GETTER SETTER*/

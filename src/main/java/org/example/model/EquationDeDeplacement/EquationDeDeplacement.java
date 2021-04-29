@@ -44,7 +44,6 @@ public abstract class EquationDeDeplacement implements Serializable {
         return typeDeplacement;
     }
 
-    //test Only
     public int getX() {
         return x;
     }

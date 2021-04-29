@@ -11,6 +11,10 @@ public class PositionDeDeplacement extends EquationDeDeplacement {
         super(true, x, y, typeDeplacement);
     }
 
+    public PositionDeDeplacement(PositionDeDeplacement pos) {
+        this(pos.getX(), pos.getY(), pos.getTypeDeplacement());
+    }
+
     public Position evaluate(Position depart){
         Position p = super.evaluate(depart);
         setEvaluable(false);

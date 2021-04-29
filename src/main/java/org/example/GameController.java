@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -27,6 +28,8 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.converter.NumberStringConverter;
 import org.example.model.*;
+import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
+import org.example.model.EquationDeDeplacement.VecteurDeDeplacement;
 import org.example.model.Regles.Jeton;
 import org.example.model.Regles.MauvaiseDefinitionRegleException;
 import org.junit.runner.manipulation.Ordering;
@@ -35,64 +38,78 @@ import javafx.scene.Scene;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+
 import java.util.function.Function;
+import java.util.*;
 
 public class GameController extends Controller {
+
+    //éléments graphiques
     @FXML
-    public Label varLabel;
+    public Label varLabel;          //Le texte en haut de l'écrant
     @FXML
-    public Label playerLabel;
+    public Label playerLabel;       //Le texte qui affiche le joueur courrant
     @FXML
-    public VBox coupsBox;
+    public VBox coupsBox;           //La boite de liste de coup
     @FXML
-    public Canvas canvas;
+    public Canvas canvas;           //Le plateau
     @FXML
-    public ScrollPane scroll;
+    public ScrollPane scroll;       //Le paneau de défilement de la liste de coup
     @FXML
-    public Canvas graveyardCanvas;
+    public Canvas graveyardCanvas;  //Le cimetière
     @FXML
-    public AnchorPane popupPane;
+    public AnchorPane popupPane;    //L'écrant invisible au dessu du jeu où mettre le menu promotion
     @FXML
-    public HBox timersHBox;
-
-    private GraphicsContext graveyardContext;
-    private CanvasManager canvasManager;
-
-    private Variante<Jeton> gameVariante;
+    public HBox timersHBox;         //La boite de liste de chronomètres
 
 
-    private OrdonnanceurDeJeu ordonnanceurDeJeu;
-
-    private Case caseOrigine = null;
-    private Case caseDestination = null;
-
-    private int indiceJoueur;
-    private Set<Case> coupPossibles;
-
-    private Deque<Integer> perdants = new ArrayDeque<>();
-
-    private Timer timerCourant;
-
-    private ArrayList<Object> labelTimers;
-    private Label labelCourant;
-
-    private String nomPieceDeplace;
-
-    private EtatClick etatClick;
-    private boolean aJoue;
-
-    private ArrayList<Position> casesPromotion;
-    private ArrayList<Piece> piecesRevivre;
-    private ArrayList<Case> casesRevivre;
-
-    private Position selectionCase;
-    private Piece selectionPieceRevivre;
-    private String messageFinDeTour;
+    //Gestion des éléments graphiques
+    private CanvasManager canvasManager;        //gère le plateau
+    private GraphicsContext graveyardContext;   //gère le cimetière
+    private ArrayList<Object> labelTimers;      //gère les chronomètres
+    private Label labelCourant;                 //gère le texte du timer courrant
 
 
+    //Gestion de la partie
+    private Variante<Jeton> gameVariante;                   //La variante de la partie
+    private OrdonnanceurDeJeu ordonnanceurDeJeu;            //Gère les déplacements et les vcérifications de jeu
+
+    private int indiceJoueur;                               //Indice du joueur courrant dans l'ordre des joueurs
+    private Deque<Integer> perdants = new ArrayDeque<>();   //Pile des perdants
+
+    private Timer timerCourant;                             //Le chronomètre actif
+
+
+    //Gestion dun tour
+    private EtatClick etatClick;        //Permet d'exécuter l'action correspondante d'un clic en fonction de l'avancée du tour
+
+    private boolean aJoue;              //Boolean : vrai ssi le joueur à fini son tour
+
+    private String messageFinDeTour;    //Message à afficher dans la liste de coup à la fin du tour
+
+
+    //Gestion d'un déplacement
+    private Case caseOrigine = null;        //La case de la pièce à déplacer
+    private Case caseDestination = null;    //La case destination du coup
+
+    private Set<Case> coupPossibles;        //Ensemble de cases où on peux déplacer la pièce
+
+
+    //Getion des selections
+    private ArrayList<Position> casesPromotion; //Liste des cases pour promouvoir une pièce
+    private ArrayList<Piece> piecesRevivre;     //Liste des Pieces morte pour faire revivre
+    private ArrayList<Case> casesRevivre;       //liste des cases où mettre la piece à faire revivre
+
+    private Position selectionCase;             //La case sélectionnée
+    private Piece selectionPieceRevivre;        //La piece à revivre selectionnée
+
+    private boolean canRevive;                  //Le joueur peux sélectionner un pièce du cimerière à faire revivre
+
+    /**
+     * Les différents états d'un clic
+     */
     private static enum EtatClick {
-        JEU, CHOIX, CHOIXREVIVRE, DESACTIVE
+        JEU, CHOIX, DESACTIVE
     }
 
     /**
@@ -102,32 +119,35 @@ public class GameController extends Controller {
      */
     @FXML
     public void ClickGraveyard(MouseEvent mouseEvent) throws IOException{
-        if (etatClick == EtatClick.CHOIXREVIVRE) {
-            Position position = new Position(0, 0);
-            double rectSize = canvasManager.getRectSize()/1.5;
-            Position positionClick = new Position((int)(mouseEvent.getX()/rectSize), (int)(mouseEvent.getY()/rectSize));
-            for (Joueur j : gameVariante.getJoueurs()) {
-                for (Piece p : j.getGraveyard()) {
-                    if (position.equals(positionClick)) {
-                        selectionnerPieceRevivre(p);
-
-                        System.out.println("Piece morte choisie : "+p);
-
-                        return;
+        if (canRevive) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                //On parcour les positions du cimetière de la même façon que pour l'affichage
+                Position position = new Position(0, 0);
+                double rectSize = canvasManager.getRectSize() / 1.5;
+                Position positionClick = new Position((int) (mouseEvent.getX() / rectSize), (int) (mouseEvent.getY() / rectSize));
+                for (Joueur j : gameVariante.getJoueurs()) {
+                    for (Piece p : j.getGraveyard()) {
+                        if (position.equals(positionClick)) {
+                            selectionnerPieceRevivre(p);
+                            return;
+                        }
+                        position.setX(position.getX() + 1);
+                        if (position.getX() * (rectSize + 1) >= canvas.getWidth()) {
+                            position.setX(0);
+                            position.setY(position.getY() + 1);
+                        }
                     }
-                    position.setX(position.getX()+1);
-                    if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
-                        position.setX(0);
-                        position.setY(position.getY()+1);
+                    if (j.getGraveyard().size() > 0) {
+                        position.setX(position.getX() + 1);
+                        if (position.getX() * (rectSize + 1) >= canvas.getWidth()) {
+                            position.setX(0);
+                            position.setY(position.getY() + 1);
+                        }
                     }
                 }
-                if (j.getGraveyard().size() > 0) {
-                    position.setX(position.getX()+1);
-                    if (position.getX()*(rectSize+1) >= canvas.getWidth()) {
-                        position.setX(0);
-                        position.setY(position.getY()+1);
-                    }
-                }
+            }
+            else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                resetCoup();
             }
         }
     }
@@ -146,6 +166,7 @@ public class GameController extends Controller {
             }
         }
         else {
+            //Initialisation de la partie
             try {
                 gameVariante = ((Variante<Jeton>) userVar).clone();
             } catch ( CloneNotSupportedException e ) {
@@ -161,6 +182,8 @@ public class GameController extends Controller {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, e.getMessage());
             }
+
+            //Initialisations graphiques
             varLabel.setText(gameVariante.getName());
             playerLabel.setText(gameVariante.getOrdrejoueur().get(0).getName());
 
@@ -171,6 +194,7 @@ public class GameController extends Controller {
                 labelTimers.add(timerLabel);
             }
 
+            //Initialisation du tour
             indiceJoueur = 0;
 
             canvasManager = new CanvasManager(canvas, gameVariante.getPlateau());
@@ -191,13 +215,15 @@ public class GameController extends Controller {
     }
 
     /**
-     * Fonction qui dit au plateau ce qu'il faut dessiner et dans quel ordre
+     * Fonction qui envoie au plateau ce qu'il faut dessiner et dans quel ordre
      */
     public void updateCanvas() {
 
         graveyardContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         playerLabel.setText(gameVariante.getOrdrejoueur().get(indiceJoueur).getName());
+
+        //Affichage plateau
         canvasManager.drawCanvas();
         if (caseOrigine != null) {
             canvasManager.drawCase(caseOrigine.getPosition());
@@ -207,11 +233,11 @@ public class GameController extends Controller {
         }
         canvasManager.drawCoupPossibles(coupPossibles);
 
+        //Affichage selections
         if (!casesPromotion.isEmpty()) {
             canvasManager.hideCasesExcept(casesPromotion);
         }
-        else if (!piecesRevivre.isEmpty()) {
-            System.out.println(" DESSIN : PIECES REVRIVRE" + piecesRevivre);
+        else if (!piecesRevivre.isEmpty() && casesRevivre.isEmpty()) {
             Position position = new Position(0, 0);
             double rectSize = canvasManager.getRectSize()/1.5;
             for (Joueur j : gameVariante.getJoueurs()) {
@@ -234,12 +260,12 @@ public class GameController extends Controller {
                     }
                 }
             }
-            canvasManager.hideAllCases();
         }
         else if (!casesRevivre.isEmpty()) {
             canvasManager.hideCasesExceptCase(casesRevivre);
         }
 
+        //Affichage element selectionné
         if (selectionCase != null) {
             canvasManager.drawSelectionCase(selectionCase);
         }
@@ -267,9 +293,11 @@ public class GameController extends Controller {
                 }
             }
         }
+
+        //Affichage des pièces
         canvasManager.drawPawn();
 
-        //Graveyard
+        //Affichage du cimetière
         Position position = new Position(0, 0);
 
         double rectSize = canvasManager.getRectSize()/1.5;
@@ -312,18 +340,15 @@ public class GameController extends Controller {
      */
     @FXML
     public void play(MouseEvent mouseEvent) throws IOException {
-        //System.out.println("CLICK! "+etatClick);
-
         getApp().soundManager.playSound("button-hover");
-        //System.out.println(mouseEvent);
 
         Case c = canvasManager.getCase(mouseEvent.getX(), mouseEvent.getY());
-        //System.out.println("Case : "+c+"\n mouseEvent : "+mouseEvent+"\n caseOrigine:"+caseOrigine);
 
         switch (mouseEvent.getButton()) {
             case PRIMARY -> {
                 switch (etatClick) {
                     case JEU -> {
+                        // On joue un coup
                         if (c.isAccessible()) {
                             if (caseOrigine == null) {
                                 if (c.getPieceOnCase() != null && c.getPieceOnCase().getJoueur().getPawnList().contains(c.getPieceOnCase())) {
@@ -344,8 +369,8 @@ public class GameController extends Controller {
                         }
                     }
                     case CHOIX -> {
+                        //On sélectionne un elément
                         selectionnerCase(c);
-
                     }
                 }
 
@@ -375,9 +400,11 @@ public class GameController extends Controller {
      */
     private void resetCoup() throws IOException{
         etatClick = EtatClick.JEU;
+        casesRevivre.clear();
         caseOrigine = null;
         coupPossibles = new LinkedHashSet<>();
         caseDestination = null;
+        updateCanvas();
     }
 
     /**
@@ -388,7 +415,6 @@ public class GameController extends Controller {
     private boolean faireSelectionner() throws IOException{
         boolean attendreUtilisateur = false;
         if (!casesPromotion.isEmpty()) {
-            //System.out.println("SELECTION PROMOTION");
             attendreUtilisateur = true;
             if (casesPromotion.size() == 1) {
                 selectionnerCase(gameVariante.getPlateau().getCase(casesPromotion.get(0)));
@@ -400,27 +426,23 @@ public class GameController extends Controller {
             }
         }
         else if (!piecesRevivre.isEmpty()) {
-            System.out.println("SELECTION REVIVRE");
-            //PIECE A FAIRE REVIVRE
+            System.out.println("SELECTION REVIVRE POSSIBLE");
             attendreUtilisateur = true;
-            if (piecesRevivre.size() == 1) {
-                selectionnerPieceRevivre(piecesRevivre.get(0));
-            }
-            else {
-                varLabel.setText("Selection : Piece à revivre");
-                updateCanvas();
-                etatClick = EtatClick.CHOIXREVIVRE;
-            }
+            canRevive = true;
         }
         //else if ...
         return attendreUtilisateur;
     }
 
+    /**
+     * Vérifie que la case selectionnée est valide et exécute le comportement associé à la selection
+     * @param c La case choisie
+     * @throws IOException
+     */
     private void selectionnerCase(Case c) throws IOException{
         boolean attendreUtilisateur = false;
         boolean caseValide = false;
         if (c.getPieceOnCase() != null && casesPromotion.contains(c.getPosition())) {
-            //System.out.println("CHOIX VALIDE : PROMOTION");
 
             caseValide = true;
 
@@ -432,6 +454,8 @@ public class GameController extends Controller {
         }
         else if (casesRevivre.contains(c)) {
             System.out.println("CASE CHOISIE VALIDE");
+            piecesRevivre.clear();
+
             caseValide = true;
 
             casesRevivre.clear();
@@ -439,6 +463,20 @@ public class GameController extends Controller {
 
             c.setPieceOnCase(selectionPieceRevivre);
             selectionPieceRevivre.getJoueur().getGraveyard().remove(selectionPieceRevivre);
+            selectionPieceRevivre.setJoueur(joueurQuiJoue());
+            joueurQuiJoue().getPawnList().add(selectionPieceRevivre);
+
+            //Changer le signe y des déplacements de la pièce
+            for (PositionDeDeplacement pos : selectionPieceRevivre.getPosDeplacements()) {
+                pos.setY(pos.getY() * -1);
+                pos.setX(pos.getX() * -1);
+            }
+            for (VecteurDeDeplacement vec : selectionPieceRevivre.getVecDeplacements()) {
+                vec.setY(vec.getY() * -1);
+                vec.setX(vec.getX() * -1);
+            }
+
+
             messageFinDeTour = joueurQuiJoue().getName()+" fait revivre "+selectionPieceRevivre.getName()+" "+c.getPosition();
             aJoue = true;
 
@@ -461,9 +499,13 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Vérifie que la piece selectionnée est valide et exécute le comportement associé à la selection
+     * @param p La piece choisie
+     * @throws IOException
+     */
     private void selectionnerPieceRevivre(Piece p) throws IOException {
         if (piecesRevivre.contains(p)) {
-            piecesRevivre.clear();
             selectionPieceRevivre = p;
 
             for (Case c : p.getCasesPourRevivre()) {
@@ -476,20 +518,23 @@ public class GameController extends Controller {
                 selectionnerCase(casesRevivre.get(0));
             }
             else {
-                varLabel.setText("Selection : Placer piece");
+                varLabel.setText("Selection : Faire revivre");
                 updateCanvas();
                 etatClick = EtatClick.CHOIX;
             }
         }
     }
 
+    /**
+     * Effectue les vérifications des etats changés par les règles et exécute le comportement approprié
+     * @return vrai ssi le comportement nécéssite une intéraction avec le joueur
+     * @throws IOException
+     */
     private boolean verifierEtatsRegle() throws  IOException{
-
         //verification Joueur
         boolean attendreUtilisateur = false;
         for (Joueur j : gameVariante.getJoueurs()) {
             if (j.aGagne()) {
-                //System.out.println("JOUEUR VICTOIRE TROUVE "+j);
                 for (Joueur jAutre : gameVariante.getJoueurs()) {
                     if (jAutre.getEquipe() != j.getEquipe()) {
                         boolean fin = giveUp("Victoire de "+j.getName(), jAutre);
@@ -515,6 +560,7 @@ public class GameController extends Controller {
             }
         }
 
+        //Verification Ordonnanceur de jeu
         String s = "";
         Joueur j = joueurQuiJoue();
         if (ordonnanceurDeJeu.echecEtMat(j)) {
@@ -551,10 +597,13 @@ public class GameController extends Controller {
             }
         }
         piecesRevivre = new ArrayList<>();
-        for (Joueur joueur : gameVariante.getJoueurs()) {
-            for (Piece p : joueur.getGraveyard()) {
-                if (p.getCasesPourRevivre() != null && p.getJoueur().getEquipe()!=joueurQuiJoue().getEquipe()) {
-                    piecesRevivre.add(p);
+        canRevive = false;
+        if (!aJoue) {
+            for (Joueur joueur : gameVariante.getJoueurs()) {
+                for (Piece p : joueur.getGraveyard()) {
+                    if (p.getCasesPourRevivre() != null && p.getJoueur().getEquipe() != joueurQuiJoue().getEquipe()) {
+                        piecesRevivre.add(p);
+                    }
                 }
             }
         }
@@ -564,6 +613,10 @@ public class GameController extends Controller {
         return attendreUtilisateur;
     }
 
+    /**
+     * Initialise un tour : reinitialise le plateau et exécute les règles d'avant coup
+     * @throws IOException
+     */
     private void debutTour() throws IOException{
         try {
             aJoue = false;
@@ -571,22 +624,6 @@ public class GameController extends Controller {
             gameVariante.getPlateau().reinitialiserComportementLieAunTour(joueurQuiJoue());
 
             ordonnanceurDeJeu.appliquerReglesAvant();
-
-            //Todo enlmever ce truc
-            ArrayList<Case> cases = new ArrayList<>();
-            for (int i = 1; i < 7; i++) {
-                for (int j = 0; j < 8; j++) {
-                    Case c = gameVariante.getPlateau().getCase(new Position(j, i));
-                    cases.add(c);
-                    Piece p = c.getPieceOnCase();
-                    if ( p != null && (p.getName().equals("Pion blanc") || p.getName().equals("Pion noir"))) {
-                        p.getJoueur().getPawnList().remove(p);
-                        p.getJoueur().getGraveyard().add(p);
-                        p.setCasesPourRevivre(cases);
-                        c.setPieceOnCase(null);
-                    }
-                }
-            }
 
             System.out.println("---------VERIFICATION REGLES DEBUT----------");
             verifierEtatsRegle();
@@ -598,7 +635,15 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Termine le tour : met l'action du joueur sur l'interface, incrémente le joueur courrant, joue le timer, et débute le tour
+     * @throws IOException
+     */
     private void finirTour() throws IOException {
+        if (timerCourant != null) {
+            pauseTimer(timerCourant);
+        }
+
         addLabelCoup(messageFinDeTour);
         incrementerIndiceJoueur();
         timerCourant = playTimer(joueurQuiJoue());
@@ -606,23 +651,20 @@ public class GameController extends Controller {
         debutTour();
     }
 
+    /**
+     * Effectue un déplacement de pièce et applique les règles d'après coup
+     * @throws IOException
+     */
     private void jouerCoup() throws IOException{
-        //System.out.println("Case origine : "+caseOrigine + " Case destination : "+caseDestination);
         try {
             etatClick = EtatClick.DESACTIVE; //Desactiver le click
 
-            nomPieceDeplace = caseOrigine.getPieceOnCase().getName();
-            //System.out.println(joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition());
+            messageFinDeTour = joueurQuiJoue().getName() + " : " + caseOrigine.getPieceOnCase().getName() + " to " + caseDestination.getPosition();
 
             ordonnanceurDeJeu.deplacerPiece(caseOrigine, joueurQuiJoue(), caseDestination);
-            messageFinDeTour = joueurQuiJoue().getName() + " : " + nomPieceDeplace + " to " + caseDestination.getPosition();
             aJoue = true;
 
             ordonnanceurDeJeu.appliquerReglesApres();
-
-            if (timerCourant != null) {
-                pauseTimer(timerCourant);
-            }
 
             System.out.println("---------VERIFICATION REGLES APRES----------");
             boolean attendreUtilisateur = verifierEtatsRegle();
@@ -637,6 +679,9 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Permet de passer au joueur suivant
+     */
     private void incrementerIndiceJoueur() {
         indiceJoueur++;
         if (indiceJoueur >= gameVariante.getOrdrejoueur().size()) {
@@ -645,6 +690,10 @@ public class GameController extends Controller {
         updateCanvas();
     }
 
+    /**
+     * Ajoute un message dans la liste des coup sur l'interface
+     * @param message
+     */
     private void addLabelCoup(String message) {
         Label l = new Label(message);
         l.setTextAlignment(TextAlignment.CENTER);
@@ -653,6 +702,13 @@ public class GameController extends Controller {
         scroll.setVvalue(2);
     }
 
+    /**
+     * Fait perdre le joueur et si il n'y a plus de joueur dans son équipe, alors on termine la partie
+     * @param message Le message à afficher si on termine la partie
+     * @param jPerdant Le joueur qui perd
+     * @return vrai ssi la partie est finie
+     * @throws IOException
+     */
     public boolean giveUp(String message, Joueur jPerdant)  throws IOException {
         fairePerdreJoueur(jPerdant);
         if (indiceJoueur >= gameVariante.getOrdrejoueur().size()) {
@@ -681,13 +737,22 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Fait apparaitre un fenetre pour promouvoir une pièce
+     * @param casePromotion la case où est la pièce à promouvoir
+     * @throws IOException
+     */
     public void fairePromouvoir(Case casePromotion) throws IOException{
         popupWindow("promotion", new PromotionController.PromotionData(casePromotion, this));
     }
 
+    /**
+     * fait promouvoir la piece de la case Pormotion en nouvelle piece de typePiece
+     * @param casePromotion la case où est la piece à promouvoir
+     * @param typePiece le type de pièce à instancier
+     * @throws IOException
+     */
     public void promote(Case casePromotion, Piece typePiece) throws IOException{
-        //System.out.println("PROMOTION EN "+typePiece);
-
         Piece p = new Piece(typePiece);
         Joueur j = casePromotion.getPieceOnCase().getJoueur();
         p.setJoueur(j);
@@ -703,7 +768,6 @@ public class GameController extends Controller {
         selectionCase = null;
         updateCanvas();
 
-        //System.out.println("FIN PROMOTION");
         boolean attendreUtilisateur = faireSelectionner();
 
         if (!attendreUtilisateur && aJoue) {
@@ -711,6 +775,11 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Créé une zone de texte de chronometre pour le joueur concerne. C'est une initialisation
+     * @param joueurConcerne le joueur à qui mettre le timer
+     * @return un Label : l'element d'interface contenant le texte du timer
+     */
     private Label createNewTimer(Joueur joueurConcerne) {
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
@@ -736,9 +805,13 @@ public class GameController extends Controller {
         return timerLabel;
     }
 
+    /**
+     * Met en marche le timer d'un joueur
+     * @param joueur le joueur concerné
+     * @return le Timer actif
+     */
     public Timer playTimer(Joueur joueur) {
         Timer timer = new Timer();
-        //System.out.println(labelTimers);
 
         labelCourant = null;
         for (int i = 0; i < labelTimers.size(); i+=2) {
@@ -748,8 +821,9 @@ public class GameController extends Controller {
                 break;
             }
         }
-        //System.out.println(joueur + " : " + labelCourant);
 
+        //Utilisation d'un thread pour le timer
+        //  on englobe les éléments graphiques dans Platform.runLater() de javaFX car les éléments graphiques ne supporte pas les threads extérieurs
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 if (joueur.getMinute() != 999) {
@@ -776,10 +850,20 @@ public class GameController extends Controller {
         return timer;
     }
 
+    /**
+     * Arrête le timer passé en paramètre
+     * @param timer le Timer concerné
+     */
     public void pauseTimer(Timer timer){
         timer.cancel();
     }
 
+    /**
+     * Fait apparaître une fenetre par dessu la zone de jeu
+     * @param fxml la fenetre à carcher
+     * @param var l'objet à passer à la fenetre
+     * @throws IOException
+     */
     public void popupWindow(String fxml, Object var) throws IOException {
         Parent layout = getApp().loadFXML(fxml, var);
 
@@ -787,16 +871,27 @@ public class GameController extends Controller {
         popupPane.setMouseTransparent(false);
     }
 
+    /**
+     * Détruit la fenetre quii est au dessu de la zone de jeu
+     */
     public void destroyPopup() {
         popupPane.getChildren().clear();
         popupPane.setMouseTransparent(true);
     }
 
+    /**
+     * Exécuté sur le bouton "Abandonner", fait perdre le joueur courrant
+     * @throws IOException
+     */
     @FXML
     public void giveUpButton() throws IOException{
         giveUp("\nAbandon de "+joueurQuiJoue(), joueurQuiJoue());
     }
 
+    /**
+     * Supprime le joueur de la liste des joueurs et l'ajoute à la pile des perdants
+     * @param jPerdant
+     */
     private void fairePerdreJoueur(Joueur jPerdant) {
         gameVariante.getOrdrejoueur().removeIf(joueur -> joueur.getEquipe() == jPerdant.getEquipe());
         if (!perdants.contains(jPerdant.getEquipe())) {
@@ -804,6 +899,9 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Exécuté sur le bouton d'information, fait apparêtre une fenetre d'aide
+     */
     @FXML
     public void infoButton() {
         showAlert(Alert.AlertType.INFORMATION, "Maintenant que vous avez choisi la variante, vous allez donc jouer la partie avec toutes les règles défini pour elle (pièces, plateau, règles, temps, etc ...).\n\nPour commencer, il suffit de choisir la pièce à déplacer de faire un clic gauche puis les emplacement des déplacement valides sera alors afficher, il suffira donc de cliquer sur l'emplacement et votre pièce se déplacera.\n\nSi vous avez cliqué sur une pièce par erreur, un clic droit annulera la sélection.\n\nDe plus, à tout moment vous pouvez abandonner la partie en cliquant sur le bouton abandonner en bas de l'écran, puis dès que il ne reste plus que un joueur sur le plateau alors un classement s'affichera pour afficher le gagnant et le second, ....\n\nIl ne vous reste plus qu'à jouer."); //todo texte edition regle

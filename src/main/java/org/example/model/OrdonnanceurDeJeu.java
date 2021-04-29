@@ -75,8 +75,11 @@ public class OrdonnanceurDeJeu {
                     for (VecteurDeDeplacement vec : p.getVecDeplacements()) {
                         cases.addAll(equDeplacementsValide(vec, c, j));
                     }
-                    for (Position pos : p.getDeplacementsSpecialRegles()) {
-                        PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
+                    for (PositionDeDeplacement pos : p.getDeplacementsSpecialRegles()) {
+                        cases.addAll(equDeplacementsValide(pos, c, j));
+                    }
+                    for (PositionDeDeplacement pos : p.getDeplacementsSpecialReglesAbsolue()) {
+                        PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX() - c.getPosition().getX(), pos.getY() - c.getPosition().getY(), pos.getTypeDeplacement());
                         cases.addAll(equDeplacementsValide(nPos, c, j));
                     }
                 }
@@ -126,8 +129,11 @@ public class OrdonnanceurDeJeu {
         for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
             cases.addAll(equDeplacementsValide(vec, origine, j));
         }
-        for (Position pos : piece.getDeplacementsSpecialRegles()) {
-            PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
+        for (PositionDeDeplacement pos : piece.getDeplacementsSpecialRegles()) {
+            cases.addAll(equDeplacementsValide(pos, origine, j));
+        }
+        for (PositionDeDeplacement pos : piece.getDeplacementsSpecialReglesAbsolue()) {
+            PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX() - origine.getPosition().getX(), pos.getY() - origine.getPosition().getY(), pos.getTypeDeplacement());
             cases.addAll(equDeplacementsValide(nPos, origine, j));
         }
         return cases;
@@ -294,10 +300,16 @@ public class OrdonnanceurDeJeu {
                 if (valide) break;
             }
             if (!valide) {
-                for (Position pos : piece.getDeplacementsSpecialRegles()) {
-                    PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX(), pos.getY(), EquationDeDeplacement.TypeDeplacement.DEPLACER);//todo
-                    valide = verifierEquDeplacement(origine, destination, nPos);
+                for (PositionDeDeplacement pos : piece.getDeplacementsSpecialRegles()) {
+                    valide = verifierEquDeplacement(origine, destination, pos);
                     if (valide) break;
+                }
+                if (!valide) {
+                    for (PositionDeDeplacement pos : piece.getDeplacementsSpecialReglesAbsolue()) {
+                        PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX() - origine.getPosition().getX(), pos.getY() - origine.getPosition().getY(), pos.getTypeDeplacement());
+                        valide = verifierEquDeplacement(origine, destination, nPos);
+                        if (valide) break;
+                    }
                 }
             }
         }
@@ -456,6 +468,19 @@ public class OrdonnanceurDeJeu {
                         for (VecteurDeDeplacement vec : piece.getVecDeplacements()) {
                             //System.out.println("VECTEUR");
                             Case caseVictime = verifierEquDeplacementMetEquec(vec, c, p, pieceConditionVictoire);
+                            if (caseVictime != null) {
+                                caseDesPieceMenaces.add(caseVictime);
+                            }
+                        }
+                        for (PositionDeDeplacement pos : piece.getDeplacementsSpecialRegles()) {
+                            Case caseVictime = verifierEquDeplacementMetEquec(pos, c, p, pieceConditionVictoire);
+                            if (caseVictime != null) {
+                                caseDesPieceMenaces.add(caseVictime);
+                            }
+                        }
+                        for (PositionDeDeplacement pos : piece.getDeplacementsSpecialReglesAbsolue()) {
+                            PositionDeDeplacement nPos = new PositionDeDeplacement(pos.getX() - c.getPosition().getX(), pos.getY() - c.getPosition().getY(), pos.getTypeDeplacement());
+                            Case caseVictime = verifierEquDeplacementMetEquec(nPos, c, p, pieceConditionVictoire);
                             if (caseVictime != null) {
                                 caseDesPieceMenaces.add(caseVictime);
                             }
