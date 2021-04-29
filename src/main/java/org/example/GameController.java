@@ -829,7 +829,7 @@ public class GameController extends Controller {
         labelCourant = null;
         for (int i = 0; i < labelTimers.size(); i+=2) {
             Joueur j = (Joueur) labelTimers.get(i);
-            if (j.equals(joueur)) {
+            if (j == joueur) {
                 labelCourant = (Label) labelTimers.get(i+1);
                 break;
             }
@@ -898,7 +898,7 @@ public class GameController extends Controller {
      */
     @FXML
     public void giveUpButton() throws IOException{
-        giveUp("\nAbandon de "+joueurQuiJoue(), joueurQuiJoue());
+        giveUp("\nAbandon de "+joueurQuiJoue().getName(), joueurQuiJoue());
     }
 
     /**
