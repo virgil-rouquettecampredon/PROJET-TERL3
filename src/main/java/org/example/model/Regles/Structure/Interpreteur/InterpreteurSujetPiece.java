@@ -65,7 +65,10 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
         List<Piece> allpieces = new ArrayList<>();
         String erreurPiece = "Piece: " + "'" + str + "': ";
         if (this.str_source.charAt(0) == 'P' && str.length() >= 2) {
-            for(Joueur j: ord.getVariante().getJoueurs()) { allpieces.addAll(j.getPawnList()); }
+            for(Joueur j: ord.getVariante().getJoueurs()) {
+                allpieces.addAll(j.getPawnList());
+                System.out.println("=====> PIECE de " + j + " : " + j.getPawnList());
+            }
 
             if (str.equals("PALL")) {
                 return allpieces;
@@ -77,6 +80,7 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
                     //TODO enlever
                     System.out.println("INT PIECE REF : " + piece_reference);
 
+                    System.out.println("ALL PIECES : " + allpieces);
                     for(Piece p: allpieces){
                         if(p.equals(piece_reference)) { lret.add(p); }
                     }

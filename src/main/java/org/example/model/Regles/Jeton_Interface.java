@@ -48,7 +48,7 @@ public enum Jeton_Interface implements EstToken, Serializable {
     CONSEQUENCE_PROMOUVOIR("promouvoir"),
     CONSEQUENCE_DEPLACER("deplacer"),
 
-    ALIAS(),
+    ALIAS(""),
     ALIASDEF("as"),
     PARENTHESE_OUVRANTE("("),
     PARENTHESE_FERMANTE(")"),

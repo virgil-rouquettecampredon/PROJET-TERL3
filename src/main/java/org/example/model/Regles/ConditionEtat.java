@@ -38,7 +38,7 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
 
     @Override
     public String toString(){
-        return "[CONSEQUENCE " + sujets.getClass() + " ETAT"
+        return "[CONDITION " + sujets.getClass() + " ETAT"
                 + ": interpreteur sujet: " + this.interpreteurSujet
                 + ", comportement: " + this.comportement
                 + ", liste sujets: " + this.sujets + "]";

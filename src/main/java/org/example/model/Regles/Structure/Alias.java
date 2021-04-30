@@ -43,16 +43,11 @@ public class Alias<A extends EstToken,T extends ObjetsDeRegle> {
     /**Méthode permettant d'effectuer l'édition des liens.
      * Va regarder les valeurs pour lesquelles la conditionDeDefinition vaudra vrai, et va les récupérer pour les redonner ensuite aux condOuConsDeReutilisation.**/
     public void editionDesLiens(OrdonnanceurDeJeu ord) throws MauvaiseDefinitionRegleException{
-        System.out.println("ALIAS : ");
         conditionDeDefinition.verifierElements(ord);
-
         if(conditionDeDefinition.evaluer()){
-            System.out.println("OK ALIAS");
             if(estSurSujet){
-                System.out.println("SUR SUJET");
                 objetsDeRegle = (List<T>) Fonctions_Comportements.sujetDeLaConditionVrai;
             }else{
-                System.out.println("SUR REGLE");
                 objetsDeRegle = (List<T>) Fonctions_Comportements.cibleDeLaConditionVrai;
             }
         }

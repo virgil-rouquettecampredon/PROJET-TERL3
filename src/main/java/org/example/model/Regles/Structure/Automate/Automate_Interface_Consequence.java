@@ -21,7 +21,7 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
 
 
     public Automate_Interface_Consequence(List<Piece> pieces, List<GroupCases> cases, List<Joueur> joueurs) {
-        super(17, 0);
+        super(16, 0);
 
         this.pieces = pieces;
         this.cases = cases;
@@ -64,7 +64,7 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         //ETAT 5
         this.ajouterUneTransition(5,Jeton_Interface.CASE,15);
         this.ajouterUneTransition(5,Jeton_Interface.CASEALIAS,15);
-        this.ajouterUneTransition(5,Jeton_Interface.CASEPARAM,16);
+        this.ajouterUneTransition(5,Jeton_Interface.CASEPARAM,15);
 
         //ETAT 6
         this.ajouterUneTransition(6,Jeton_Interface.PIECETOKEN,11);
@@ -94,18 +94,13 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
         this.ajouterUneTransition(12,Jeton_Interface.JOUEUR,11);
 
         //ETAT 13
-        this.ajouterUneTransition(13,Jeton_Interface.CASE,14);
+        //this.ajouterUneTransition(13,Jeton_Interface.CASE,14);
 
         //ETAT 14
 
         //ETAT 15
         this.ajouterUneTransition(15,Jeton_Interface.PIECE,9);
         this.ajouterUneTransition(15,Jeton_Interface.PIECETOKEN,10);
-        this.ajouterUneTransition(15,Jeton_Interface.CASE,16);
-
-        //ETAT 16
-        this.ajouterUneTransition(16,Jeton_Interface.PIECE,9);
-        this.ajouterUneTransition(16,Jeton_Interface.PIECETOKEN,10);
     }
 
     public void revenirEnArriere(){
