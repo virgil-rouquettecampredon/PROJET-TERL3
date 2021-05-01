@@ -129,9 +129,15 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
 
     public boolean equalsRegle(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            System.out.println("EQUALSREGLE: Objet NULL OU classe différentes");
+            return false;
+        }
         Piece piece = (Piece) o;
-        return name.equals(piece.name) && posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements) && Arrays.equals(comportementPiece, piece.comportementPiece);
+        System.out.println("EQUALSREGLE: name: " + name.equals(piece.name)
+                + "\nposDep: " + posDeplacements.equals(piece.posDeplacements)
+                + "\nvecDep: " + vecDeplacements.equals(piece.vecDeplacements));
+        return name.equals(piece.name) && posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements);
     }
 
     @Override
@@ -151,7 +157,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
 
     @Override
     public String toString() {
-        return "["+name + " joueur="+joueur+"]";
+        return "["+name + ", sprite: " + this.sprite
+                + ", posDep: " + this.posDeplacements
+                + ", vecDep: " + this.vecDeplacements
+                + ", comportements: " + this.comportementPiece
+                + ", joueur="+joueur
+                + ", nbMovement: " + this.nbMovement
+                + "]";
+
     }
 
     /*DEBUT GETTER SETTER*/
@@ -294,4 +307,6 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
     }
 
     /*FIN GETTER SETTER*/
+
+
 }

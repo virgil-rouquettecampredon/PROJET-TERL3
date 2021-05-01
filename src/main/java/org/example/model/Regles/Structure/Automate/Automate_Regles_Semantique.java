@@ -149,7 +149,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(33,Jeton.ET,0);
         this.ajouterUneTransition(33,Jeton.OU,0);
         this.ajouterUneTransition(33,Jeton.ALORS,15);
-        //this.ajouterUneTransition(33,Jeton.CASE,27);
+        //this.ajouterUneTransition(33,Jeton.CASE,27);    //LIGNE COMMENTE
 
         //Meme transition que 27
         this.ajouterUneTransition(34,Jeton.ET,0);
@@ -452,6 +452,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
             if (etat != null){
                 parcours+=etat.getValeur();
                 if (etat.estTerminal()) {
+                    System.out.println("ARS: EST TERMINAL");
+                    codeDeRetour = etat.getCodeDeRetour();
                     /** Soit: peut avancer et jeton suivant est un connecteur adéquat
                      *      OU
                      *      Ne peut pas avancer (mais est terminal)
@@ -468,7 +470,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             ||
                             !peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                     )  {
-
+                        System.out.println("ARS: SWITCH ETAT: " + etat.getCodeDeRetour());
                         //Alors notre etat est bien terminal de block, on l'analyse
                         switch (etat.getCodeDeRetour()) {
                             /*---------------------------------CONDITIONS---------------------------------*/
@@ -585,6 +587,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             }
 
                             case 327 , 334 -> {
+                                System.out.println("ARS: CAS 327");
                                 if (indRegleSyntaxe >= 1) {
                                     Condition cond = case327_334(parcours, indRegleSyntaxe, regleSyntaxe, regleString);
                                     conditionsDeLaRegle.add(cond);

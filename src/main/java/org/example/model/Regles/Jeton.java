@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Jeton est une énumération permettant de classifier les éléments qui constitue une règle à sa création.
+ * Quand un Jeton est créé à partir d'une chaine de caractère, une analyse syntaxique est opéré à partir de la chaine
+ * selon le type d'énumération. Ces Jetons sont créé
+ * Cette classification va permettre d'analyser sémantiquement la règle ensuite*/
 public enum Jeton implements Serializable, EstToken {
+
     //Jeton particulier si rien n'est reconnu
     AUCUN("aucun") {
         @Override

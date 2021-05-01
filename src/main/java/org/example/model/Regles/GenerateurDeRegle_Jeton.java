@@ -7,6 +7,11 @@ import java.io.Serializable;
 import java.util.*;
 import javafx.util.Pair;
 
+/**
+ * GenerateurDeRegle_Jeton génère un objet Règle à partir d'une liste de chaine de caractère généré depuis l'interface.
+ * L'objet fait une analyse syntaxique en créant les jetons (voir enum Jeton) puis, si l'analyse syntaxique réussi,
+ * l'objet fait une analyse sémantique en utilisant un Automate_Regles_Semantique (voir objet Automate_Regles_Semantique)*/
+
 public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements Serializable {
 
     public GenerateurDeRegle_Jeton(Automate_Regles<Jeton> auto, List<Jeton> jetons){

@@ -82,7 +82,11 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
 
                     System.out.println("ALL PIECES : " + allpieces);
                     for(Piece p: allpieces){
-                        if(p.equals(piece_reference)) { lret.add(p); }
+                        System.out.println("-------COMPARAISON PIECE-------");
+                        System.out.println(piece_reference);
+                        System.out.println(p);
+                        System.out.println(p.equalsRegle(piece_reference));
+                        if(p.equalsRegle(piece_reference)) { lret.add(p); }
                     }
 
                     //TODO enlever

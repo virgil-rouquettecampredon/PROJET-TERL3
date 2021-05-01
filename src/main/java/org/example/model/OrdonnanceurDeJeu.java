@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * OrdonnanceurDeJeu est un objet permettant de d'exécuter les actions de bases du jeu (victoire, defaite, pat, echec,
+ * echec et mat, règles, déplacements) selon la varante donné à l'initialisation.*/
 public class OrdonnanceurDeJeu {
 
     //private int nbJoueur;
