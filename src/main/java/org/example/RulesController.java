@@ -25,10 +25,7 @@ public class RulesController extends Controller {
 
     private ObservableList<RegleRow> rules;
 
-    @FXML
-    private void confirmButton() throws IOException {
-        getApp().soundManager.playSound("button-click");
-
+    private void appliquer() {
         ArrayList<RegleInterface> list = getApp().varianteManager.getCurrent().getRegles();
         ArrayList<RegleInterface> listBackup = new ArrayList<>(list);
         list.clear();
@@ -42,6 +39,13 @@ public class RulesController extends Controller {
             showAlert(Alert.AlertType.ERROR, "Erreur : Une regle est à la fois avant et après! ("+se.getMessage()+")");
             list.addAll(listBackup);
         }
+    }
+
+    @FXML
+    private void confirmButton() throws IOException {
+        getApp().soundManager.playSound("button-click");
+
+        appliquer();
 
         getApp().setRoot("varianteMenu3");
     }
@@ -49,6 +53,7 @@ public class RulesController extends Controller {
     @FXML
     private void addButton() {
         getApp().soundManager.playSound("button-click");
+        appliquer();
         try {
             getApp().setRoot("editRule");
         } catch (IOException e) {
@@ -96,6 +101,7 @@ public class RulesController extends Controller {
             showAlert(Alert.AlertType.ERROR, "Erreur : aucune regle selectionne");
             return;
         }
+        appliquer();
 
         getApp().varianteManager.getCurrent().getRegles().remove(r.getRegle());
         try {

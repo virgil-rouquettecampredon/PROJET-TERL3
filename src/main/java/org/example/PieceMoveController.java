@@ -74,8 +74,8 @@ public class PieceMoveController extends Controller {
         bothRadio.setUserData(EquationDeDeplacement.TypeDeplacement.BOTH);
 
         // On récupère les données des joueurs sout forme de liste pour designer à quel joueur est la piece
-        for (Joueur p : getApp().varianteManager.getCurrent().getJoueurs()) {
-            joueurBox.getItems().add(new JoueurBox(p.getName(), p));
+        for (Joueur j : getApp().varianteManager.getCurrent().getJoueurs()) {
+            joueurBox.getItems().add(new JoueurBox(j.getName(), j));
         }
 
         // On initialise tout avec :
@@ -102,7 +102,7 @@ public class PieceMoveController extends Controller {
         else {
             // AJOUTER
             joueurBox.getSelectionModel().selectFirst();
-            nomInput.setText("Pawn");
+            nomInput.setText("Pion par defaut");
             posDeplacements = new ArrayList<>();
             vecDeplacements = new ArrayList<>();
             file = new File("src/main/resources/org/example/images/pawn.png").getAbsolutePath();
@@ -192,11 +192,11 @@ public class PieceMoveController extends Controller {
         Piece p;
         if (userVar != null) {
             p = (Piece) userVar;
-            p.setName(nomInput.getText());
-            p.setSprite("file:" + file);
-
             p.getJoueur().getTypePawnList().remove(p);
             p.setJoueur(joueurBox.getSelectionModel().getSelectedItem().getJoueur());
+
+            p.setName(nomInput.getText());
+            p.setSprite("file:" + file);
         }
         else {
             p = new Piece(nomInput.getText(), "file:" + file, joueurBox.getSelectionModel().getSelectedItem().getJoueur());
@@ -213,7 +213,6 @@ public class PieceMoveController extends Controller {
 
         //On ajoute la piece au joueur
         p.getJoueur().getTypePawnList().add(p);
-
 
         //On charge le menu des pieces
         getApp().setRoot("piece");

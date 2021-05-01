@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.example.model.Joueur;
 import org.example.model.Piece;
 
 import java.io.IOException;
@@ -46,10 +47,10 @@ public class PieceController extends Controller {
 
         pieces = FXCollections.observableArrayList();
 
-        for (Piece p:
-                getApp().varianteManager.getCurrent().getAllPawn()) {
-
-            pieces.add(new PieceRow(imgCol.getWidth(), p));
+        for (Joueur j : getApp().varianteManager.getCurrent().getJoueurs()) {
+            for (Piece p : j.getTypePawnList()) {
+                pieces.add(new PieceRow(imgCol.getWidth(), p));
+            }
         }
 
         tab.setItems(pieces);
@@ -76,7 +77,7 @@ public class PieceController extends Controller {
         tab.setContextMenu(contextMenu);
     }
 
-    private void duplicateSelectedPiece() {
+    private void duplicateSelectedPiece(){
         PieceRow pr = tab.getSelectionModel().getSelectedItem();
         if (pr == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur : aucune piece selectionne");
@@ -84,9 +85,16 @@ public class PieceController extends Controller {
         }
 
         Piece p = new Piece(pr.getPiece());
+
         p.getJoueur().getTypePawnList().add(p);
         PieceRow pr2 = new PieceRow(imgCol.getWidth(), p);
         pieces.add(pr2);
+
+        try {
+            getApp().setRoot("pieceMove", pr.getPiece());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void deleteSelectedPiece() {

@@ -11,10 +11,10 @@ import javafx.scene.input.MouseEvent;
 import org.example.model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupCaseController extends Controller {
-    @FXML
-    public TextField joueurInput;
     @FXML
     public TableView<GroupeRow> tab;
     @FXML
@@ -65,6 +65,14 @@ public class GroupCaseController extends Controller {
         groupes = FXCollections.observableArrayList();
         tab.setItems(groupes);
 
+        GroupCases g = new GroupCases("Toutes les cases", getApp().varianteManager.getCurrent().getPlateau());
+        ArrayList<Case> allcases = new ArrayList<>();
+        for (List<Case> lc: getApp().varianteManager.getCurrent().getPlateau().getEchiquier()){
+            allcases.addAll(lc);
+        }
+        g.setCasesAbsolue(allcases);
+        groupes.add(new GroupeRow(g));
+
         for (GroupCases gc : getApp().varianteManager.getCurrent().getListGroupCases()) {
             groupes.add(new GroupeRow(gc));
         }
@@ -91,6 +99,10 @@ public class GroupCaseController extends Controller {
             showAlert(Alert.AlertType.ERROR, "Erreur : aucun groupe selectionne");
             return;
         }
+        if (gr == groupes.get(0)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : Vous ne pouvez pas supprimer ce groupe");
+            return;
+        }
 
         groupes.remove(gr);
 
@@ -103,8 +115,8 @@ public class GroupCaseController extends Controller {
             canvasManager.drawGroupCases(posX, posY, tab.getSelectionModel().getSelectedItem().getGroup());
         }
         else {
-            for (GroupeRow g : groupes) {
-                canvasManager.drawGroupCases(posX, posY, g.getGroup());
+            for (int i = 1; i < groupes.size(); i ++) {
+                canvasManager.drawGroupCases(posX, posY, groupes.get(i).getGroup());
             }
         }
     }
@@ -112,12 +124,12 @@ public class GroupCaseController extends Controller {
     @FXML
     private void validateButton() throws IOException {
         getApp().soundManager.playSound("button-click");
-        System.out.println(tab.getRowFactory());
 
         getApp().varianteManager.getCurrent().getListGroupCases().clear();
         for (GroupeRow gr : groupes) {
             getApp().varianteManager.getCurrent().getListGroupCases().add(gr.getGroup());
         }
+        getApp().varianteManager.getCurrent().getListGroupCases().remove(0);
 
         getApp().setRoot("varianteMenu2");
     }
@@ -125,6 +137,10 @@ public class GroupCaseController extends Controller {
     @FXML
     public void onClick() {
         GroupeRow gr = tab.getSelectionModel().getSelectedItem();
+        if (gr == groupes.get(0)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : Vous ne pouvez pas modifier ce groupe");
+            return;
+        }
 
         Case c = canvasManager.getCase(mouseX, mouseY);
         if (c == null) {
@@ -196,6 +212,15 @@ public class GroupCaseController extends Controller {
 
     @FXML
     public void updateSelectedName(TableColumn.CellEditEvent<GroupeRow, String> groupeRowStringCellEditEvent) {
+        if (groupeRowStringCellEditEvent.getRowValue() == groupes.get(0)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur : vous ne pouvez pas modifier ce groupe");
+            try {
+                getApp().setRoot("groupCase");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         groupeRowStringCellEditEvent.getRowValue().setName(groupeRowStringCellEditEvent.getNewValue());
         groupeRowStringCellEditEvent.getRowValue().getGroup().setName(groupeRowStringCellEditEvent.getNewValue());
         updateCanvas();

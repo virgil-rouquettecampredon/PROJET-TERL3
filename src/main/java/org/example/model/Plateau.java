@@ -163,6 +163,7 @@ public class Plateau implements Serializable, Cloneable{
                     }
                     casePlateau.getPieceOnCase().setEstApromouvoir(false);
                     casePlateau.getPieceOnCase().getDeplacementsSpecialRegles().clear();
+                    casePlateau.getPieceOnCase().getDeplacementsSpecialReglesAbsolue().clear();
                     casePlateau.getPieceOnCase().setCasesPourRevivre(null);
                 }
             }

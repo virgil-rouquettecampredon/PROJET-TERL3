@@ -53,7 +53,9 @@ public class Joueur implements CibleDeRegle, SujetDeRegle, Serializable, Cloneab
         j.pawnList = new ArrayList<>();
         j.typePawnList = new ArrayList<>();
         for (Piece p : typePawnList) {
-            j.typePawnList.add(p.clone());
+            Piece np = p.clone();
+            np.setJoueur(j);
+            j.typePawnList.add(np);
         }
         return j;
     }

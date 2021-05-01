@@ -28,6 +28,7 @@ public class VarianteMenu1Controller extends Controller {
 
         if (getApp().varianteManager.getCurrent().getAllPawn().size() == 0) {
             getApp().varianteManager.addClassiquePawn(getApp().varianteManager.getCurrent().getJoueurs(), getApp().varianteManager.getCurrent().getPlateau());
+            getApp().varianteManager.getCurrent().getListGroupCases().clear();
             getApp().varianteManager.addClassiqueGroupeCases(getApp().varianteManager.getCurrent().getListGroupCases(), getApp().varianteManager.getCurrent().getPlateau());
         }
         getApp().varianteManager.addClassiqueOrderPlayer();

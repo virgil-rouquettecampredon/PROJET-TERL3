@@ -179,8 +179,14 @@ public class GameController extends Controller {
             try {
                 gameVariante.initialiser(ordonnanceurDeJeu.getListTypesPieces());
             } catch ( VarianteException e ) {
+                System.err.println(e.getMessage());
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur : La variante n'a pas put être initialisée.");
+                try {
+                    getApp().setRoot("home");
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
 
             //Initialisations graphiques
@@ -380,6 +386,23 @@ public class GameController extends Controller {
                     case JEU -> {
                         resetCoup();
                     }
+                }
+            }
+            case MIDDLE -> {
+                //TEST UNIQUEMENT tODO TODO TODO TODO ALERT
+                aJoue = true;
+
+                try {
+                    ordonnanceurDeJeu.appliquerReglesApres();
+                } catch (MauvaiseDefinitionRegleException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("---------VERIFICATION REGLES APRES----------");
+                boolean attendreUtilisateur = verifierEtatsRegle();
+
+                if (!attendreUtilisateur) {
+                    finirTour();
                 }
             }
         }
@@ -848,7 +871,14 @@ public class GameController extends Controller {
                                     String s = "Plus de temps pour " + joueur.getName() + "!";
                                     //showAlert(Alert.AlertType.ERROR, "T'as perdu looser de " + joueur.getName() + " Aussi talentueux que Hugo !");
                                     try {
-                                        giveUp(s, joueurQuiJoue());
+                                        boolean fin = giveUp(s, joueur);
+
+                                        addLabelCoup(joueur.getName() + " fin du temps");
+                                        if (!fin) {
+                                            timerCourant = playTimer(joueurQuiJoue());
+                                            resetCoup();
+                                            debutTour();
+                                        }
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         showAlert(Alert.AlertType.ERROR, "WOW! un bug t'as empeché de perde!!");

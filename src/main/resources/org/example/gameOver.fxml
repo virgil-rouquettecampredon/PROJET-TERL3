@@ -21,7 +21,7 @@
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#backButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="RETOUR ACCEUIL">
+                                <Button mnemonicParsing="false" onAction="#backButton" onMouseEntered="#buttonHover" prefHeight="100.0" prefWidth="300.0" styleClass="backButton" text="RETOUR ACCUEIL">
                                     <font>
                                         <Font name="Candara" size="36.0" />
                                     </font>
