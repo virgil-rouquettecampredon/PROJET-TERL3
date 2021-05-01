@@ -193,33 +193,42 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             if (j == Jeton_Interface.PARENTHESE_OUVRANTE) {
                 --nbParenthese;
             }
+            //Si on rejette un Alias, on doit MAJ la liste des alias en conséquence
             if(j == Jeton_Interface.ALIAS){
                 try {
                     alias.remove(aliasCrees.removeLast());
                 }catch(NoSuchElementException ignore){/*Si plus d'alias à enlever, tant pis*/}
             }
         } else {
-            //Si on ne peut pas revenir en arrière, on recommence au début
+            //Si on ne peut pas/plus revenir en arrière, on recommence au début
             curEtat = 0;
         }
     }
 
     public List<ElementRegle> elementSelectionnables()throws MauvaiseDefinitionRegleException {
+        //Liste des éléments à retourner
         List<ElementRegle> elements = new ArrayList<>();
+
+        //Récupération de l'état courant
         Etat e = this.recupererEtat(curEtat);
         if(e == null){
             throw new MauvaiseDefinitionRegleException("Etat courant inconnu : " + curEtat);
         }
-        //Si un etat est terminal dans une définition de Condition
+
+        //Si on est dans un etat terminal dans une définition de Condition
         if (e.estTerminal()) {
+            //Alors on peut également proposer des connecteurs de définition d'un nouveau bloc Condition
             elements.add(new ElementRegle(Jeton_Interface.OU,"OU", "OU"));
             elements.add(new ElementRegle(Jeton_Interface.ET,"ET", "et"));
+            //Ou encore des connecteurs liés à la fin de définition des Conditions
             if(nbParenthese <= 0){
                 elements.add(new ElementRegle(Jeton_Interface.ALORS,"ALORS", "alors"));
             }
         }
+        //Sinon pour chacune des transitions sortante de notre état
         for (TransitionSortante t : e.getTransitions()) {
             int ind = 0;
+            //On va générer les bons ElementDeRegles en conséquence
             switch (t.getEtiquetteArete()) {
                 case CASE -> {
                     elements.add(new ElementRegle(Jeton_Interface.CASE,"Toutes les cases", "tous-case"));
@@ -258,7 +267,6 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                 }
             }
         }
-
         return elements;
     }
 
@@ -279,9 +287,10 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
 
         //Gestion des alias
         if(elR.getJetonAssocie() == Jeton_Interface.ALIAS){
-            //On ajoute ce nom d'alias à la liste des Alias renseignés
+            //On ajoute ce nom d'alias à la liste des Alias renseignés (backtrack)
             aliasCrees.addLast(elR.getNomRegle());
 
+            //Puis on ajoute cet Alias à la liste des alias connus de l'automate
             switch (curEtat){
                 case 27 -> alias.put(elR.getNomRegle(),Jeton_Interface.JOUEUR);
                 case 28 , 31 -> alias.put(elR.getNomRegle(),Jeton_Interface.PIECE);
@@ -308,7 +317,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
             }else{
                 if(elR.getJetonAssocie() == Jeton_Interface.ALORS){
                     //Si on est sur un etat terminal et que l'on cherche à lire un ALORS
-                    //Vérifier si on peut bien faire une transition ALORS et passer à l'automate d'évaluation des consequences ou non
+                    //Il faut vérifier si on peut bien faire une transition ALORS et passer à l'automate d'évaluation des consequences ou non
                     if(nbParenthese>0){
                         String mesErr = (nbParenthese == 1)? "une parenthèse fermante" : nbParenthese + " parenthèses fermantes";
                         throw new MauvaiseDefinitionRegleException("Impossible de terminer les conséquences, il manque encore " + mesErr);
@@ -413,6 +422,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                         continue;
                     }
                 }else {
+                    //Gestion cas alias à rentrer
                     if(elem.size() == 1 && elem.get(0).getJetonAssocie() == Jeton_Interface.ALIAS) {
                         boolean bon = false;
                         String mes = "Veuillez entrer un nom d'alias valide (" + COLOR_RED + "#P" + COLOR_RESET + " pour revenir en arrière) :";
@@ -436,7 +446,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                                     choix = elem.get(0);
                                     choix.setNomInterface(rep);
                                 } else {
-                                    mes = COLOR_RED + "J'ai dit valide : " + COLOR_RESET;
+                                    mes = "Nom interdit : " + COLOR_RED + rep + COLOR_RESET;
                                 }
                             }
                         }
@@ -467,7 +477,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                             int etatEnleve = auto.getCurEtat();
                             auto.revenirEnArriere();
                             ElementRegle elemSup = regleChoix.remove(regleChoix.size() - 1);
-                            //Gestion chaine de caractère regle
+                            //Gestion chaine de caractères regle
                             regle = regle.substring(0, regle.lastIndexOf("]"));
                             regle = regle.substring(0, regle.lastIndexOf("]") + 1);
                             System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + elemSup.getNomInterface() + CYAN_BRIGHT + " (" + etatEnleve + ")" + COLOR_RESET);
@@ -480,36 +490,6 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                                 throw new MauvaiseDefinitionRegleException("Seul un nombre valide est autorisé");
                             } else {
                                 choix = elem.get(indRep);
-                                /* if (choix.getJetonAssocie() == Jeton_Interface.ALIAS) {
-                                    //Si c'est un alias qui a été choisi par l'utilisateur
-                                    boolean bon = false;
-
-                                    String mes = "Veuillez entrer un nom d'alias (" + COLOR_RED + "#P" + COLOR_RESET + " pour revenir en arrière) :";
-                                    while (!bon) {
-                                        System.out.println(mes);
-                                        rep = scan.next();
-                                        //Si on veut revenir en arrière
-                                        if (rep.equals("#P") && regleChoix.size() > 0) {
-                                            //Comme le choix n'a pas vraiment été pris en compte
-                                            //On peut simplement l'annuler
-                                            System.out.println("Retour en arrière : " + COLOR_RED + "suppression " + COLOR_RESET + "de " + BLUE_BRIGHT + Jeton_Interface.ALIAS + CYAN_BRIGHT + " (" + auto.etatSuivant(auto.curEtat, Jeton_Interface.ALIAS) + ")" + COLOR_RESET);
-                                            break;
-                                        }
-                                        //Si la chaine de caractère est autorisée
-                                        if (auto.peutEtreRenseigne(rep)) {
-                                            //Alors on valide ce choix
-                                            bon = true;
-
-                                            choix.setNomInterface(choix.getNomInterface() + " " + rep);
-                                            choix.setNomRegle(rep);
-                                        }
-                                        mes = "Nom interdit : " + COLOR_RED + rep + COLOR_RESET;
-                                    }
-                                    if (!bon) {
-                                        System.out.println("Regle : " + regle + "\n");
-                                        continue;
-                                    }
-                                }*/
                                 reponse = choix.getNomInterface();
                             }
                         }
@@ -561,7 +541,7 @@ public class Automate_Interface_Condition extends Automate_Interface<Jeton_Inter
                 }
             }
 
-            //AFFICHAGE AXIOMES
+            //AFFICHAGE ALIAS
             System.out.println("\nALIAS : ");
             for (Map.Entry<String, Jeton_Interface> entry : auto.getAlias().entrySet()) {
                 System.out.println(COLOR_BLUE + entry.getKey() + COLOR_RESET + "->" + COLOR_GREEN + entry.getValue() + COLOR_RESET);

@@ -119,7 +119,9 @@ public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
     /**Méthode permettant d'ajouter une CaseAbsolue au groupe
      * @param c : case à ajouter aux cases absolues d'un groupe.**/
     public void addCasesAbsolue(Case c){
-        casesAbsolue.add(c);
+        if(!casesAbsolue.contains(c)){
+            casesAbsolue.add(c);
+        }
     }
 
     @Override

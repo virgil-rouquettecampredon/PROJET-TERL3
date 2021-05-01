@@ -67,7 +67,7 @@ public abstract class EquationDeDeplacement implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EquationDeDeplacement that = (EquationDeDeplacement) o;
-        return evaluable == that.evaluable && x == that.x && y == that.y;
+        return  x == that.x && y == that.y;
     }
 
     @Override

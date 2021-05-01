@@ -16,6 +16,7 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
     protected Deque<Integer> etatsParcourus;
     protected Deque<A> jetonsReconnus;
 
+    //Liste des Alias définis au cours de l'utilisation du parcours
     protected Map<String, Jeton_Interface> alias;
 
     public Automate_Interface(int nbEtat,int etatDeDepart){
@@ -55,7 +56,8 @@ public abstract class Automate_Interface<A extends EstToken> extends Automate<A>
     public abstract void revenirEnArriere();
 
     /**Méthode permettant d'indiquer si une chaine de caractère peut être renseignée sans risque d'être interprétée par le système ensuite
-     * @param s : chaine de caractère dont on veut déterminer si elle est renseignable ou non.**/
+     * @param s : chaine de caractère dont on veut déterminer si elle est renseignable ou non.
+     * @return vrai si s est renseignable, faux sinon.**/
     public boolean peutEtreRenseigne(String s){
         Jeton[] jetons = Jeton.values();
         for (Jeton j: jetons) {

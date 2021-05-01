@@ -12,7 +12,7 @@ public enum Jeton_Interface implements EstToken, Serializable {
     ET(),
     OU(),
     ALORS(),
-    NON("NON"),
+    NON("non"),
 
     COMPARATEUR("=" , "<" , ">"),
 

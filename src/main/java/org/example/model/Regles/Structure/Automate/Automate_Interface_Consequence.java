@@ -108,7 +108,7 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
             curEtat = etatsParcourus.removeLast();
             jetonsReconnus.removeLast();
         }else{
-            //Si on ne peut pas revenir en arrière, on recommence au début
+            //Si on ne peut pas/plus revenir en arrière, on recommence au début
             curEtat = 0;
         }
     }
@@ -119,17 +119,24 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
     }
 
     public List<ElementRegle> elementSelectionnables() throws MauvaiseDefinitionRegleException {
+        //Liste des éléments à retourner
         List<ElementRegle> elements = new ArrayList<>();
+
+        //Récupération de l'état courant
         Etat e = this.recupererEtat(curEtat);
         if(e == null){
             throw new MauvaiseDefinitionRegleException("Etat courant inconnu : " + curEtat);
         }
+        //Si on est dans un etat terminal dans une définition de Condition
         if (e.estTerminal()) {
+            //Alors on peut également proposer des connecteurs de définition d'un nouveau bloc Conséquence
             if(e.getCodeDeRetour() != 301){
                 elements.add(new ElementRegle(Jeton_Interface.ET,"ET", "ET"));
             }
+            //Ou encore des connecteurs liés à la fin de définition des Conséquences
             elements.add(new ElementRegle(Jeton_Interface.FIN,"FIN", ""));
         }
+        //Sinon pour chacune des transitions sortante de notre état
         for (TransitionSortante t : e.getTransitions()) {
             int ind = 0;
             switch (t.getEtiquetteArete()) {
@@ -330,8 +337,8 @@ public class Automate_Interface_Consequence extends Automate_Interface<Jeton_Int
                 }
             }
 
-            //AFFICHAGE AXIOMES
-            System.out.println("\nAXIOMES UTILISABLES : ");
+            //AFFICHAGE ALIAS
+            System.out.println("\nALIAS UTILISABLES : ");
             for (Map.Entry<String, Jeton_Interface> entry : auto.getAlias().entrySet()) {
                 System.out.println(COLOR_BLUE + entry.getKey() + COLOR_RESET + "->" + COLOR_GREEN + entry.getValue() + COLOR_RESET);
             }

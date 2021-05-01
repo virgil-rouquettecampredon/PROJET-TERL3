@@ -50,7 +50,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
     public void initialiserAutomate(){
         //GESTIONS ETATS TERMINAUX
-        List<Integer> etatTer = new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23,27,31,32,33,34));
+        List<Integer> etatTer = new ArrayList<>(Arrays.asList(6,9,10,11,13,14,19,21,22,23,25,27,31,32,33,34));
         for (Integer i:etatTer) {
             this.ajouterUnEtatTerminal(i,300+i);
         }
@@ -361,6 +361,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
         Iterator<Jeton> ite = regleSyntaxe.iterator();
 
+        int codeDeRetour = 0;
+
         while(ite.hasNext()){
             Jeton j = ite.next();
             switch (j) {
@@ -373,6 +375,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 case PARENTHESEFERMANTE -> {
                     jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
                     indParenthese--;
+                    this.ajouterUnEtatTerminal(25,codeDeRetour);
                     if(indParenthese<0){
                         throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString));
                     }
@@ -418,6 +421,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             regleString.remove(indRegleSyntaxe);
                             --indRegleSyntaxe;
                             ite.remove();
+                            System.out.println("==========================> Jeton : " + j);
                         }catch (MauvaiseDefinitionRegleException e){
                             throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
                         }

@@ -100,18 +100,28 @@ public class Fonctions_Comportements {
         boolean valeurDeRetour = false;
         Plateau plateau = null;
 
+        List<Pair<Piece,Case>> piecesSurCase = new ArrayList<>();
         for (GroupCases g: groupescases) {
-            for (Piece p: pieces) {
-                for (Case c : g.getCasesAbsolue()) {
-                    if (p.equals(c.getPieceOnCase())) {
-                        plateau = g.getPlateau();
-                        sujetDeLaConditionVrai.add(p);
-                        groupe.addCasesAbsolue(c);
-                        valeurDeRetour = true;
-                    }
+            for (Case c : g.getCasesAbsolue()) {
+                if(c.getPieceOnCase() != null){
+                    piecesSurCase.add(new Pair<Piece,Case>(c.getPieceOnCase(),c));
+                    plateau = g.getPlateau();
                 }
             }
         }
+
+        for (Piece p: pieces) {
+            for (Pair<Piece,Case> pc : piecesSurCase) {
+                if (p.equals(pc.getKey())) {
+                    if(!sujetDeLaConditionVrai.contains(pc.getKey())){
+                        sujetDeLaConditionVrai.add(pc.getKey());
+                    }
+                    groupe.addCasesAbsolue(pc.getValue());
+                    valeurDeRetour = true;
+                }
+            }
+        }
+
         if(valeurDeRetour){
             groupe.setPlateau(plateau);
             cibleDeLaConditionVrai.add(groupe);
