@@ -29,7 +29,7 @@ public class OrdonnanceurDeJeu {
     public OrdonnanceurDeJeu(Variante<Jeton> variantej){
         this.variantej = variantej;
         this.listTypesPieces = new ArrayList<>();
-        LinkedHashSet<Piece> tmp = new LinkedHashSet<>();
+        ArrayList<Piece> tmp = new ArrayList<>();
         for (int i = 0; i < this.variantej.getJoueurs().size(); i++) {
             tmp.addAll(this.variantej.getJoueurs().get(i).getTypePawnList());
         }

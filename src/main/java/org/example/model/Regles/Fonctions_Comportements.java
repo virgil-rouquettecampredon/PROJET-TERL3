@@ -1,5 +1,6 @@
 package org.example.model.Regles;
 
+import javafx.util.Pair;
 import org.example.model.*;
 import org.example.model.EquationDeDeplacement.EquationDeDeplacement;
 import org.example.model.EquationDeDeplacement.PositionDeDeplacement;
