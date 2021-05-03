@@ -5,6 +5,7 @@ import org.example.model.Regles.CibleDeRegle;
 import org.example.model.Regles.Jeton;
 import org.example.model.Regles.Structure.Alias;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreteur_Alias_Cible<T extends CibleDeRegle> implements Interpreteur_Objet_Regle<T> {
@@ -16,7 +17,8 @@ public class Interpreteur_Alias_Cible<T extends CibleDeRegle> implements Interpr
     }
 
     public List<T> recupererTout(OrdonnanceurDeJeu ord){
-        return this.alias.getObjetsDeRegle();
+        System.out.println("\033[42m" + "RECUPERER TOUT INTERPRETEUR CIBLE ALIAS :" + "\033[0m "+ alias);
+        return new ArrayList<>(alias.getObjetsDeRegle());
     }
 
     @Override

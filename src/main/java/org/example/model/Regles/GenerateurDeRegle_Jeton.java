@@ -47,7 +47,6 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
         for (int i = 0; i<regle.size();i++){
             Jeton curJeton;
             String curRegle = regle.get(i);
-            System.out.println("anasyn: cur regle: "+curRegle);
 
             try {
                 //Permets de reconnaitre des blocs NEGATION de la forme "N..."
@@ -61,7 +60,6 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                 switch ((curRegle.length() > 0)? curRegle.charAt(0) : ' ') {
                     /*CAS PIECE*/
                     case 'P' -> {
-                        System.out.println("anasyn: PIECE");
                         //Si rien n'est reconnu (jeton aucun)
                         if((curJeton = estReconnu(curRegle)).equals(Jeton.AUCUN)){
                             //Alors on essaye de savoir pourquoi
@@ -220,16 +218,19 @@ public class GenerateurDeRegle_Jeton extends GenerateurDeRegle<Jeton> implements
                     try{
                         //Analyse syntaxique de la règle
                         //(que des termes connus du système composant la règle)
+                        System.out.println("\033[0;105m" + "ANALYSE SYNTAXIQUE DE LA REGLE" + "\033[0m");
                         regleSousFormeDejetons = analyseSyntaxique(regleSousFormeDeChaine);
                         System.out.println(regleSousFormeDejetons);
                         //Analyse sémantique de la règle
                         //(bon agancement de termes connus du système)
+                        System.out.println("\033[0;105m" +"ANALYSE SEMANTIQUE DE LA REGLE"+ "\033[0m");
                         Regle r = this.automate.analyserUneRegle(regleSousFormeDejetons,regleSousFormeDeChaine);
                         if(premier.equals("0")){
                             this.ajouterRegleAvantCoup(r);
                         }else{
                             this.ajouterRegleApresCoup(r);
                         }
+                        System.out.println("\033[0;105m" +"FIN DE CREATION DE LA REGLE"+ "\033[0m");
                     }catch(MauvaiseSemantiqueRegleException | MauvaiseSyntaxeRegleException e){
                         throw new MauvaiseDefinitionRegleException("Problème à la règle num [" + i + "] => " + e.getMessage());
                     }

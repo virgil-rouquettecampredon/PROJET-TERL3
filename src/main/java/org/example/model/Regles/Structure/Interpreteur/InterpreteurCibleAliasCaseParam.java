@@ -17,8 +17,15 @@ public class InterpreteurCibleAliasCaseParam extends InterpreteurCible<GroupCase
 
     @Override
     public List<GroupCases> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[42m" + "RECUPERER TOUT INTERPRETEUR CIBLE CASE ALIAS + CASE :" + "\033[0m " + groupCase);
+
+        System.out.println("\u001B[31m" + "Récupération entre : " + interpreteurCaseAlias + " et " + groupCase + "\u001B[0m");
+
+
         InterpreteurCible<GroupCases> interpreteur = new InterpreteurCibleCase(groupCase);
         List<GroupCases> listeCases = interpreteur.recupererTout(ord);
+
+        System.out.println("\u001B[31m" + "Récupération entre : " + interpreteurCaseAlias.recupererTout(ord) + " et " + listeCases + "\u001B[0m");
 
         List<GroupCases> casesARetourner = new ArrayList<>();
         GroupCases group = new GroupCases("GroupeCaseParam",null);

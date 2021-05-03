@@ -30,6 +30,8 @@ public class InterpreteurCibleCase extends InterpreteurCible<GroupCases> {
      * */
     @Override
     public List<GroupCases> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[0;102m" + "RECUPERER TOUT INTERPRETEUR CIBLE CASE :" + "\033[0m "+ str_source);
+
         List<GroupCases> lret;
         String erreurPiece = "'" + this.str_source + "': ";
         if (this.str_source.contains("#")){

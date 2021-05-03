@@ -93,9 +93,11 @@ public class Fonctions_Comportements {
      * @param cases : liste des cases possible
      * @return vrai si au moins une pièce dans la liste pieces est sur une case inclu dans la liste cases*/
     public static final BiFunction<List<Piece>, List<GroupCases>, Boolean> est_Sur = (pieces, groupescases) -> {
-        //System.out.println("EST SUR : "+pieces+"\n et "+groupescases);
         sujetDeLaConditionVrai.clear();
         cibleDeLaConditionVrai.clear();
+        System.out.println("-----------------------------------fonction est sur");
+        System.out.println("pieces : "+pieces);
+        System.out.println("groupescases : " + groupescases);
 
         GroupCases groupe = new GroupCases("groupeAliasEstSur",null);
         boolean valeurDeRetour = false;
@@ -113,7 +115,7 @@ public class Fonctions_Comportements {
 
         for (Piece p: pieces) {
             for (Pair<Piece,Case> pc : piecesSurCase) {
-                if (p.equals(pc.getKey())) {
+                if (p.equalsRegle(pc.getKey())) {
                     if(!sujetDeLaConditionVrai.contains(pc.getKey())){
                         sujetDeLaConditionVrai.add(pc.getKey());
                     }
@@ -130,6 +132,9 @@ public class Fonctions_Comportements {
             System.out.println("EST SUR EST "+valeurDeRetour);
             System.out.println("cibleDeLaConditionVrai : "+cibleDeLaConditionVrai);
         }
+        System.out.println("-----------------------------------fin fonction est sur");
+        System.out.println("-----------------------------------val : " + valeurDeRetour);
+
         return valeurDeRetour;
     };
 

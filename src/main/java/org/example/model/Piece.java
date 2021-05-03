@@ -130,13 +130,14 @@ public class Piece implements SujetDeRegle, CibleDeRegle, Serializable, Cloneabl
     public boolean equalsRegle(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) {
-            System.out.println("EQUALSREGLE: Objet NULL OU classe différentes");
+            //System.out.println("EQUALSREGLE: Objet NULL OU classe différentes");
             return false;
         }
         Piece piece = (Piece) o;
-        System.out.println("EQUALSREGLE: name: " + name.equals(piece.name)
+        /*System.out.println("EQUALSREGLE: name: " + name.equals(piece.name)
                 + "\nposDep: " + posDeplacements.equals(piece.posDeplacements)
                 + "\nvecDep: " + vecDeplacements.equals(piece.vecDeplacements));
+        */
         return name.equals(piece.name) && posDeplacements.equals(piece.posDeplacements) && vecDeplacements.equals(piece.vecDeplacements);
     }
 

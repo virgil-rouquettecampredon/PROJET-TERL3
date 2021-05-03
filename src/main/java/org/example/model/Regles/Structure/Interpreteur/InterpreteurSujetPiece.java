@@ -30,6 +30,8 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
      * @param ord : toutes les pieces présentes sur le plateau de jeu*/
     @Override
     public List<Piece> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[0;102m" + "RECUPERER TOUT INTERPRETEUR SUJET PIECE :" + "\033[0m " + str_source);
+
         List<Piece> lret;
         String erreurPiece = "'" + this.str_source + "': ";
         if (this.str_source.contains("#")){
@@ -82,10 +84,11 @@ public class InterpreteurSujetPiece extends InterpreteurSujet<Piece> {
 
                     System.out.println("ALL PIECES : " + allpieces);
                     for(Piece p: allpieces){
-                        System.out.println("-------COMPARAISON PIECE-------");
+                        /*System.out.println("-------COMPARAISON PIECE-------");
                         System.out.println(piece_reference);
                         System.out.println(p);
                         System.out.println(p.equalsRegle(piece_reference));
+                        */
                         if(p.equalsRegle(piece_reference)) { lret.add(p); }
                     }
 

@@ -506,4 +506,18 @@ public class ArbreTest {
             fail("Exception détectée : " + e.getMessage());
         }
     }
+
+    @Test
+    public final void test_Evaluation_VETVET_NON_F_Bon(){
+        jetons = Arrays.asList(Jeton.CONDITION,Jeton.ET,Jeton.CONDITION,Jeton.ET,Jeton.NON,Jeton.PARENTHESEOUVRANTE,Jeton.CONDITION,Jeton.PARENTHESEFERMANTE);
+        conditions = Arrays.asList(condVrai,condVrai,condFaux);
+        arbre = new Arbre_Condition(jetons,conditions);
+        try {
+            arbre.construire();
+            assertTrue(arbre.evaluer());
+            assertEquals("ET<ET<T,T>,¬F>",arbre.toString());
+        }catch (ArbreException e){
+            fail("Exception détectée : " + e.getMessage());
+        }
+    }
 }

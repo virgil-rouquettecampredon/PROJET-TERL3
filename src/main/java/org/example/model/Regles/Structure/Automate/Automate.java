@@ -127,9 +127,11 @@ public abstract class Automate<A extends EstToken>{
     protected void ajouterUnEtatTerminal(int etat, int codeDeRetour){
         Etat et =  recupererEtat(etat);
         if(et != null){
-            et.estTerminal = true;
+            if(!et.estTerminal){
+                this.nbEtatTerminaux++;
+                et.estTerminal = true;
+            }
             et.codeDeRetour = codeDeRetour;
-            this.nbEtatTerminaux++;
         }
     }
 
@@ -201,7 +203,6 @@ public abstract class Automate<A extends EstToken>{
     public void setEtatDeDepart(int etatDeDepart) {
         this.etatDeDepart = etatDeDepart;
     }
-
 
     /** Méthode abstraite permettant l'initialisation de l'automate (à définir dans les sous-classes)**/
     public abstract void initialiserAutomate();

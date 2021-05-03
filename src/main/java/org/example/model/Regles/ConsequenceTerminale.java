@@ -26,7 +26,10 @@ public class ConsequenceTerminale<A extends SujetDeRegle> extends Consequence{
 
     @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[0;103m" + "verifierElements CONSEQUENCE TERMINALE" + "\033[0m");
+        System.out.println("-------> INTSUJET : " + interpretSujet);
         sujets = interpretSujet.recupererTout(ord);
+        System.out.println("-------> SUJET : " + sujets);
     }
 
     public void comportement(OrdonnanceurDeJeu ord){
@@ -36,8 +39,8 @@ public class ConsequenceTerminale<A extends SujetDeRegle> extends Consequence{
     @Override
     public String toString(){
         return "[CONSEQUENCE " + sujets.getClass() + " TERMINALE"
-                + ": interpreteur sujet: " + this.interpretSujet
-                + ", comportement: " + this.comportement
-                + ", liste sujets: " + this.sujets + "]";
+                + "\ninterpreteur sujet: " + this.interpretSujet
+                + "\ncomportement: " + this.comportement
+                + "\nliste sujets: " + this.sujets + "]";
     }
 }

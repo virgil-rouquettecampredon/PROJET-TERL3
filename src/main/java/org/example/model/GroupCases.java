@@ -128,8 +128,8 @@ public class GroupCases implements CibleDeRegle, Serializable, Cloneable {
     public String toString() {
         return "GroupCases{" +
                 "name='" + name + '\'' +
-                ", casesAbsolue=" + casesAbsolue +
-                ", positionsRelatives=" + positionsRelatives +
+                "\ncasesAbsolue=" + casesAbsolue +
+                "\npositionsRelatives=" + positionsRelatives +
                 '}';
     }
 }

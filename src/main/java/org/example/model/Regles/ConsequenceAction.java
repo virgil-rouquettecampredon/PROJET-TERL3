@@ -30,8 +30,15 @@ public class ConsequenceAction<A extends SujetDeRegle,B extends CibleDeRegle> ex
 
     @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[0;103m" + "verifierElements CONSEQUENCE ACTION" + "\033[0m");
+        System.out.println("-------> INTSUJET : " + interpreteurSujet);
+        System.out.println("-------> INTCIBLE : " + interpreteurCible);
+
         sujets = interpreteurSujet.recupererTout(ord);
         cibles = interpreteurCible.recupererTout(ord);
+
+        System.out.println("-------> SUJET : " + sujets);
+        System.out.println("-------> CIBLE : " + cibles);
     }
 
     public void comportement(OrdonnanceurDeJeu ord){
@@ -41,10 +48,10 @@ public class ConsequenceAction<A extends SujetDeRegle,B extends CibleDeRegle> ex
     @Override
     public String toString(){
         return "[CONSEQUENCE " + sujets.getClass() + " ACTION " + cibles.getClass()
-                + ": interpreteur sujet: " + this.interpreteurSujet
-                + ", interpreteur cible: " + this.interpreteurCible
-                + ", comportement: " + this.comportement
-                + ", liste sujets: " + this.sujets
-                + ", liste cibles: " + this.cibles + "]";
+                + "\ninterpreteur sujet: " + this.interpreteurSujet
+                + "\ninterpreteur cible: " + this.interpreteurCible
+                + "\ncomportement: " + this.comportement
+                + "\nliste sujets: " + this.sujets
+                + "\nliste cibles: " + this.cibles + "]";
     }
 }

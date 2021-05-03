@@ -29,7 +29,10 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
 
     @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[0;103m" + "verifierElements CONDITION ETAT" + "\033[0m");
+        System.out.println("-------> INTSUJET : " + interpreteurSujet);
         sujets = interpreteurSujet.recupererTout(ord);
+        System.out.println("-------> SUJET : " + sujets);
     }
 
     public boolean evaluer(){
@@ -39,8 +42,8 @@ public class ConditionEtat<A extends SujetDeRegle> extends Condition {
     @Override
     public String toString(){
         return "[CONDITION " + sujets.getClass() + " ETAT"
-                + ": interpreteur sujet: " + this.interpreteurSujet
-                + ", comportement: " + this.comportement
-                + ", liste sujets: " + this.sujets + "]";
+                + "\ninterpreteur sujet: " + this.interpreteurSujet
+                + "\ncomportement: " + this.comportement
+                + "\nliste sujets: " + this.sujets + "]";
     }
 }

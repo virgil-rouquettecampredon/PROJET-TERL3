@@ -57,9 +57,11 @@ public class Regle {
     /**Méthode permettant d'éditer les liens pour les Alias
      * Cela va permettre de mettre à jour les informations importantes pour pouvoir les réutiliser après.**/
     public void editerLesLiens(OrdonnanceurDeJeu ord) throws MauvaiseDefinitionRegleException{
+        System.out.println("\033[0;37;0;101m" + "EDITION DES LIENS DE LA REGLE" + "\033[0m");
         for (Alias<Jeton,?> alias: listeAlias) {
             alias.editionDesLiens(ord);
         }
+        System.out.println("\033[0;37;0;101m" + "FIN EDITION DES LIENS DE LA REGLE" + "\033[0m");
     }
 
     /**Méthode permettant d'ajouter une conséquence supplémentaire à une Regle
@@ -122,12 +124,16 @@ public class Regle {
         this.arbre_conditions = cond;
     }
 
+    public List<Alias<Jeton, ?>> getListeAlias() {
+        return listeAlias;
+    }
+
     @Override
     public String toString() {
         return "Regle{" +
                 "arbre_conditions=" + arbre_conditions +
-                ", consequences=" + consequences +
-                ", listeAlias=" + listeAlias +
+                "\nconsequences=" + consequences +
+                "\nlisteAlias=" + listeAlias +
                 '}';
     }
 }

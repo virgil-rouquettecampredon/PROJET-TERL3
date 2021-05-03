@@ -43,21 +43,32 @@ public class Alias<A extends EstToken,T extends ObjetsDeRegle> {
     /**Méthode permettant d'effectuer l'édition des liens.
      * Va regarder les valeurs pour lesquelles la conditionDeDefinition vaudra vrai, et va les récupérer pour les redonner ensuite aux condOuConsDeReutilisation.**/
     public void editionDesLiens(OrdonnanceurDeJeu ord) throws MauvaiseDefinitionRegleException{
+        System.out.println("\033[41m" + "EDITION DES LIENS DE L'ALIAS :" + "\033[0m " + this);
         conditionDeDefinition.verifierElements(ord);
+        System.out.println("\033[4;32m" + "RECUPERATION OBJET DE REGLES ALIAS EDITION DES LIENS" + "\u001B[0m");
         if(conditionDeDefinition.evaluer()){
             if(estSurSujet){
-                objetsDeRegle = (List<T>) Fonctions_Comportements.sujetDeLaConditionVrai;
+                System.out.println("\033[4;32m" + "SUJET" + "\u001B[0m");
+                objetsDeRegle = new ArrayList<>((List<T>) Fonctions_Comportements.sujetDeLaConditionVrai);
             }else{
-                objetsDeRegle = (List<T>) Fonctions_Comportements.cibleDeLaConditionVrai;
+                System.out.println("\033[4;32m" + "CIBLE" + "\u001B[0m");
+                objetsDeRegle = new ArrayList<>((List<T>) Fonctions_Comportements.cibleDeLaConditionVrai);
             }
+            System.out.println("\033[4;32m" + "OBJETS :"+ "\u001B[0m");
+            for (T obj: objetsDeRegle) {
+                System.out.println("\033[0;32m" + "-> " + "\u001B[0m" + obj);
+            }
+        }else{
+            System.out.println("\033[4;32m" + "CONDITION DE DEPART FAUSSE" + "\u001B[0m");
         }
+        System.out.println("\033[41m" + " FIN EDITION DES LIENS DE L'ALIAS :" + "\033[0m " + this);
     }
 
     @Override
     public String toString(){
         return "---ALIAS---\nJeton: " + this.jetonAssocie
-                + ", Condition de def: " + this.conditionDeDefinition
-                + ", estSurSujet: " + this.estSurSujet
-                + ", Objet de Regle: " + this.objetsDeRegle + "\n";
+                + "\nCondition de def: " + this.conditionDeDefinition
+                + "\nestSurSujet: " + this.estSurSujet
+                + "\nObjet de Regle: " + this.objetsDeRegle + "\n";
     }
 }

@@ -19,6 +19,8 @@ public class InterpreteurSujetPieceAliasPT extends InterpreteurSujet<Piece>{
 
     @Override
     public List<Piece> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
+        System.out.println("\033[42m" + "RECUPERER TOUT INTERPRETEUR SUJET PIECE + JOUEUR ALIAS :" + "\033[0m "+ pieces);
+
         InterpreteurSujet<Piece> interpreteur = new InterpreteurSujetPiece(pieces);
         List<Piece> listePieces = interpreteur.recupererTout(ord);
 

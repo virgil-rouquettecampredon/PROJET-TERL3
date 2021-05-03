@@ -82,8 +82,8 @@ public class Case implements Serializable, Cloneable {
     public String toString() {
         return "Case : [" +
                 "position=" + position +
-                ", pieceOnCase=" + pieceOnCase +
-                ", accessible=" + accessible +
+                "\npieceOnCase=" + pieceOnCase +
+                "\naccessible=" + accessible +
                 ']';
     }
 }

@@ -19,7 +19,7 @@ public class InterpreteurSujetJoueur extends InterpreteurSujet<Joueur> {
 
     @Override
     public List<Joueur> recupererTout(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException {
-        //System.out.println("source : " + str_source);
+        System.out.println("\033[0;102m" + "RECUPERER TOUT INTERPRETEUR SUJET JOUEUR :" + "\033[0m "+ str_source);
 
         List<Joueur> lret = new ArrayList<>();
         String erreurJoueur = "'" + this.str_source + "': ";

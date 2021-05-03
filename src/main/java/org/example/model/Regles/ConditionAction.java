@@ -40,6 +40,7 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
 
     @Override
     public void verifierElements(OrdonnanceurDeJeu ord) throws MauvaiseInterpretationObjetRegleException{
+        System.out.println("\033[0;103m" + "verifierElements CONDITION ACTION" + "\033[0m");
         System.out.println("-------> INTSUJET : " + interpretSujet);
         System.out.println("-------> INTCIBLE : " + interpretCible);
         sujets = interpretSujet.recupererTout(ord);
@@ -57,10 +58,10 @@ public class ConditionAction<A extends SujetDeRegle,B extends CibleDeRegle> exte
     @Override
     public String toString(){
         return "[CONDITION " + sujets.getClass() + " ACTION " + cibles.getClass()
-                + ": interpreteur sujet: " + this.interpretSujet
-                + ", interpreteur cible: " + this.interpretCible
-                + ", comportement: " + this.comportement
-                + ", liste sujets: " + this.sujets
-                + ", liste cibles: " + this.cibles + "]";
+                + "\ninterpreteur sujet: " + this.interpretSujet
+                + "\ninterpreteur cible: " + this.interpretCible
+                + "\ncomportement: " + this.comportement
+                + "\nliste sujets: " + this.sujets
+                + "\nliste cibles: " + this.cibles + "]";
     }
 }

@@ -101,6 +101,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(25,Jeton.OU,0);
         this.ajouterUneTransition(25,Jeton.ALORS,15);
 
+
         //GESTION DES ALIAS
         //Permet de ne pas renseigner la traversée de cet état dans le parcours de l'automate
         //Les alias ne change pas le traitement sémantique d'un bloc de regle
@@ -155,6 +156,14 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         this.ajouterUneTransition(34,Jeton.ET,0);
         this.ajouterUneTransition(34,Jeton.OU,0);
         this.ajouterUneTransition(34,Jeton.ALORS,15);
+
+
+        //GESTION ALIAS ET PARENTHESAGE
+        this.ajouterUneTransition(31,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(32,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(33,Jeton.PARENTHESEFERMANTE,25);
+        this.ajouterUneTransition(34,Jeton.PARENTHESEFERMANTE,25);
+
 
         //=========== CONDITIONS ===========
         //ETAT INITIAL
@@ -359,9 +368,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         //Compteur permettant de vérifier que la Regle est bien parenthésée
         int indParenthese = 0;
 
-        Iterator<Jeton> ite = regleSyntaxe.iterator();
+        //Compteur du nombre de parenthèses fermantes englobant un unique bloc condition
+        //(utile pour la bonne construction de l'arbre de Conditions de la Regle)
+        int nbParantheseFermanteBlocCond = 0;
 
-        int codeDeRetour = 0;
+        Iterator<Jeton> ite = regleSyntaxe.iterator();
 
         while(ite.hasNext()){
             Jeton j = ite.next();
@@ -370,15 +381,20 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 case PARENTHESEOUVRANTE -> {
                     jetonsarborescence.add(Jeton.PARENTHESEOUVRANTE);
                     indParenthese++;
+                    regleString.remove(indRegleSyntaxe);
+                    --indRegleSyntaxe;
+                    ite.remove();
                 }
                 //Gestion du parenthésage
                 case PARENTHESEFERMANTE -> {
-                    jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                    nbParantheseFermanteBlocCond++;
                     indParenthese--;
-                    this.ajouterUnEtatTerminal(25,codeDeRetour);
                     if(indParenthese<0){
                         throw new MauvaiseSemantiqueRegleException("Probleme de paranthesage, une paranthese fermante est présente alors qu'il n'existe pas de paranthèse ouvrante pour celle-ci : " + getMessageErreur(indRegleSyntaxe, regleSyntaxe, regleString));
                     }
+                    regleString.remove(indRegleSyntaxe);
+                    --indRegleSyntaxe;
+                    ite.remove();
                 }
                 //Gestion des connecteurs (Pour l'arbre des conditions)
                 case ET,OU -> {
@@ -391,6 +407,9 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     if (traitementCondition) {
                         if (!estNonComparateur(parcours)) {
                             jetonsarborescence.add(j);
+                            regleString.remove(indRegleSyntaxe);
+                            --indRegleSyntaxe;
+                            ite.remove();
                         }else{
                             parcours+="N";
                         }
@@ -421,7 +440,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             regleString.remove(indRegleSyntaxe);
                             --indRegleSyntaxe;
                             ite.remove();
-                            System.out.println("==========================> Jeton : " + j);
                         }catch (MauvaiseDefinitionRegleException e){
                             throw new MauvaiseDefinitionRegleException(e.getMessage() + " (" + indRegleSyntaxe + ")");
                         }
@@ -437,8 +455,8 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 }
             }
 
-            System.out.println("REGLESTRING ARS: " + regleString + " à l'indice : " + indRegleSyntaxe);
-            System.out.println("PARCOUR : " + parcours);
+            System.out.println("\033[1;96m" + "REGLESTRING ARS: " + "\033[0m" + regleString +"\033[1;96m" + " à l'indice : " + "\033[0m" + indRegleSyntaxe);
+            System.out.println("\033[1;96m" + "PARCOUR : " + "\033[0m" + parcours);
 
             //Récupération de l'état précédent (messages d'erreur)
             int predEtat = curEtat;
@@ -453,11 +471,10 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 parcours+=etat.getValeur();
                 if (etat.estTerminal()) {
                     System.out.println("ARS: EST TERMINAL");
-                    codeDeRetour = etat.getCodeDeRetour();
+                    this.ajouterUnEtatTerminal(25,etat.getCodeDeRetour());
                     /** Soit: peut avancer et jeton suivant est un connecteur adéquat
                      *      OU
                      *      Ne peut pas avancer (mais est terminal)
-                     *
                      * */
                     if ((peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                             && ( (          traitementCondition
@@ -470,7 +487,7 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             ||
                             !peutAvancer(indRegleSyntaxe + 1, regleSyntaxe)
                     )  {
-                        System.out.println("ARS: SWITCH ETAT: " + etat.getCodeDeRetour());
+                        System.out.println("ARS: SWITCH ETAT: " +"\033[4;36m" + etat.getCodeDeRetour() + "\033[0m");
                         //Alors notre etat est bien terminal de block, on l'analyse
                         switch (etat.getCodeDeRetour()) {
                             /*---------------------------------CONDITIONS---------------------------------*/
@@ -487,6 +504,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Etat [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -506,6 +528,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -524,6 +551,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Piece(J|T) [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -543,6 +575,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Action-Case [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -561,6 +598,11 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Joueur-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -578,8 +620,12 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         regle.ajouterUnAlias(alias);
                                         alias.setConditionDeDefinition(cond);
                                     }
-                                    System.out.println("Alias après setCondition: " + aliasCondtion);
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 } else {
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour Piece(T)-Compteur-Comparaison-Nombre [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
@@ -587,7 +633,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                             }
 
                             case 327 , 334 -> {
-                                System.out.println("ARS: CAS 327");
                                 if (indRegleSyntaxe >= 1) {
                                     Condition cond = case327_334(parcours, indRegleSyntaxe, regleSyntaxe, regleString);
                                     conditionsDeLaRegle.add(cond);
@@ -599,13 +644,17 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                         alias.setConditionDeDefinition(cond);
                                     }
                                     aliasCondtion.clear();
+                                    //Gestion du parenthésage (pour la bonne construction de l'arbre de Condition de la Regle)
+                                    for (int i = 0; i < nbParantheseFermanteBlocCond; i++) {
+                                        jetonsarborescence.add(Jeton.PARENTHESEFERMANTE);
+                                    }
+                                    nbParantheseFermanteBlocCond = 0;
                                 }else{
                                     throw new MauvaiseSemantiqueRegleException("Pas assez d'argument pour PieceToken-ConsequenceAction-Caseparam [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
                                 }
                             }
 
                             /*---------------------------------CONSEQUENCES---------------------------------*/
-                            //regle.ajouterUneConsequence(cons);
                             case 319 -> {
                                 //Consequence Joueur+ConsequenceTerminale
                                 if(indRegleSyntaxe >= 1) {
@@ -641,7 +690,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
 
                             case 323 -> {
                                 //SUJET-CONSEQUENCE-CASE
-                                System.out.println("323");
                                 if(indRegleSyntaxe>=2) {
                                     Consequence conseq = case323(parcours, indRegleSyntaxe, regleSyntaxe, regleString);
                                     nbConsequence++;
@@ -679,6 +727,18 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
         if(nbConsequence == 0){
             throw new MauvaiseSemantiqueRegleException("Il faut définir au moins une consequence pour créer une règle");
         }
+
+        System.out.println("\033[1;96m" + "CONDITIONS DE LA REGLE : " + "\033[0m");
+        for (Condition c: conditionsDeLaRegle) {
+            System.out.println("\t-> " + c);
+        }
+        System.out.println("\033[1;96m" + "JETONS ARBORESCENCE : " + "\033[0m" + jetonsarborescence);
+
+        System.out.println("\033[1;96m" + "ALIAS DE LA REGLE : " + "\033[0m");
+        for (Alias<Jeton,?> alias: regle.getListeAlias()) {
+            System.out.println("\t-> " + alias);
+        }
+
         //Ensuite, on essaye de générer l'arbre de conditions de notre règle
         regle.genererArbreCondition(conditionsDeLaRegle,jetonsarborescence);
         for (Consequence c: consequencesDeLaRegle) {
@@ -3433,7 +3493,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     Fonctions_Comportements.deplacement_inferieur_a);
                         }
                         case "=" -> {
-                            System.out.println("EGAL 0o");
                             cond = new ConditionAction<Piece, IntegerRegle>(
                                     new InterpreteurSujetPiece(regleString.get(indRegleSyntaxe-3)),
                                     new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
@@ -3536,7 +3595,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                                     Fonctions_Comportements.deplacement_inferieur_a);
                         }
                         case "=" -> {
-                            System.out.println("EGAL : alias: " + alias);
                             cond = new ConditionAction<Piece, IntegerRegle>(
                                     new Interpreteur_Alias_Sujet<Piece>(alias),
                                     new InterpreteurInteger(regleString.get(indRegleSyntaxe)),
@@ -6229,7 +6287,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 throw new MauvaiseSemantiqueRegleException("Bloc PieceToken-ConsequenceAction-Case-PieceToken inconnu [" + getMessageErreur(indRegleSyntaxe,regleSyntaxe,regleString) + "]");
             }
 
-
             /*==== Reutilisation Alias ====*/
             /*22*/
             //22
@@ -7315,7 +7372,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                 /*==== Reutilisation Alias ====*/
                 case "15R172023" , "15R182023" ->{
                     //Alias sur Piece : [PIECE(Token)]+CONSEQUENCEACTION+CASE
-                    System.out.println("---------------------------------case 15R172023");
                     Alias<Jeton,Piece> alias;
                     Alias<Jeton,?> testAlias = null;
 
@@ -7327,11 +7383,6 @@ public class Automate_Regles_Semantique extends Automate_Regles<Jeton>{
                     }catch (MauvaiseDefinitionRegleException re){
                         throw new MauvaiseDefinitionRegleException("Alias  " + regleString.get(indRegleSyntaxe-2) + " inconnu dans sa réutilisation ([PIECE(Token)]+CONSEQUENCEACTION+CASE)");
                     }
-                    System.out.println(regleString.get(indRegleSyntaxe-2));
-                    System.out.println("testAlias: " + testAlias);
-                    System.out.println("Alias: " + alias);
-                    System.out.println("---------------------------------fin case 15R172023");
-
                     switch (regleString.get(indRegleSyntaxe - 1)) {
                         case "prendre" -> {
                             conseq = new ConsequenceAction<Piece, GroupCases>(
