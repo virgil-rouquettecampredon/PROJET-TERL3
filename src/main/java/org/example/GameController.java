@@ -389,7 +389,8 @@ public class GameController extends Controller {
                 }
             }
             case MIDDLE -> {
-                //TEST UNIQUEMENT tODO TODO TODO TODO ALERT
+                //TEST UNIQUEMENT, permet de passer son tour lors du clique de la molette de la sourie
+                /*
                 aJoue = true;
 
                 try {
@@ -404,6 +405,7 @@ public class GameController extends Controller {
                 if (!attendreUtilisateur) {
                     finirTour();
                 }
+                 */
             }
         }
         updateCanvas();
